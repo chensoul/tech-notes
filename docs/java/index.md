@@ -7,7 +7,8 @@ $ curl -s "https://get.sdkman.io" | bash
 $ source "$HOME/.sdkman/bin/sdkman-init.sh"
 $ sdk version
 $ sdk list java
-$ sdk install java 21.0.1-tem
+$ sdk install java 21.0.5-tem
+$ sdk install java 8.0.432-zulu
 ```
 
 ## IDEs
@@ -48,37 +49,116 @@ $ sdk install java 21.0.1-tem
 - [generator-springboot](https://github.com/sivaprasadreddy/generator-springboot)
 - [progen](https://github.com/sivaprasadreddy/progen)
 
-### Testing
+## Testing
 
-- [JUnit 5 Docs](https://junit.org/junit5/docs/current/user-guide/)
-- [REST Assured](https://github.com/rest-assured/rest-assured/wiki/Usage)
-- [Mock Server](http://www.mock-server.com/)
-- [TestContainers](https://www.testcontainers.org/)
-- [Mockito](https://site.mockito.org/)
+### Test Frameworks
+
+- [JUnit 5](https://junit.org/junit5/docs/current/user-guide/)
+- TestNG
+- JGiven
+
+- JUnit 4
+- Spock
+- Arquillian
+- Jbehave
+
+### Assertion Libraries
+
 - [Assertj](http://joel-costigliola.github.io/assertj/)
+- Hamcrest
+- JSONAssert
+
+- JsonPath
+- XMLUnit
+- [REST Assured](https://github.com/rest-assured/rest-assured/wiki/Usage)
+
+### Mocking Frameworks
+
+- [Mockito](https://site.mockito.org/)
+- [Mock Server](http://www.mock-server.com/)
+
+- WireMock
+- EasyMock
+- PowerMock
+
+### Test Infrastructure
+
+- [TestContainers](https://www.testcontainers.org/)
+- Microshed Testing
+- GreenMail
+
+- LocalStack
+- Selenide
+- Selenium
+- Serenity
+
+### Utility
+
+- Instancio
+- ArchUnit
+- PIT
+
+- Pact
+- Diffblue
 - [Awaitility](https://github.com/awaitility/awaitility)
-- [Localstack](https://localstack.cloud/)
-- [Jacoco](https://www.eclemma.org/jacoco/)
-- [SonarQube](https://www.sonarqube.org/)
-- [SonarCloud](https://sonarcloud.io/)
+- Httpie
+- Cucumber
+- FitNesse
+- DBUnit
+- Gauge
+- DataFaker
+- PiTest
 
-### Performace Testinng
+### Performance Testing
 
-- [Gatling](https://gatling.io/)
+- JMH
 - [JMeter](https://jmeter.apache.org/)
+- [Gatling](https://gatling.io/)
+- ApacheBench
 
-### Database Migration
+- JfrUnit
 
-- [Flyway DB Migration](https://flywaydb.org/)
+### Plugin
+
+- [Jacoco](https://www.eclemma.org/jacoco/)
+
+## Database 
+
+### Migration
+
+- [Flyway](https://flywaydb.org/)
 - [Liquibase](https://www.liquibase.org/)
+- [Mongock](https://mongock.io/)
 
-### CI/CD
+### CDC
+
+- [Debezium](https://debezium.io/)
+- [Canal](https://github.com/alibaba/canal)
+
+## Security
+
+### Authorization Server
+
+- [Tanzu Local Authorization Server](https://blogs.vmware.com/tanzu/unlocking-security-a-deep-dive-into-the-local-authorization-server/)
+- [Keycloak](https://www.keycloak.org/)
+- [Auth.js](https://authjs.dev/)
+
+## CI/CD
 
 - [Jenkins](https://jenkins.io/)
 - [TravisCI](https://travis-ci.org/)
 - [CircleCI](https://circleci.com/)
+- Argo CD
+- GitHub Actions
+- Bitbucket Pipelines
 
-### Monitoring
+## Code Review
+
+- Code Climate
+- SonarQube
+- Snyk
+
+## Monitoring
 
 - [Grafana](https://grafana.com/)
 - [Prometheus](https://prometheus.io/)

@@ -1,6 +1,6 @@
 ## 架构发展历程
 
-参考 [1.软件架构编年史(译)](https://www.jianshu.com/p/b477b2cc6cfa)，架构发展经历一下几个阶段：
+参考 [1.软件架构编年史(译)](https://www.jianshu.com/p/b477b2cc6cfa)，架构发展经历以下几个阶段：
 
 - **过程式/函数式编程**
 - **MVC 模式(Model-View-Controller)**

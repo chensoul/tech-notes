@@ -3,10 +3,16 @@
 ## 插件
 
 - .ignore
+
 - Atom Materia Icons
-- Rainbow Brackets
-- GitHub Copilot
+
 - Laconic POM for Maven
+
+- Rainbow Brackets
+
+- GitHub Copilot
+
+  
 
 ## 卸载 idea2024
 
