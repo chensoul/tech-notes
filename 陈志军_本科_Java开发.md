@@ -1,6 +1,5 @@
-# 																																											陈志军
-
-​			  男 | 156-0865-8617 | ichensoul@gmail.com | [blog.chensoul.cc](https://blog.chensoul.cc/)  |  本科  | 期望城市：武汉
+# 陈志军
+   男 | 156-0865-8617 | ichensoul@gmail.com | [blog.chensoul.cc](https://blog.chensoul.cc/)  |  本科  | 期望城市：武汉
 
 ## 专业技能
 
