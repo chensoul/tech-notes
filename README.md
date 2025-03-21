@@ -1,3 +1,26 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:8b4e4a6ee27581cc4453eedcc08020afafc9fc3213c13e5ec07b31c4b1d6bb9e
-size 314
+# tech-notes
+
+My Tech Notes
+
+## Prerequisites
+
+- Nodejs 18+
+- VitePress
+
+## How to?
+
+```bash
+# Clone the repository
+$ git clone https://github.com/chensoul/tech-notes.git
+
+# install dependences
+npm install
+
+##local run
+npm run docs:dev
+
+# build dist
+npm run docs:build
+```
+
+Visit: http://localhost:5173/tech-notes/
