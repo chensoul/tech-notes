@@ -1,3 +1,29 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:6b918f3adf293f04bad9284c87ee8dcffe0e5becec50c674485da4b78617839c
-size 679
+---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
+
+hero:
+  name: "Tech Notes"
+  tagline: Welcome to My Tech Notes
+  actions:
+    - theme: brand
+      text: Java
+      link: /java
+    - theme: alt
+      text: Devops
+      link: /devops
+    - theme: alt
+      text: Database
+      link: /database  
+    - theme: alt
+      text: Distribution
+      link: /distribution    
+
+features:
+  - title: Feature A
+    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Feature B
+    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: Feature C
+    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+---

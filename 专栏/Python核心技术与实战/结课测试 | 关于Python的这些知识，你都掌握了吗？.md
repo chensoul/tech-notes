@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:db1d14906e145bdd6e804a5e0abd0024495e62c61f0cf864546bc9836750514d
-size 631
+
+你好，我是景霄。
+
+《Python核心技术与实战》这门课程已经完结一段时间了，在完结的这段时间里，我依然会收到很多留言，很感谢你一直以来的认真学习和支持！
+
+为了帮助你检验自己的学习效果，我特别给你准备了一套结课测试题。这套测试题共有20道题目，包括5道单选题和15道多选题，满分 100 分。
+
+还等什么，点击下面按钮开始测试吧！
+
+[<img src="https://static001.geekbang.org/resource/image/28/a4/28d1be62669b4f3cc01c36466bf811a4.png" alt="">](http://time.geekbang.org/quiz/intro?act_id=157&amp;exam_id=348)
