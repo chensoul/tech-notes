@@ -1,3 +1,8 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:3b1d06dc365efba430d9e27b61728e9b2c49e990c529c0bae6f33a012152b71d
-size 543
+
+你好，我是欧创新。
+
+《DDD实战课》这个专栏已经完结有段时间了，很庆幸啊，依然能收到很多留言，与我交流技术。为认真学习的你点赞，也很感谢你的支持！
+
+为了让你更好地检测自己的学习成果，我特意做了一套期末测试题。题目共有20道，满分为100分，快来检测一下吧！
+
+[<img src="https://static001.geekbang.org/resource/image/28/a4/28d1be62669b4f3cc01c36466bf811a4.png" alt="">](http://time.geekbang.org/quiz/intro?act_id=137&amp;exam_id=295)
