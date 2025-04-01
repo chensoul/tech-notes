@@ -14,17 +14,10 @@ PasswordEncoder 组件与认证流程之间的关系
 
 ```java
 @Override
-
 protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-
- 
-
         auth.jdbcAuthentication().dataSource(dataSource)
-
                .usersByUsernameQuery("select username, password, enabled from Users " + "where username=?")
-
                .authoritiesByUsernameQuery("select username, authority from UserAuthorities " + "where username=?")
-
                .passwordEncoder(new BCryptPasswordEncoder());
 
 }
