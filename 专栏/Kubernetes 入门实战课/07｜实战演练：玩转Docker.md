@@ -38,14 +38,14 @@ docker pull nginx:alpine
 &nbsp; &nbsp; -p 80:80 \
 &nbsp; &nbsp; -v `pwd`/wp.conf:/etc/nginx/conf.d/default.conf \
 &nbsp; &nbsp; nginx:alpine
-</code></pre><p>三个容器都启动之后，我们再用 <code>docker ps</code> 来看看它们的状态：</p><p><img src="https://static001.geekbang.org/resource/image/35/15/353f0f3aed1d1b540312548c29cb6c15.png?wh=1920x198" alt="图片"></p><p>可以看到，WordPress和MariaDB虽然使用了80和3306端口，但被容器隔离，外界不可见，只有Nginx有端口映射，能够从外界的80端口收发数据，网络状态和我们的架构图是一致的。</p><p>现在整个系统就已经在容器环境里运行好了，我们来打开浏览器，输入本机的“127.0.0.1”或者是虚拟机的IP地址（我这里是“<a href="http://192.168.10.208">http://192.168.10.208</a>”），就可以看到WordPress的界面：</p><p><img src="https://static001.geekbang.org/resource/image/a6/31/a63084a8dd95d0034ba72dcb60613531.png?wh=1224x1156" alt="图片"></p><p>在创建基本的用户、初始化网站之后，我们可以再登录MariaDB，看看是否已经有了一些数据：</p><p><img src="https://static001.geekbang.org/resource/image/a2/1e/a22dcabe805471e304a74c715e7fb51e.png?wh=1920x1749" alt="图片"></p><p>可以看到，WordPress已经在数据库里新建了很多的表，这就证明我们的容器化的WordPress网站搭建成功。</p><h2>小结</h2><p>好了，今天我们简单地回顾了一下容器技术，这里有一份思维导图，是对前面所有容器知识要点的总结，你可以对照着用来复习。</p><p><img src="https://static001.geekbang.org/resource/image/79/16/79f8c75e018e0a82eff432786110ef16.jpg?wh=1920x2142" alt="图片"></p><p>我们还使用Docker实际搭建了两个服务：Registry镜像仓库和WordPress网站。</p><p>通过这两个项目的实战演练，你应该能够感受到容器化对后端开发带来的巨大改变，它简化了应用的打包、分发和部署，简单的几条命令就可以完成之前需要编写大量脚本才能完成的任务，对于开发、运维来绝对是一个“福音”。</p><p>不过，在感受容器便利的同时，你有没有注意到它还是存在一些遗憾呢？比如说：</p><ul>
-<li>我们还是要手动运行一些命令来启动应用，然后再人工确认运行状态。</li>
-<li>运行多个容器组成的应用比较麻烦，需要人工干预（如检查IP地址）才能维护网络通信。</li>
-<li>现有的网络模式功能只适合单机，多台服务器上运行应用、负载均衡该怎么做？</li>
-<li>如果要增加应用数量该怎么办？这时容器技术完全帮不上忙。</li>
-</ul><p>其实，如果我们仔细整理这些运行容器的 <code>docker run</code> 命令，写成脚本，再加上一些Shell、Python编程来实现自动化，也许就能够得到一个勉强可用的解决方案。</p><p>这个方案已经超越了容器技术本身，是在更高的层次上规划容器的运行次序、网络连接、数据持久化等应用要素，也就是现在我们常说的“<strong>容器编排</strong>”（Container Orchestration）的雏形，也正是后面要学习的Kubernetes的主要出发点。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>学完了“入门篇”，和刚开始相比，你对容器技术有了哪些更深入的思考和理解？</li>
-<li>你觉得容器编排应该解决哪些方面的问题？</li>
+</code></pre><p>三个容器都启动之后，我们再用 <code>docker ps</code> 来看看它们的状态：</p><p><img src="https://static001.geekbang.org/resource/image/35/15/353f0f3aed1d1b540312548c29cb6c15.png?wh=1920x198" alt="图片"></p><p>可以看到，WordPress和MariaDB虽然使用了80和3306端口，但被容器隔离，外界不可见，只有Nginx有端口映射，能够从外界的80端口收发数据，网络状态和我们的架构图是一致的。</p><p>现在整个系统就已经在容器环境里运行好了，我们来打开浏览器，输入本机的“127.0.0.1”或者是虚拟机的IP地址（我这里是“<a href="http://192.168.10.208">http://192.168.10.208</a>”），就可以看到WordPress的界面：</p><p><img src="https://static001.geekbang.org/resource/image/a6/31/a63084a8dd95d0034ba72dcb60613531.png?wh=1224x1156" alt="图片"></p><p>在创建基本的用户、初始化网站之后，我们可以再登录MariaDB，看看是否已经有了一些数据：</p><p><img src="https://static001.geekbang.org/resource/image/a2/1e/a22dcabe805471e304a74c715e7fb51e.png?wh=1920x1749" alt="图片"></p><p>可以看到，WordPress已经在数据库里新建了很多的表，这就证明我们的容器化的WordPress网站搭建成功。</p><h2>小结</h2><p>好了，今天我们简单地回顾了一下容器技术，这里有一份思维导图，是对前面所有容器知识要点的总结，你可以对照着用来复习。</p><p><img src="https://static001.geekbang.org/resource/image/79/16/79f8c75e018e0a82eff432786110ef16.jpg?wh=1920x2142" alt="图片"></p><p>我们还使用Docker实际搭建了两个服务：Registry镜像仓库和WordPress网站。</p><p>通过这两个项目的实战演练，你应该能够感受到容器化对后端开发带来的巨大改变，它简化了应用的打包、分发和部署，简单的几条命令就可以完成之前需要编写大量脚本才能完成的任务，对于开发、运维来绝对是一个“福音”。</p><p>不过，在感受容器便利的同时，你有没有注意到它还是存在一些遗憾呢？比如说：</p>
+我们还是要手动运行一些命令来启动应用，然后再人工确认运行状态。
+运行多个容器组成的应用比较麻烦，需要人工干预（如检查IP地址）才能维护网络通信。
+现有的网络模式功能只适合单机，多台服务器上运行应用、负载均衡该怎么做？
+如果要增加应用数量该怎么办？这时容器技术完全帮不上忙。
+<p>其实，如果我们仔细整理这些运行容器的 <code>docker run</code> 命令，写成脚本，再加上一些Shell、Python编程来实现自动化，也许就能够得到一个勉强可用的解决方案。</p><p>这个方案已经超越了容器技术本身，是在更高的层次上规划容器的运行次序、网络连接、数据持久化等应用要素，也就是现在我们常说的“<strong>容器编排</strong>”（Container Orchestration）的雏形，也正是后面要学习的Kubernetes的主要出发点。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
+学完了“入门篇”，和刚开始相比，你对容器技术有了哪些更深入的思考和理解？
+你觉得容器编排应该解决哪些方面的问题？
 </ol><p>欢迎积极留言讨论，如果有收获，也欢迎你转发给身边的朋友一起学习。</p><p>下节课是视频课，我会用视频直观演示我们前面学过的操作，我们下节课见。<br>
 <img src="https://static001.geekbang.org/resource/image/43/fa/43ccbfc6b629eed231ffec8d6eaf99fa.jpg?wh=1920x2051" alt=""></p>
 <style>
@@ -157,7 +157,7 @@ docker pull nginx:alpine
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -172,8 +172,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -188,8 +188,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/bb/74/edc07099.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -204,8 +204,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -220,8 +220,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -236,8 +236,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/8e/3f/1f529b26.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -252,8 +252,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/ed/d50de13c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -268,8 +268,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/94/91/6d6ca42f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -284,8 +284,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/0a/a4/828a431f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -300,8 +300,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/1d/de/62bfa83f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -316,8 +316,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqF6ViaDyAibEKbcKfWoGXe8lCbb8wqes5g3JezHWNLf4DIl92QwXX43HWv408BxzkOKmKb2HpKJuIw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -332,8 +332,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqw0R25Bt0iahFhEHfnxmzr9iaZf0eLsDQtFUJzgGkYwHTqicU9TydMngrJ4yL7D50awD2VibHBAdqplQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -348,8 +348,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/f7/b1/982ea185.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -364,8 +364,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/0c/e1/f663213e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -380,8 +380,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -396,8 +396,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -412,8 +412,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/3c/4d/3dec4bfe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -428,8 +428,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/c7/89/16437396.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -444,8 +444,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5c/18/9f35fddb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -460,8 +460,8 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5c/18/9f35fddb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -476,5 +476,4 @@ docker pull nginx:alpine
   </div>
 </div>
 </div>
-</li>
-</ul>
+

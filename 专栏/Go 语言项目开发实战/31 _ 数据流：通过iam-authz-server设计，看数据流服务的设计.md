@@ -17,14 +17,14 @@
 &nbsp; &nbsp; }
 &nbsp; }
 }
-</code></pre><p>策略（Policy）由若干元素构成，用来描述授权的具体信息，你可以把它们看成一组规则。核心元素包括主题（Subject）、操作（Action）、效力（Effect）、资源（Resource）以及生效条件（Condition）。元素保留字仅支持小写，它们在描述上没有顺序要求。对于没有特定约束条件的策略，Condition元素是可选项。一条策略包含下面6个元素：</p><ul>
-<li>主题（Subject），主题名是唯一的，代表一个授权主题。例如，“ken” or “printer-service.mydomain.com”。</li>
-<li>操作（Action），描述允许或拒绝的操作。</li>
-<li>效力（Effect），描述策略产生的结果是“允许”还是“拒绝”，包括 allow（允许）和 deny（拒绝）。</li>
-<li>资源（Resource），描述授权的具体数据。</li>
-<li>生效条件（Condition），描述策略生效的约束条件。</li>
-<li>描述（Description），策略的描述。</li>
-</ul><p>有了授权策略，我们就可以传入请求上下文，由Ladon来决定请求是否能通过授权。下面是一个请求示例：</p><pre><code class="language-json">{
+</code></pre><p>策略（Policy）由若干元素构成，用来描述授权的具体信息，你可以把它们看成一组规则。核心元素包括主题（Subject）、操作（Action）、效力（Effect）、资源（Resource）以及生效条件（Condition）。元素保留字仅支持小写，它们在描述上没有顺序要求。对于没有特定约束条件的策略，Condition元素是可选项。一条策略包含下面6个元素：</p>
+主题（Subject），主题名是唯一的，代表一个授权主题。例如，“ken” or “printer-service.mydomain.com”。
+操作（Action），描述允许或拒绝的操作。
+效力（Effect），描述策略产生的结果是“允许”还是“拒绝”，包括 allow（允许）和 deny（拒绝）。
+资源（Resource），描述授权的具体数据。
+生效条件（Condition），描述策略生效的约束条件。
+描述（Description），策略的描述。
+<p>有了授权策略，我们就可以传入请求上下文，由Ladon来决定请求是否能通过授权。下面是一个请求示例：</p><pre><code class="language-json">{
 &nbsp; "subject": "users:peter",
 &nbsp; "action" : "delete",
 &nbsp; "resource": "resources:articles:ladon-introduction",
@@ -79,17 +79,17 @@ func main() {
 
 &nbsp; &nbsp; // ...
 }
-</code></pre><p>在使用Ladon的过程中，有两个地方需要你注意：</p><ul>
-<li>所有检查都区分大小写，因为主题值可能是区分大小写的ID。</li>
-<li>如果ladon.Ladon无法将策略与请求匹配，会默认授权结果为拒绝，并返回错误。</li>
-</ul><h3>iam-authz-server使用方法介绍</h3><p>上面，我介绍了iam-authz-server的资源授权功能，这里介绍下如何使用iam-authz-server，也就是如何调用 <code>/v1/authz</code> 接口完成资源授权。你可以通过下面的3大步骤，来完成资源授权请求。</p><p><strong>第一步，登陆iam-<strong><strong>a</strong></strong>p<strong><strong>i</strong></strong>s<strong><strong>e</strong></strong>r<strong><strong>v</strong></strong>er，创建授权策略和密钥。</strong></p><p>这一步又分为3个小步骤。</p><ol>
-<li>登陆iam-apiserver系统，获取访问令牌：</li>
+</code></pre><p>在使用Ladon的过程中，有两个地方需要你注意：</p>
+所有检查都区分大小写，因为主题值可能是区分大小写的ID。
+如果ladon.Ladon无法将策略与请求匹配，会默认授权结果为拒绝，并返回错误。
+<h3>iam-authz-server使用方法介绍</h3><p>上面，我介绍了iam-authz-server的资源授权功能，这里介绍下如何使用iam-authz-server，也就是如何调用 <code>/v1/authz</code> 接口完成资源授权。你可以通过下面的3大步骤，来完成资源授权请求。</p><p><strong>第一步，登陆iam-<strong><strong>a</strong></strong>p<strong><strong>i</strong></strong>s<strong><strong>e</strong></strong>r<strong><strong>v</strong></strong>er，创建授权策略和密钥。</strong></p><p>这一步又分为3个小步骤。</p><ol>
+登陆iam-apiserver系统，获取访问令牌：
 </ol><pre><code class="language-shell">$ token=`curl -s -XPOST -H'Content-Type: application/json' -d'{"username":"admin","password":"Admin@2021"}' http://127.0.0.1:8080/login | jq -r .token`
 </code></pre><ol start="2">
-<li>创建授权策略：</li>
+创建授权策略：
 </ol><pre><code class="language-shell">$ curl -s -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer $token" -d'{"metadata":{"name":"authztest"},"policy":{"description":"One policy to rule them all.","subjects":["users:&lt;peter|ken&gt;","users:maria","groups:admins"],"actions":["delete","&lt;create|update&gt;"],"effect":"allow","resources":["resources:articles:&lt;.*&gt;","resources:printer"],"conditions":{"remoteIP":{"type":"CIDRCondition","options":{"cidr":"192.168.0.1/16"}}}}}' http://127.0.0.1:8080/v1/policies
 </code></pre><ol start="3">
-<li>创建密钥，并从请求结果中提取secretID 和 secretKey：</li>
+创建密钥，并从请求结果中提取secretID 和 secretKey：
 </ol><pre><code class="language-shell">$ curl -s -XPOST -H"Content-Type: application/json" -H"Authorization: Bearer $token" -d'{"metadata":{"name":"authztest"},"expires":0,"description":"admin secret"}' http://127.0.0.1:8080/v1/secrets
 {"metadata":{"id":23,"name":"authztest","createdAt":"2021-04-08T07:24:50.071671422+08:00","updatedAt":"2021-04-08T07:24:50.071671422+08:00"},"username":"admin","secretID":"ZuxvXNfG08BdEMqkTaP41L2DLArlE6Jpqoox","secretKey":"7Sfa5EfAPIwcTLGCfSvqLf0zZGCjF3l8","expires":0,"description":"admin secret"}
 </code></pre><p><strong>第二步，生成访问 iam-authz-server的 token。</strong></p><p>iamctl 提供了 <code>jwt sigin</code> 子命令，可以根据 secretID 和 secretKey 签发 Token，方便使用。</p><pre><code class="language-shell">$ iamctl jwt sign ZuxvXNfG08BdEMqkTaP41L2DLArlE6Jpqoox 7Sfa5EfAPIwcTLGCfSvqLf0zZGCjF3l8 # iamctl jwt sign $secretID $secretKey
@@ -109,17 +109,17 @@ Claims:
 &nbsp; &nbsp; "iss": "iamctl",
 &nbsp; &nbsp; "nbf": 1617837995
 }
-</code></pre><p>我们生成的Token包含了下面这些信息。</p><p><strong>Header</strong></p><ul>
-<li>alg：生成签名的算法。</li>
-<li>kid：密钥ID。</li>
-<li>typ：Token的类型，这里是JWT。</li>
-</ul><p><strong>Claims</strong></p><ul>
-<li>aud：JWT Token的接受者。</li>
-<li>exp：JWT Token的过期时间（UNIX时间格式）。</li>
-<li>iat：JWT Token的签发时间（UNIX时间格式）。</li>
-<li>iss：签发者，因为我们是用 iamctl 工具签发的，所以这里的签发者是 iamctl。</li>
-<li>nbf：JWT Token的生效时间（UNIX时间格式），默认是签发时间。</li>
-</ul><p><strong>第三步，调用</strong><code>/v1/authz</code><strong>接口</strong><strong>，</strong><strong>完成资源授权请求。</strong></p><p>请求方法如下：</p><pre><code class="language-shell">$ curl -s -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Ilp1eHZYTmZHMDhCZEVNcWtUYVA0MUwyRExBcmxFNkpwcW9veCIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYxNzg0NTE5NSwiaWF0IjoxNjE3ODM3OTk1LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MTc4Mzc5OTV9.za9yLM7lHVabPAlVQLCqXEaf8sTU6sodAsMXnmpXjMQ' -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIP":"192.168.0.5"}}' http://127.0.0.1:9090/v1/authz
+</code></pre><p>我们生成的Token包含了下面这些信息。</p><p><strong>Header</strong></p>
+alg：生成签名的算法。
+kid：密钥ID。
+typ：Token的类型，这里是JWT。
+<p><strong>Claims</strong></p>
+aud：JWT Token的接受者。
+exp：JWT Token的过期时间（UNIX时间格式）。
+iat：JWT Token的签发时间（UNIX时间格式）。
+iss：签发者，因为我们是用 iamctl 工具签发的，所以这里的签发者是 iamctl。
+nbf：JWT Token的生效时间（UNIX时间格式），默认是签发时间。
+<p><strong>第三步，调用</strong><code>/v1/authz</code><strong>接口</strong><strong>，</strong><strong>完成资源授权请求。</strong></p><p>请求方法如下：</p><pre><code class="language-shell">$ curl -s -XPOST -H'Content-Type: application/json' -H'Authorization: Bearer eyJhbGciOiJIUzI1NiIsImtpZCI6Ilp1eHZYTmZHMDhCZEVNcWtUYVA0MUwyRExBcmxFNkpwcW9veCIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXV0aHoubWFybW90ZWR1LmNvbSIsImV4cCI6MTYxNzg0NTE5NSwiaWF0IjoxNjE3ODM3OTk1LCJpc3MiOiJpYW1jdGwiLCJuYmYiOjE2MTc4Mzc5OTV9.za9yLM7lHVabPAlVQLCqXEaf8sTU6sodAsMXnmpXjMQ' -d'{"subject":"users:maria","action":"delete","resource":"resources:articles:ladon-introduction","context":{"remoteIP":"192.168.0.5"}}' http://127.0.0.1:9090/v1/authz
 {"allowed":true}
 </code></pre><p>如果授权通过，会返回：<code>{"allowed":true}</code> 。 如果授权失败，则返回：</p><pre><code class="language-shell">{"allowed":false,"denied":true,"reason":"Request was denied by default"}
 </code></pre><h2>iam-authz-server的代码实现</h2><p>接下来，我们来看下iam-authz-server的具体实现，我会从配置处理、启动流程、请求处理流程和代码架构4个方面来讲解。</p><h3>iam-authz-server的配置处理</h3><p>iam-authz-server服务的main函数位于<a href="https://github.com/marmotedu/iam/blob/v1.0.4/cmd/iam-authz-server/authzserver.go">authzserver.go</a>文件中，你可以跟读代码，了解iam-authz-server的代码实现。iam-authz-server的服务框架设计跟iam-apiserver的服务框架设计保持一致，也是有3种配置：Options配置、组件配置和HTTP服务配置。</p><p>Options配置见<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/authzserver/options/options.go">options.go</a>文件：</p><pre><code class="language-go">type Options struct {
@@ -133,11 +133,11 @@ Claims:
 &nbsp; &nbsp; Log&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;*log.Options
 &nbsp; &nbsp; AnalyticsOptions&nbsp; &nbsp; &nbsp; &nbsp; *analytics.AnalyticsOptions
 }
-</code></pre><p>和iam-apiserver相比，iam-authz-server多了 <code>AnalyticsOptions</code>，用来配置iam-authz-server内的Analytics服务，Analytics服务会将授权日志异步写入到Redis中。</p><p>iam-apiserver和iam-authz-server共用了GenericServerRunOptions、InsecureServing、SecureServing、FeatureOptions、RedisOptions、Log这些配置。所以，我们只需要用简单的几行代码，就可以将很多配置项都引入到iam-authz-server的命令行参数中，这也是命令行参数分组带来的好处：批量共享。</p><h3>iam-authz-server启动流程设计</h3><p>接下来，我们来详细看下iam-authz-server的启动流程。</p><p>iam-authz-server的启动流程也和iam-apiserver基本保持一致。二者比较大的不同在于Options参数配置和应用初始化内容。另外，和iam-apiserver相比，iam-authz-server只提供了REST API服务。启动流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/19/35/195178d37854bac7d5243d80e42a4c35.jpg?wh=2248x799" alt=""></p><h3>iam-authz-server 的 RESTful API请求处理流程</h3><p>iam-authz-server的请求处理流程也是清晰、规范的，具体流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/5a/89/5a83384f5762c41831190628bfa60989.jpg?wh=2248x780" alt=""></p><p><strong>首先，</strong>我们通过API调用（<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>）请求iam-authz-server提供的RESTful API接口 <code>POST /v1/authz</code> 。</p><p><strong>接着，</strong>Gin Web框架接收到HTTP请求之后，会通过认证中间件完成请求的认证，iam-authz-server采用了Bearer认证方式。</p><p><strong>然后，</strong>请求会被我们加载的一系列中间件所处理，例如跨域、RequestID、Dump等中间件。</p><p><strong>最后，</strong>根据<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>进行路由匹配。</p><p>比如，我们请求的RESTful API是<code>POST /v1/authz</code>，Gin Web框架会根据 HTTP Method 和 HTTP Request Path，查找注册的Controllers，最终匹配到 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/authzserver/controller/v1/authorize/authorize.go#L33">authzController.Authorize</a> Controller。在 Authorize Controller中，会先解析请求参数，接着校验请求参数、调用业务层的方法进行资源授权，最后处理业务层的返回结果，返回最终的 HTTP 请求结果。</p><h3>iam-authz-server的代码架构</h3><p>iam-authz-server的代码设计和iam-apiserver一样，遵循简洁架构设计。</p><p>iam-authz-server的代码架构也分为4层，分别是模型层（Models）、控制层（Controller）、业务层 （Service）和仓库层（Repository）。从控制层、业务层到仓库层，从左到右层级依次加深。模型层独立于其他层，可供其他层引用。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/a5/dd/a57832495c9e031a94282f0a8a3a61dd.jpg?wh=2248x702" alt=""></p><p>iam-authz-server 和 iam-apiserver 的代码架构有这三点不同：</p><ul>
-<li>iam-authz-server客户端不支持前端和命令行。</li>
-<li>iam-authz-server仓库层对接的是iam-apiserver微服务，而非数据库。</li>
-<li>iam-authz-server业务层的代码存放在目录<a href="https://github.com/marmotedu/iam/tree/v1.0.4/internal/authzserver/authorization">authorization</a>中。</li>
-</ul><h2>iam-authz-server关键代码分析</h2><p>和 iam-apiserver 一样，iam-authz-server也包含了一些优秀的设计思路和关键代码，这里我来一一介绍下。</p><h3>资源授权</h3><p>先来看下，iam-authz-server是如何实现资源授权的。</p><p>我们可以调用iam-authz-server的 <code>/v1/authz</code>  API接口，实现资源的访问授权。 <code>/v1/authz</code> 对应的controller方法是<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/authzserver/controller/v1/authorize/authorize.go#L33">Authorize</a>：</p><pre><code class="language-go">func (a *AuthzController) Authorize(c *gin.Context) {
+</code></pre><p>和iam-apiserver相比，iam-authz-server多了 <code>AnalyticsOptions</code>，用来配置iam-authz-server内的Analytics服务，Analytics服务会将授权日志异步写入到Redis中。</p><p>iam-apiserver和iam-authz-server共用了GenericServerRunOptions、InsecureServing、SecureServing、FeatureOptions、RedisOptions、Log这些配置。所以，我们只需要用简单的几行代码，就可以将很多配置项都引入到iam-authz-server的命令行参数中，这也是命令行参数分组带来的好处：批量共享。</p><h3>iam-authz-server启动流程设计</h3><p>接下来，我们来详细看下iam-authz-server的启动流程。</p><p>iam-authz-server的启动流程也和iam-apiserver基本保持一致。二者比较大的不同在于Options参数配置和应用初始化内容。另外，和iam-apiserver相比，iam-authz-server只提供了REST API服务。启动流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/19/35/195178d37854bac7d5243d80e42a4c35.jpg?wh=2248x799" alt=""></p><h3>iam-authz-server 的 RESTful API请求处理流程</h3><p>iam-authz-server的请求处理流程也是清晰、规范的，具体流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/5a/89/5a83384f5762c41831190628bfa60989.jpg?wh=2248x780" alt=""></p><p><strong>首先，</strong>我们通过API调用（<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>）请求iam-authz-server提供的RESTful API接口 <code>POST /v1/authz</code> 。</p><p><strong>接着，</strong>Gin Web框架接收到HTTP请求之后，会通过认证中间件完成请求的认证，iam-authz-server采用了Bearer认证方式。</p><p><strong>然后，</strong>请求会被我们加载的一系列中间件所处理，例如跨域、RequestID、Dump等中间件。</p><p><strong>最后，</strong>根据<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>进行路由匹配。</p><p>比如，我们请求的RESTful API是<code>POST /v1/authz</code>，Gin Web框架会根据 HTTP Method 和 HTTP Request Path，查找注册的Controllers，最终匹配到 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/authzserver/controller/v1/authorize/authorize.go#L33">authzController.Authorize</a> Controller。在 Authorize Controller中，会先解析请求参数，接着校验请求参数、调用业务层的方法进行资源授权，最后处理业务层的返回结果，返回最终的 HTTP 请求结果。</p><h3>iam-authz-server的代码架构</h3><p>iam-authz-server的代码设计和iam-apiserver一样，遵循简洁架构设计。</p><p>iam-authz-server的代码架构也分为4层，分别是模型层（Models）、控制层（Controller）、业务层 （Service）和仓库层（Repository）。从控制层、业务层到仓库层，从左到右层级依次加深。模型层独立于其他层，可供其他层引用。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/a5/dd/a57832495c9e031a94282f0a8a3a61dd.jpg?wh=2248x702" alt=""></p><p>iam-authz-server 和 iam-apiserver 的代码架构有这三点不同：</p>
+iam-authz-server客户端不支持前端和命令行。
+iam-authz-server仓库层对接的是iam-apiserver微服务，而非数据库。
+iam-authz-server业务层的代码存放在目录<a href="https://github.com/marmotedu/iam/tree/v1.0.4/internal/authzserver/authorization">authorization</a>中。
+<h2>iam-authz-server关键代码分析</h2><p>和 iam-apiserver 一样，iam-authz-server也包含了一些优秀的设计思路和关键代码，这里我来一一介绍下。</p><h3>资源授权</h3><p>先来看下，iam-authz-server是如何实现资源授权的。</p><p>我们可以调用iam-authz-server的 <code>/v1/authz</code>  API接口，实现资源的访问授权。 <code>/v1/authz</code> 对应的controller方法是<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/authzserver/controller/v1/authorize/authorize.go#L33">Authorize</a>：</p><pre><code class="language-go">func (a *AuthzController) Authorize(c *gin.Context) {
 	var r ladon.Request
 	if err := c.ShouldBind(&amp;r); err != nil {
 		core.WriteResponse(c, errors.WithCode(code.ErrBind, err.Error()), nil)
@@ -221,12 +221,12 @@ Claims:
 &nbsp; &nbsp; log.Debug("refresh target storage succ")
 }
 </code></pre><p>上面我们说了，创建Load服务时，传入的cacheIns实例是一个实现了Loader接口的实例，所以在<a href="https://github.com/marmotedu/iam/blob/v1.0.5/internal/authzserver/load/load.go#L119">DoReload</a>方法中，可以直接调用Reload方法。cacheIns的Reload方法会从iam-apiserver中同步密钥和策略信息到iam-authz-server缓存中。</p><p>我们再来看下，startPubSubLoop、reloadQueueLoop、reloadLoop 这3个Go协程分别完成了什么功能。</p><ol>
-<li>startPubSubLoop协程</li>
+startPubSubLoop协程
 </ol><p><a href="https://github.com/marmotedu/iam/blob/v1.0.5/internal/authzserver/load/redis_signals.go#L46">startPubSubLoop</a>函数通过<a href="https://github.com/marmotedu/iam/blob/v1.0.5/pkg/storage/redis_cluster.go#L897">StartPubSubHandler</a>函数，订阅Redis的 <code>iam.cluster.notifications</code> channel，并注册一个回调函数：</p><pre><code class="language-go">func(v interface{}) {
 &nbsp; &nbsp; handleRedisEvent(v, nil, nil)
 }
 </code></pre><p><a href="https://github.com/marmotedu/iam/blob/v1.0.5/internal/authzserver/load/redis_signals.go#L65">handleRedisEvent</a>函数中，会将消息解析为<a href="https://github.com/marmotedu/iam/blob/v1.0.5/internal/authzserver/load/redis_signals.go#L32">Notification</a>类型的消息，并判断Command的值。如果是NoticePolicyChanged或NoticeSecretChanged，就会向 <code>reloadQueue</code> channel中写入一个回调函数。因为我们不需要用回调函数做任何事情，所以这里回调函数是nil。 <code>reloadQueue</code> 主要用来告诉程序，需要完成一次密钥和策略的同步。</p><ol start="2">
-<li>reloadQueueLoop协程</li>
+reloadQueueLoop协程
 </ol><p>reloadQueueLoop函数会监听 <code>reloadQueue</code> ，当发现有新的消息（这里是回调函数）写入时，会实时将消息缓存到 <code>requeue</code> 切片中，代码如下：</p><pre><code class="language-go">func (l *Load) reloadQueueLoop(cb ...func()) {
 		for {
 			select {
@@ -244,7 +244,7 @@ Claims:
 		}
 	}
 </code></pre><ol start="3">
-<li>reloadLoop协程</li>
+reloadLoop协程
 </ol><p>通过<a href="https://github.com/marmotedu/iam/blob/v1.0.5/internal/authzserver/load/load.go#L81">reloadLoop</a>函数启动一个timer定时器，每隔1秒会检查 <code>requeue</code> 切片是否为空，如果不为空，则调用 <code>l.DoReload</code> 方法，从iam-apiserver中拉取密钥和策略，并缓存在内存中。</p><p>密钥和策略的缓存模型如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/a2/11/a2f5694e5d6291ca610b84ee49469211.jpg?wh=2248x890" alt=""></p><p><strong>密钥和策略缓存的具体流程如下：</strong></p><p>接收上游消息（这里是从Redis中接收），将消息缓存到切片或者带缓冲的channel中，并启动一个消费协程去消费这些消息。这里的消费协程是reloadLoop，reloadLoop会每隔1s判断 <code>requeue</code> 切片是否长度为0，如果不为0，则执行 <code>l.DoReload()</code> 缓存密钥和策略。</p><p>讲完了密钥和策略缓存，<strong>再<strong><strong>来</strong></strong>看下授权日志缓存。</strong></p><p>在启动iam-authz-server时，还会启动一个Analytics服务，代码如下（位于<a href="https://github.com/marmotedu/iam/blob/v1.0.6/internal/authzserver/server.go#L147-L156">internal/authzserver/server.go</a>文件中）：</p><pre><code class="language-go">&nbsp; &nbsp; if s.analyticsOptions.Enable {&nbsp; &nbsp;&nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; analyticsStore := storage.RedisCluster{KeyPrefix: RedisKeyPrefix}&nbsp; &nbsp;&nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; analyticsIns := analytics.NewAnalytics(s.analyticsOptions, &amp;analyticsStore)&nbsp; &nbsp;&nbsp;
@@ -318,12 +318,12 @@ Claims:
 recordsBufferSize := options.RecordsBufferSize
 workerBufferSize := recordsBufferSize / uint64(ps)
 </code></pre><p>其中，options.PoolSize由命令行参数 <code>--analytics.pool-size</code> 指定，代表worker 的个数，默认 50；options.RecordsBufferSize由命令行参数 <code>--analytics.records-buffer-size</code> 指定，代表缓存的授权日志消息数。也就是说，我们把缓存的记录平均分配给所有的worker。</p><p>当recordsBuffer存满或者达到投递最大时间后，调用 <code>r.Store.AppendToSetPipelined(analyticsKeyName, recordsBuffer)</code> 将记录批量发送给Redis，为了提高传输速率，这里将日志内容编码为msgpack格式后再传输。</p><p>上面的缓存方法可以抽象成一个缓存模型，满足实际开发中的大部分需要异步转存的场景，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/47/95/479fyy2cd16a6c1fa5f6074f7ce6fe95.jpg?wh=2248x668" alt=""></p><p>Producer将数据投递到带缓冲的channel中，后端有多个worker消费channel中的数据，并进行批量投递。你可以设置批量投递的条件，一般至少包含<strong>最大投递日志数</strong>和<strong>最大投递时间间隔</strong>这两个。</p><p>通过以上缓冲模型，你可以将日志转存的时延降到最低。</p><h3>数据一致性</h3><p>上面介绍了 iam-authz-server的 <code>/v1/authz</code> 接口，为了最大化地提高性能，采用了大量的缓存设计。因为数据会分别在持久化存储和内存中都存储一份，就可能会出现数据不一致的情况。所以，我们也要确保缓存中的数据和数据库中的数据是一致的。数据一致性架构如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/72/a4/72c2afe63d197e7335deec1ac9f550a4.jpg?wh=2248x1006" alt=""></p><p>密钥和策略同步流程如下：</p><ol>
-<li>通过iam-webconsole请求iam-apiserver创建（或更新、删除）密钥（或策略）。</li>
-<li>iam-apiserver收到“写”请求后，会向Redis  <code>iam.cluster.notifications</code> channel发送PolicyChanged或SecretChanged消息。</li>
-<li>Loader收到消息后，会触发cache loader实例执行 <code>Reload</code> 方法，重新从iam-apiserver中同步密钥和策略信息。</li>
+通过iam-webconsole请求iam-apiserver创建（或更新、删除）密钥（或策略）。
+iam-apiserver收到“写”请求后，会向Redis  <code>iam.cluster.notifications</code> channel发送PolicyChanged或SecretChanged消息。
+Loader收到消息后，会触发cache loader实例执行 <code>Reload</code> 方法，重新从iam-apiserver中同步密钥和策略信息。
 </ol><p>Loader不会关心 <code>Reload</code> 方法的具体实现，只会在收到指定消息时，执行 <code>Reload</code> 方法。通过这种方式，我们可以实现不同的缓存策略。</p><p>在cache实例的 <code>Reload</code> 方法中，我们其实是调用仓库层Secret和Policy的List方法来获取密钥和策略列表。仓库层又是通过执行gRPC请求，从iam-apiserver中获取密钥和策略列表。</p><p>cache的<a href="https://github.com/marmotedu/iam/blob/v1.0.6/internal/authzserver/load/cache/cache.go#L105-L132">Reload</a>方法，会将获取到的密钥和策略列表缓存在<a href="https://github.com/dgraph-io/ristretto">ristretto</a>类型的Cache中，供业务层调用。业务层代码位于<a href="https://github.com/marmotedu/iam/tree/v1.0.6/internal/authzserver/authorization">internal/authzserver/authorization</a>目录下。</p><h2>总结</h2><p>这一讲中，我介绍了IAM数据流服务iam-authz-server的设计和实现。iam-authz-server提供了 <code>/v1/authz</code> RESTful API接口，供第三方用户完成资源授权功能，具体是使用Ladon包来完成资源授权的。Ladon包解决了“在特定的条件下，谁能够/不能够对哪些资源做哪些操作”的问题。</p><p>iam-authz-server的配置处理、启动流程和请求处理流程跟iam-apiserver保持一致。此外，iam-authz-server也实现了简洁架构。</p><p>iam-authz-server通过缓存密钥和策略信息、缓存授权日志来提高 <code>/v1/authz</code> 接口的性能。</p><p>在缓存密钥和策略信息时，为了和iam-apiserver中的密钥和策略信息保持一致，使用了Redis Pub/Sub机制。当iam-apiserver有密钥/策略变更时，会往指定的Redis channel Pub一条消息。iam-authz-server订阅相同的channel，在收到新消息时，会解析消息，并重新从iam-apiserver中获取密钥和策略信息，缓存在内存中。</p><p>iam-authz-server执行完资源授权之后，会将授权日志存放在一个带缓冲的channel中。后端有多个worker消费channel中的数据，并进行批量投递。可以设置批量投递的条件，例如最大投递日志数和最大投递时间间隔。</p><h2>课后练习</h2><ol>
-<li>iam-authz-server和iam-apiserver共用了应用框架（包括一些配置项）和HTTP服务框架层的代码，请阅读iam-authz-server代码，看下IAM项目是如何实现代码复用的。</li>
-<li>iam-authz-server使用了<a href="https://github.com/dgraph-io/ristretto">ristretto</a>来缓存密钥和策略信息，请调研下业界还有哪些优秀的缓存包可供使用，欢迎在留言区分享。</li>
+iam-authz-server和iam-apiserver共用了应用框架（包括一些配置项）和HTTP服务框架层的代码，请阅读iam-authz-server代码，看下IAM项目是如何实现代码复用的。
+iam-authz-server使用了<a href="https://github.com/dgraph-io/ristretto">ristretto</a>来缓存密钥和策略信息，请调研下业界还有哪些优秀的缓存包可供使用，欢迎在留言区分享。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -434,7 +434,7 @@ workerBufferSize := recordsBufferSize / uint64(ps)
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/64/53/c93b8110.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -449,8 +449,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKhuGLVRYZibOTfMumk53Wn8Q0Rkg0o6DzTicbibCq42lWQoZ8lFeQvicaXuZa7dYsr9URMrtpXMVDDww/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -465,8 +465,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/60/a1/8f003697.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -481,8 +481,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/96/82/8ac1e909.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -497,8 +497,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -513,8 +513,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -529,8 +529,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/4b/11/d7e08b5b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -545,8 +545,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJKObzsYVibibyibmTVKBmoGPqS0WQC16EY4p1agGDCpv5okKpjzicLtHafBVa7TCwh9HaRxTx9qQ1Qkg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -561,8 +561,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -577,8 +577,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/30/49/c4/c5ddbe2b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -593,8 +593,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/c9/5e/b79e6d5d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -609,8 +609,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/1e/4c/10174727.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -625,8 +625,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/7orjLiard5WYicG0WaRjk01ycCDtAZadtf2sWzg0c7vXl7oqIwic0QvzlE3lr3fgMZibqXSwAibV4Qu0YSeeMlibUMSg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -641,8 +641,8 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/f0/eb/24a8be29.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -657,5 +657,4 @@ workerBufferSize := recordsBufferSize / uint64(ps)
   </div>
 </div>
 </div>
-</li>
-</ul>
+

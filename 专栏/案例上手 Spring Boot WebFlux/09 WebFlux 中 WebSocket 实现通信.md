@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -166,12 +166,12 @@
 <p>回到这个工程，新建一个工程编写 WebSocket 实现通信案例。工程如图：</p>
 <p><img src="assets/38520c5f22d961494869d108b3c044711525329.png" alt="file" /></p>
 <p>目录核心如下：</p>
-<ul>
-<li>EchoHandler websocket 处理类（类似 HTTP Servlet 处理）</li>
-<li>WebSocketConfiguration websocket 配置类</li>
-<li>websocket-client.html HTML 客户端实现</li>
-<li>WSClient java 客户端实现</li>
-</ul>
+
+EchoHandler websocket 处理类（类似 HTTP Servlet 处理）
+WebSocketConfiguration websocket 配置类
+websocket-client.html HTML 客户端实现
+WSClient java 客户端实现
+
 <p><a href="https://github.com/JeffLi1993/springboot-learning-example">单击这里查看源代码</a>。</p>
 <h3>EchoHandler 处理类</h3>
 <p>代码如下：</p>
@@ -193,12 +193,12 @@ public class EchoHandler implements WebSocketHandler {
 
 </code></pre>
 <p>代码详解：</p>
-<ul>
-<li>WebSocketHandler 接口，实现该接口来处理 WebSokcet 消息。</li>
-<li>handle(WebSocketSession session) 方法，接收 WebSocketSession 对象，即获取客户端信息、发送消息和接收消息的操作对象。</li>
-<li>receive() 方法，接收消息，使用 map 操作获取的 Flux 中包含的消息持续处理，并拼接出返回消息 Flux 对象。</li>
-<li>send() 方法，发送消息。消息为“服务端返回：小明， -&gt; ”开头的。</li>
-</ul>
+
+WebSocketHandler 接口，实现该接口来处理 WebSokcet 消息。
+handle(WebSocketSession session) 方法，接收 WebSocketSession 对象，即获取客户端信息、发送消息和接收消息的操作对象。
+receive() 方法，接收消息，使用 map 操作获取的 Flux 中包含的消息持续处理，并拼接出返回消息 Flux 对象。
+send() 方法，发送消息。消息为“服务端返回：小明， -&gt; ”开头的。
+
 <h3>WebSocketConfiguration 配置类</h3>
 <p>代码如下：</p>
 <pre><code>@Configuration
@@ -224,11 +224,11 @@ public class WebSocketConfiguration {
 
 </code></pre>
 <p>代码详解：</p>
-<ul>
-<li>WebSocketHandlerAdapter 负责将 EchoHandler 处理类适配到 WebFlux 容器中；</li>
-<li>SimpleUrlHandlerMapping 指定了 WebSocket 的路由配置；</li>
-<li>使用 map 指定 WebSocket 协议的路由，路由为 ws://localhost:8080/echo。</li>
-</ul>
+
+WebSocketHandlerAdapter 负责将 EchoHandler 处理类适配到 WebFlux 容器中；
+SimpleUrlHandlerMapping 指定了 WebSocket 的路由配置；
+使用 map 指定 WebSocket 协议的路由，路由为 ws://localhost:8080/echo。
+
 <h3>运行工程</h3>
 <p>一个操作 Redis 工程就开发完毕了，下面运行工程验证下。使用 IDEA 右侧工具栏，点击 Maven Project Tab，点击使用下 Maven 插件的 install 命令。或者使用命令行的形式，在工程根目录下，执行 Maven 清理和安装工程的指令：</p>
 <pre><code>cd springboot-webflux-8-websocket
@@ -292,10 +292,10 @@ mvn clean install
 
 </code></pre>
 <p>大多数浏览器是支持 WebSocket，代码详解如下：</p>
-<ul>
-<li>网页打开是，会调用 onopen 方法，并发送消息给服务端“你好！”；</li>
-<li>如果服务端关闭，会调用 onclose 方法，页面会出现“聊天会话关闭！”信息。</li>
-</ul>
+
+网页打开是，会调用 onopen 方法，并发送消息给服务端“你好！”；
+如果服务端关闭，会调用 onclose 方法，页面会出现“聊天会话关闭！”信息。
+
 <h3>WSClient Java 客户端实现</h3>
 <p>类似，HTTPClient 调用 HTTP，WebSocket 客户端去调用 WebSokcet 协议，并实现服务。代码如下：</p>
 <pre><code>public class WSClient {
@@ -312,12 +312,12 @@ mvn clean install
 
 </code></pre>
 <p>代码详解：</p>
-<ul>
-<li>ReactorNettyWebSocketClient 是 WebFlux 默认 Reactor Netty 库提供的 WebSocketClient 实现。</li>
-<li>execute 方法，与 ws://localhost:8080/echo 建立 WebSokcet 协议连接。</li>
-<li>execute 需要传入 WebSocketHandler 的对象，用来处理消息，这里的实现和前面的 EchoHandler 类似。</li>
-<li>通过 WebSocketSession 的 send 方法来发送字符串“你好”到服务器端，然后通过 receive 方法来等待服务器端的响应并输出。</li>
-</ul>
+
+ReactorNettyWebSocketClient 是 WebFlux 默认 Reactor Netty 库提供的 WebSocketClient 实现。
+execute 方法，与 ws://localhost:8080/echo 建立 WebSokcet 协议连接。
+execute 需要传入 WebSocketHandler 的对象，用来处理消息，这里的实现和前面的 EchoHandler 类似。
+通过 WebSocketSession 的 send 方法来发送字符串“你好”到服务器端，然后通过 receive 方法来等待服务器端的响应并输出。
+
 <h3>总结</h3>
 <p>这一篇内容主要一起实践了简单的 WebSocket 的应用操作，以及 WebSocket 客户端小例子。</p>
 <p>工程：springboot-webflux-8-websocket</p>

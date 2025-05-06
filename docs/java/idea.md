@@ -17,7 +17,7 @@
 ## 卸载 idea2024
 
 ```bash
-rm -rf /Applications/IntelliJ\ IDEA.app
+rm -rf /Applications/IntelliJ*
 rm -rf ~/Library/Application\ Support/JetBrains/
 rm -rf ~/Library/Preferences/com.apple.java.util.prefs.plist
 rm -rf ~/Library/Preferences/com.jetbrains*

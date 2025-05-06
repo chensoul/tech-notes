@@ -25,315 +25,315 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;开篇词&#32;&#32;深入掌握&#32;Dubbo&#32;原理与实现，提升你的职场竞争力.md">00 开篇词  深入掌握 Dubbo 原理与实现，提升你的职场竞争力.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Dubbo&#32;源码环境搭建：千里之行，始于足下.md">01  Dubbo 源码环境搭建：千里之行，始于足下.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Dubbo&#32;的配置总线：抓住&#32;URL，就理解了半个&#32;Dubbo.md">02 Dubbo 的配置总线：抓住 URL，就理解了半个 Dubbo.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（上）.md">03  Dubbo SPI 精析，接口实现两极反转（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（下）.md">04  Dubbo SPI 精析，接口实现两极反转（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;海量定时任务，一个时间轮搞定.md">05  海量定时任务，一个时间轮搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（上）.md">06  ZooKeeper 与 Curator，求你别用 ZkClient 了（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="07&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（下）.md">07  ZooKeeper 与 Curator，求你别用 ZkClient 了（下）.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;代理模式与常见实现.md">08  代理模式与常见实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;Netty&#32;入门，用它做网络编程都说好（上）.md">09  Netty 入门，用它做网络编程都说好（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;Netty&#32;入门，用它做网络编程都说好（下）.md">10  Netty 入门，用它做网络编程都说好（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;简易版&#32;RPC&#32;框架实现（上）.md">11  简易版 RPC 框架实现（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;简易版&#32;RPC&#32;框架实现（下）.md">12  简易版 RPC 框架实现（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;本地缓存：降低&#32;ZooKeeper&#32;压力的一个常用手段.md">13  本地缓存：降低 ZooKeeper 压力的一个常用手段.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;重试机制是网络操作的基本保证.md">14  重试机制是网络操作的基本保证.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;ZooKeeper&#32;注册中心实现，官方推荐注册中心实践.md">15  ZooKeeper 注册中心实现，官方推荐注册中心实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;Dubbo&#32;Serialize&#32;层：多种序列化算法，总有一款适合你.md">16  Dubbo Serialize 层：多种序列化算法，总有一款适合你.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;Dubbo&#32;Remoting&#32;层核心接口分析：这居然是一套兼容所有&#32;NIO&#32;框架的设计？.md">17  Dubbo Remoting 层核心接口分析：这居然是一套兼容所有 NIO 框架的设计？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;Buffer&#32;缓冲区：我们不生产数据，我们只是数据的搬运工.md">18  Buffer 缓冲区：我们不生产数据，我们只是数据的搬运工.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（上）.md">19  Transporter 层核心实现：编解码与线程模型一文打尽（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（下）.md">20  Transporter 层核心实现：编解码与线程模型一文打尽（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（上）.md">21  Exchange 层剖析：彻底搞懂 Request-Response 模型（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（下）.md">22  Exchange 层剖析：彻底搞懂 Request-Response 模型（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;核心接口介绍，RPC&#32;层骨架梳理.md">23  核心接口介绍，RPC 层骨架梳理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（上）.md">24  从 Protocol 起手，看服务暴露和服务引用的全流程（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（下）.md">25  从 Protocol 起手，看服务暴露和服务引用的全流程（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（上）.md">26  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（下）.md">27  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;复杂问题简单化，代理帮你隐藏了多少底层细节？.md">28  复杂问题简单化，代理帮你隐藏了多少底层细节？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Dubbo%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E4%B8%8E%E5%AE%9E%E6%88%98-%E5%AE%8C/29%20%20%E5%8A%A0%E9%A4%90%EF%BC%9AHTTP%20%E5%8D%8F%E8%AE%AE%20+%20JSON-RPC%EF%BC%8CDubbo%20%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%B0%B1%E6%98%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95.md">29  加餐：HTTP 协议 + JSON-RPC，Dubbo 跨语言就是如此简单.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;&#32;Filter&#32;接口，扩展&#32;Dubbo&#32;框架的常用手段指北.md">30  Filter 接口，扩展 Dubbo 框架的常用手段指北.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;&#32;加餐：深潜&#32;Directory&#32;实现，探秘服务目录玄机.md">31  加餐：深潜 Directory 实现，探秘服务目录玄机.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;&#32;路由机制：请求到底怎么走，它说了算（上）.md">32  路由机制：请求到底怎么走，它说了算（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;&#32;路由机制：请求到底怎么走，它说了算（下）.md">33  路由机制：请求到底怎么走，它说了算（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="34&#32;&#32;加餐：初探&#32;Dubbo&#32;动态配置的那些事儿.md">34  加餐：初探 Dubbo 动态配置的那些事儿.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="35&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md">35  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="36&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md">36  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="37&#32;&#32;集群容错：一个好汉三个帮（上）.md">37  集群容错：一个好汉三个帮（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="38&#32;&#32;集群容错：一个好汉三个帮（下）.md">38  集群容错：一个好汉三个帮（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="39&#32;&#32;加餐：多个返回值不用怕，Merger&#32;合并器来帮忙.md">39  加餐：多个返回值不用怕，Merger 合并器来帮忙.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="40&#32;&#32;加餐：模拟远程调用，Mock&#32;机制帮你搞定.md">40  加餐：模拟远程调用，Mock 机制帮你搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="41&#32;&#32;加餐：一键通关服务发布全流程.md">41  加餐：一键通关服务发布全流程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="42&#32;&#32;加餐：服务引用流程全解析.md">42  加餐：服务引用流程全解析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="43&#32;&#32;服务自省设计方案：新版本新方案.md">43  服务自省设计方案：新版本新方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="44&#32;&#32;元数据方案深度剖析，如何避免注册中心数据量膨胀？.md">44  元数据方案深度剖析，如何避免注册中心数据量膨胀？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="45&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（上）.md">45  加餐：深入服务自省方案中的服务发布订阅（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="46&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（下）.md">46  加餐：深入服务自省方案中的服务发布订阅（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="47&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（上）.md">47  配置中心设计与实现：集中化配置 and 本地化配置，我都要（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="48&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（下）.md">48  配置中心设计与实现：集中化配置 and 本地化配置，我都要（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="49&#32;结束语&#32;&#32;认真学习，缩小差距.md">49 结束语  认真学习，缩小差距.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -390,14 +390,14 @@
                         <div><h1>07  ZooKeeper 与 Curator，求你别用 ZkClient 了（下）</h1>
 <p>在上一课时我们介绍了 ZooKeeper 的核心概念以及工作原理，这里我们再简单了解一下 ZooKeeper 客户端的相关内容，毕竟在实际工作中，直接使用客户端与 ZooKeeper 进行交互的次数比深入 ZooKeeper 底层进行扩展和二次开发的次数要多得多。从 ZooKeeper 架构的角度看，使用 Dubbo 的业务节点也只是一个 ZooKeeper 客户端罢了。</p>
 <p>ZooKeeper 官方提供的客户端支持了一些基本操作，例如，创建会话、创建节点、读取节点、更新数据、删除节点和检查节点是否存在等，但在实际开发中只有这些简单功能是根本不够的。而且，ZooKeeper 本身的一些 API 也存在不足，例如：</p>
-<ul>
-<li>ZooKeeper 的 Watcher 是一次性的，每次触发之后都需要重新进行注册。</li>
-<li>会话超时之后，没有实现自动重连的机制。</li>
-<li>ZooKeeper 提供了非常详细的异常，异常处理显得非常烦琐，对开发新手来说，非常不友好。</li>
-<li>只提供了简单的 byte[] 数组的接口，没有提供基本类型以及对象级别的序列化。</li>
-<li>创建节点时，如果节点存在抛出异常，需要自行检查节点是否存在。</li>
-<li>删除节点就无法实现级联删除。</li>
-</ul>
+
+ZooKeeper 的 Watcher 是一次性的，每次触发之后都需要重新进行注册。
+会话超时之后，没有实现自动重连的机制。
+ZooKeeper 提供了非常详细的异常，异常处理显得非常烦琐，对开发新手来说，非常不友好。
+只提供了简单的 byte[] 数组的接口，没有提供基本类型以及对象级别的序列化。
+创建节点时，如果节点存在抛出异常，需要自行检查节点是否存在。
+删除节点就无法实现级联删除。
+
 <p><strong>常见的第三方开源 ZooKeeper 客户端有 ZkClient 和 Apache Curator</strong>。</p>
 <p>ZkClient 是在 ZooKeeper 原生 API 接口的基础上进行了包装，虽然 ZkClient 解决了 ZooKeeper 原生 API 接口的很多问题，提供了非常简洁的 API 接口，实现了会话超时自动重连的机制，解决了 Watcher 反复注册等问题，但其缺陷也非常明显。例如，文档不全、重试机制难用、异常全部转换成了 RuntimeException、没有足够的参考示例等。可见，一个简单易用、高效可靠的 ZooKeeper 客户端是多么重要。</p>
 <h3>Apache Curator 基础</h3>
@@ -810,11 +810,11 @@
 <p>之所以这样，是因为通过 usingWatcher() 方法添加的 CuratorWatcher 只会触发一次，触发完毕后就会销毁。checkExists() 方法、getData() 方法通过 usingWatcher() 方法添加的 Watcher 也是一样的原理，只不过监听的事件不同，你若感兴趣的话，可以自行尝试一下。</p>
 <p>相信你已经感受到，直接通过注册 Watcher 进行事件监听不是特别方便，需要我们自己反复注册 Watcher。<strong>Apache Curator 引入了 Cache 来实现对 ZooKeeper 服务端事件的监听</strong>。Cache 是 Curator 中对事件监听的包装，其对事件的监听其实可以近似看作是一个本地缓存视图和远程ZooKeeper 视图的对比过程。同时，Curator 能够自动为开发人员处理反复注册监听，从而大大简化了代码的复杂程度。</p>
 <p>实践中常用的 Cache 有三大类：</p>
-<ul>
-<li><strong>NodeCache。</strong> 对一个节点进行监听，监听事件包括指定节点的增删改操作。注意哦，NodeCache 不仅可以监听数据节点的内容变更，也能监听指定节点是否存在，如果原本节点不存在，那么 Cache 就会在节点被创建后触发 NodeCacheListener，删除操作亦然。</li>
-<li><strong>PathChildrenCache。</strong> 对指定节点的一级子节点进行监听，监听事件包括子节点的增删改操作，但是不对该节点的操作监听。</li>
-<li><strong>TreeCache。</strong> 综合 NodeCache 和 PathChildrenCache 的功能，是对指定节点以及其子节点进行监听，同时还可以设置监听的深度。</li>
-</ul>
+
+<strong>NodeCache。</strong> 对一个节点进行监听，监听事件包括指定节点的增删改操作。注意哦，NodeCache 不仅可以监听数据节点的内容变更，也能监听指定节点是否存在，如果原本节点不存在，那么 Cache 就会在节点被创建后触发 NodeCacheListener，删除操作亦然。
+<strong>PathChildrenCache。</strong> 对指定节点的一级子节点进行监听，监听事件包括子节点的增删改操作，但是不对该节点的操作监听。
+<strong>TreeCache。</strong> 综合 NodeCache 和 PathChildrenCache 的功能，是对指定节点以及其子节点进行监听，同时还可以设置监听的深度。
+
 <p>下面通过示例介绍上述三种 Cache 的基本使用：</p>
 <pre><code>public class Main5 { 
 
@@ -1018,15 +1018,15 @@ PathChildrenCache删除子节点:/user/test3
 <h3>curator-x-discovery 扩展库</h3>
 <p>为了避免 curator-framework 包过于膨胀，Curator 将很多其他解决方案都拆出来了，作为单独的一个包，例如：curator-recipes、curator-x-discovery、curator-x-rpc 等。</p>
 <p>在后面我们会使用到 curator-x-discovery 来完成一个简易 RPC 框架的注册中心模块。<strong>curator-x-discovery 扩展包是一个服务发现的解决方案</strong>。在 ZooKeeper 中，我们可以使用临时节点实现一个服务注册机制。当服务启动后在 ZooKeeper 的指定 Path 下创建临时节点，服务断掉与 ZooKeeper 的会话之后，其相应的临时节点就会被删除。这个 curator-x-discovery 扩展包抽象了这种功能，并提供了一套简单的 API 来实现服务发现机制。curator-x-discovery 扩展包的核心概念如下：</p>
-<ul>
-<li><strong>ServiceInstance。</strong> 这是 curator-x-discovery 扩展包对服务实例的抽象，由 name、id、address、port 以及一个可选的 payload 属性构成。其存储在 ZooKeeper 中的方式如下图展示的这样。</li>
-</ul>
+
+<strong>ServiceInstance。</strong> 这是 curator-x-discovery 扩展包对服务实例的抽象，由 name、id、address、port 以及一个可选的 payload 属性构成。其存储在 ZooKeeper 中的方式如下图展示的这样。
+
 <p><img src="assets/CgqCHl87icOABt59AADHccHcE1Q955.png" alt="Drawing 5.png" /></p>
-<ul>
-<li><strong>ServiceProvider。</strong> 这是 curator-x-discovery 扩展包的核心组件之一，提供了多种不同策略的服务发现方式，具体策略有轮询调度、随机和黏性（总是选择相同的一个）。得到 ServiceProvider 对象之后，我们可以调用其 getInstance() 方法，按照指定策略获取 ServiceInstance 对象（即发现可用服务实例）；还可以调用 getAllInstances() 方法，获取所有 ServiceInstance 对象（即获取全部可用服务实例）。</li>
-<li><strong>ServiceDiscovery。</strong> 这是 curator-x-discovery 扩展包的入口类。开始必须调用 start() 方法，当使用完成应该调用 close() 方法进行销毁。</li>
-<li><strong>ServiceCache。</strong> 如果程序中会频繁地查询 ServiceInstance 对象，我们可以添加 ServiceCache 缓存，ServiceCache 会在内存中缓存 ServiceInstance 实例的列表，并且添加相应的 Watcher 来同步更新缓存。查询 ServiceCache 的方式也是 getInstances() 方法。另外，ServiceCache 上还可以添加 Listener 来监听缓存变化。</li>
-</ul>
+
+<strong>ServiceProvider。</strong> 这是 curator-x-discovery 扩展包的核心组件之一，提供了多种不同策略的服务发现方式，具体策略有轮询调度、随机和黏性（总是选择相同的一个）。得到 ServiceProvider 对象之后，我们可以调用其 getInstance() 方法，按照指定策略获取 ServiceInstance 对象（即发现可用服务实例）；还可以调用 getAllInstances() 方法，获取所有 ServiceInstance 对象（即获取全部可用服务实例）。
+<strong>ServiceDiscovery。</strong> 这是 curator-x-discovery 扩展包的入口类。开始必须调用 start() 方法，当使用完成应该调用 close() 方法进行销毁。
+<strong>ServiceCache。</strong> 如果程序中会频繁地查询 ServiceInstance 对象，我们可以添加 ServiceCache 缓存，ServiceCache 会在内存中缓存 ServiceInstance 实例的列表，并且添加相应的 Watcher 来同步更新缓存。查询 ServiceCache 的方式也是 getInstances() 方法。另外，ServiceCache 上还可以添加 Listener 来监听缓存变化。
+
 <p>下面通过一个简单示例来说明一下 curator-x-discovery 包的使用，该示例中的 ServerInfo 记录了一个服务的 host、port 以及描述信息。</p>
 <pre><code>public class ZookeeperCoordinator { 
 
@@ -1144,21 +1144,21 @@ PathChildrenCache删除子节点:/user/test3
 </code></pre>
 <h3>curator-recipes 简介</h3>
 <p>Recipes 是 Curator 对常见分布式场景的解决方案，这里我们只是简单介绍一下，具体的使用和原理，就先不做深入分析了。</p>
-<ul>
-<li><strong>Queues</strong>。提供了多种的分布式队列解决方法，比如：权重队列、延迟队列等。在生产环境中，很少将 ZooKeeper 用作分布式队列，只适合在压力非常小的情况下，才使用该解决方案，所以建议你要适度使用。</li>
-<li><strong>Counters</strong>。全局计数器是分布式系统中很常用的工具，curator-recipes 提供了 SharedCount、DistributedAtomicLong 等组件，帮助开发人员实现分布式计数器功能。</li>
-<li><strong>Locks</strong>。java.util.concurrent.locks 中提供的各种锁相信你已经有所了解了，在微服务架构中，分布式锁也是一项非常基础的服务组件，curator-recipes 提供了多种基于 ZooKeeper 实现的分布式锁，满足日常工作中对分布式锁的需求。</li>
-<li><strong>Barries</strong>。curator-recipes 提供的分布式栅栏可以实现多个服务之间协同工作，具体实现有 DistributedBarrier 和 DistributedDoubleBarrier。</li>
-<li><strong>Elections</strong>。实现的主要功能是在多个参与者中选举出 Leader，然后由 Leader 节点作为操作调度、任务监控或是队列消费的执行者。curator-recipes 给出的实现是 LeaderLatch。</li>
-</ul>
+
+<strong>Queues</strong>。提供了多种的分布式队列解决方法，比如：权重队列、延迟队列等。在生产环境中，很少将 ZooKeeper 用作分布式队列，只适合在压力非常小的情况下，才使用该解决方案，所以建议你要适度使用。
+<strong>Counters</strong>。全局计数器是分布式系统中很常用的工具，curator-recipes 提供了 SharedCount、DistributedAtomicLong 等组件，帮助开发人员实现分布式计数器功能。
+<strong>Locks</strong>。java.util.concurrent.locks 中提供的各种锁相信你已经有所了解了，在微服务架构中，分布式锁也是一项非常基础的服务组件，curator-recipes 提供了多种基于 ZooKeeper 实现的分布式锁，满足日常工作中对分布式锁的需求。
+<strong>Barries</strong>。curator-recipes 提供的分布式栅栏可以实现多个服务之间协同工作，具体实现有 DistributedBarrier 和 DistributedDoubleBarrier。
+<strong>Elections</strong>。实现的主要功能是在多个参与者中选举出 Leader，然后由 Leader 节点作为操作调度、任务监控或是队列消费的执行者。curator-recipes 给出的实现是 LeaderLatch。
+
 <h3>总结</h3>
 <p>本课时我们重点介绍了 Apache Curator 相关的内容：</p>
-<ul>
-<li>首先将 Apache Curator 与其他 ZooKeeper 客户端进行了对比，Apache Curator 的易用性是选择 Apache Curator 的重要原因。</li>
-<li>接下来，我们通过示例介绍了 Apache Curator 的基本使用方式以及实际使用过程中的一些注意点。</li>
-<li>然后，介绍了 curator-x-discovery 扩展库的基本概念和使用。</li>
-<li>最后，简单介绍了 curator-recipes 提供的强大功能。</li>
-</ul>
+
+首先将 Apache Curator 与其他 ZooKeeper 客户端进行了对比，Apache Curator 的易用性是选择 Apache Curator 的重要原因。
+接下来，我们通过示例介绍了 Apache Curator 的基本使用方式以及实际使用过程中的一些注意点。
+然后，介绍了 curator-x-discovery 扩展库的基本概念和使用。
+最后，简单介绍了 curator-recipes 提供的强大功能。
+
 <p>关于 Apache Curator，你有什么其他的见解？欢迎你在评论区给我留言，与我分享。</p>
 <p>zk-demo 链接：<a href="https://github.com/xxxlxy2008/zk-demo">https://github.com/xxxlxy2008/zk-demo</a> 。</p>
 </div>

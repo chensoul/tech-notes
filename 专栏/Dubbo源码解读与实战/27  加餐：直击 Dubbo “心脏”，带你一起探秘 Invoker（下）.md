@@ -25,315 +25,315 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;开篇词&#32;&#32;深入掌握&#32;Dubbo&#32;原理与实现，提升你的职场竞争力.md">00 开篇词  深入掌握 Dubbo 原理与实现，提升你的职场竞争力.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Dubbo&#32;源码环境搭建：千里之行，始于足下.md">01  Dubbo 源码环境搭建：千里之行，始于足下.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Dubbo&#32;的配置总线：抓住&#32;URL，就理解了半个&#32;Dubbo.md">02 Dubbo 的配置总线：抓住 URL，就理解了半个 Dubbo.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（上）.md">03  Dubbo SPI 精析，接口实现两极反转（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（下）.md">04  Dubbo SPI 精析，接口实现两极反转（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;海量定时任务，一个时间轮搞定.md">05  海量定时任务，一个时间轮搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（上）.md">06  ZooKeeper 与 Curator，求你别用 ZkClient 了（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（下）.md">07  ZooKeeper 与 Curator，求你别用 ZkClient 了（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;代理模式与常见实现.md">08  代理模式与常见实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;Netty&#32;入门，用它做网络编程都说好（上）.md">09  Netty 入门，用它做网络编程都说好（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;Netty&#32;入门，用它做网络编程都说好（下）.md">10  Netty 入门，用它做网络编程都说好（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;简易版&#32;RPC&#32;框架实现（上）.md">11  简易版 RPC 框架实现（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;简易版&#32;RPC&#32;框架实现（下）.md">12  简易版 RPC 框架实现（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;本地缓存：降低&#32;ZooKeeper&#32;压力的一个常用手段.md">13  本地缓存：降低 ZooKeeper 压力的一个常用手段.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;重试机制是网络操作的基本保证.md">14  重试机制是网络操作的基本保证.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;ZooKeeper&#32;注册中心实现，官方推荐注册中心实践.md">15  ZooKeeper 注册中心实现，官方推荐注册中心实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;Dubbo&#32;Serialize&#32;层：多种序列化算法，总有一款适合你.md">16  Dubbo Serialize 层：多种序列化算法，总有一款适合你.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;Dubbo&#32;Remoting&#32;层核心接口分析：这居然是一套兼容所有&#32;NIO&#32;框架的设计？.md">17  Dubbo Remoting 层核心接口分析：这居然是一套兼容所有 NIO 框架的设计？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;Buffer&#32;缓冲区：我们不生产数据，我们只是数据的搬运工.md">18  Buffer 缓冲区：我们不生产数据，我们只是数据的搬运工.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（上）.md">19  Transporter 层核心实现：编解码与线程模型一文打尽（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（下）.md">20  Transporter 层核心实现：编解码与线程模型一文打尽（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（上）.md">21  Exchange 层剖析：彻底搞懂 Request-Response 模型（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（下）.md">22  Exchange 层剖析：彻底搞懂 Request-Response 模型（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;核心接口介绍，RPC&#32;层骨架梳理.md">23  核心接口介绍，RPC 层骨架梳理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（上）.md">24  从 Protocol 起手，看服务暴露和服务引用的全流程（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（下）.md">25  从 Protocol 起手，看服务暴露和服务引用的全流程（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（上）.md">26  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="27&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（下）.md">27  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（下）.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;复杂问题简单化，代理帮你隐藏了多少底层细节？.md">28  复杂问题简单化，代理帮你隐藏了多少底层细节？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Dubbo%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E4%B8%8E%E5%AE%9E%E6%88%98-%E5%AE%8C/29%20%20%E5%8A%A0%E9%A4%90%EF%BC%9AHTTP%20%E5%8D%8F%E8%AE%AE%20+%20JSON-RPC%EF%BC%8CDubbo%20%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%B0%B1%E6%98%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95.md">29  加餐：HTTP 协议 + JSON-RPC，Dubbo 跨语言就是如此简单.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;&#32;Filter&#32;接口，扩展&#32;Dubbo&#32;框架的常用手段指北.md">30  Filter 接口，扩展 Dubbo 框架的常用手段指北.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;&#32;加餐：深潜&#32;Directory&#32;实现，探秘服务目录玄机.md">31  加餐：深潜 Directory 实现，探秘服务目录玄机.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;&#32;路由机制：请求到底怎么走，它说了算（上）.md">32  路由机制：请求到底怎么走，它说了算（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;&#32;路由机制：请求到底怎么走，它说了算（下）.md">33  路由机制：请求到底怎么走，它说了算（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="34&#32;&#32;加餐：初探&#32;Dubbo&#32;动态配置的那些事儿.md">34  加餐：初探 Dubbo 动态配置的那些事儿.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="35&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md">35  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="36&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md">36  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="37&#32;&#32;集群容错：一个好汉三个帮（上）.md">37  集群容错：一个好汉三个帮（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="38&#32;&#32;集群容错：一个好汉三个帮（下）.md">38  集群容错：一个好汉三个帮（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="39&#32;&#32;加餐：多个返回值不用怕，Merger&#32;合并器来帮忙.md">39  加餐：多个返回值不用怕，Merger 合并器来帮忙.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="40&#32;&#32;加餐：模拟远程调用，Mock&#32;机制帮你搞定.md">40  加餐：模拟远程调用，Mock 机制帮你搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="41&#32;&#32;加餐：一键通关服务发布全流程.md">41  加餐：一键通关服务发布全流程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="42&#32;&#32;加餐：服务引用流程全解析.md">42  加餐：服务引用流程全解析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="43&#32;&#32;服务自省设计方案：新版本新方案.md">43  服务自省设计方案：新版本新方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="44&#32;&#32;元数据方案深度剖析，如何避免注册中心数据量膨胀？.md">44  元数据方案深度剖析，如何避免注册中心数据量膨胀？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="45&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（上）.md">45  加餐：深入服务自省方案中的服务发布订阅（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="46&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（下）.md">46  加餐：深入服务自省方案中的服务发布订阅（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="47&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（上）.md">47  配置中心设计与实现：集中化配置 and 本地化配置，我都要（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="48&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（下）.md">48  配置中心设计与实现：集中化配置 and 本地化配置，我都要（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="49&#32;结束语&#32;&#32;认真学习，缩小差距.md">49 结束语  认真学习，缩小差距.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -413,20 +413,20 @@
 <p><img src="assets/CgqCHl-X8UOAOTRbAACy-uBf52M689.png" alt="Lark20201027-180625.png" /></p>
 <p>SYNC 调用模式图</p>
 <p>在拿到线程池之后，DubboInvoker 就会调用 ExchangeClient.request() 方法，将 Invocation 包装成 Request 请求发送出去，同时会创建相应的 DefaultFuture 返回。注意，这里还加了一个回调，取出其中的 AppResponse 对象。AppResponse 表示的是服务端返回的具体响应，其中有三个字段。</p>
-<ul>
-<li>result（Object 类型）：响应结果，也就是服务端返回的结果值，注意，这是一个业务上的结果值。例如，在我们前面第 01 课时的 Demo 示例（即 dubbo-demo 模块中的 Demo）中，Provider 端 DemoServiceImpl 返回的 “Hello Dubbo xxx” 这一串字符串。</li>
-<li>exception（Throwable 类型）：服务端返回的异常信息。</li>
-<li>attachments（Map&lt;String, Object&gt; 类型）：服务端返回的附加信息。</li>
-</ul>
+
+result（Object 类型）：响应结果，也就是服务端返回的结果值，注意，这是一个业务上的结果值。例如，在我们前面第 01 课时的 Demo 示例（即 dubbo-demo 模块中的 Demo）中，Provider 端 DemoServiceImpl 返回的 “Hello Dubbo xxx” 这一串字符串。
+exception（Throwable 类型）：服务端返回的异常信息。
+attachments（Map&lt;String, Object&gt; 类型）：服务端返回的附加信息。
+
 <p>这里请求返回的 AppResponse 你可能不太熟悉，但是其子类 DecodeableRpcResult 你可能就有点眼熟了，DecodeableRpcResult 表示的是一个响应，与其对应的是 DecodeableRpcInvocation（它表示的是请求）。在第 24 课时介绍 DubboCodec 对 Dubbo 请求体的编码流程中，我们已经详细介绍过 DecodeableRpcInvocation 了，你可以回顾一下 DubboCodec 的 decodeBody() 方法，就会发现 DecodeableRpcResult 的“身影”。</p>
 <h4>1. DecodeableRpcResult</h4>
 <p>DecodeableRpcResult 解码核心流程大致如下：</p>
-<ul>
-<li>首先，确定当前使用的序列化方式，并对字节流进行解码。</li>
-<li>然后，读取一个 byte 的标志位，其可选值有六种枚举，下面我们就以其中的 RESPONSE_VALUE_WITH_ATTACHMENTS 为例进行分析。</li>
-<li>标志位为 RESPONSE_VALUE_WITH_ATTACHMENTS 时，会先通过 handleValue() 方法处理返回值，其中会根据 RpcInvocation 中记录的返回值类型读取返回值，并设置到 result 字段。</li>
-<li>最后，再通过 handleAttachment() 方法读取返回的附加信息，并设置到 DecodeableRpcResult 的 attachments 字段中。</li>
-</ul>
+
+首先，确定当前使用的序列化方式，并对字节流进行解码。
+然后，读取一个 byte 的标志位，其可选值有六种枚举，下面我们就以其中的 RESPONSE_VALUE_WITH_ATTACHMENTS 为例进行分析。
+标志位为 RESPONSE_VALUE_WITH_ATTACHMENTS 时，会先通过 handleValue() 方法处理返回值，其中会根据 RpcInvocation 中记录的返回值类型读取返回值，并设置到 result 字段。
+最后，再通过 handleAttachment() 方法读取返回的附加信息，并设置到 DecodeableRpcResult 的 attachments 字段中。
+
 <pre><code>public Object decode(Channel channel, InputStream input) throws IOException {
 
     // 反序列化
@@ -492,12 +492,12 @@
 <p>decode() 方法中其他分支的代码这里就不再展示了，你若感兴趣的话可以参考 DecodeableRpcResult 源码进行分析。</p>
 <h4>2. AsyncRpcResult</h4>
 <p>在 DubboInvoker 中还有一个 <strong>AsyncRpcResult 类，它表示的是一个异步的、未完成的 RPC 调用，其中会记录对应 RPC 调用的信息</strong>（例如，关联的 RpcContext 和 Invocation 对象），包括以下几个核心字段。</p>
-<ul>
-<li>responseFuture（CompletableFuture<code>&lt;AppResponse&gt;</code> 类型）：这个 responseFuture 字段与前文提到的 DefaultFuture 有紧密的联系，是 DefaultFuture 回调链上的一个 Future。后面 AsyncRpcResult 之上添加的回调，实际上都是添加到这个 Future 之上。</li>
-<li>storedContext、storedServerContext（RpcContext 类型）：用于存储相关的 RpcContext 对象。我们知道 RpcContext 是与线程绑定的，而真正执行 AsyncRpcResult 上添加的回调方法的线程可能先后处理过多个不同的 AsyncRpcResult，所以我们需要传递并保存当前的 RpcContext。</li>
-<li>executor（Executor 类型）：此次 RPC 调用关联的线程池。</li>
-<li>invocation（Invocation 类型）：此次 RPC 调用关联的 Invocation 对象。</li>
-</ul>
+
+responseFuture（CompletableFuture<code>&lt;AppResponse&gt;</code> 类型）：这个 responseFuture 字段与前文提到的 DefaultFuture 有紧密的联系，是 DefaultFuture 回调链上的一个 Future。后面 AsyncRpcResult 之上添加的回调，实际上都是添加到这个 Future 之上。
+storedContext、storedServerContext（RpcContext 类型）：用于存储相关的 RpcContext 对象。我们知道 RpcContext 是与线程绑定的，而真正执行 AsyncRpcResult 上添加的回调方法的线程可能先后处理过多个不同的 AsyncRpcResult，所以我们需要传递并保存当前的 RpcContext。
+executor（Executor 类型）：此次 RPC 调用关联的线程池。
+invocation（Invocation 类型）：此次 RPC 调用关联的 Invocation 对象。
+
 <p>在 AsyncRpcResult 构造方法中，除了接收发送请求返回的 CompletableFuture<code>&lt;AppResponse&gt;</code> 对象，还会将当前的 RpcContext 保存到 storedContext 和 storedServerContext 中，具体实现如下：</p>
 <pre><code>public AsyncRpcResult(CompletableFuture&lt;AppResponse&gt; future, Invocation invocation) {
 
@@ -656,11 +656,11 @@ public Object recreate() throws Throwable {
 </code></pre>
 <p>这里拿到的其实就是 AsyncRpcResult 中 responseFuture，即前面介绍的 DefaultFuture。可见，<strong>无论是 SYNC 模式、ASYNC 模式还是 FUTURE 模式，都是围绕 DefaultFuture 展开的。</strong></p>
 <p>其实，在 Dubbo 2.6.x 及之前的版本提供了一定的异步编程能力，但其异步方式存在如下一些问题：</p>
-<ul>
-<li>Future 获取方式不够直接，业务需要从 RpcContext 中手动获取。</li>
-<li>Future 接口无法实现自动回调，而自定义 ResponseFuture（这是 Dubbo 2.6.x 中类）虽支持回调，但支持的异步场景有限，并且还不支持 Future 间的相互协调或组合等。</li>
-<li>不支持 Provider 端异步。</li>
-</ul>
+
+Future 获取方式不够直接，业务需要从 RpcContext 中手动获取。
+Future 接口无法实现自动回调，而自定义 ResponseFuture（这是 Dubbo 2.6.x 中类）虽支持回调，但支持的异步场景有限，并且还不支持 Future 间的相互协调或组合等。
+不支持 Provider 端异步。
+
 <p>Dubbo 2.6.x 及之前版本中使用的 Future 是在 Java 5 中引入的，所以存在以上一些功能设计上的问题；而在 Java 8 中引入的 CompletableFuture 进一步丰富了 Future 接口，很好地解决了这些问题。<strong>Dubbo 在 2.7.0 版本已经升级了对 Java 8 的支持，同时基于 CompletableFuture 对当前的异步功能进行了增强，弥补了上述不足。</strong></p>
 <p>因为 CompletableFuture 实现了 CompletionStage 和 Future 接口，所以它还是可以像以前一样通过 get() 阻塞或者 isDone() 方法轮询的方式获得结果，这就保证了同步调用依旧可用。当然，在实际工作中，不是很建议用 get() 这样阻塞的方式来获取结果，因为这样就丢失了异步操作带来的性能提升。</p>
 <p>另外，CompletableFuture 提供了良好的回调方法，例如，whenComplete()、whenCompleteAsync() 等方法都可以在逻辑完成后，执行该方法中添加的 action 逻辑，实现回调的逻辑。同时，CompletableFuture 很好地支持了 Future 间的相互协调或组合，例如，thenApply()、thenApplyAsync() 等方法。</p>
@@ -733,10 +733,10 @@ public Object recreate() throws Throwable {
 <h4>2. Filter 相关的 Invoker 装饰器</h4>
 <p>Filter 接口是 Dubbo 为用户提供的一个非常重要的扩展接口，将各个 Filter 串联成 Filter 链并与 Invoker 实例相关。构造 Filter 链的核心逻辑位于 ProtocolFilterWrapper.buildInvokerChain() 方法中，ProtocolFilterWrapper 的 refer() 方法和 export() 方法都会调用该方法。</p>
 <p>buildInvokerChain() 方法的核心逻辑如下：</p>
-<ul>
-<li>首先会根据 URL 中携带的配置信息，确定当前激活的 Filter 扩展实现有哪些，形成 Filter 集合。</li>
-<li>遍历 Filter 集合，将每个 Filter 实现封装成一个匿名 Invoker，在这个匿名 Invoker 中，会调用 Filter 的 invoke() 方法执行 Filter 的逻辑，然后由 Filter 内部的逻辑决定是否将调用传递到下一个 Filter 执行。</li>
-</ul>
+
+首先会根据 URL 中携带的配置信息，确定当前激活的 Filter 扩展实现有哪些，形成 Filter 集合。
+遍历 Filter 集合，将每个 Filter 实现封装成一个匿名 Invoker，在这个匿名 Invoker 中，会调用 Filter 的 invoke() 方法执行 Filter 的逻辑，然后由 Filter 内部的逻辑决定是否将调用传递到下一个 Filter 执行。
+
 <p>buildInvokerChain() 方法的具体实现如下：</p>
 <pre><code>private static &lt;T&gt; Invoker&lt;T&gt; buildInvokerChain(final Invoker&lt;T&gt; invoker, String key, String group) {
 

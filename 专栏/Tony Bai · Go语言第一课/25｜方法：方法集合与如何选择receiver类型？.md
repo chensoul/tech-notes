@@ -1,13 +1,13 @@
 <audio title="25｜方法：方法集合与如何选择receiver类型？" src="https://static001.geekbang.org/resource/audio/e1/c2/e192df76b2efc3434b8307491f5aa3c2.mp3" controls="controls"></audio> 
 <p>你好，我是Tony Bai。</p><p>在上一节中我们开启了Go方法的学习，了解了Go语言中方法的组成、声明和实质。可以说，我们已经正式入门Go方法了。</p><p>入门Go方法后，和函数一样，我们要考虑如何进行方法设计的问题。由于在Go语言中，<strong>方法本质上就是函数</strong>，所以我们之前讲解的、关于函数设计的内容对方法也同样适用，比如错误处理设计、针对异常的处理策略、使用defer提升简洁性，等等。</p><p>但关于Go方法中独有的receiver组成部分，却没有现成的、可供我们参考的内容。而据我了解，初学者在学习Go方法时，最头疼的一个问题恰恰就是<strong>如何选择receiver参数的类型</strong>。</p><p>那么，在这一讲中，我们就来学习一下不同receiver参数类型对Go方法的影响，以及我们选择receiver参数类型时的一些经验原则。</p><h2>receiver参数类型对Go方法的影响</h2><p>要想为receiver参数选出合理的类型，我们先要了解不同的receiver参数类型会对Go方法产生怎样的影响。在上一节课中，我们分析了Go方法的本质，得出了“Go方法实质上是<strong>以方法的receiver参数作为第一个参数的普通函数</strong>”的结论。</p><p>对于函数参数类型对函数的影响，我们是很熟悉的。那么我们能不能将方法等价转换为对应的函数，再通过分析receiver参数类型对函数的影响，从而间接得出它对Go方法的影响呢？</p><!-- [[[read_end]]] --><p>我们可以基于这个思路试试看。我们直接来看下面例子中的两个Go方法，以及它们等价转换后的函数：</p><pre><code class="language-plain">func (t T) M1() &lt;=&gt; F1(t T)
 func (t *T) M2() &lt;=&gt; F2(t *T)
-</code></pre><p>这个例子中有方法M1和M2。M1方法是receiver参数类型为T的一类方法的代表，而M2方法则代表了receiver参数类型为*T的另一类。下面我们分别来看看不同的receiver参数类型对M1和M2的影响。</p><ul>
-<li><strong>首先，当receiver参数的类型为T时：</strong><br>
-当我们选择以T作为receiver参数类型时，M1方法等价转换为<code>F1(t T)</code>。我们知道，Go函数的参数采用的是值拷贝传递，也就是说，F1函数体中的t是T类型实例的一个副本。这样，我们在F1函数的实现中对参数t做任何修改，都只会影响副本，而不会影响到原T类型实例。</li>
-</ul><p>据此我们可以得出结论：当我们的方法M1采用类型为T的receiver参数时，代表T类型实例的receiver参数以值传递方式传递到M1方法体中的，实际上是<strong>T类型实例的副本</strong>，M1方法体中对副本的任何修改操作，都不会影响到原T类型实例。</p><ul>
-<li><strong>第二，当receiver参数的类型为*T时：</strong><br>
-当我们选择以*T作为receiver参数类型时，M2方法等价转换为<code>F2(t *T)</code>。同上面分析，我们传递给F2函数的t是T类型实例的地址，这样F2函数体中对参数t做的任何修改，都会反映到原T类型实例上。</li>
-</ul><p>据此我们也可以得出结论：当我们的方法M2采用类型为*T的receiver参数时，代表*T类型实例的receiver参数以值传递方式传递到M2方法体中的，实际上是<strong>T类型实例的地址</strong>，M2方法体通过该地址可以对原T类型实例进行任何修改操作。</p><p>我们再通过一个更直观的例子，证明一下上面这个分析结果，看一下Go方法选择不同的receiver类型对原类型实例的影响：</p><pre><code class="language-plain">package main
+</code></pre><p>这个例子中有方法M1和M2。M1方法是receiver参数类型为T的一类方法的代表，而M2方法则代表了receiver参数类型为*T的另一类。下面我们分别来看看不同的receiver参数类型对M1和M2的影响。</p>
+<strong>首先，当receiver参数的类型为T时：</strong><br>
+当我们选择以T作为receiver参数类型时，M1方法等价转换为<code>F1(t T)</code>。我们知道，Go函数的参数采用的是值拷贝传递，也就是说，F1函数体中的t是T类型实例的一个副本。这样，我们在F1函数的实现中对参数t做任何修改，都只会影响副本，而不会影响到原T类型实例。
+<p>据此我们可以得出结论：当我们的方法M1采用类型为T的receiver参数时，代表T类型实例的receiver参数以值传递方式传递到M1方法体中的，实际上是<strong>T类型实例的副本</strong>，M1方法体中对副本的任何修改操作，都不会影响到原T类型实例。</p>
+<strong>第二，当receiver参数的类型为*T时：</strong><br>
+当我们选择以*T作为receiver参数类型时，M2方法等价转换为<code>F2(t *T)</code>。同上面分析，我们传递给F2函数的t是T类型实例的地址，这样F2函数体中对参数t做的任何修改，都会反映到原T类型实例上。
+<p>据此我们也可以得出结论：当我们的方法M2采用类型为*T的receiver参数时，代表*T类型实例的receiver参数以值传递方式传递到M2方法体中的，实际上是<strong>T类型实例的地址</strong>，M2方法体通过该地址可以对原T类型实例进行任何修改操作。</p><p>我们再通过一个更直观的例子，证明一下上面这个分析结果，看一下Go方法选择不同的receiver类型对原类型实例的影响：</p><pre><code class="language-plain">package main
   
 type T struct {
     a int
@@ -262,7 +262,7 @@ func (T) M2()
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/aQmhiahazRFUA4W3r1hdxxreSB5Pl54IwAJ8bwN6j02lzicydWAfPFbWx1LSFtzXH8MkI0jUKjlpUtmQBoZ4kReA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -277,8 +277,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,8 +293,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/20/1e/18/9d1f1439.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -309,8 +309,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -325,8 +325,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/b5/e6/c67f12bd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -341,8 +341,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -357,8 +357,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/7b/bd/ccb37425.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b0/6e/921cb700.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/28/22/ebc770dc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,8 +437,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -453,8 +453,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/98/4b/39908079.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -469,8 +469,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/e6/e5/e3daa1a7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -485,8 +485,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/cb/8f/e7e9fa10.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -501,8 +501,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/cb/28/21a8a29e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -517,8 +517,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/2e/ca/469f7266.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -533,8 +533,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/50/66/047ee060.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -549,8 +549,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/12/a8/8aaf13e0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -565,8 +565,8 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -581,5 +581,4 @@ func (T) M2()
   </div>
 </div>
 </div>
-</li>
-</ul>
+

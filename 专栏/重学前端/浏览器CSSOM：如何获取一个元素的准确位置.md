@@ -179,18 +179,18 @@ window对象上提供了一些全局的尺寸信息，它是通过属性来提�
 
 <img src="https://static001.geekbang.org/resource/image/b6/10/b6c7281d86eb7214edf17069f95ae610.png" alt="">
 
-<li>
+
 window.innerHeight, window.innerWidth 这两个属性表示视口的大小。
-</li>
-<li>
+
+
 window.outerWidth, window.outerHeight 这两个属性表示浏览器窗口占据的大小，很多浏览器没有实现，一般来说这两个属性无关紧要。
-</li>
-<li>
+
+
 window.devicePixelRatio 这个属性非常重要，表示物理像素和CSS像素单位的倍率关系，Retina屏这个值是2，后来也出现了一些3倍的Android屏。
-</li>
-<li>
+
+
 window.screen （屏幕尺寸相关的信息）
-<ul>
+
 - window.screen.width, window.screen.height 设备的屏幕尺寸。
 - window.screen.availWidth, window.screen.availHeight 设备屏幕的可渲染区域尺寸，一些Android机器会把屏幕的一部分预留做固定按钮，所以有这两个属性，实际上一般浏览器不会实现的这么细致。
 - window.screen.colorDepth, window.screen.pixelDepth 这两个属性是固定值24，应该是为了以后预留。

@@ -25,315 +25,315 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;开篇词&#32;&#32;深入掌握&#32;Dubbo&#32;原理与实现，提升你的职场竞争力.md">00 开篇词  深入掌握 Dubbo 原理与实现，提升你的职场竞争力.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Dubbo&#32;源码环境搭建：千里之行，始于足下.md">01  Dubbo 源码环境搭建：千里之行，始于足下.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Dubbo&#32;的配置总线：抓住&#32;URL，就理解了半个&#32;Dubbo.md">02 Dubbo 的配置总线：抓住 URL，就理解了半个 Dubbo.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（上）.md">03  Dubbo SPI 精析，接口实现两极反转（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（下）.md">04  Dubbo SPI 精析，接口实现两极反转（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;海量定时任务，一个时间轮搞定.md">05  海量定时任务，一个时间轮搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（上）.md">06  ZooKeeper 与 Curator，求你别用 ZkClient 了（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（下）.md">07  ZooKeeper 与 Curator，求你别用 ZkClient 了（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;代理模式与常见实现.md">08  代理模式与常见实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;Netty&#32;入门，用它做网络编程都说好（上）.md">09  Netty 入门，用它做网络编程都说好（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;Netty&#32;入门，用它做网络编程都说好（下）.md">10  Netty 入门，用它做网络编程都说好（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;简易版&#32;RPC&#32;框架实现（上）.md">11  简易版 RPC 框架实现（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;简易版&#32;RPC&#32;框架实现（下）.md">12  简易版 RPC 框架实现（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;本地缓存：降低&#32;ZooKeeper&#32;压力的一个常用手段.md">13  本地缓存：降低 ZooKeeper 压力的一个常用手段.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;重试机制是网络操作的基本保证.md">14  重试机制是网络操作的基本保证.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;ZooKeeper&#32;注册中心实现，官方推荐注册中心实践.md">15  ZooKeeper 注册中心实现，官方推荐注册中心实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;Dubbo&#32;Serialize&#32;层：多种序列化算法，总有一款适合你.md">16  Dubbo Serialize 层：多种序列化算法，总有一款适合你.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;Dubbo&#32;Remoting&#32;层核心接口分析：这居然是一套兼容所有&#32;NIO&#32;框架的设计？.md">17  Dubbo Remoting 层核心接口分析：这居然是一套兼容所有 NIO 框架的设计？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;Buffer&#32;缓冲区：我们不生产数据，我们只是数据的搬运工.md">18  Buffer 缓冲区：我们不生产数据，我们只是数据的搬运工.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（上）.md">19  Transporter 层核心实现：编解码与线程模型一文打尽（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（下）.md">20  Transporter 层核心实现：编解码与线程模型一文打尽（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（上）.md">21  Exchange 层剖析：彻底搞懂 Request-Response 模型（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（下）.md">22  Exchange 层剖析：彻底搞懂 Request-Response 模型（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;核心接口介绍，RPC&#32;层骨架梳理.md">23  核心接口介绍，RPC 层骨架梳理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="24&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（上）.md">24  从 Protocol 起手，看服务暴露和服务引用的全流程（上）.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（下）.md">25  从 Protocol 起手，看服务暴露和服务引用的全流程（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（上）.md">26  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（下）.md">27  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;复杂问题简单化，代理帮你隐藏了多少底层细节？.md">28  复杂问题简单化，代理帮你隐藏了多少底层细节？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Dubbo%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E4%B8%8E%E5%AE%9E%E6%88%98-%E5%AE%8C/29%20%20%E5%8A%A0%E9%A4%90%EF%BC%9AHTTP%20%E5%8D%8F%E8%AE%AE%20+%20JSON-RPC%EF%BC%8CDubbo%20%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%B0%B1%E6%98%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95.md">29  加餐：HTTP 协议 + JSON-RPC，Dubbo 跨语言就是如此简单.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;&#32;Filter&#32;接口，扩展&#32;Dubbo&#32;框架的常用手段指北.md">30  Filter 接口，扩展 Dubbo 框架的常用手段指北.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;&#32;加餐：深潜&#32;Directory&#32;实现，探秘服务目录玄机.md">31  加餐：深潜 Directory 实现，探秘服务目录玄机.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;&#32;路由机制：请求到底怎么走，它说了算（上）.md">32  路由机制：请求到底怎么走，它说了算（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;&#32;路由机制：请求到底怎么走，它说了算（下）.md">33  路由机制：请求到底怎么走，它说了算（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="34&#32;&#32;加餐：初探&#32;Dubbo&#32;动态配置的那些事儿.md">34  加餐：初探 Dubbo 动态配置的那些事儿.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="35&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md">35  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="36&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md">36  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="37&#32;&#32;集群容错：一个好汉三个帮（上）.md">37  集群容错：一个好汉三个帮（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="38&#32;&#32;集群容错：一个好汉三个帮（下）.md">38  集群容错：一个好汉三个帮（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="39&#32;&#32;加餐：多个返回值不用怕，Merger&#32;合并器来帮忙.md">39  加餐：多个返回值不用怕，Merger 合并器来帮忙.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="40&#32;&#32;加餐：模拟远程调用，Mock&#32;机制帮你搞定.md">40  加餐：模拟远程调用，Mock 机制帮你搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="41&#32;&#32;加餐：一键通关服务发布全流程.md">41  加餐：一键通关服务发布全流程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="42&#32;&#32;加餐：服务引用流程全解析.md">42  加餐：服务引用流程全解析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="43&#32;&#32;服务自省设计方案：新版本新方案.md">43  服务自省设计方案：新版本新方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="44&#32;&#32;元数据方案深度剖析，如何避免注册中心数据量膨胀？.md">44  元数据方案深度剖析，如何避免注册中心数据量膨胀？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="45&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（上）.md">45  加餐：深入服务自省方案中的服务发布订阅（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="46&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（下）.md">46  加餐：深入服务自省方案中的服务发布订阅（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="47&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（上）.md">47  配置中心设计与实现：集中化配置 and 本地化配置，我都要（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="48&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（下）.md">48  配置中心设计与实现：集中化配置 and 本地化配置，我都要（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="49&#32;结束语&#32;&#32;认真学习，缩小差距.md">49 结束语  认真学习，缩小差距.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -392,15 +392,15 @@
 <p><img src="assets/Ciqc1F-FTHGAOVGKAAJe5PD5u9A015.png" alt="Drawing 0.png" /></p>
 <p>Protocol 接口继承关系图</p>
 <p>其中，<strong>AbstractProtocol</strong>提供了一些 Protocol 实现需要的公共能力以及公共字段，它的核心字段有如下三个。</p>
-<ul>
-<li>exporterMap（Map&lt;String, Exporter&lt;?&gt;&gt;类型）：用于存储出去的服务集合，其中的 Key 通过 ProtocolUtils.serviceKey() 方法创建的服务标识，在 ProtocolUtils 中维护了多层的 Map 结构（如下图所示）。首先按照 group 分组，在实践中我们可以根据需求设置 group，例如，按照机房、地域等进行 group 划分，做到就近调用；在 GroupServiceKeyCache 中，依次按照 serviceName、serviceVersion、port 进行分类，最终缓存的 serviceKey 是前面三者拼接而成的。</li>
-</ul>
+
+exporterMap（Map&lt;String, Exporter&lt;?&gt;&gt;类型）：用于存储出去的服务集合，其中的 Key 通过 ProtocolUtils.serviceKey() 方法创建的服务标识，在 ProtocolUtils 中维护了多层的 Map 结构（如下图所示）。首先按照 group 分组，在实践中我们可以根据需求设置 group，例如，按照机房、地域等进行 group 划分，做到就近调用；在 GroupServiceKeyCache 中，依次按照 serviceName、serviceVersion、port 进行分类，最终缓存的 serviceKey 是前面三者拼接而成的。
+
 <p><img src="assets/Ciqc1F-JXfmAJK8RAAHUliqXmBc629.png" alt="Lark20201016-164613.png" /></p>
 <p>groupServiceKeyCacheMap 结构图</p>
-<ul>
-<li>serverMap（Map&lt;String, ProtocolServer&gt;类型）：记录了全部的 ProtocolServer 实例，其中的 Key 是 host 和 port 组成的字符串，Value 是监听该地址的 ProtocolServer。ProtocolServer 就是对 RemotingServer 的一层简单封装，表示一个服务端。</li>
-<li>invokers（Set&lt;Invoker&lt;?&gt;&gt;类型）：服务引用的集合。</li>
-</ul>
+
+serverMap（Map&lt;String, ProtocolServer&gt;类型）：记录了全部的 ProtocolServer 实例，其中的 Key 是 host 和 port 组成的字符串，Value 是监听该地址的 ProtocolServer。ProtocolServer 就是对 RemotingServer 的一层简单封装，表示一个服务端。
+invokers（Set&lt;Invoker&lt;?&gt;&gt;类型）：服务引用的集合。
+
 <p>AbstractProtocol 没有对 Protocol 的 export() 方法进行实现，对 refer() 方法的实现也是委托给了 protocolBindingRefer() 这个抽象方法，然后由子类实现。AbstractProtocol 唯一实现的方法就是 destory() 方法，其首先会遍历 Invokers 集合，销毁全部的服务引用，然后遍历全部的 exporterMap 集合，销毁发布出去的服务，具体实现如下：</p>
 <pre><code>public void destroy() {
 
@@ -511,13 +511,13 @@
 }
 </code></pre>
 <p>createServer() 方法首先会为 URL 添加一些默认值，同时会进行一些参数值的检测，主要有五个。</p>
-<ul>
-<li>HEARTBEAT_KEY 参数值，默认值为 60000，表示默认的心跳时间间隔为 60 秒。</li>
-<li>CHANNEL_READONLYEVENT_SENT_KEY 参数值，默认值为 true，表示 ReadOnly 请求需要阻塞等待响应返回。在 Server 关闭的时候，只能发送 ReadOnly 请求，这些 ReadOnly 请求由这里设置的 CHANNEL_READONLYEVENT_SENT_KEY 参数值决定是否需要等待响应返回。</li>
-<li>CODEC_KEY 参数值，默认值为 dubbo。你可以回顾 Codec2 接口中 @Adaptive 注解的参数，都是获取该 URL 中的 CODEC_KEY 参数值。</li>
-<li>检测 SERVER_KEY 参数指定的扩展实现名称是否合法，默认值为 netty。你可以回顾 Transporter 接口中 @Adaptive 注解的参数，它决定了 Transport 层使用的网络库实现，默认使用 Netty 4 实现。</li>
-<li>检测 CLIENT_KEY 参数指定的扩展实现名称是否合法。同 SERVER_KEY 参数的检查流程。</li>
-</ul>
+
+HEARTBEAT_KEY 参数值，默认值为 60000，表示默认的心跳时间间隔为 60 秒。
+CHANNEL_READONLYEVENT_SENT_KEY 参数值，默认值为 true，表示 ReadOnly 请求需要阻塞等待响应返回。在 Server 关闭的时候，只能发送 ReadOnly 请求，这些 ReadOnly 请求由这里设置的 CHANNEL_READONLYEVENT_SENT_KEY 参数值决定是否需要等待响应返回。
+CODEC_KEY 参数值，默认值为 dubbo。你可以回顾 Codec2 接口中 @Adaptive 注解的参数，都是获取该 URL 中的 CODEC_KEY 参数值。
+检测 SERVER_KEY 参数指定的扩展实现名称是否合法，默认值为 netty。你可以回顾 Transporter 接口中 @Adaptive 注解的参数，它决定了 Transport 层使用的网络库实现，默认使用 Netty 4 实现。
+检测 CLIENT_KEY 参数指定的扩展实现名称是否合法。同 SERVER_KEY 参数的检查流程。
+
 <p>完成上述默认参数值的设置之后，我们就可以通过 Exchangers 门面类创建 ExchangeServer，并封装成 DubboProtocolServer 返回。</p>
 <pre><code>private ProtocolServer createServer(URL url) {
 
@@ -674,19 +674,19 @@
 <p><img src="assets/CgqCHl-FTMSAYeP7AAA_pzU2CPA016.png" alt="Drawing 6.png" /></p>
 <p>RpcInvocation 继承关系图</p>
 <p>下面是 RpcInvocation 中的核心字段，通过读写这些字段即可实现 Invocation 接口的全部方法。</p>
-<ul>
-<li>targetServiceUniqueName（String类型）：要调用的唯一服务名称，其实就是 ServiceKey，即 interface/group:version 三部分构成的字符串。</li>
-<li>methodName（String类型）：调用的目标方法名称。</li>
-<li>serviceName（String类型）：调用的目标服务名称，示例中就是org.apache.dubbo.demo.DemoService。</li>
-<li>parameterTypes（Class&lt;?&gt;[]类型）：记录了目标方法的全部参数类型。</li>
-<li>parameterTypesDesc（String类型）：参数列表签名。</li>
-<li>arguments（Object[]类型）：具体参数值。</li>
-<li>attachments（Map&lt;String, Object&gt;类型）：此次调用的附加信息，可以被序列化到请求中。</li>
-<li>attributes（Map&lt;Object, Object&gt;类型）：此次调用的属性信息，这些信息不能被发送出去。</li>
-<li>invoker（Invoker&lt;?&gt;类型）：此次调用关联的 Invoker 对象。</li>
-<li>returnType（Class&lt;?&gt;类型）：返回值的类型。</li>
-<li>invokeMode（InvokeMode类型）：此次调用的模式，分为 SYNC、ASYNC 和 FUTURE 三类。</li>
-</ul>
+
+targetServiceUniqueName（String类型）：要调用的唯一服务名称，其实就是 ServiceKey，即 interface/group:version 三部分构成的字符串。
+methodName（String类型）：调用的目标方法名称。
+serviceName（String类型）：调用的目标服务名称，示例中就是org.apache.dubbo.demo.DemoService。
+parameterTypes（Class&lt;?&gt;[]类型）：记录了目标方法的全部参数类型。
+parameterTypesDesc（String类型）：参数列表签名。
+arguments（Object[]类型）：具体参数值。
+attachments（Map&lt;String, Object&gt;类型）：此次调用的附加信息，可以被序列化到请求中。
+attributes（Map&lt;Object, Object&gt;类型）：此次调用的属性信息，这些信息不能被发送出去。
+invoker（Invoker&lt;?&gt;类型）：此次调用关联的 Invoker 对象。
+returnType（Class&lt;?&gt;类型）：返回值的类型。
+invokeMode（InvokeMode类型）：此次调用的模式，分为 SYNC、ASYNC 和 FUTURE 三类。
+
 <p>我们在上面的继承图中看到 RpcInvocation 的一个子类—— DecodeableRpcInvocation，它是用来支持解码的，其实现的 decode() 方法正好是 DubboCodec.encodeRequestData() 方法对应的解码操作，在 DubboCodec.decodeBody() 方法中就调用了这个方法，调用关系如下图所示：</p>
 <p><img src="assets/Ciqc1F-FTM2Ae73pAAC0_daI0N4088.png" alt="Drawing 7.png" /></p>
 <p>decode() 方法调用栈</p>
@@ -725,10 +725,10 @@ return req;
 </code></pre>
 <p>如果不在 DubboCodec 中解码，那会在哪里解码呢？你可以回顾第 20 课时介绍的 DecodeHandler（Transport 层），它的 received() 方法也是可以进行解码的，另外，DecodeableRpcInvocation 中有一个 hasDecoded 字段来判断当前是否已经完成解码，这样，三者配合就可以根据 DECODE_IN_IO_THREAD_KEY 参数决定执行解码操作的线程了。</p>
 <p>如果你对线程模型不清楚，可以依次回顾一下 Exchangers、HeaderExchanger、Transporters 三个门面类的 bind() 方法，以及 Dispatcher 各实现提供的线程模型，搞清楚各个 ChannelHandler 是由哪个线程执行的，这些知识点在前面课时都介绍过了，不再重复。这里我们就直接以 AllDispatcher 实现为例给出结论。</p>
-<ul>
-<li>IO 线程内执行的 ChannelHandler 实现依次有：InternalEncoder、InternalDecoder（两者底层都是调用 DubboCodec）、IdleStateHandler、MultiMessageHandler、HeartbeatHandler 和 NettyServerHandler。</li>
-<li>在非 IO 线程内执行的 ChannelHandler 实现依次有：DecodeHandler、HeaderExchangeHandler 和 DubboProtocol$requestHandler。</li>
-</ul>
+
+IO 线程内执行的 ChannelHandler 实现依次有：InternalEncoder、InternalDecoder（两者底层都是调用 DubboCodec）、IdleStateHandler、MultiMessageHandler、HeartbeatHandler 和 NettyServerHandler。
+在非 IO 线程内执行的 ChannelHandler 实现依次有：DecodeHandler、HeaderExchangeHandler 和 DubboProtocol$requestHandler。
+
 <p>在 DubboProtocol 中有一个 requestHandler 字段，它是一个实现了 ExchangeHandlerAdapter 抽象类的匿名内部类的实例，间接实现了 ExchangeHandler 接口，其核心是 reply() 方法，具体实现如下：</p>
 <pre><code>public CompletableFuture&lt;Object&gt; reply(ExchangeChannel channel, Object message) throws RemotingException {
 

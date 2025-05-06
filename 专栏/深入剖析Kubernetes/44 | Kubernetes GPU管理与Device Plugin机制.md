@@ -14,12 +14,12 @@
 
 以 NVIDIA 的 GPU 设备为例，上面的需求就意味着当用户的容器被创建之后，这个容器里必须出现如下两部分设备和目录：
 
-<li>
+
 GPU 设备，比如 /dev/nvidia0；
-</li>
-<li>
+
+
 GPU 驱动目录，比如/usr/local/nvidia/*。
-</li>
+
 
 其中，GPU 设备路径，正是该容器启动时的 Devices 参数；而驱动目录，则是该容器启动时的 Volume 参数。所以，在 Kubernetes 的GPU 支持的实现里，kubelet 实际上就是将上述两部分内容，设置在了创建该容器的 CRI （Container Runtime Interface）参数里面。这样，等到该容器启动之后，对应的容器里就会出现 GPU 设备和驱动的路径了。
 

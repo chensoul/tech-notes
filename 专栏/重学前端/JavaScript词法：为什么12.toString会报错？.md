@@ -17,8 +17,8 @@
 - WhiteSpace 空白字符
 - LineTerminator 换行符
 - Comment 注释
-<li>Token 词
-<ul>
+Token 词
+
 - IdentifierName 标识符名称，典型案例是我们使用的变量名，注意这里关键字也包含在内了。
 - Punctuator 符号，我们使用的运算符和大括号等符号。
 - NumericLiteral 数字直接量，就是我们写的数字。
@@ -59,24 +59,24 @@ JavaScript词法的另一个特别设计是字符串模板，模板语法大概�
 
 说起空白符号，想必给大家留下的印象就是空格，但是实际上，JavaScript可以支持更多空白符号。
 
-<li>
+
 `&lt;HT&gt;`(或称`&lt;TAB&gt;`)是U+0009，是缩进TAB符，也就是字符串中写的 \t 。
-</li>
-<li>
+
+
 `&lt;VT&gt;`是U+000B，也就是垂直方向的TAB符 \v，这个字符在键盘上很难打出来，所以很少用到。
-</li>
-<li>
+
+
 `&lt;FF&gt;`是U+000C，Form Feed，分页符，字符串直接量中写作 \f ，现代已经很少有打印源程序的事情发生了，所以这个字符在JavaScript源代码中很少用到。
-</li>
-<li>
+
+
 `&lt;SP&gt;`是U+0020，就是最普通的空格了。
-</li>
-<li>
+
+
 `&lt;NBSP&gt;`是U+00A0，非断行空格，它是SP的一个变体，在文字排版中，可以避免因为空格在此处发生断行，其它方面和普通空格完全一样。多数的JavaScript编辑环境都会把它当做普通空格（因为一般源代码编辑环境根本就不会自动折行……）。HTML中，很多人喜欢用的 `&amp;nbsp;` 最后生成的就是它了。
-</li>
-<li>
+
+
 `&lt;ZWNBSP&gt;`(旧称`&lt;BOM&gt;`)是U+FEFF，这是ES5新加入的空白符，是Unicode中的零宽非断行空格，在以UTF格式编码的文件中，常常在文件首插入一个额外的U+FEFF，解析UTF文件的程序可以根据U+FEFF的表示方法猜测文件采用哪种UTF编码方式。这个字符也叫做“bit order mark”。
-</li>
+
 
 此外，JavaScript支持所有的Unicode中的空格分类下的空格，我们可以看下表：
 

@@ -1,10 +1,10 @@
 <audio title="04｜如何借助GitOps实现应用秒级自动发布和回滚？" src="https://static001.geekbang.org/resource/audio/53/f8/53880df5407a20130503f3b80535e6f8.mp3" controls="controls"></audio> 
-<p>你好，我是王炜。</p><p>在上一节课，我为你介绍了 K8s 在自愈和自动扩容方面的强大能力，它们对提升业务稳定性有非常大的帮助。</p><p>其实，除了保障业务稳定以外，在日常软件研发的生命周期中，还有非常重要的一环：发布和回滚。发布周期是体现研发效率的一项重要指标，更早更快的发布有利于我们及时发现问题。</p><p>在我们有了关于容器化、K8s 工作负载的基础之后，这节课，我们来看看 K8s 应用发布的一般做法，此外，我还会带你从零开始构建 GitOps 工作流，体验 GitOps 在应用发布上为我们带来的全新体验。</p><p>在正式开始之前，你需要做好以下准备：</p><ul>
-<li>准备一台电脑（首选 Linux 或 macOS，Windows 系统注意操作差异）；</li>
-<li><a href="https://docs.docker.com/engine/install/">安装 Docker</a>；</li>
-<li><a href="https://kubernetes.io/docs/tasks/tools/">安装 Kubectl</a>；</li>
-<li>按照上一节课的内容在本地 Kind 集群安装 Ingress-Nginx。</li>
-</ul><h2>传统 K8s 应用发布流程</h2><p>还记得在上节课学习的如何创建 Deployment 工作负载吗？下面这段 Deployment Manifest 可以帮助你复习一下：</p><pre><code class="language-yaml">apiVersion: apps/v1
+<p>你好，我是王炜。</p><p>在上一节课，我为你介绍了 K8s 在自愈和自动扩容方面的强大能力，它们对提升业务稳定性有非常大的帮助。</p><p>其实，除了保障业务稳定以外，在日常软件研发的生命周期中，还有非常重要的一环：发布和回滚。发布周期是体现研发效率的一项重要指标，更早更快的发布有利于我们及时发现问题。</p><p>在我们有了关于容器化、K8s 工作负载的基础之后，这节课，我们来看看 K8s 应用发布的一般做法，此外，我还会带你从零开始构建 GitOps 工作流，体验 GitOps 在应用发布上为我们带来的全新体验。</p><p>在正式开始之前，你需要做好以下准备：</p>
+准备一台电脑（首选 Linux 或 macOS，Windows 系统注意操作差异）；
+<a href="https://docs.docker.com/engine/install/">安装 Docker</a>；
+<a href="https://kubernetes.io/docs/tasks/tools/">安装 Kubectl</a>；
+按照上一节课的内容在本地 Kind 集群安装 Ingress-Nginx。
+<h2>传统 K8s 应用发布流程</h2><p>还记得在上节课学习的如何创建 Deployment 工作负载吗？下面这段 Deployment Manifest 可以帮助你复习一下：</p><pre><code class="language-yaml">apiVersion: apps/v1
 kind: Deployment
 metadata:
   creationTimestamp: null
@@ -28,11 +28,11 @@ spec:
         name: hello-world-flask
         resources: {}
 status: {}
-</code></pre><!-- [[[read_end]]] --><p>当我们在部署 Deployment 工作负载的时候，Image 字段同时指定了镜像名称和版本号。在发布应用的过程中，一般会先修改 Manifest 镜像版本，再使用 kubectl apply 重新将 Manifest 应用到集群来更新应用。</p><p>你可能会问，那在升级应用的过程中，新老版本的切换会导致服务中断吗？答案当然是不会的，并且 K8s 将会自动处理，无需人工干预。</p><p><strong>接下来，我们进入实战环节。我们先尝试通过手动的方式来更新应用，这也是传统 K8s 发布应用的过程。</strong></p><p>通常，更新应用可以使用下面三种方式：</p><ul>
-<li>使用 kubectl set image 命令；</li>
-<li>修改本地的 Manifest ；</li>
-<li>修改集群内 Manifest 。</li>
-</ul><h3>通过 kubectl set image 命令更新应用</h3><p>要想更新应用，最简单的方式是通过 kubectl set image 来更新集群内已经存在工作负载的镜像版本，例如更新 hello-world-flask Deployment 工作负载：</p><pre><code class="language-powershell">$ kubectl set image deployment/hello-world-flask hello-world-flask=lyzhang1999/hello-world-flask:v1
+</code></pre><!-- [[[read_end]]] --><p>当我们在部署 Deployment 工作负载的时候，Image 字段同时指定了镜像名称和版本号。在发布应用的过程中，一般会先修改 Manifest 镜像版本，再使用 kubectl apply 重新将 Manifest 应用到集群来更新应用。</p><p>你可能会问，那在升级应用的过程中，新老版本的切换会导致服务中断吗？答案当然是不会的，并且 K8s 将会自动处理，无需人工干预。</p><p><strong>接下来，我们进入实战环节。我们先尝试通过手动的方式来更新应用，这也是传统 K8s 发布应用的过程。</strong></p><p>通常，更新应用可以使用下面三种方式：</p>
+使用 kubectl set image 命令；
+修改本地的 Manifest ；
+修改集群内 Manifest 。
+<h3>通过 kubectl set image 命令更新应用</h3><p>要想更新应用，最简单的方式是通过 kubectl set image 来更新集群内已经存在工作负载的镜像版本，例如更新 hello-world-flask Deployment 工作负载：</p><pre><code class="language-powershell">$ kubectl set image deployment/hello-world-flask hello-world-flask=lyzhang1999/hello-world-flask:v1
 deployment.apps/hello-world-flask image updated
 </code></pre><p>为了方便你动手实践，我已经给你制作了 hello-world-flask:v1 版本的镜像，新镜像版本修改了 Python 的返回内容，你可以直接使用。</p><p>当 K8s 接收到镜像更新的指令时，K8s 会用新的镜像版本重新创建 Pod。你可以使用 kubectl get pods 来查看 Pod 的更新情况：</p><pre><code class="language-powershell">$ kubectl get pods
 NAME&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; READY&nbsp; &nbsp;STATUS&nbsp; &nbsp; RESTARTS&nbsp; &nbsp;AGE
@@ -63,8 +63,8 @@ spec:
 </code></pre><p>接下来，执行 kubectl apply -f new-hello-world-flask.yaml 来更新应用：</p><pre><code class="language-powershell">$ kubectl apply -f new-hello-world-flask.yaml
 deployment.apps/hello-world-flask configured
 </code></pre><p>也就是说，kubectl apply 命令会自动处理两种情况：</p><ol>
-<li>如果该资源不存在，那就创建资源；</li>
-<li>如果资源存在，那就更新资源。</li>
+如果该资源不存在，那就创建资源；
+如果资源存在，那就更新资源。
 </ol><p>到这里，我相信有一些同学可能会有疑问，如果我本地的 Manifest 找不到了，我可以直接更新集群内已经存在的 Manifest 吗？答案是肯定的。也就是说，我们还可以直接编辑集群内的 Manifest 来更新应用，这就是更新应用的第三种方式。</p><h3>通过修改集群内 Manifest 更新应用</h3><p>以 hello-world-flask Deployment 为例，要直接修改集群内已部署的 Manifest，你可以使用 kubectl edit 命令：</p><pre><code class="language-powershell">$ kubectl edit deployment hello-world-flask
 </code></pre><p>执行命令后，kubectl 会自动为我们下载集群内的 Manifest 到本地，并且用 VI 编辑器自动打开。你可以进入 VI 的编辑模式修改任何字段，<strong>保存退出后修改即时生效。</strong></p><p><strong>总结来说，要更新 K8s 的工作负载，我们可以修改本地的 Manifest，再使用 kubectl apply 将它重新应用到集群内，或者通过 kubectl edit 命令直接修改集群内已存在的工作负载。</strong></p><p>在实际项目的实践中，负责更新应用的同学早期可能会在自己的电脑上操作，然后把这部分操作挪到 CI 过程，例如使用 Jenkins 来执行。</p><p>但是，随着项目的发展，我们会需要发布流程更加自动化、安全、可追溯。这时候，我们应该考虑用 GitOps 的方式来发布应用。</p><h2>从零搭建 GitOps 发布工作流</h2><p>在正式搭建 GitOps 之前，我想先让你对 GitOps 有个简单的理解。通俗来说，GitOps 就是以 Git 版本控制为理念的 DevOps 实践。</p><p>对于这节课要设计的 GitOps 发布工作流来说，我们会将 Manifest 存储在 Git 仓库中作为期望状态，一旦修改并提交了 Manifest ，那么 GitOps 工作流就会<strong>自动比对 Git 仓库和集群内工作负载的实际差异</strong>，并进行部署。</p><h3>安装 FluxCD 并创建工作流</h3><p>要实现 GitOps 工作流，首先我们需要一个能够帮助我们监听 Git 仓库变化，自动部署的工具。这节课，我以 FluxCD 为例，带你一步步构建出一个 GitOps 工作流。</p><p><strong>接下来，我们进入实战环节。</strong></p><p>首先，我们需要在集群内安装 FluxCD：</p><pre><code class="language-powershell">$ kubectl apply -f https://ghproxy.com/https://raw.githubusercontent.com/lyzhang1999/resource/main/fluxcd/fluxcd.yaml
 </code></pre><p>由于安装 FluxCD 的工作负载比较多，你可以使用 kubectl wait 来等待安装完成：</p><pre><code class="language-powershell">$ kubectl wait --for=condition=available --timeout=300s --all deployments -n flux-system
@@ -200,9 +200,9 @@ Status:
 ......
 </code></pre><p>从返回结果的 Last Applied Revision 可以看出，FluxCD 已经检查到了变更，并已经进行了同步。</p><p>再次打开浏览器访问 127.0.0.1，可以看到返回结果已回滚到了 latest 镜像对应的内容：</p><pre><code class="language-powershell">Hello, my first docker images! hello-world-flask-56fbff68c8-c8dc4
 </code></pre><p>到这里，我们就成功实现了 GitOps 的发布和回滚。</p><h2>总结</h2><p>这节课，我为你归纳了 K8s 更新应用镜像的 3 种基本操作，他们分别是：</p><ol>
-<li>kubectl set image；</li>
-<li>修改本地 Manifest 并重新执行 kubectl apply -f；</li>
-<li>通过 kubectl edit 直接修改集群内的工作负载。</li>
+kubectl set image；
+修改本地 Manifest 并重新执行 kubectl apply -f；
+通过 kubectl edit 直接修改集群内的工作负载。
 </ol><p>这种手动更新应用的方法效率非常低，最重要的是很难回溯，会让应用回滚变得困难。所以，我们引入了一种全新 GitOps 工作流的发布方式来解决这些问题。</p><p>在这节课的实战当中，我们只实现了 GitOps 环节中的一小部分，我希望通过这个小小的试炼，让你认识到 GitOps 的价值。</p><p>在实际项目中，构建端到端的 GitOps 工作流其实还有非常多的细节，例如如何在修改代码后自动构建并推送镜像，如何自动更新 Manifest 仓库等，这些进阶的内容我都会在后续的课程中详细介绍。</p><p>另外，能实现 GitOps 的工具其实并不止 FluxCD，在你为实际项目构建生产级的 GitOps 工作流时，我推荐你使用 ArgoCD，这也是我们这个专栏接下来会重点介绍的内容。</p><p>最后，在前面几节课里，我们引出了非常多 K8s 相关的概念，例如工作负载、Service、Ingress、HPA 等等，为了快速实战并让你感受 K8s 和 GitOps 的价值，之前我并没有详细解释这些概念。但当你要将真实的项目迁移到 K8s 的时候，这些内容是我们必须要熟练掌握的。</p><p>所以，为了让你在工作过程中对 K8s 更加得心应手，我会在接下来第二模块为你提供零基础的 K8s 极简入门教程。我会详细介绍之前出现过的 K8s 常用对象，让你真正掌握他们，扫除将公司项目迁移到 K8s 的技术障碍，<strong>迈出 GitOps 的第一步。</strong></p><h2>思考题</h2><p>最后，给你留一道思考题吧。</p><p>请你分享一下你们现在使用的发布方案是什么？相比 GitOps 的发布方式，你认为它有哪些优缺点呢？</p><p>欢迎你给我留言交流讨论，你也可以把这节课分享给更多的朋友一起阅读。我们下节课见。</p>
 <style>
     ul {
@@ -313,7 +313,7 @@ Status:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/52/66/3e4d4846.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -328,8 +328,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/ff/28/040f6f01.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -344,8 +344,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/c4/03/f753fda7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -360,8 +360,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/65/e8/d1e52dbb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -376,8 +376,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/90/95/86b21093.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -392,8 +392,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/37/3b/495e2ce6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -408,8 +408,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/43/05/3fbf26cf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -424,8 +424,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/83/51/aa521f2a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -440,8 +440,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLRibTnDs0ZjFrAtfzcwDDFnaX1DEY8qKoFczP8e8ucAdTr7C33bYFDYxpN8VRhgEVsDrBwILO8Msw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -456,8 +456,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/32/a8/d5bf5445.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -472,8 +472,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/qftso2tiat4Y6LB5dxynrqm54aprlPGQBEuPsFLoyEr8JLKoJAmjtFePG8YzaDqlk5UVIsIUMMIH7Yg7iaWhTnmQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -488,8 +488,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/qftso2tiat4Y6LB5dxynrqm54aprlPGQBEuPsFLoyEr8JLKoJAmjtFePG8YzaDqlk5UVIsIUMMIH7Yg7iaWhTnmQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -504,8 +504,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/54/21/0bac2254.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -520,8 +520,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/52/66/3e4d4846.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -536,8 +536,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/52/66/3e4d4846.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -552,8 +552,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/8c/78/25eeacd7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -568,8 +568,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/65/e8/d1e52dbb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -584,8 +584,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/29/01/203fcb5d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -600,8 +600,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/d9/36/92d8eb91.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -616,8 +616,8 @@ Status:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -632,5 +632,4 @@ Status:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

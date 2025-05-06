@@ -63,30 +63,30 @@ redex --sign -s ReDexSample/keystore/debug.keystore -a androiddebugkey -p androi
 
 上面这段很长的命令，其实可以拆解为几部分：
 
-<li>
+
 `--sign` 签名信息
-</li>
-<li>
+
+
 `-s`（keystore）签名文件路径
-</li>
-<li>
+
+
 `-a`（keyalias）签名的别名
-</li>
-<li>
+
+
 `-p`（keypass）签名的密码
-</li>
-<li>
+
+
 `-c` 指定ReDex的配置文件路径
-</li>
-<li>
+
+
 `-P` ProGuard规则文件路径
-</li>
-<li>
+
+
 `-o` 输出的文件路径
-</li>
-<li>
+
+
 最后是要处理APK文件的路径
-</li>
+
 
 但在使用时，我遇到了下图的问题：
 
@@ -163,21 +163,21 @@ public class TraceTagAspectj {
 
 简单介绍下上面代码的意思：
 
-<li>
+
 `@Aspect`：在编译时AspectJ会查找被`@Aspect`注解的类，然后执行我们的AOP实现。
-</li>
-<li>
+
+
 `@Before`：可以简单理解为方法执行前。
-</li>
-<li>
+
+
 `@After`：可以简单理解为方法执行后。
-</li>
-<li>
+
+
 `execution`：方法执行。
-</li>
-<li>
+
+
 `* **(..)`：第一个星号代表任意返回类型，第二个星号代表任意类，第三个代表任意方法，括号内为方法参数无限制。星号和括号内都是可以替换为具体值，比如String TestClass.test(String)。
-</li>
+
 
 知道了相关注解的含义，那么实现的代码含义就是，**所有方法在执行前后插入相应指定操作**。
 
@@ -212,12 +212,12 @@ public class TryCatchAspect {
 
 上面用到了两个新注解：
 
-<li>
+
 `@Around`：用于替换以前的代码，使用joinPoint.proceed()可以调用原方法。
-</li>
-<li>
+
+
 `@Pointcut`：指定一个切入点。
-</li>
+
 
 实现就是指定一个切入点，利用替换原方法的思路包裹一层try catch。
 
@@ -234,15 +234,15 @@ public class TryCatchAspect {
 Sample利用ASM实现了统计方法耗时和替换项目中所有的new Thread。
 
 
-<li>
+
 运行项目首先要注掉ASMSample build.gradle的`apply plugin: 'com.geektime.asm-plugin'`和根目录build.gradle的`classpath ("com.geektime.asm:asm-gradle-plugin:1.0") { changing = true }`。
-</li>
-<li>
+
+
 运行`gradle task ":asm-gradle-plugin:buildAndPublishToLocalMaven"`编译plugin插件，编译的插件在本地`.m2\repository`目录下
-</li>
-<li>
+
+
 打开第一步注掉的内容就可以运行了。
-</li>
+
 
 实现的大致过程是，先利用Transform遍历所有文件，再通过ASM的`visitMethod`遍历所有方法，最后通过AdviceAdapter实现最终的修改字节码。具体实现可以看代码和[《练习Sample跑起来 | ASM插桩强化练习》](https://time.geekbang.org/column/article/83148)。
 

@@ -36,13 +36,13 @@ type Dialector interface {
    QuoteTo(clause.Writer, string) // 将类中的注释对应到 sql 语句中
    Explain(sql string, vars ...interface{}) string // 将有占位符的 sql 解析为无占位符 sql，常用于日志打印等
 }
-</code></pre><p>不同的数据库有不同的 Dialector 实现，我们称之为“驱动”。每个数据库的驱动，都有一个 git 地址进行存放。目前 gorm 官方支持五种数据库驱动：</p><ul>
-<li>MySQL 的 Gorm 驱动地址为<a href="http://gorm.io/driver/mysql"> </a>gorm.io/driver/mysql</li>
-<li>Postgres 的 Gorm 驱动地址为 gorm.io/driver/postgres</li>
-<li>SQLite 的 gorm 驱动地址为 gorm.io/driver/sqlite</li>
-<li>SQL Server 的 gorm 驱动地址为 gorm.io/driver/sqlserver</li>
-<li>ClickHouse 的 gorm 驱动地址为 gorm.io/driver/clickhouse</li>
-</ul><p><strong>如果要创建对应数据库的连接，要先引入对应的驱动</strong>。而在对应的驱动库中都有一个约定的 Open 方法，来创建一个新的数据库驱动。比如要创建 MySQL 的连接，使用下面这个例子：</p><pre><code class="language-go">import (
+</code></pre><p>不同的数据库有不同的 Dialector 实现，我们称之为“驱动”。每个数据库的驱动，都有一个 git 地址进行存放。目前 gorm 官方支持五种数据库驱动：</p>
+MySQL 的 Gorm 驱动地址为<a href="http://gorm.io/driver/mysql"> </a>gorm.io/driver/mysql
+Postgres 的 Gorm 驱动地址为 gorm.io/driver/postgres
+SQLite 的 gorm 驱动地址为 gorm.io/driver/sqlite
+SQL Server 的 gorm 驱动地址为 gorm.io/driver/sqlserver
+ClickHouse 的 gorm 驱动地址为 gorm.io/driver/clickhouse
+<p><strong>如果要创建对应数据库的连接，要先引入对应的驱动</strong>。而在对应的驱动库中都有一个约定的 Open 方法，来创建一个新的数据库驱动。比如要创建 MySQL 的连接，使用下面这个例子：</p><pre><code class="language-go">import (
   "gorm.io/driver/mysql"
   "gorm.io/gorm"
 )
@@ -259,10 +259,10 @@ createCallback.Clauses = config.CreateClauses
 </code></pre><p>我们可以看到，Gorm 在一个 create 方法，定义了 7 个执行方法 fns，分别是：BeginTransaction、BeforeCreate、SaveBeforeAssociations、Create、SaveAfterAssociations、AfterCreate、CommitOrRollbackTransaction。这七个执行方法就是按照顺序，从上到下每个 Create 函数都会执行的方法。</p><p>其中关注一下 Create 方法，它又分为五个步骤：<br>
 <img src="https://static001.geekbang.org/resource/image/74/97/74168a832a7ea27fc84548cc980d1297.png?wh=1920x719" alt=""></p><p>我们看到了熟悉的 ExecContent 函数，这个就对应上了 Golang 标准库的 database/sql 中 sql.DB 的 ExecContext 方法。原来它藏在这里！</p><p>那前面说的 database/sql 的 sql.DB 的 Open 方法，又放在哪里呢？就在 gorm.Open 的第四大步中：</p><pre><code class="language-plain">db.ConnPool, err = sql.Open(dialector.DriverName, dialector.DSN)
 </code></pre><p>将 database/sql 中生成的 sql.DB 结构，设置在了 gorm.DB 的 ConnPool 上。</p><h3>db.Create</h3><p>下面再来看 gorm.DB 的 Create 方法。它的任务就很简单了：触发启动 processor 中的 fns 方法。具体最核心的代码就在 Gorm 的 callback.go 中的 Execute 函数里。<br>
-<img src="https://static001.geekbang.org/resource/image/d4/7a/d41214f972f885c9c18da6aeb7e2e77a.png?wh=1920x566" alt=""></p><p>可以看到，在 Execute 函数中，最核心的是遍历 fns，调用 fn(db) 方法，其中就有我们前面定义的 Create 方法了，也就是执行了 database/sql 的 db.ExecContext 方法。</p><p>这里我们就根据思维导图找到了 Gorm 封装的 database/sql 的两个关键步骤：</p><ul>
-<li>sql.Open</li>
-<li>db.ExecContext</li>
-</ul><p>理解了这一点，就基本理解了 Gorm 最核心的实现原理了。<br>
+<img src="https://static001.geekbang.org/resource/image/d4/7a/d41214f972f885c9c18da6aeb7e2e77a.png?wh=1920x566" alt=""></p><p>可以看到，在 Execute 函数中，最核心的是遍历 fns，调用 fn(db) 方法，其中就有我们前面定义的 Create 方法了，也就是执行了 database/sql 的 db.ExecContext 方法。</p><p>这里我们就根据思维导图找到了 Gorm 封装的 database/sql 的两个关键步骤：</p>
+sql.Open
+db.ExecContext
+<p>理解了这一点，就基本理解了 Gorm 最核心的实现原理了。<br>
 <img src="https://static001.geekbang.org/resource/image/ee/88/eec03fdb85d622202f8e7c8ac7e70488.jpg?wh=4861x3258" alt=""></p><p>当然 Gorm 中还有一个部分，是将我们定义的 Model解析成为 SQL 语句，这里又是 Gorm 定义的一套非常庞大的数据结构支撑的了，其中包括 Statement、Schema、Field、Relationship 等和数据表操作相关的数据结构。</p><p>这需要用另外一个篇幅来描述了。不过这块 Model 解析，对我们下一章 hade 框架融合 Gorm 的影响并不大。有兴趣的同学可以追着上述 Create 方法中的 stmt.Parse 方法进一步分析。</p><p>今天我们还没有涉及代码修改，思维导图保存在 GitHub 上的 <a href="https://github.com/gohade/coredemo/tree/geekbang/25">geekbang/25</a> 分支中根目录的 mysql.xmind 中了。</p><h2>小结</h2><p>我们分析了 Gorm 的具体数据结构和创建连接的核心源码流程。想要检验自己是否理解这节课也很简单，你可以对照开头为 user 表插入一行的代码，看看能不能清晰分析出它的底层是如何封装标准库的 database/sql 来实现的。</p><p>我们在阅读 Gorm 源码的同时，也是在学习它的优秀编码方式，比如今天讲到的 Option 方式、定义驱动、ConnPool 定义实现标准库方法的接口。这些都是 Gorm 设计精妙的地方。</p><p>当然 Gorm 的代码远不是一篇文章能说透的。其中包含的 Model 解析，以及更多的具体细节实现，都得靠你在后续使用过程中多看<a href="https://gorm.io/zh_CN/">官网</a>、多思考、多解析，才能完全吃透这个库。</p><h3>思考题</h3><p>GORM 有一个功能我非常喜欢，DryRun 空跑，这个设置是在 gorm.DB 结构中的。如果我们设置了 gorm.DB 的 DryRun，能让我在这个 DB 中的所有 SQL 操作并不真正执行，这个功能在调试的时候是非常有用的。你能再顺着思维导图，分析出 DryRun 是怎么做到这一点的么？</p><p>欢迎在留言区分享你的思考。感谢你的收听，如果你觉得今天的内容对你有所帮助，也欢迎分享给身边的朋友，邀请他一起学习。我们下节课见～</p>
 <style>
     ul {
@@ -373,7 +373,7 @@ createCallback.Clauses = config.CreateClauses
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/cb/07/482b7155.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -388,8 +388,8 @@ createCallback.Clauses = config.CreateClauses
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -404,8 +404,8 @@ createCallback.Clauses = config.CreateClauses
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -420,8 +420,8 @@ createCallback.Clauses = config.CreateClauses
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/f1/ed/4e249c6b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -436,5 +436,4 @@ createCallback.Clauses = config.CreateClauses
   </div>
 </div>
 </div>
-</li>
-</ul>
+

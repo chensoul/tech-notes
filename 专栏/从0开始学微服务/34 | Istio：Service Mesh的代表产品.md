@@ -2,15 +2,15 @@
 
 专栏上一期我们聊了Service Mesh，并以Linkerd为例介绍了Service Mesh的架构。随着技术发展，现在来看Linkerd可以说是第一代Service Mesh产品，到了今天当我们再谈到Service Mesh时，往往第一个想到的是[Istio](https://istio.io/)。为什么我认为Istio可以称得上是Service Mesh的代表产品呢？在我看来主要有以下几个原因：
 
-<li>
+
 相比Linkerd，Istio引入了Control Plane的理念，通过Control Plane能带来强大的服务治理能力，可以称得上是Linkerd的进化，算是第二代的Service Mesh产品。
-</li>
-<li>
+
+
 Istio默认的SideCar采用了[Envoy](https://www.envoyproxy.io/)，它是用C++语言实现的，在性能和资源消耗上要比采用Scala语言实现的Linkerd小，这一点对于延迟敏感型和资源敏感型的服务来说，尤其重要。
-</li>
-<li>
+
+
 有Google和IBM的背书，尤其是在微服务容器化的大趋势下，云原生应用越来越受欢迎，而Google开源的Kubernetes可以说已经成为云原生应用默认采用的容器平台，基于此Google可以将Kubernetes与Istio很自然的整合，打造成云原生应用默认的服务治理方案。
-</li>
+
 
 现在我们一起走进Istio的架构，看看它各部分的实现原理，希望能让你有所收获。
 
@@ -18,12 +18,12 @@ Istio默认的SideCar采用了[Envoy](https://www.envoyproxy.io/)，它是用C++
 
 如下图所示，Istio的架构可以说由两部分组成，分别是Proxy和Control Plane。
 
-<li>
+
 Proxy，就是前面提到的SideCar，与应用程序部署在同一个主机上，应用程序之间的调用都通过Proxy来转发，目前支持HTTP/1.1、HTTP/2、gRPC以及TCP请求。
-</li>
-<li>
+
+
 Control Plane，与Proxy通信，来实现各种服务治理功能，包括三个基本组件：Pilot、Mixer以及Citadel。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/00/84/00613758a46fe1341089ce11ef8a0f84.png" alt=""><br>
 （图片来源：[https://istio.io/docs/concepts/what-is-istio/arch.svg](https://istio.io/docs/concepts/what-is-istio/arch.svg)）
@@ -34,15 +34,15 @@ Control Plane，与Proxy通信，来实现各种服务治理功能，包括三�
 
 Istio的Proxy采用的是Envoy，Envoy是跟上一期提到的Linkerd是同一代的产品，既要作为服务消费者端的正向代理，又要作为服务提供者端的反向代理，一般需要具备服务发现、服务注册、负载均衡、限流降级、超时熔断、动态路由、监控上报和日志推送等功能，它主要包含以下几个特性：
 
-<li>
+
 性能损耗低。因为采用了C++语言实现，Envoy能提供极高的吞吐量和极少的长尾延迟，而且对系统的CPU和内存资源占用也不大，所以跟业务进程部署在一起不会对业务进程造成影响。
-</li>
-<li>
+
+
 可扩展性高。Envoy提供了可插拔过滤器的能力，用户可以开发定制过滤器以满足自己特定的需求。
-</li>
-<li>
+
+
 动态可配置。Envoy对外提供了统一的API，包括CDS（集群发现服务）、RDS（路由发现服务）、LDS（监听器发现服务）、EDS（EndPoint发现服务）、HDS（健康检查服务）、ADS（聚合发现服务）等。通过调用这些API，可以实现相应配置的动态变更，而不需要重启Envoy。
-</li>
+
 
 Envoy是Istio中最基础的组件，所有其他组件的功能都是通过调用Envoy提供的API，在请求经过Envoy转发时，由Envoy执行相关的控制逻辑来实现的。
 
@@ -50,18 +50,18 @@ Envoy是Istio中最基础的组件，所有其他组件的功能都是通过调�
 
 Pilot的作用是实现流量控制，它通过向Envoy下发各种指令来实现流量控制，它的架构如下图所示。从架构图里可以看出，Pilot主要包含以下几个部分：
 
-<li>
+
 Rules API，对外封装统一的API，供服务的开发者或者运维人员调用，可以用于流量控制。
-</li>
-<li>
+
+
 Envoy API，对内封装统一的API，供Envoy调用以获取注册信息、流量控制信息等。
-</li>
-<li>
+
+
 抽象模型层，对服务的注册信息、流量控制规则等进行抽象，使其描述与平台无关。
-</li>
-<li>
+
+
 平台适配层，用于适配各个平台如Kubernetes、Mesos、Cloud Foundry等，把平台特定的注册信息、资源信息等转换成抽象模型层定义的平台无关的描述。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/4e/7e/4e78a1b7532df205939f7a4b0f7a047e.png" alt=""><br>
 （图片来源：[https://istio.io/docs/concepts/traffic-management/PilotAdapters.svg](https://istio.io/docs/concepts/traffic-management/PilotAdapters.svg)）
@@ -181,12 +181,12 @@ Mixer的作用是实现策略控制和监控日志收集等功能，实现方式
 
 理论上每一次的服务调用Proxy都需要调用Mixer，一方面检查调用的合法性，一方面要上报服务的监控信息和日志信息，所以这就要求Mixer必须是高可用和低延迟的，那么Mixer是如何做到的呢？下图是它的实现原理，从图中你可以看到Mixer实现了两级的缓存结构：
 
-<li>
+
 Proxy端的本地缓存。为了减少Proxy对Mixer的调用以尽量降低服务调用的延迟，在Proxy这一端会有一层本地缓存，但由于Proxy作为SideCar与每个服务实例部署在同一个节点上，所以不能对服务节点有太多的内存消耗，所以就限制了Proxy本地缓存的大小和命中率。
-</li>
-<li>
+
+
 Mixer的本地缓存。Mixer是独立运行的，所以可以在Mixer这一层使用大容量的本地缓存，从而减少对后端基础设施的调用，一方面可以减少延迟，另一方面也可以最大限度减少后端基础设施故障给服务调用带来的影响。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/c5/72/c5a213195ef50de213bc44b401725772.png" alt=""><br>
 （图片来源：[https://istio.io/docs/concepts/policies-and-telemetry/topology-with-cache.svg](https://istio.io/docs/concepts/policies-and-telemetry/topology-with-cache.svg)）
@@ -245,18 +245,18 @@ spec:
 
 Citadel的作用是保证服务之间访问的安全，它的工作原理见下图，可见实际的安全保障并不是Citadel独立完成的，而是需要Proxy、Pilot以及Mixer的配合，具体来讲，
 
-<li>
+
 Citadel里存储了密钥和证书。
-</li>
-<li>
+
+
 通过Pilot把授权策略和安全命名信息分发给Proxy。
-</li>
-<li>
+
+
 Proxy与Proxy之间的调用使用双向TLS认证来保证服务调用的安全。
-</li>
-<li>
+
+
 最后由Mixer来管理授权和审计。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/bf/44/bfcb6885e5446508e041355665d6c444.png" alt=""><br>
 （图片来源：[https://istio.io/docs/concepts/security/architecture.svg](https://istio.io/docs/concepts/security/architecture.svg)）
@@ -273,17 +273,17 @@ Mixer的一个功能是实现服务调用的日志收集，假如某一个服务
 
 扩展阅读：
 
-<li>
+
 Envoy对外提供统一API的详细作用：[https://github.com/envoyproxy/data-plane-api/blob/master/API_OVERVIEW.md](https://github.com/envoyproxy/data-plane-api/blob/master/API_OVERVIEW.md)
-</li>
-<li>
+
+
 授权策略：[https://istio.io/docs/concepts/security/#authentication-policies](https://istio.io/docs/concepts/security/#authentication-policies)
-</li>
-<li>
+
+
 安全命名信息：[https://istio.io/docs/concepts/security/#secure-naming](https://istio.io/docs/concepts/security/#secure-naming)
-</li>
-<li>
+
+
 双向TLS认证：[https://istio.io/docs/tasks/security/mtls-migration/](https://istio.io/docs/tasks/security/mtls-migration/)
-</li>
+
 
 

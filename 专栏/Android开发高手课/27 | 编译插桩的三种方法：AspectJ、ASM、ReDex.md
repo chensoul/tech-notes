@@ -16,18 +16,18 @@
 
 编译插桩技术非常有趣，同样也很有价值，掌握它之后，可以完成一些其他技术很难实现或无法完成的任务。学会这项技术以后，我们就可以随心所欲地操控代码，满足不同场景的需求。
 
-<li>
+
 **代码生成**。除了Dagger、ButterKnife这些常用的注解生成框架，Protocol Buffers、数据库ORM框架也都会在编译过程生成代码。代码生成隔离了复杂的内部实现，让开发更加简单高效，而且也减少了手工重复的劳动量，降低了出错的可能性。
-</li>
-<li>
+
+
 **代码监控**。除了网络监控和耗电监控，我们可以利用编译插桩技术实现各种各样的性能监控。为什么不直接在源码中实现监控功能呢？首先我们不一定有第三方SDK的源码，其次某些调用点可能会非常分散，例如想监控代码中所有new Thread()调用，通过源码的方式并不那么容易实现。
-</li>
-<li>
+
+
 **代码修改**。我们在这个场景拥有无限的发挥空间，例如某些第三方SDK库没有源码，我们可以给它内部的一个崩溃函数增加try catch，或者说替换它的图片库等。我们也可以通过代码修改实现无痕埋点，就像网易的[HubbleData](https://neyoufan.github.io/2017/07/11/android/%E7%BD%91%E6%98%93HubbleData%E4%B9%8BAndroid%E6%97%A0%E5%9F%8B%E7%82%B9%E5%AE%9E%E8%B7%B5/)、51信用卡的[埋点实践](https://mp.weixin.qq.com/s/P95ATtgT2pgx4bSLCAzi3Q)。
-</li>
-<li>
+
+
 **代码分析**。上一期我讲到持续集成，里面的自定义代码检查就可以使用编译插桩技术实现。例如检查代码中的new Thread()调用、检查代码中的一些敏感权限使用等。事实上，Findbugs这些第三方的代码检查工具也同样使用的是编译插桩技术实现。
-</li>
+
 
 “一千个人眼中有一千个哈姆雷特”，通过编译插桩技术，你可以大胆发挥自己的想象力，做一些对提升团队质量和效能有帮助的事情。
 
@@ -81,23 +81,23 @@ dexdump -d Sample.dex   // 查看Sample.dex的Dalvik的字节码
 
 <img src="https://static001.geekbang.org/resource/image/33/1c/3357723f90b34af2717e320b61dca01c.png" alt="">
 
-<li>
+
 **格式结构**。对于Class文件，每个文件都会有自己单独的常量池以及其他一些公共字段。对于Dex文件，整个Dex中的所有Class共用同一个常量池和公共字段，所以整体结构更加紧凑，因此也大大减少了体积。
-</li>
-<li>
+
+
 **指令优化**。Dalvik字节码对大量的指令专门做了精简和优化，如下图所示，相同的代码Java字节码需要100多条，而Dalvik字节码只需要几条。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/35/4f/359817cf20201f045eef60a31f45ff4f.png" alt="">
 
 关于Java字节码和Dalvik字节码的更多介绍，你可以参考下面的资料：
 
-<li>
+
 [Dalvik and ART](https://github.com/AndroidAdvanceWithGeektime/Chapter27/blob/master/doucments/Dalvik%20and%20ART.pdf)
-</li>
-<li>
+
+
 [Understanding the Davlik Virtual Machine](https://github.com/AndroidAdvanceWithGeektime/Chapter27/blob/master/doucments/Understanding%20the%20Davlik%20Virtual%20Machine.pdf)
-</li>
+
 
 ## 编译插桩的三种方法
 
@@ -113,12 +113,12 @@ AspectJ和ASM框架的输入和输出都是Class文件，它们是我们最常�
 
 从使用上来看，作为字节码处理元老，AspectJ的框架的确有自己的一些优势。
 
-<li>
+
 **成熟稳定**。从字节码的格式和各种指令规则来看，字节码处理不是那么简单，如果处理出错，就会导致程序编译或者运行过程出问题。而AspectJ作为从2001年发展至今的框架，它已经很成熟，一般不用考虑插入的字节码正确性的问题。
-</li>
-<li>
+
+
 **使用简单**。AspectJ功能强大而且使用非常简单，使用者完全不需要理解任何Java字节码相关的知识，就可以使用自如。它可以在方法（包括构造方法）被调用的位置、在方法体（包括构造方法）的内部、在读写变量的位置、在静态代码块内部、在异常处理的位置等前后，插入自定义的代码，或者直接将原位置的代码替换为自定义的代码。
-</li>
+
 
 在专栏前面文章里我提过360的性能监控框架[ArgusAPM](https://github.com/Qihoo360/ArgusAPM)，它就是使用AspectJ实现性能的监控，其中[TraceActivity](https://github.com/Qihoo360/ArgusAPM/blob/master/argus-apm/argus-apm-aop/src/main/java/com/argusapm/android/aop/TraceActivity.java)是为了监控Application和Activity的生命周期。
 
@@ -140,15 +140,15 @@ public void applicationOnCreateAdvice(Context context) {
 
 但是从AspectJ的使用说明里也可以看出它的一些劣势，它的功能无法满足我们某些场景的需要。
 
-<li>
+
 **切入点固定**。AspectJ只能在一些固定的切入点来进行操作，如果想要进行更细致的操作则无法完成，它不能针对一些特定规则的字节码序列做操作。
-</li>
-<li>
+
+
 **正则表达式**。AspectJ的匹配规则是类似正则表达式的规则，比如匹配Activity生命周期的onXXX方法，如果有自定义的其他以on开头的方法也会匹配到。
-</li>
-<li>
+
+
 **性能较低**。AspectJ在实现时会包装自己的一些类，逻辑比较复杂，不仅生成的字节码比较大，而且对原函数的性能也会有所影响。
-</li>
+
 
 我举专栏第7期启动耗时[Sample](https://github.com/AndroidAdvanceWithGeektime/Chapter07)的例子，我们希望在所有的方法调用前后都增加Trace的函数。如果选择使用AspectJ，那么实现真的非常简单。
 
@@ -177,12 +177,12 @@ public void after() {
 
 如果说AspectJ只能满足50%的字节码处理场景，那[ASM](http://asm.ow2.org/)就是一个可以实现100%场景的Java字节码操作框架，它的功能也非常强大。使用ASM操作字节码主要的特点有：
 
-<li>
+
 **操作灵活**。操作起来很灵活，可以根据需求自定义修改、插入、删除。
-</li>
-<li>
+
+
 **上手难**。上手比较难，需要对Java字节码有比较深入的了解。
-</li>
+
 
 为了使用简单，相比于BCEL框架，ASM的优势是提供了一个Visitor模式的访问接口（Core API），使用者可以不用关心字节码的格式，只需要在每个Visitor的位置关心自己所修改的结构即可。但是这种模式的缺点是，一般只能在一些简单场景里实现字节码的处理。
 
@@ -206,12 +206,12 @@ public void after() {
 
 <img src="https://static001.geekbang.org/resource/image/42/00/426fb987bed676f448ebf8e938df2a00.png" alt="">
 
-<li>
+
 **本地变量表**。在使用过程中，可以认为本地变量表是存放临时数据的，并且本地变量表有个很重要的功能就是用来传递方法调用时的参数，当调用方法的时候，参数会依次传递到本地变量表中从0开始的位置上，并且如果调用的方法是实例方法，那么我们可以通过第0个本地变量中获取当前实例的引用，也就是this所指向的对象。
-</li>
-<li>
+
+
 **操作数栈**。可以认为操作数栈是一个用于存放指令执行所需要的数据的位置，指令从操作数栈中取走数据并将操作结果重新入栈。
-</li>
+
 
 由于本地变量表的最大数和操作数栈的最大深度是在编译时就确定的，所以在使用ASM进行字节码操作后需要调用ASM提供的visitMaxs方法来设置maxLocal和maxStack数。不过，ASM为了方便用户使用，已经提供了自动计算的方法，在实例化ClassWriter操作类的时候传入COMPUTE_MAXS后，ASM就会自动计算本地变量表和操作数栈。
 
@@ -262,18 +262,18 @@ ReDex的这个功能并不是完整的AOP工具，但它提供了一系列指令
 
 市面上大部分需要直接修改Dex的情况是做逆向，很多同学都采用手动书写Smali代码然后编译回去。这里我总结了一些修改Dalvik字节码的库。
 
-<li>
+
 [ASMDEX](https://gitlab.ow2.org/asm/asmdex)，开发者是ASM库的开发者，但很久未更新了。
-</li>
-<li>
+
+
 [Dexter](https://android.googlesource.com/platform/tools/dexter/+/refs/heads/master)，Google官方开发的Dex操作库，更新很频繁，但使用起来很复杂。
-</li>
-<li>
+
+
 [Dexmaker](https://github.com/linkedin/dexmaker)，用来生成Dalvik字节码的代码。
-</li>
-<li>
+
+
 [Soot](https://github.com/Sable/soot)，修改Dex的方法很另类，是先将Dalvik字节码转成一种Jimple three-address code，然后插入Jimple Opcode后再转回Dalvik字节码，具体可以参考[例子](https://raw.githubusercontent.com/wiki/Sable/soot/code/androidinstr/AndroidInstrument.java_.txt)。
-</li>
+
 
 ## 总结
 
@@ -291,30 +291,30 @@ ReDex的这个功能并不是完整的AOP工具，但它提供了一系列指令
 
 除了上面的两个Sample，我也推荐你认真看看下面的一些参考资料和项目。
 
-<li>
+
 [一起玩转Android项目中的字节码](https://mp.weixin.qq.com/s?__biz=MzA5MzI3NjE2MA==&amp;mid=2650244795&amp;idx=1&amp;sn=cdfc4acec8b0d2b5c82fd9d884f32f09&amp;chksm=886377d4bf14fec2fc822cd2b3b6069c36cb49ea2814d9e0e2f4a6713f4e86dfc0b1bebf4d39&amp;mpshare=1&amp;scene=1&amp;srcid=1217NjDpKNvdgalsqBQLJXjX%23rd)
-</li>
-<li>
+
+
 [字节码操纵技术探秘](https://www.infoq.cn/article/Living-Matrix-Bytecode-Manipulation)
-</li>
-<li>
+
+
 [ASM 6 Developer Guide](https://asm.ow2.io/developer-guide.html)
-</li>
-<li>
+
+
 [Java字节码(Bytecode)与ASM简单说明](http://blog.hakugyokurou.net/?p=409)
-</li>
-<li>
+
+
 [Dalvik and ART](https://github.com/AndroidAdvanceWithGeektime/Chapter27/blob/master/doucments/Dalvik%20and%20ART.pdf)
-</li>
-<li>
+
+
 [Understanding the Davlik Virtual Machine](https://github.com/AndroidAdvanceWithGeektime/Chapter27/blob/master/doucments/Understanding%20the%20Davlik%20Virtual%20Machine.pdf)
-</li>
-<li>
+
+
 基于ASM的字节码处理工具：[Hunter](https://github.com/Leaking/Hunter/blob/master/README_ch.md)和[Hibeaver](https://github.com/BryanSharp/hibeaver)
-</li>
-<li>
+
+
 基于Javassist的字节码处理工具：[DroidAssist](https://github.com/didi/DroidAssist/blob/master/README_CN.md)
-</li>
+
 
 欢迎你点击“请朋友读”，把今天的内容分享给好友，邀请他一起学习。最后别忘了在评论区提交今天的作业，我也为认真完成作业的同学准备了丰厚的“学习加油礼包”，期待与你一起切磋进步哦。
 

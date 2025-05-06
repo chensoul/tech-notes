@@ -230,8 +230,8 @@
 
 1. PDCA执行法就是把事情的执行过程分成四个环节：计划（Plan）、执行（Do）、检查（Check）和行动（Act），从而把控执行过程，保证具体事项高效高质地落地。
 1. 计划环节确定具体任务、阶段目标、时间节点和具体责任人；执行环节落地各项具体的活动，检查环节检查实际执行结果，行动环节明确下一步需要采取的措施。
-<li>OKR规划法、3C方案设计法和PDCA的计划环节的关系是：OKR制定目标，3C选择方案，PDCA落实任务。<br>
-<img src="https://static001.geekbang.org/resource/image/a9/cf/a98a4c5b0cb9fe6a867c5ff97558c9cf.jpg" alt=""></li>
+OKR规划法、3C方案设计法和PDCA的计划环节的关系是：OKR制定目标，3C选择方案，PDCA落实任务。<br>
+<img src="https://static001.geekbang.org/resource/image/a9/cf/a98a4c5b0cb9fe6a867c5ff97558c9cf.jpg" alt="">
 
 ## 思考题
 

@@ -25,177 +25,177 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;溯本求源，吃透&#32;Docker！.md">00 溯本求源，吃透 Docker！.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Docker&#32;安装：入门案例带你了解容器技术原理.md">01  Docker 安装：入门案例带你了解容器技术原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;核心概念：镜像、容器、仓库，彻底掌握&#32;Docker&#32;架构核心设计理念.md">02  核心概念：镜像、容器、仓库，彻底掌握 Docker 架构核心设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;镜像使用：Docker&#32;环境下如何配置你的镜像？.md">03  镜像使用：Docker 环境下如何配置你的镜像？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;容器操作：得心应手掌握&#32;Docker&#32;容器基本操作.md">04  容器操作：得心应手掌握 Docker 容器基本操作.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;仓库访问：怎样搭建属于你的私有仓库？.md">05  仓库访问：怎样搭建属于你的私有仓库？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="06&#32;&#32;最佳实践：如何在生产中编写最优&#32;Dockerfile？.md">06  最佳实践：如何在生产中编写最优 Dockerfile？.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;Docker&#32;安全：基于内核的弱隔离系统如何保障安全性？.md">07  Docker 安全：基于内核的弱隔离系统如何保障安全性？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;容器监控：容器监控原理及&#32;cAdvisor&#32;的安装与使用.md">08  容器监控：容器监控原理及 cAdvisor 的安装与使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;资源隔离：为什么构建容器需要&#32;Namespace&#32;？.md">09  资源隔离：为什么构建容器需要 Namespace ？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;资源限制：如何通过&#32;Cgroups&#32;机制实现资源限制？.md">10  资源限制：如何通过 Cgroups 机制实现资源限制？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;组件组成：剖析&#32;Docker&#32;组件作用及其底层工作原理.md">11  组件组成：剖析 Docker 组件作用及其底层工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;网络模型：剖析&#32;Docker&#32;网络实现及&#32;Libnetwork&#32;底层原理.md">12  网络模型：剖析 Docker 网络实现及 Libnetwork 底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;数据存储：剖析&#32;Docker&#32;卷与持久化数据存储的底层原理.md">13  数据存储：剖析 Docker 卷与持久化数据存储的底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;文件存储驱动：AUFS&#32;文件系统原理及生产环境的最佳配置.md">14  文件存储驱动：AUFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;文件存储驱动：Devicemapper&#32;文件系统原理及生产环境的最佳配置.md">15  文件存储驱动：Devicemapper 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;文件存储驱动：OverlayFS&#32;文件系统原理及生产环境的最佳配置.md">16  文件存储驱动：OverlayFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（上）.md">17  原理实践：自己动手使用 Golang 开发 Docker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（下）.md">18  原理实践：自己动手使用 Golang 开发 Docker（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;如何使用&#32;Docker&#32;Compose&#32;解决开发环境的依赖？.md">19  如何使用 Docker Compose 解决开发环境的依赖？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;如何在生产环境中使用&#32;Docker&#32;Swarm&#32;调度容器？.md">20  如何在生产环境中使用 Docker Swarm 调度容器？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;如何使&#32;Docker&#32;和&#32;Kubernetes&#32;结合发挥容器的最大价值？.md">21  如何使 Docker 和 Kubernetes 结合发挥容器的最大价值？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;多阶级构建：Docker&#32;下如何实现镜像多阶级构建？.md">22  多阶级构建：Docker 下如何实现镜像多阶级构建？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;DevOps：容器化后如何通过&#32;DevOps&#32;提高协作效能？.md">23  DevOps：容器化后如何通过 DevOps 提高协作效能？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;CICD：容器化后如何实现持续集成与交付？（上）.md">24  CICD：容器化后如何实现持续集成与交付？（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;CICD：容器化后如何实现持续集成与交付？（下）.md">25  CICD：容器化后如何实现持续集成与交付？（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;结束语&#32;&#32;展望未来：Docker&#32;的称霸之路.md">26 结束语  展望未来：Docker 的称霸之路.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -251,11 +251,11 @@
                         <p id="tip" align="center"></p>
                         <div><h1>06  最佳实践：如何在生产中编写最优 Dockerfile？</h1>
 <p>在介绍 Dockerfile 最佳实践前，这里再强调一下，<strong>生产实践中一定优先使用 Dockerfile 的方式构建镜像。</strong> 因为使用 Dockerfile 构建镜像可以带来很多好处：</p>
-<ul>
-<li>易于版本化管理，Dockerfile 本身是一个文本文件，方便存放在代码仓库做版本管理，可以很方便地找到各个版本之间的变更历史；</li>
-<li>过程可追溯，Dockerfile 的每一行指令代表一个镜像层，根据 Dockerfile 的内容即可很明确地查看镜像的完整构建过程；</li>
-<li>屏蔽构建环境异构，使用 Dockerfile 构建镜像无须考虑构建环境，基于相同 Dockerfile 无论在哪里运行，构建结果都一致。</li>
-</ul>
+
+易于版本化管理，Dockerfile 本身是一个文本文件，方便存放在代码仓库做版本管理，可以很方便地找到各个版本之间的变更历史；
+过程可追溯，Dockerfile 的每一行指令代表一个镜像层，根据 Dockerfile 的内容即可很明确地查看镜像的完整构建过程；
+屏蔽构建环境异构，使用 Dockerfile 构建镜像无须考虑构建环境，基于相同 Dockerfile 无论在哪里运行，构建结果都一致。
+
 <p>虽然有这么多好处，但是如果你 Dockerfile 使用不当也会引发很多问题。比如镜像构建时间过长，甚至镜像构建失败；镜像层数过多，导致镜像文件过大。所以，这一课时我就教你如何在生产环境中编写最优的 Dockerfile。</p>
 <p>在介绍 Dockerfile 最佳实践前，我们再聊一下我们平时书写 Dockerfile 应该尽量遵循的原则。</p>
 <h3>Dockerfile 书写原则</h3>
@@ -304,11 +304,11 @@
 <h4>（6）尽量使用构建缓存</h4>
 <p>Docker 构建过程中，每一条 Dockerfile 指令都会提交为一个镜像层，下一条指令都是基于上一条指令构建的。如果构建时发现要构建的镜像层的父镜像层已经存在，并且下一条命令使用了相同的指令，即可命中构建缓存。</p>
 <p>Docker 构建时判断是否需要使用缓存的规则如下：</p>
-<ul>
-<li>从当前构建层开始，比较所有的子镜像，检查所有的构建指令是否与当前完全一致，如果不一致，则不使用缓存；</li>
-<li>一般情况下，只需要比较构建指令即可判断是否需要使用缓存，但是有些指令除外（例如<code>ADD</code>和<code>COPY</code>）；</li>
-<li>对于<code>ADD</code>和<code>COPY</code>指令不仅要校验命令是否一致，还要为即将拷贝到容器的文件计算校验和（根据文件内容计算出的一个数值，如果两个文件计算的数值一致，表示两个文件内容一致 ），命令和校验和完全一致，才认为命中缓存。</li>
-</ul>
+
+从当前构建层开始，比较所有的子镜像，检查所有的构建指令是否与当前完全一致，如果不一致，则不使用缓存；
+一般情况下，只需要比较构建指令即可判断是否需要使用缓存，但是有些指令除外（例如<code>ADD</code>和<code>COPY</code>）；
+对于<code>ADD</code>和<code>COPY</code>指令不仅要校验命令是否一致，还要为即将拷贝到容器的文件计算校验和（根据文件内容计算出的一个数值，如果两个文件计算的数值一致，表示两个文件内容一致 ），命令和校验和完全一致，才认为命中缓存。
+
 <p>因此，基于 Docker 构建时的缓存特性，我们可以把不轻易改变的指令放到 Dockerfile 前面（例如安装软件包），而可能经常发生改变的指令放在 Dockerfile 末尾（例如编译应用程序）。</p>
 <p>例如，我们想要定义一些环境变量并且安装一些软件包，可以按照如下顺序编写 Dockerfile：</p>
 <pre><code>FROM centos:7
@@ -322,16 +322,16 @@ RUN yum install -y make
 <p>按照上面原则编写的 Dockerfile 在构建镜像时，前面步骤命中缓存的概率会增加，可以大大缩短镜像构建时间。</p>
 <h4>（7）正确设置时区</h4>
 <p>我们从 Docker Hub 拉取的官方操作系统镜像大多数都是 UTC 时间（世界标准时间）。如果你想要在容器中使用中国区标准时间（东八区），请根据使用的操作系统修改相应的时区信息，下面我介绍几种常用操作系统的修改方式：</p>
-<ul>
-<li><strong>Ubuntu 和Debian 系统</strong></li>
-</ul>
+
+<strong>Ubuntu 和Debian 系统</strong>
+
 <p>Ubuntu 和Debian 系统可以向 Dockerfile 中添加以下指令：</p>
 <pre><code>RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo &quot;Asia/Shanghai&quot; &gt;&gt; /etc/timezone
 </code></pre>
-<ul>
-<li><strong>CentOS系统</strong></li>
-</ul>
+
+<strong>CentOS系统</strong>
+
 <p>CentOS 系统则向 Dockerfile 中添加以下指令：</p>
 <pre><code>RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 </code></pre>
@@ -396,10 +396,10 @@ RUN yum install -y make
 <h4>（1）RUN</h4>
 <p><code>RUN</code>指令在构建时将会生成一个新的镜像层并且执行<code>RUN</code>指令后面的内容。</p>
 <p>使用<code>RUN</code>指令时应该尽量遵循以下原则：</p>
-<ul>
-<li>当<code>RUN</code>指令后面跟的内容比较复杂时，建议使用反斜杠（\） 结尾并且换行；</li>
-<li><code>RUN</code>指令后面的内容尽量按照字母顺序排序，提高可读性。</li>
-</ul>
+
+当<code>RUN</code>指令后面跟的内容比较复杂时，建议使用反斜杠（\） 结尾并且换行；
+<code>RUN</code>指令后面的内容尽量按照字母顺序排序，提高可读性。
+
 <p>例如，我想在官方的 CentOS 镜像下安装一些软件，一个建议的 Dockerfile 指令如下：</p>
 <pre><code>FROM centos:7
 RUN yum install -y automake \
@@ -410,15 +410,15 @@ RUN yum install -y automake \
 <h4>（2）CMD 和 ENTRYPOINT</h4>
 <p><code>CMD</code>和<code>ENTRYPOINT</code>指令都是容器运行的命令入口，这两个指令使用中有很多相似的地方，但是也有一些区别。</p>
 <p>这两个指令的相同之处，<code>CMD</code>和<code>ENTRYPOINT</code>的基本使用格式分为两种。</p>
-<ul>
-<li>第一种为<code>CMD</code>/<code>ENTRYPOINT</code>[&quot;command&quot; , &quot;param&quot;]。这种格式是使用 Linux 的<code>exec</code>实现的， 一般称为<code>exec</code>模式，这种书写格式为<code>CMD</code>/<code>ENTRYPOINT</code>后面跟 json 数组，也是Docker 推荐的使用格式。</li>
-<li>另外一种格式为<code>CMD</code>/<code>ENTRYPOINT</code>command param ，这种格式是基于 shell 实现的， 通常称为<code>shell</code>模式。当使用<code>shell</code>模式时，Docker 会以 /bin/sh -c command 的方式执行命令。</li>
-</ul>
+
+第一种为<code>CMD</code>/<code>ENTRYPOINT</code>[&quot;command&quot; , &quot;param&quot;]。这种格式是使用 Linux 的<code>exec</code>实现的， 一般称为<code>exec</code>模式，这种书写格式为<code>CMD</code>/<code>ENTRYPOINT</code>后面跟 json 数组，也是Docker 推荐的使用格式。
+另外一种格式为<code>CMD</code>/<code>ENTRYPOINT</code>command param ，这种格式是基于 shell 实现的， 通常称为<code>shell</code>模式。当使用<code>shell</code>模式时，Docker 会以 /bin/sh -c command 的方式执行命令。
+
 <p>这两个指令的区别：</p>
-<ul>
-<li>Dockerfile 中如果使用了<code>ENTRYPOINT</code>指令，启动 Docker 容器时需要使用 --entrypoint 参数才能覆盖 Dockerfile 中的<code>ENTRYPOINT</code>指令 ，而使用<code>CMD</code>设置的命令则可以被<code>docker run</code>后面的参数直接覆盖。</li>
-<li><code>ENTRYPOINT</code>指令可以结合<code>CMD</code>指令使用，也可以单独使用，而<code>CMD</code>指令只能单独使用。</li>
-</ul>
+
+Dockerfile 中如果使用了<code>ENTRYPOINT</code>指令，启动 Docker 容器时需要使用 --entrypoint 参数才能覆盖 Dockerfile 中的<code>ENTRYPOINT</code>指令 ，而使用<code>CMD</code>设置的命令则可以被<code>docker run</code>后面的参数直接覆盖。
+<code>ENTRYPOINT</code>指令可以结合<code>CMD</code>指令使用，也可以单独使用，而<code>CMD</code>指令只能单独使用。
+
 <p>看到这里你也许会问，我什么时候应该使用<code>ENTRYPOINT</code>,什么时候使用<code>CMD</code>呢？</p>
 <p>如果你希望你的镜像足够灵活，推荐使用<code>CMD</code>指令。如果你的镜像只执行单一的具体程序，并且不希望用户在执行<code>docker run</code>时覆盖默认程序，建议使用<code>ENTRYPOINT</code>。</p>
 <p>最后再强调一下，无论使用<code>CMD</code>还是<code>ENTRYPOINT</code>，都尽量使用<code>exec</code>模式。</p>
@@ -438,11 +438,11 @@ RUN make -C /tmp/memtester-4.3.0 &amp;&amp; make -C /tmp/memtester-4.3.0 install
 <h4>（4）WORKDIR</h4>
 <p>为了使构建过程更加清晰明了，推荐使用 WORKDIR 来指定容器的工作路径，应该尽量避免使用 RUN cd /work/path &amp;&amp; do some work 这样的指令。</p>
 <p>最后给出几个常用软件的官方 Dockerfile 示例链接，希望可以对你有所帮助。</p>
-<ul>
-<li><a href="https://github.com/docker-library/golang/blob/4d68c4dd8b51f83ce4fdce0f62484fdc1315bfa8/1.15/buster/Dockerfile">Go</a></li>
-<li><a href="https://github.com/nginxinc/docker-nginx/blob/9774b522d4661effea57a1fbf64c883e699ac3ec/mainline/buster/Dockerfile">Nginx</a></li>
-<li><a href="https://github.com/hylang/docker-hylang/blob/f9c873b7f71f466e5af5ea666ed0f8f42835c688/dockerfiles-generated/Dockerfile.python3.8-buster">Hy</a></li>
-</ul>
+
+<a href="https://github.com/docker-library/golang/blob/4d68c4dd8b51f83ce4fdce0f62484fdc1315bfa8/1.15/buster/Dockerfile">Go</a>
+<a href="https://github.com/nginxinc/docker-nginx/blob/9774b522d4661effea57a1fbf64c883e699ac3ec/mainline/buster/Dockerfile">Nginx</a>
+<a href="https://github.com/hylang/docker-hylang/blob/f9c873b7f71f466e5af5ea666ed0f8f42835c688/dockerfiles-generated/Dockerfile.python3.8-buster">Hy</a>
+
 <h3>结语</h3>
 <p>好了，到此为止，相信你已经对 Dockerfile 的书写原则和一些重要指令有了较深的认识。</p>
 <p>当你需要编写编译型语言（例如 Golang、Java）的 Dockerfile 时，如何分离编译环境和运行环境，使得镜像体积尽可能小呢？思考后，可以把你的想法写在留言区。</p>

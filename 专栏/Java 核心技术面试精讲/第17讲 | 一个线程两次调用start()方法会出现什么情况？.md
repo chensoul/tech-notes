@@ -10,24 +10,24 @@ Java的线程是不允许启动两次的，第二次调用必然会抛出Illegal
 
 关于线程生命周期的不同状态，在Java 5以后，线程状态被明确定义在其公共内部枚举类型java.lang.Thread.State中，分别是：
 
-<li>
+
 新建（NEW），表示线程被创建出来还没真正启动的状态，可以认为它是个Java内部状态。
-</li>
-<li>
+
+
 就绪（RUNNABLE），表示该线程已经在JVM中执行，当然由于执行需要计算资源，它可能是正在运行，也可能还在等待系统分配给它CPU片段，在就绪队列里面排队。
-</li>
-<li>
+
+
 在其他一些分析中，会额外区分一种状态RUNNING，但是从Java API的角度，并不能表示出来。
-</li>
-<li>
+
+
 阻塞（BLOCKED），这个状态和我们前面两讲介绍的同步非常相关，阻塞表示线程在等待Monitor lock。比如，线程试图通过synchronized去获取某个锁，但是其他线程已经独占了，那么当前线程就会处于阻塞状态。
-</li>
-<li>
+
+
 等待（WAITING），表示正在等待其他线程采取某些操作。一个常见的场景是类似生产者消费者模式，发现任务条件尚未满足，就让当前消费者线程等待（wait），另外的生产者线程去准备任务数据，然后通过类似notify等动作，通知消费线程可以继续工作了。Thread.join()也会令线程进入等待状态。
-</li>
-<li>
+
+
 计时等待（TIMED_WAIT），其进入条件和等待状态类似，但是调用的是存在超时条件的方法，比如wait或join等方法的指定超时版本，如下面示例：
-</li>
+
 
 ```
 public final native void wait(long timeout) throws InterruptedException;
@@ -44,15 +44,15 @@ public final native void wait(long timeout) throws InterruptedException;
 
 面试官可能会以此为契机，从各种不同角度考察你对线程的掌握：
 
-<li>
+
 相对理论一些的面试官可以会问你线程到底是什么以及Java底层实现方式。
-</li>
-<li>
+
+
 线程状态的切换，以及和锁等并发工具类的互动。
-</li>
-<li>
+
+
 线程编程时容易踩的坑与建议等。
-</li>
+
 
 可以看出，仅仅是一个线程，就有非常多的内容需要掌握。我们选择重点内容，开始进入详细分析。
 
@@ -100,15 +100,15 @@ Future future = Executors.newFixedThreadPool(1)
 
 从线程生命周期的状态开始展开，那么在Java编程中，有哪些因素可能影响线程的状态呢？主要有：
 
-<li>
+
 线程自身的方法，除了start，还有多个join方法，等待线程结束；yield是告诉调度器，主动让出CPU；另外，就是一些已经被标记为过时的resume、stop、suspend之类，据我所知，在JDK最新版本中，destory/stop方法将被直接移除。
-</li>
-<li>
+
+
 基类Object提供了一些基础的wait/notify/notifyAll方法。如果我们持有某个对象的Monitor锁，调用wait会让当前线程处于等待状态，直到其他线程notify或者notifyAll。所以，本质上是提供了Monitor的获取和释放的能力，是基本的线程间通信方式。
-</li>
-<li>
+
+
 并发类库中的工具，比如CountDownLatch.await()会让当前线程进入等待状态，直到latch被基数为0，这可以看作是线程间通信的Signal。
-</li>
+
 
 我这里画了一个状态和方法之间的对应图：
 

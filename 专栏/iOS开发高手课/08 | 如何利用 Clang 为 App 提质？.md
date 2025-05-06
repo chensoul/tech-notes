@@ -70,18 +70,18 @@ clang -fmodules -E -Xclang -dump-tokens main.m
 
 这个命令的作用是，显示每个 Token 的类型、值，以及位置。你可以在[这个链接](https://opensource.apple.com//source/lldb/lldb-69/llvm/tools/clang/include/clang/Basic/TokenKinds.def)中，看到Clang 定义的所有Token 类型。我们可以把这些Token类型，分为下面这4类。
 
-<li>
+
 关键字：语法中的关键字，比如 if、else、while、for 等；
-</li>
-<li>
+
+
 标识符：变量名；
-</li>
-<li>
+
+
 字面量：值、数字、字符串；
-</li>
-<li>
+
+
 特殊符号：加减乘除等符号。
-</li>
+
 
 **接下来，词法分析完后就会进行语法分析**，将输出的 Token 先按照语法组合成语义，生成类似 VarDecl 这样的节点，然后将这些节点按照层级关系构成抽象语法树（AST）。
 
@@ -144,47 +144,47 @@ Clang Plugins 可以让你在 AST 上做些操作，这些操作能够集成到�
 
 LibTooling 是一个 C++ 接口，通过 LibTooling 能够编写独立运行的语法检查和代码重构工具。LibTooling 的优势如下：
 
-<li>
+
 所写的工具不依赖于构建系统，可以作为一个命令单独使用，比如 clang-check、clang-fixit、clang-format；
-</li>
-<li>
+
+
 可以完全控制 Clang AST；
-</li>
-<li>
+
+
 能够和 Clang Plugins 共用一份代码。
-</li>
+
 
 与Clang Plugins 相比，LibTooling 无法影响编译过程；与 LibClang 相比，LibTooling 的接口没有那么稳定，也无法开箱即用，当 AST 的 API 升级后需要更新接口的调用。
 
 但是，LibTooling 基于能够完全控制 Clang AST 和可独立运行的特点，可以做的事情就非常多了。
 
-<li>
+
 改变代码：可以改变 Clang 生成代码的方式。基于现有代码可以做出大量的修改。还可以进行语言的转换，比如把 OC 语言转成 JavaScript 或者 Swift。
-</li>
-<li>
+
+
 做检查：检查命名规范，增加更强的类型检查，还可以按照自己的定义进行代码的检查分析。
-</li>
-<li>
+
+
 做分析：对源码做任意类型分析，甚至重写程序。给 Clang 添加一些自定义的分析，创建自己的重构器，还可以基于工程生成相关图形或文档进行分析。
-</li>
+
 
 在 LibTooling 的基础之上有个开发人员工具合集 Clang tools，Clang tools 作为 Clang 项目的一部分，已经提供了一些工具，主要包括：
 
-<li>
+
 语法检查工具 clang-check；
-</li>
-<li>
+
+
 自动修复编译错误工具 clang-fixit；
-</li>
-<li>
+
+
 自动代码格式工具 clang-format；
-</li>
-<li>
+
+
 新语言和新功能的迁移工具；
-</li>
-<li>
+
+
 重构工具。
-</li>
+
 
 如果你打算基于 LibTooling 来开发工具，Clang tools 将会是很好的范例。
 

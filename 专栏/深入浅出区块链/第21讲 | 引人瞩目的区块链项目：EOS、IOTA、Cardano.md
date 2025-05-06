@@ -127,21 +127,21 @@ IOTA的Tangle账本结构，为区块链技术带来了新的视角，这也是�
 
 ### 参考链接：
 
-<li>[EOS.IO 技术白皮书](https://github.com/EOSIO/Documentation/blob/master/zh-CN/TechnicalWhitePaper.md)
-</li>
-<li>[https://github.com/EOSIO/eos/wiki](https://github.com/EOSIO/eos/wiki)
-</li>
-<li>[BM回怼V神：加密经济治理有局限，所以我选DPOS](https://mp.weixin.qq.com/s?__biz=MzU5MzQ5MDk5MA==&amp;mid=2247483719&amp;idx=1&amp;sn=c225cd7ed63434b24255e5bc35b11622&amp;chksm=fe0ee406c9796d1009ff002712fc9019cf4b2373cac89b28e0d8f7dbfde478648436db9a1fe3&amp;scene=21#wechat_redirect)
-</li>
-<li>[V神回应BM：你说的没错，但我必须要提醒你](https://mp.weixin.qq.com/s?__biz=MzU5MzQ5MDk5MA==&amp;mid=2247483727&amp;idx=1&amp;sn=09819643108cee1fdf117958b4963916&amp;chksm=fe0ee40ec9796d18dc4a07240c94b3cd1fb1c9a00234861e057ed990502fcf349e0668668c6a&amp;scene=21#wechat_redirect)
-</li>
-<li>[https://steemit.com/cn/@niking/iota](https://steemit.com/cn/@niking/iota)
-</li>
-<li>[https://docs.iota.org/introduction](https://docs.iota.org/introduction)
-</li>
-<li>[https://whycardano.com/cn/](https://whycardano.com/cn/)
-</li>
-<li>[](http://url)[https://iohk.io/blog/ouroboros-at-crypto-2017/](https://iohk.io/blog/ouroboros-at-crypto-2017/)
-</li>
+[EOS.IO 技术白皮书](https://github.com/EOSIO/Documentation/blob/master/zh-CN/TechnicalWhitePaper.md)
+
+[https://github.com/EOSIO/eos/wiki](https://github.com/EOSIO/eos/wiki)
+
+[BM回怼V神：加密经济治理有局限，所以我选DPOS](https://mp.weixin.qq.com/s?__biz=MzU5MzQ5MDk5MA==&amp;mid=2247483719&amp;idx=1&amp;sn=c225cd7ed63434b24255e5bc35b11622&amp;chksm=fe0ee406c9796d1009ff002712fc9019cf4b2373cac89b28e0d8f7dbfde478648436db9a1fe3&amp;scene=21#wechat_redirect)
+
+[V神回应BM：你说的没错，但我必须要提醒你](https://mp.weixin.qq.com/s?__biz=MzU5MzQ5MDk5MA==&amp;mid=2247483727&amp;idx=1&amp;sn=09819643108cee1fdf117958b4963916&amp;chksm=fe0ee40ec9796d18dc4a07240c94b3cd1fb1c9a00234861e057ed990502fcf349e0668668c6a&amp;scene=21#wechat_redirect)
+
+[https://steemit.com/cn/@niking/iota](https://steemit.com/cn/@niking/iota)
+
+[https://docs.iota.org/introduction](https://docs.iota.org/introduction)
+
+[https://whycardano.com/cn/](https://whycardano.com/cn/)
+
+[](http://url)[https://iohk.io/blog/ouroboros-at-crypto-2017/](https://iohk.io/blog/ouroboros-at-crypto-2017/)
+
 
 

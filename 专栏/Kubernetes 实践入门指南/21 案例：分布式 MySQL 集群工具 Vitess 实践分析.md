@@ -25,165 +25,165 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;为什么我们要学习&#32;Kubernetes&#32;技术.md">00 为什么我们要学习 Kubernetes 技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;重新认识&#32;Kubernetes&#32;的核心组件.md">01 重新认识 Kubernetes 的核心组件.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;深入理解&#32;Kubernets&#32;的编排对象.md">02 深入理解 Kubernets 的编排对象.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;DevOps&#32;场景下落地&#32;K8s&#32;的困难分析.md">03 DevOps 场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;微服务应用场景下落地&#32;K8s&#32;的困难分析.md">04 微服务应用场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;解决&#32;K8s&#32;落地难题的方法论提炼.md">05 解决 K8s 落地难题的方法论提炼.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;练习篇：K8s&#32;核心实践知识掌握.md">06 练习篇：K8s 核心实践知识掌握.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;容器引擎&#32;containerd&#32;落地实践.md">07 容器引擎 containerd 落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;K8s&#32;集群安装工具&#32;kubeadm&#32;的落地实践.md">08 K8s 集群安装工具 kubeadm 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;南北向流量组件&#32;IPVS&#32;的落地实践.md">09 南北向流量组件 IPVS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;东西向流量组件&#32;Calico&#32;的落地实践.md">10 东西向流量组件 Calico 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;服务发现&#32;DNS&#32;的落地实践.md">11 服务发现 DNS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;练习篇：K8s&#32;集群配置测验.md">12 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;理解对方暴露服务的对象&#32;Ingress&#32;和&#32;Service.md">13 理解对方暴露服务的对象 Ingress 和 Service.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;应用网关&#32;OpenResty&#32;对接&#32;K8s&#32;实践.md">14 应用网关 OpenResty 对接 K8s 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Service&#32;层引流技术实践.md">15 Service 层引流技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;Cilium&#32;容器网络的落地实践.md">16 Cilium 容器网络的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;应用流量的优雅无损切换实践.md">17 应用流量的优雅无损切换实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;练习篇：应用流量无损切换技术测验.md">18 练习篇：应用流量无损切换技术测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;使用&#32;Rook&#32;构建生产可用存储环境实践.md">19 使用 Rook 构建生产可用存储环境实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;有状态应用的默认特性落地分析.md">20 有状态应用的默认特性落地分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="21&#32;案例：分布式&#32;MySQL&#32;集群工具&#32;Vitess&#32;实践分析.md">21 案例：分布式 MySQL 集群工具 Vitess 实践分析.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;存储对象&#32;PV、PVC、Storage&#32;Classes&#32;的管理落地实践.md">22 存储对象 PV、PVC、Storage Classes 的管理落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;K8s&#32;集群中存储对象灾备的落地实践.md">23 K8s 集群中存储对象灾备的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;练习篇：K8s&#32;集群配置测验.md">24 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -434,9 +434,9 @@ COrder
 <h3>总结</h3>
 <p>应用 Vitess Operator 之后，收获最大的就是完全不用操心 MySQL 复制集群的架构设计，由 Vitess Operator 来管理高可用和数据库的分片，把复杂的分布式部署的运维问题屏蔽了一大半。当然，作为运维人员需要注意的是，因为 Vitess 是一个 Proxy，它和 MySQL 原生接口的协议还是有一些不一样的地方，需要适配。因为京东在 618 大促中采用了 Vitess 技术来支撑数据库集群，让我们可以放心大胆地使用它。</p>
 <h3>参考资料</h3>
-<ul>
-<li><a href="https://vitess.io/zh/docs/get-started/kubernetes/">https://vitess.io/zh/docs/get-started/kubernetes/</a></li>
-</ul>
+
+<a href="https://vitess.io/zh/docs/get-started/kubernetes/">https://vitess.io/zh/docs/get-started/kubernetes/</a>
+
 </div>
                     </div>
                     <div>

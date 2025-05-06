@@ -1,9 +1,9 @@
 <audio title="难点解析｜eBPF开发环境搭建及内核编译详解" src="https://static001.geekbang.org/resource/audio/53/c6/53760a5fccdebe0a008d0365abdf32c6.mp3" controls="controls"></audio> 
-<p>你好，我是倪朋飞。</p><p>转眼间，距离这门课的常规更新结束已经过去了两个月的时间。非常高兴看到很多同学都坚持学习到了最后，并对课程中的各个案例进行了实践操作，甚至把它们扩展到了更多的场景中。</p><p>从今天开始，我们的课程就进入了动态更新阶段——“技术雷达篇”。我会根据同学们反馈的热点问题，以及 eBPF 最新的发展状况和实践案例，动态调整这一阶段的内容。在为你解惑的同时，这一动态模块也会交付更深入的 eBPF 内核原理，以及它在实际生产环境中的综合应用方法。</p><p>这一讲是动态更新阶段的第一篇，也是我对很多同学留言反馈的统一解答。我会带你重新梳理一下 eBPF 开发环境的搭建方法，以及内核的配置和编译方法。</p><h2>关于 eBPF 开发环境搭建的三个典型问题</h2><p>在 <a href="https://time.geekbang.org/column/article/480094">02讲</a> 中我曾提到，学习 eBPF 技术需要你具备一定的 Linux 操作系统基础，并掌握一些基础知识，包括常见 Linux 操作命令、软件包安装管理方法、C 语言程序的基本语法及编译运行步骤等。</p><p>在查看课程的留言和反馈时，我发现很多同学的疑惑是有共性的——这些疑惑正是源于对上面这些基础知识的掌握不够深入。其中，最典型的几个问题如下：</p><ul>
-<li>不熟悉 Linux 系统软件包的安装管理方法，比如找不到软件包 <code>linux-head-$(uname -r)</code>，无法定位软件包 <code>libbpf-dev</code> 等。</li>
-<li>不熟悉内置软件包版本过老之后的升级方法。比如，在 <code>bpftrace</code>、<code>bpftool</code> 等工具报错之后不知道该如何升级，而对于这两个工具，在很多发行版中都需要先升级到新版本，才可以体验最新的特性。</li>
-<li>不熟悉内核的编译和升级方法，比如不清楚内核编译开关的打开方法，不知道如何编译安装内核等。</li>
-</ul><!-- [[[read_end]]] --><p>接下来，我就带你一起来看看如何解决这些问题。</p><h2>如何配置 eBPF 开发环境？</h2><p>在 <a href="https://time.geekbang.org/column/article/481090">03讲</a> 中我曾提到，为了体验最新的 eBPF 特性，推荐你使用自带 5.0 版本以上内核的发行版，并开启 <code>CONFIG_DEBUG_INFO_BTF=y</code> 和 <code>CONFIG_DEBUG_INFO=y</code> 这两个编译选项。而要满足这些条件，最简单的方法就是去公有云，或者借助 Vagrant 等工具，创建一个基于 Ubuntu 20.10、Fedora 31、RHEL 8.2、Debian 11 或者更新版本的虚拟机。</p><p>比如，使用 <a href="https://www.vagrantup.com">Vagrant</a> 创建并登录 Ubuntu 21.10 虚拟机的步骤如下：</p><pre><code class="language-bash"># 创建Ubuntu 21.10虚拟机
+<p>你好，我是倪朋飞。</p><p>转眼间，距离这门课的常规更新结束已经过去了两个月的时间。非常高兴看到很多同学都坚持学习到了最后，并对课程中的各个案例进行了实践操作，甚至把它们扩展到了更多的场景中。</p><p>从今天开始，我们的课程就进入了动态更新阶段——“技术雷达篇”。我会根据同学们反馈的热点问题，以及 eBPF 最新的发展状况和实践案例，动态调整这一阶段的内容。在为你解惑的同时，这一动态模块也会交付更深入的 eBPF 内核原理，以及它在实际生产环境中的综合应用方法。</p><p>这一讲是动态更新阶段的第一篇，也是我对很多同学留言反馈的统一解答。我会带你重新梳理一下 eBPF 开发环境的搭建方法，以及内核的配置和编译方法。</p><h2>关于 eBPF 开发环境搭建的三个典型问题</h2><p>在 <a href="https://time.geekbang.org/column/article/480094">02讲</a> 中我曾提到，学习 eBPF 技术需要你具备一定的 Linux 操作系统基础，并掌握一些基础知识，包括常见 Linux 操作命令、软件包安装管理方法、C 语言程序的基本语法及编译运行步骤等。</p><p>在查看课程的留言和反馈时，我发现很多同学的疑惑是有共性的——这些疑惑正是源于对上面这些基础知识的掌握不够深入。其中，最典型的几个问题如下：</p>
+不熟悉 Linux 系统软件包的安装管理方法，比如找不到软件包 <code>linux-head-$(uname -r)</code>，无法定位软件包 <code>libbpf-dev</code> 等。
+不熟悉内置软件包版本过老之后的升级方法。比如，在 <code>bpftrace</code>、<code>bpftool</code> 等工具报错之后不知道该如何升级，而对于这两个工具，在很多发行版中都需要先升级到新版本，才可以体验最新的特性。
+不熟悉内核的编译和升级方法，比如不清楚内核编译开关的打开方法，不知道如何编译安装内核等。
+<!-- [[[read_end]]] --><p>接下来，我就带你一起来看看如何解决这些问题。</p><h2>如何配置 eBPF 开发环境？</h2><p>在 <a href="https://time.geekbang.org/column/article/481090">03讲</a> 中我曾提到，为了体验最新的 eBPF 特性，推荐你使用自带 5.0 版本以上内核的发行版，并开启 <code>CONFIG_DEBUG_INFO_BTF=y</code> 和 <code>CONFIG_DEBUG_INFO=y</code> 这两个编译选项。而要满足这些条件，最简单的方法就是去公有云，或者借助 Vagrant 等工具，创建一个基于 Ubuntu 20.10、Fedora 31、RHEL 8.2、Debian 11 或者更新版本的虚拟机。</p><p>比如，使用 <a href="https://www.vagrantup.com">Vagrant</a> 创建并登录 Ubuntu 21.10 虚拟机的步骤如下：</p><pre><code class="language-bash"># 创建Ubuntu 21.10虚拟机
 vagrant init ubuntu/impish64
 vagrant up
 
@@ -71,11 +71,11 @@ sudo apt install -y docker.io
 # 第二步，下载镜像后从中复制bpftrace二进制文件
 sudo docker pull quay.io/iovisor/bpftrace:master-vanilla_llvm_clang_glibc2.23
 sudo docker run -v $(pwd):/output quay.io/iovisor/bpftrace:master-vanilla_llvm_clang_glibc2.23 /bin/bash -c "cp /usr/bin/bpftrace /output"
-</code></pre><p>安装成功后，你可以执行同样的 <code>sudo ./bpftrace -e 'tracepoint:syscalls:sys_enter_openat { printf("%s %s\n", comm, str(args-&gt;filename)); }'</code> 命令验证 bpftrace 的功能。</p><p>到这里，基本的开发环境就配置好了。不过环境的配置并没有完全结束，在使用 bpftool 时（比如执行命令 <code>sudo bpftool prog dump jited id 2</code>），你很可能会碰到 <code>Error: No libbfd support</code> 的错误。这说明发行版自带的 bpftool 默认不支持 libbfd，这时就需要我们下载内核源码重新编译安装。</p><p>那么，该如何下载内核源码，又该如何编译 bpftool 呢？接下来，我就带你一起来看下。</p><h2>如何从内核源码编译升级 bpftool？</h2><p>从内核源码编译安装 bpftool 的第一步是下载内核的源码。根据发行版的不同，内核源码的下载方法可以分为三种：</p><ul>
-<li>利用发行版自带的工具，下载安装发行版提供的内核源码包。比如 RHEL、CentOS、Ubuntu 等，都可以使用这种方法。</li>
-<li>直接从内核网站 <a href="https://kernel.org">kernel.org</a> 下载内核源码，注意下载前要先执行 <code>uname -r</code> 查询系统的内核版本。</li>
-<li>从发行版提供的代码仓库下载内核源码，比如对于 WSL2，就可以到 <a href="https://github.com/microsoft/WSL2-Linux-Kernel">GitHub</a> 下载。</li>
-</ul><p>后两种方法比较简单，只要从相关的网站中找到链接就可以直接下载了；而对于第一种方法，你可以执行下面的步骤，借助 <code>yumdownloader</code> 或 <code>apt</code> 工具下载发行版提供的内核源码包。</p><p>比如，在 CentOS Stream 8 系统中，你可以执行下面的命令，下载内核源码并安装内核编译所需的开发工具和开发库：</p><pre><code class="language-bash"># 第一步，开启必需的软件包仓库
+</code></pre><p>安装成功后，你可以执行同样的 <code>sudo ./bpftrace -e 'tracepoint:syscalls:sys_enter_openat { printf("%s %s\n", comm, str(args-&gt;filename)); }'</code> 命令验证 bpftrace 的功能。</p><p>到这里，基本的开发环境就配置好了。不过环境的配置并没有完全结束，在使用 bpftool 时（比如执行命令 <code>sudo bpftool prog dump jited id 2</code>），你很可能会碰到 <code>Error: No libbfd support</code> 的错误。这说明发行版自带的 bpftool 默认不支持 libbfd，这时就需要我们下载内核源码重新编译安装。</p><p>那么，该如何下载内核源码，又该如何编译 bpftool 呢？接下来，我就带你一起来看下。</p><h2>如何从内核源码编译升级 bpftool？</h2><p>从内核源码编译安装 bpftool 的第一步是下载内核的源码。根据发行版的不同，内核源码的下载方法可以分为三种：</p>
+利用发行版自带的工具，下载安装发行版提供的内核源码包。比如 RHEL、CentOS、Ubuntu 等，都可以使用这种方法。
+直接从内核网站 <a href="https://kernel.org">kernel.org</a> 下载内核源码，注意下载前要先执行 <code>uname -r</code> 查询系统的内核版本。
+从发行版提供的代码仓库下载内核源码，比如对于 WSL2，就可以到 <a href="https://github.com/microsoft/WSL2-Linux-Kernel">GitHub</a> 下载。
+<p>后两种方法比较简单，只要从相关的网站中找到链接就可以直接下载了；而对于第一种方法，你可以执行下面的步骤，借助 <code>yumdownloader</code> 或 <code>apt</code> 工具下载发行版提供的内核源码包。</p><p>比如，在 CentOS Stream 8 系统中，你可以执行下面的命令，下载内核源码并安装内核编译所需的开发工具和开发库：</p><pre><code class="language-bash"># 第一步，开启必需的软件包仓库
 sudo dnf -y install dnf-plugins-core
 sudo dnf config-manager --set-enabled powertools
 
@@ -109,11 +109,11 @@ sudo apt install -y binutils-dev
 make -C tools/bpf/bpftool
 sudo make install -C tools/bpf/bpftool/
 </code></pre><p>上述命令执行成功后，再次执行 <code>sudo bpftool prog dump jited id 2</code> 之后，你可以发现，现在已经可以正常看到 eBPF 程序的指令了。</p><p>到这里，bpftool 也就升级成功了。接下来，如果当前内核没有开启 <code>CONFIG_DEBUG_INFO</code> 等 eBPF 必需的内核选项，那就还需要进一步开启这些缺少的选项，并重新编译安装内核。</p><h2>如何配置和编译内核？</h2><p>在更改内核配置之前，由于我们希望保留当前内核的默认选项，而只开启 eBPF 相关的选项，这就需要我们把当前内核的配置选项复制到内核源码目录的 <code>.config</code> 中，即执行下面的复制命令：</p><pre><code class="language-bash">cp -v /boot/config-$(uname -r) .config
-</code></pre><p>接着，继续执行 <code>make menuconfig</code> 就可以进入如下图所示的内核配置选项修改界面：</p><p><img src="https://static001.geekbang.org/resource/image/e1/85/e1d2db7fcca483ffb75b4dfe5388e985.png?wh=999x636" alt="图片"></p><p>在这个界面中，输入 <code>/</code> 将进入配置搜索界面：</p><p><img src="https://static001.geekbang.org/resource/image/0f/ee/0fa138d7b4e4f1726db410e7395cebee.png?wh=548x196" alt="图片"></p><p>在搜索框中输入要搜索的配置名 <code>DEBUG_INFO</code>（<code>CONFIG_</code> 前缀可有可无），然后敲回车，就会进入搜索结果界面，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/0e/12/0e184e5a9e4012ab5e5790b68a72f612.png?wh=963x577" alt="图片"></p><p>在搜索结果中，你可以发现：</p><ul>
-<li>Symbol 行显示了配置名称以及当前配置值；</li>
-<li>Type 行显示了配置的数据类型；</li>
-<li>Prompt 行显示了配置的含义、配置路径、定义位置以及依赖配置。</li>
-</ul><p>当配置值需要修改时，我们就可以通过配置路径，按键盘上的方向键找到具体的配置，然后根据界面提示修改。比如，导航到上图提示的“Compile-time checks and comipler options”菜单之后，你就可以找到“Compile the kernel with debug info”选项。如果它还没有开启，按一下键盘上的空格键就可以打开这个配置，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/0b/f7/0b54c72d6e9f4f15c5e3140dc00d4cf7.png?wh=912x214" alt="图片"></p><p>这里提醒下你，通过相同的方法修改完成所有配置之后，不要忘记通过 TAB 键切换到 <code>Save</code> 按钮保存配置。</p><p>配置更新之后，最后一步就是编译和安装内核了。执行下面的 make 命令，就可以编译并安装内核：</p><pre><code class="language-bash"># 第一步，多线程编译内核
+</code></pre><p>接着，继续执行 <code>make menuconfig</code> 就可以进入如下图所示的内核配置选项修改界面：</p><p><img src="https://static001.geekbang.org/resource/image/e1/85/e1d2db7fcca483ffb75b4dfe5388e985.png?wh=999x636" alt="图片"></p><p>在这个界面中，输入 <code>/</code> 将进入配置搜索界面：</p><p><img src="https://static001.geekbang.org/resource/image/0f/ee/0fa138d7b4e4f1726db410e7395cebee.png?wh=548x196" alt="图片"></p><p>在搜索框中输入要搜索的配置名 <code>DEBUG_INFO</code>（<code>CONFIG_</code> 前缀可有可无），然后敲回车，就会进入搜索结果界面，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/0e/12/0e184e5a9e4012ab5e5790b68a72f612.png?wh=963x577" alt="图片"></p><p>在搜索结果中，你可以发现：</p>
+Symbol 行显示了配置名称以及当前配置值；
+Type 行显示了配置的数据类型；
+Prompt 行显示了配置的含义、配置路径、定义位置以及依赖配置。
+<p>当配置值需要修改时，我们就可以通过配置路径，按键盘上的方向键找到具体的配置，然后根据界面提示修改。比如，导航到上图提示的“Compile-time checks and comipler options”菜单之后，你就可以找到“Compile the kernel with debug info”选项。如果它还没有开启，按一下键盘上的空格键就可以打开这个配置，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/0b/f7/0b54c72d6e9f4f15c5e3140dc00d4cf7.png?wh=912x214" alt="图片"></p><p>这里提醒下你，通过相同的方法修改完成所有配置之后，不要忘记通过 TAB 键切换到 <code>Save</code> 按钮保存配置。</p><p>配置更新之后，最后一步就是编译和安装内核了。执行下面的 make 命令，就可以编译并安装内核：</p><pre><code class="language-bash"># 第一步，多线程编译内核
 make -j $(getconf _NPROCESSORS_ONLN)
 
 # 第二步，安装内核模块、内核头文件以及内核二进制文件
@@ -230,7 +230,7 @@ sudo make install
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -245,8 +245,8 @@ sudo make install
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/22/f5/d8/121e4b68.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -261,8 +261,8 @@ sudo make install
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/cd/db/7467ad23.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -277,8 +277,8 @@ sudo make install
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0c/30/bb4bfe9d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,5 +293,4 @@ sudo make install
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -336,16 +336,16 @@ master
 </code></pre>
 <p>我们在之前介绍时，也提到过 <code>kubelet</code> 或者 <code>kube-scheduler</code> 等组件会接受某些事件等，<code>event</code> 便是用于记录集群内各处发生的事件之类的。</p>
 <h3>修正错误</h3>
-<ul>
-<li>
+
+
 <p>修正配置文件</p>
 <p>修正配置文件，然后 <code>kubectl apply -f redis-deployment.yaml</code> 便可应用修正后的配置文件。这种方法比较推荐，并且可以将修改过的位置纳入到版本控制系统中，有利于后续维护。</p>
-</li>
-<li>
+
+
 <p>在线修改配置</p>
 <p>使用 <code>kubectl -n work edit deploy/saythx-redis</code>，会打开默认的编辑器，我们可以将使用的镜像及 tag 修正为 <code>redis:5</code> 保存退出，便会自动应用新的配置。这种做法比较适合比较紧急或者资源是直接通过命令行创建等情况。 <strong>非特殊情况尽量不要在线修改。</strong> 且这样修改并不利于后期维护。</p>
-</li>
-</ul>
+
+
 <h3>通过详细内容排查错误</h3>
 <pre><code>master $ kubectl apply -f namespace.yaml
 namespace/work created

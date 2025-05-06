@@ -300,14 +300,14 @@ __zone_watermark_ok
 
 如果你无法通过修改内核来解决这一问题的话，那就采取一些规避措施。
 
-<li>规避方案一：<br>
-通过drop_caches清理掉pagecache，不过这种做法也有很多缺陷，具体你可以参考我们这个课程的pagecache模块，我在这里就不细说了。</li>
-<li>规避方案二：<br>
-调整碎片指数，确保紧急情况下能够申请到连续页。内存碎片指数对应的文件是`/proc/sys/vm/extfrag_threshold`，它的默认值是500 ，我们可以适当降低该值，不过在这种情况下，降低它的效果并不会很明显。</li>
-<li>规避方案三：<br>
-手动compact，你可以通过写入/proc/sys/vm/compact_memory来触发compact。</li>
-<li>规避方案四：<br>
-调整 vm.vfs_cache_pressure，降低它的值，让pagecache被回收得更多，以此来减少freelist中order为0的page个数。</li>
+规避方案一：<br>
+通过drop_caches清理掉pagecache，不过这种做法也有很多缺陷，具体你可以参考我们这个课程的pagecache模块，我在这里就不细说了。
+规避方案二：<br>
+调整碎片指数，确保紧急情况下能够申请到连续页。内存碎片指数对应的文件是`/proc/sys/vm/extfrag_threshold`，它的默认值是500 ，我们可以适当降低该值，不过在这种情况下，降低它的效果并不会很明显。
+规避方案三：<br>
+手动compact，你可以通过写入/proc/sys/vm/compact_memory来触发compact。
+规避方案四：<br>
+调整 vm.vfs_cache_pressure，降低它的值，让pagecache被回收得更多，以此来减少freelist中order为0的page个数。
 
 至此，我们这个问题的分析就结束了。
 

@@ -25,189 +25,189 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;架构的演进.md">01 架构的演进.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Serverless&#32;的价值.md">02 Serverless 的价值.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;常见&#32;Serverless&#32;架构模式.md">03 常见 Serverless 架构模式.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;Serverless&#32;技术选型.md">04 Serverless 技术选型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;函数计算简介.md">05 函数计算简介.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;函数计算是如何工作的？.md">06 函数计算是如何工作的？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;函数粘合云服务提供端到端解决方案.md">07 函数粘合云服务提供端到端解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;函数计算的开发与配置.md">08 函数计算的开发与配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;函数的调试与部署.md">09 函数的调试与部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;自动化&#32;CI&amp;CD&#32;与灰度发布.md">10 自动化 CI&amp;CD 与灰度发布.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;函数计算的可观测性.md">11 函数计算的可观测性.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;典型案例&#32;1：函数计算在音视频场景实践.md">12 典型案例 1：函数计算在音视频场景实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;典型案例&#32;3：十分钟搭建弹性可扩展的&#32;Web&#32;API.md">13 典型案例 3：十分钟搭建弹性可扩展的 Web API.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="14&#32;Serverless&#32;Kubernetes&#32;容器服务介绍.md">14 Serverless Kubernetes 容器服务介绍.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Serverless&#32;Kubernetes&#32;应用部署及扩缩容.md">15 Serverless Kubernetes 应用部署及扩缩容.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;使用&#32;Spot&#32;低成本运行&#32;Job&#32;任务.md">16 使用 Spot 低成本运行 Job 任务.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;低成本运行&#32;Spark&#32;数据计算.md">17 低成本运行 Spark 数据计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;GPU&#32;机器学习开箱即用.md">18 GPU 机器学习开箱即用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;基于&#32;Knative&#32;低成本部署在线应用，灵活自动伸缩.md">19 基于 Knative 低成本部署在线应用，灵活自动伸缩.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;快速构建&#32;JenkinsGitlab&#32;持续集成环境.md">20 快速构建 JenkinsGitlab 持续集成环境.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;在线应用的&#32;Serverless&#32;实践.md">21 在线应用的 Serverless 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;通过&#32;IDEMaven&#32;部署&#32;Serverless&#32;应用实践.md">22 通过 IDEMaven 部署 Serverless 应用实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;企业级&#32;CICD&#32;工具部署&#32;Serverless&#32;应用的落地实践.md">23 企业级 CICD 工具部署 Serverless 应用的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;Serverless&#32;应用如何管理日志&amp;持久化数据.md">24 Serverless 应用如何管理日志&amp;持久化数据.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;Serverless&#32;应用引擎产品的流量负载均衡和路由策略配置实践.md">25 Serverless 应用引擎产品的流量负载均衡和路由策略配置实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Spring&#32;CloudDubbo&#32;应用无缝迁移到&#32;Serverless&#32;架构.md">26 Spring CloudDubbo 应用无缝迁移到 Serverless 架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;SAE&#32;应用分批发布与无损下线的最佳实践.md">27 SAE 应用分批发布与无损下线的最佳实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Serverless%20%E6%8A%80%E6%9C%AF%E5%85%AC%E5%BC%80%E8%AF%BE%EF%BC%88%E5%AE%8C%EF%BC%89/28%20%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7+%20SAE%20%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B%E8%BD%BB%E6%9D%BE%E5%BA%94%E5%AF%B9%E5%A4%A7%E4%BF%83.md">28 如何通过压测工具+ SAE 弹性能力轻松应对大促.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;SAE&#32;极致应用部署效率.md">29 SAE 极致应用部署效率.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -279,14 +279,14 @@
 <p>ECI 只可以做到单个容器实例的创建，而没有编排的能力，比如让应用多副本扩容，让 SLB 和 Ingress 接入 Pod 流量，所以我们需要在编排系统 Kubernetes 中使用 ECI，我们提供了两种在 Kubernetes 中使用 ECI 的方式。一个是 ACK on ECI，另外一个是 ASK。</p>
 <p><img src="assets/2020-08-26-031201.png" alt="image.png" /></p>
 <p>在与 Kubernetes 编排系统的集成中，我们以 Pod 的形式管理每个 ECI 容器实例，每个 Pod 对应一个 ECI 实例， ECI Pod 之间相互隔离，一个 ECI Pod 的启动时间约是 10s。因为是在 Kubernetes 集群中管理 ECI Pod，所以完全连接了 Kubernetes 生态，有以下几点体现：</p>
-<ul>
-<li>很方便地用 Kubectl 管理 ECI Pod，可以使用标准的 Kubernetes 的 API 操作资源；</li>
-<li>通过 Service 和 Ingress 连接 SLB 和 ECI Pod；</li>
-<li>使用 Deployment / Statefulset 进行容器编排，使用 HPA 进行动态扩容；</li>
-<li>可以使用 Proms 来监控 ECI Pod；</li>
-<li>运行 Istio 进行流量管理，Spark / Presto 做数据计算，使用 Kubeflow 进行机器学习；</li>
-<li>部署各种 Helm Chart。</li>
-</ul>
+
+很方便地用 Kubectl 管理 ECI Pod，可以使用标准的 Kubernetes 的 API 操作资源；
+通过 Service 和 Ingress 连接 SLB 和 ECI Pod；
+使用 Deployment / Statefulset 进行容器编排，使用 HPA 进行动态扩容；
+可以使用 Proms 来监控 ECI Pod；
+运行 Istio 进行流量管理，Spark / Presto 做数据计算，使用 Kubeflow 进行机器学习；
+部署各种 Helm Chart。
+
 <p>这些都是使用 Kubernetes 管理容器实例的价值所在。</p>
 <p>需要留意的是 Kubernetes 中的 ECI Pod 是 Serverless 容器，所以与普通的 Pod 相比，不支持一些功能（比如 Daemonset），不支持 Prividge 权限，不支持 HostPort 等。除此之外，ECI Pod 与普通 Pod 能力一样，比如支持挂载云盘、NAS 和 OSS 数据卷等。</p>
 <h4>2. ACK on ECI</h4>
@@ -328,11 +328,11 @@
 <p><img src="assets/2020-08-26-031214.png" alt="image.png" /></p>
 <p>第四个场景是 CI/CD 持续集成，将 Jenkins 和 Gitlab-Runner 对接 ASK 集群，按需创建 CI/CD 构建任务，构建完成后直接部署到 ASK 测试环境进行验证，这样我们无需为 Job 类任务维护一个固定资源池，按需创建极大降低成本，另外如果结合 Spot 实例还能进一步降低成本。</p>
 <p>以上就是 Serverless Kubernetes 集群的典型场景，另有快速使用链接、产品文档以及使用示例，供大家学习交流：</p>
-<ul>
-<li>控制台：<a href="https://cs.console.aliyun.com/ask">https://cs.console.aliyun.com/ask</a></li>
-<li>产品文档：<a href="https://www.alibabacloud.com/help/doc-detail/86366.htm">https://www.alibabacloud.com/help/doc-detail/86366.htm</a></li>
-<li>示例：<a href="https://github.com/AliyunContainerService/serverless-k8s-examples">https://github.com/AliyunContainerService/serverless-k8s-examples</a></li>
-</ul>
+
+控制台：<a href="https://cs.console.aliyun.com/ask">https://cs.console.aliyun.com/ask</a>
+产品文档：<a href="https://www.alibabacloud.com/help/doc-detail/86366.htm">https://www.alibabacloud.com/help/doc-detail/86366.htm</a>
+示例：<a href="https://github.com/AliyunContainerService/serverless-k8s-examples">https://github.com/AliyunContainerService/serverless-k8s-examples</a>
+
 </div>
                     </div>
                     <div>

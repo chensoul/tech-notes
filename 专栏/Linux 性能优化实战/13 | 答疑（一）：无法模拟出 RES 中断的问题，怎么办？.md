@@ -77,12 +77,12 @@ $ pidstat -u -t 1
 
 在这里顺便提一下，留言中很常见的一个错误。有些同学会拿 pidstat 中的 %wait 跟 top 中的 iowait% （缩写为wa）对比，其实这是没有意义的，因为它们是完全不相关的两个指标。
 
-<li>
+
 pidstat 中， %wait 表示进程等待 CPU 的时间百分比。
-</li>
-<li>
+
+
 top 中 ，iowait% 则表示等待 I/O 的 CPU 时间百分比。
-</li>
+
 
 回忆一下我们学过的进程状态，你应该记得，等待 CPU 的进程已经在 CPU 的就绪队列中，处于运行状态；而等待 I/O 的进程则处于不可中断状态。
 
@@ -122,15 +122,15 @@ $ sysbench --num-threads=10 --max-time=300 --test=threads run
 
 所以，在最新的案例中，我为 app 应用增加了三个选项。
 
-<li>
+
 -d 设置要读取的磁盘，默认前缀为 `/dev/sd` 或者 `/dev/xvd` 的磁盘。
-</li>
-<li>
+
+
 -s 设置每次读取的数据量大小，单位为字节，默认为 67108864（也就是 64MB）。
-</li>
-<li>
+
+
 -c 设置每个子进程读取的次数，默认为 20 次，也就是说，读取 20*64MB 数据后，子进程退出。
-</li>
+
 
 你可以点击 [Github](https://github.com/feiskyer/linux-perf-examples/tree/master/high-iowait-process) 查看它的源码，使用方法我写在了这里：
 

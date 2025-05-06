@@ -6,13 +6,13 @@ func (e *Election) Campaign(ctx context.Context, val string) error
 func (e *Election) Leader(ctx context.Context) (*v3.GetResponse, error)
 func (e *Election) Observe(ctx context.Context) &lt;-chan v3.GetResponse
 func (e *Election) Resign(ctx context.Context) (err error)
-</code></pre><!-- [[[read_end]]] --><p>我来解释一下这些API的含义。</p><ul>
-<li>NewSession函数：创建一个与etcd服务端带租约的会话。</li>
-<li>NewElection函数：创建一个选举对象Election，Election有许多方法。</li>
-<li>Election.Leader方法可以查询当前集群中的Leader信息。</li>
-<li>Election.Observe 可以接收到当前Leader的变化</li>
-<li>Election.Campaign方法：开启选举，该方法会阻塞住协程，直到调用者成为Leader。</li>
-</ul><h2>实现Master选主与故障容错</h2><p>现在让我们在项目中实现分布式选主算法，核心逻辑位于Master.Campaign方法中，完整的代码位于<a href="https://github.com/dreamerjackson/crawler">v0.3.5分支</a>。</p><pre><code class="language-plain">func (m *Master) Campaign() {
+</code></pre><!-- [[[read_end]]] --><p>我来解释一下这些API的含义。</p>
+NewSession函数：创建一个与etcd服务端带租约的会话。
+NewElection函数：创建一个选举对象Election，Election有许多方法。
+Election.Leader方法可以查询当前集群中的Leader信息。
+Election.Observe 可以接收到当前Leader的变化
+Election.Campaign方法：开启选举，该方法会阻塞住协程，直到调用者成为Leader。
+<h2>实现Master选主与故障容错</h2><p>现在让我们在项目中实现分布式选主算法，核心逻辑位于Master.Campaign方法中，完整的代码位于<a href="https://github.com/dreamerjackson/crawler">v0.3.5分支</a>。</p><pre><code class="language-plain">func (m *Master) Campaign() {
 	endpoints := []string{m.registryURL}
 	cli, err := clientv3.New(clientv3.Config{Endpoints: endpoints})
 	if err != nil {
@@ -56,8 +56,8 @@ func (e *Election) Resign(ctx context.Context) (err error)
 	}
 }
 </code></pre><p>我们一步步来解析这段分布式选主的代码。</p><ol>
-<li>第3行调用clientv3.New函数创建一个etcd clientv3的客户端。</li>
-<li>第15行，<code>concurrency.NewElection(s, "/resources/election")</code> 意为创建一个新的etcd选举对象。其中的第二个参数就是所有Master都在抢占的Key，抢占到该Key的Master将变为Leader。</li>
+第3行调用clientv3.New函数创建一个etcd clientv3的客户端。
+第15行，<code>concurrency.NewElection(s, "/resources/election")</code> 意为创建一个新的etcd选举对象。其中的第二个参数就是所有Master都在抢占的Key，抢占到该Key的Master将变为Leader。
 </ol><p>在etcd中，一般都会选择这种目录形式的结构作为Key，这种方式可以方便我们进行前缀查找。例如，Kubernetes 资源在 etcd 中的存储格式为  <code>prefix/资源类型/namespace/资源名称</code> 。</p><pre><code class="language-plain">/registry/clusterrolebindings/system:coredns
 /registry/clusterroles/system:coredns
 /registry/configmaps/kube-system/coredns
@@ -66,7 +66,7 @@ func (e *Election) Resign(ctx context.Context) (err error)
 /registry/secrets/kube-system/coredns-token-hpqbt
 /registry/serviceaccounts/kube-system/coredns
 </code></pre><ol start="3">
-<li>第17行 <code>go m.elect(e, leaderCh)</code> 代表开启一个新的协程，让当前的Master进行Leader的选举。如果集群中已经有了其他的Leader，当前协程将陷入到堵塞状态。如果当前Master选举成功，成为了Leader，e.Campaign方法会被唤醒，我们将其返回的消息传递到ch通道中。</li>
+第17行 <code>go m.elect(e, leaderCh)</code> 代表开启一个新的协程，让当前的Master进行Leader的选举。如果集群中已经有了其他的Leader，当前协程将陷入到堵塞状态。如果当前Master选举成功，成为了Leader，e.Campaign方法会被唤醒，我们将其返回的消息传递到ch通道中。
 </ol><pre><code class="language-plain">func (m *Master) elect(e *concurrency.Election, ch chan error) {
 	// 堵塞直到选取成功
 	err := e.Campaign(context.Background(), m.ID)
@@ -125,12 +125,12 @@ func genMasterID(id string, ipv4 string, GRPCAddress string) string {
 	return "", errors.New("no local ip")
 }
 </code></pre><ol start="4">
-<li>
+
 <p>当Master并行进行选举的同时（第18行），调用e.Observe监听Leader的变化。e.Observe函数会返回一个通道，当Leader状态发生变化时，会将当前Leader的信息发送到通道中。在这里我们初始化时首先堵塞读取了一次e.Observe返回的通道信息。因为只有成功收到e.Observe返回的消息，才意味着集群中已经存在Leader，表示集群完成了选举。</p>
-</li>
-<li>
+
+
 <p>第24行，我们在for循环中使用select监听了多个通道的变化，其中通道leaderCh负责监听当前Master是否当上了Leader，而leaderChange负责监听当前集群中Leader是否发生了变化。</p>
-</li>
+
 </ol><p>书写好Master的选主逻辑之后，接下来让我们执行Master程序，完整的代码位于<a href="https://github.com/dreamerjackson/crawler">v0.3.5分支</a>。</p><pre><code class="language-plain">» go run main.go master --id=2 --http=:8081  --grpc=:9091
 </code></pre><p>由于当前只有一个Master，因此当前Master一定会成为Leader。我们可以看到打印出的当前Leader的信息：master2-192.168.0.107:9091。</p><pre><code class="language-plain">{"level":"INFO","ts":"2022-12-07T18:23:28.494+0800","logger":"master","caller":"master/master.go:65","msg":"watch leader change","leader:":"master2-192.168.0.107:9091"}
 {"level":"INFO","ts":"2022-12-07T18:23:28.494+0800","logger":"master","caller":"master/master.go:65","msg":"watch leader change","leader:":"master2-192.168.0.107:9091"}
@@ -339,7 +339,7 @@ func waitDelete(ctx context.Context, client *v3.Client, key string, rev int64) e
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/4a/6e/5f2a8a99.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -354,8 +354,8 @@ func waitDelete(ctx context.Context, client *v3.Client, key string, rev int64) e
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -370,8 +370,8 @@ func waitDelete(ctx context.Context, client *v3.Client, key string, rev int64) e
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -386,5 +386,4 @@ func waitDelete(ctx context.Context, client *v3.Client, key string, rev int64) e
   </div>
 </div>
 </div>
-</li>
-</ul>
+

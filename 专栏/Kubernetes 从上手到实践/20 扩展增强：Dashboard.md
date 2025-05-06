@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -240,8 +240,8 @@
 <h2>如何安装</h2>
 <p>要想使用 Dashboard，首先我们需要安装它，而 Dashboard 的安装其实也很简单。不过对于国内用户需要注意的是需要解决网络问题，或替换镜像地址等。</p>
 <p>这里我们安装当前最新版 <code>v1.10.1</code> 的 Dashboard：</p>
-<ul>
-<li>
+
+
 <p>对于已经解决网络问题的用户：</p>
 <p>可使用官方推荐做法进行安装，以下链接是使用了我提交了 path 的版本，由于官方最近的一次更新导致配置文件中的镜像搞错了。</p>
 <pre><code>master $ kubectl apply -f https://raw.githubusercontent.com/tao12345666333/dashboard/67970554aa9275cccec1d1ee5fbf89ae81b3b614/aio/deploy/recommended/kubernetes-dashboard.yaml
@@ -252,8 +252,8 @@ rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard-minimal created
 deployment.apps/kubernetes-dashboard created
 service/kubernetes-dashboard created
 </code></pre>
-</li>
-<li>
+
+
 <p>也可使用我修改过的这份（使用 Docker Hub 同步了镜像）仓库地址 <a href="https://github.com/tao12345666333/k8s-dashboard">GitHub</a>, 国内 <a href="https://gitee.com/K8S-release/k8s-dashboard">Gitee</a>：</p>
 <pre><code>master $ kubectl apply -f https://gitee.com/K8S-release/k8s-dashboard/raw/master/kubernetes-dashboard.yaml
 secret/kubernetes-dashboard-certs created
@@ -263,8 +263,8 @@ rolebinding.rbac.authorization.k8s.io/kubernetes-dashboard-minimal created
 deployment.apps/kubernetes-dashboard created
 service/kubernetes-dashboard created
 </code></pre>
-</li>
-</ul>
+
+
 <p>当已经执行完以上步骤后，可检查下是否安装成功：</p>
 <pre><code>master $ kubectl -n kube-system get all  -l k8s-app=kubernetes-dashboard
 NAME                                        READY     STATUS    RESTARTS   AGE
@@ -337,8 +337,8 @@ token:      eyJhbGciOiJSUzI1NiIsImtpZCI6IiJ9.eyJpc3MiOiJrdWJlcm5ldGVzL3NlcnZpY2V
 <h3>修正权限</h3>
 <p>但是我们注意到这里有很多提示 <code>configmaps is forbidden: User &quot;system:serviceaccount:kube-system:kubernetes-dashboard&quot; cannot list resource &quot;configmaps&quot; in API group &quot;&quot; in the namespace &quot;default&quot;</code> 。根据我们前面的介绍，这很明显就是用户权限不足。</p>
 <p>我们已经知道，当前我们的集群是开启了 <code>RBAC</code> 的，所以这里我们还是以前面学到的方法创建一个用户并进行授权。</p>
-<ul>
-<li>
+
+
 <p>创建 ServiceAccount：</p>
 <pre><code>apiVersion: v1
 kind: ServiceAccount
@@ -346,8 +346,8 @@ metadata:
   name: admin-user
   namespace: kube-system
 </code></pre>
-</li>
-<li>
+
+
 <p>创建 RoleBinding: 这里为了方便直接绑定了 <code>cluster-admin</code> 的 ClusterRole ，但是生产环境下，请按照实际情况进行授权，参考前面第 8 节相关的内容。</p>
 <pre><code>apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
@@ -362,8 +362,8 @@ subjects:
   name: admin-user
   namespace: kube-system
 </code></pre>
-</li>
-</ul>
+
+
 <p>使用以上配置创建了用户和绑定，然后还是同样的办法获取 Token。</p>
 <p>点击 Dashboard 右上角，退出登录后，重新使用新的 Token 进行登录。登录完成后便可看到如下图：</p>
 <p><img src="assets/167d6b9e22f03343" alt="img" /></p>

@@ -1,9 +1,9 @@
 <audio title="22｜如何使用 ArgoCD 快速打造生产可用的 GitOps 工作流？" src="https://static001.geekbang.org/resource/audio/79/ae/795f5b4580fc78f8cba53026d6430cae.mp3" controls="controls"></audio> 
-<p>你好，我是王炜。</p><p>在之前的课程中，我们学习了如何使用 Kustomize 和 Helm 和来定义应用。其中，Helm Chart在实际工作中使用较多，它有两种存储方式，一种是以源码的方式存储在 Git 仓库中，另一种是以 tgz 压缩包的方式存储在专用的 OCI 仓库中。</p><p>此外，在自动化镜像构建部分，我还向你介绍了如何使用 GitHub Action、GitLab CI 以及自托管 Tekton 来自动构建镜像。</p><p>当我们具备这些 GitOps 的核心基础后，接下来我们就可以根据实际场景，选择合适的技术栈来构建 GitOps 流水线了。</p><p>在这节课，我仍然会以示例应用为例，使用 GitHub Action 和 Helm 分别作为自动构建镜像和应用定义的工具，并通过 ArgoCD 来构建一个完整的 GitOps 工作流。</p><p>在开始今天的学习之前，你需要准备好下面这几个条件。</p><ul>
-<li>按照<a href="https://time.geekbang.org/column/article/612571">第 2 讲</a>的内容在本地配置好 Kind 集群，安装 Ingress-Nginx，<strong>并暴露 80 和 443 端口。</strong></li>
-<li>配置好 Kubectl，使其能够访问 Kind 集群。</li>
-<li>克隆 <a href="https://github.com/lyzhang1999/kubernetes-example">kubernetes-example</a> 示例应用代码并推送到自己的 GitHub 仓库中，然后按照<a href="https://time.geekbang.org/column/article/622743">第 16 讲</a>的内容配置好 GitHub Action 和 DockerHub Registry。</li>
-</ul><!-- [[[read_end]]] --><h2>ArgoCD</h2><p>在“从零上手 GitOps”这一章，我使用了 FluxCD 来构建 GitOps 流水线。FluxCD 的主要特点是比较轻量，但同时也缺少友好的 UI 控制台。相比较而言，在社区和维护方面，ArgoCD 更为活跃。所以，<strong>在生产环境下，我推荐你使用 ArgoCD 来构建 GitOps 工作流</strong>。</p><h3>安装 ArgoCD</h3><p>要使用 ArgoCD，首先需要在 Kind 集群安装它，你可以通过下面的命令来安装。</p><p>首先，创建 argocd 命名空间。</p><pre><code class="language-powershell">$ kubectl create namespace argocd
+<p>你好，我是王炜。</p><p>在之前的课程中，我们学习了如何使用 Kustomize 和 Helm 和来定义应用。其中，Helm Chart在实际工作中使用较多，它有两种存储方式，一种是以源码的方式存储在 Git 仓库中，另一种是以 tgz 压缩包的方式存储在专用的 OCI 仓库中。</p><p>此外，在自动化镜像构建部分，我还向你介绍了如何使用 GitHub Action、GitLab CI 以及自托管 Tekton 来自动构建镜像。</p><p>当我们具备这些 GitOps 的核心基础后，接下来我们就可以根据实际场景，选择合适的技术栈来构建 GitOps 流水线了。</p><p>在这节课，我仍然会以示例应用为例，使用 GitHub Action 和 Helm 分别作为自动构建镜像和应用定义的工具，并通过 ArgoCD 来构建一个完整的 GitOps 工作流。</p><p>在开始今天的学习之前，你需要准备好下面这几个条件。</p>
+按照<a href="https://time.geekbang.org/column/article/612571">第 2 讲</a>的内容在本地配置好 Kind 集群，安装 Ingress-Nginx，<strong>并暴露 80 和 443 端口。</strong>
+配置好 Kubectl，使其能够访问 Kind 集群。
+克隆 <a href="https://github.com/lyzhang1999/kubernetes-example">kubernetes-example</a> 示例应用代码并推送到自己的 GitHub 仓库中，然后按照<a href="https://time.geekbang.org/column/article/622743">第 16 讲</a>的内容配置好 GitHub Action 和 DockerHub Registry。
+<!-- [[[read_end]]] --><h2>ArgoCD</h2><p>在“从零上手 GitOps”这一章，我使用了 FluxCD 来构建 GitOps 流水线。FluxCD 的主要特点是比较轻量，但同时也缺少友好的 UI 控制台。相比较而言，在社区和维护方面，ArgoCD 更为活跃。所以，<strong>在生产环境下，我推荐你使用 ArgoCD 来构建 GitOps 工作流</strong>。</p><h3>安装 ArgoCD</h3><p>要使用 ArgoCD，首先需要在 Kind 集群安装它，你可以通过下面的命令来安装。</p><p>首先，创建 argocd 命名空间。</p><pre><code class="language-powershell">$ kubectl create namespace argocd
 namespace/argocd created
 </code></pre><p>然后，部署 ArgoCD。</p><pre><code class="language-plain">$ kubectl apply -n argocd -f https://ghproxy.com/https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 customresourcedefinition.apiextensions.k8s.io/applications.argoproj.io created
@@ -36,8 +36,8 @@ Gn4b2PFG6vKm1ADm
 </code></pre><p>第三部分的核心是 ArgoCD，它包括下面两个步骤。</p><pre><code>4. 通过定期 Poll 的方式持续拉取 Git 仓库，并判断是否有新的 commit。
 5. 从 Git 仓库获取 Kubernetes 对象，与集群对象进行实时比较，自动更新集群内有差异的资源。
 </code></pre><p>在之前的课程中，我们已经为示例应用创建好了 GitHub Action 来自动构建镜像，但还缺少自动更新 Helm Chart values.yaml 文件的镜像版本逻辑，我会在稍后进行配置。</p><p>现在，我们开始创建 GitOps 工作流中的第三部分，也就是创建 ArgoCD 应用，实现 Kubernetes 资源的自动同步。</p><h2>创建 ArgoCD 应用</h2><p>我们以示例应用为例子来创建 ArgoCD 应用，这里主要分成两个步骤。</p><ol>
-<li>配置仓库访问权限。</li>
-<li>创建 ArgoCD 应用。</li>
+配置仓库访问权限。
+创建 ArgoCD 应用。
 </ol><p>其中，如果你的示例应用仓库是公开的，可以跳过第一步。</p><h3>配置 ArgoCD 仓库访问权限（可选）</h3><p>在实际场景下，我们存放应用定义的仓库一般都是私有仓库，这就需要为 ArgoCD 配置仓库访问权限。</p><p>你可以通过下面的 ArgoCD CLI 工具来为 ArgoCD 添加仓库访问权限。</p><p>在使用 ArgoCD CLI 工具之前，你需要先执行 argocd login 命令登录。</p><pre><code class="language-plain">$ argocd login 127.0.0.1:8080 --insecure
 Username: admin
 Password:
@@ -47,25 +47,25 @@ Repository 'https://github.com/lyzhang1999/kubernetes-example.git' added
 </code></pre><p>这里要注意将仓库地址修改为你实际的 GitHub 仓库地址，并将 <code>$USERNAME</code> 替换为 GitHub 账户 ID，将 <code>$PASSWORD</code> 替换为 GitHub Personal Token。你可以在<a href="https://github.com/settings/tokens">这个页面</a>创建 GitHub Personal Token，并赋予仓库相关权限，如下图所示。</p><p><img src="https://static001.geekbang.org/resource/image/ba/35/ba7703a5429af8f1b0ccf34174114035.png?wh=1608x1056" alt="图片"></p><h3>创建 ArgoCD 应用</h3><p>接下来，就可以创建 ArgoCD 应用了。ArgoCD 同时支持使用 Helm Chart、Kustomize 和 Manifest 来创建应用，这里我们以示例应用的 Helm Chart 为例。</p><p>你可以通过 argocd app create 命令来创建应用。</p><pre><code class="language-plain">$ argocd app create example --sync-policy automated --repo https://github.com/lyzhang1999/kubernetes-example.git --revision main --path helm --dest-namespace gitops-example --dest-server https://kubernetes.default.svc --sync-option CreateNamespace=true
 application 'example' created
 </code></pre><p>这里我简单解释一下每个参数的作用。</p><p>–sync-policy 参数代表设置自动同步策略。automated 的含义是自动同步，也就是说当集群内的资源和 Git 仓库 Helm Chart 定义的资源有差异时，ArgoCD 会自动执行同步操作，实时确保集群资源和 Helm Chart 的一致性。</p><p>–repo 参数表示 Helm Chart 的仓库地址。这里的值是示例应用的仓库地址，注意需要替换成你实际的 Git 仓库地址。</p><p>–revision 参数表示需要跟踪的分支或者 Tag，这里我们让 ArgoCD 跟踪 main 分支的改动。</p><p>–path 参数表示 Helm Chart 的路径。在示例应用中，存放 Helm Chart 的目录是 helm 目录。</p><p>–dest-namespace 参数表示命名空间。这里指定了 gitops-example 命名空间，注意，这是一个不存在的命名空间，所以我们额外通过 --sync-option 参数来让 ArgoCD 自动创建这个命名空间。</p><p>最后，–dest-server 参数表示要部署的集群，<a href="https://kubernetes.default.svc">https://kubernetes.default.svc</a> 表示 ArgoCD 所在的集群。</p><h3>查看 ArgoCD 同步状态</h3><p>创建好应用之后，GitOps 工作流中的自动同步部分也就建立起来了。现在，你可以打开 ArgoCD 控制台，进入左侧的“Application”菜单来查看示例应用详情。</p><p><img src="https://static001.geekbang.org/resource/image/23/34/23df1a812a1a4ea33ddaf3d63ba97b34.png?wh=4320x2272" alt="图片"></p><p>在应用详情页面，我们需要重点关注三个状态。</p><ol>
-<li>
+
 <p><strong>APP HEALTH：</strong>应用整体的健康状态，它包含下面三个值。</p>
 <ol>
-<li>Progressing：处理中</li>
-<li>Healthy：健康状态</li>
-<li>Degraded：宕机</li>
+Progressing：处理中
+Healthy：健康状态
+Degraded：宕机
 </ol>
-</li>
-<li>
+
+
 <p><strong>CURRENT SYNC STATUS：</strong> 应用定义和集群对象的差异状态，也包含下面三个值。</p>
 <ol>
-<li>Synced：完全同步</li>
-<li>OutOfSync：存在差异</li>
-<li>Unknown：未知</li>
+Synced：完全同步
+OutOfSync：存在差异
+Unknown：未知
 </ol>
-</li>
-<li>
+
+
 <p><strong>LAST SYNC RESULT：</strong>最后一次同步到 Git 仓库的信息，包括 Commit ID 和提交者信息。</p>
-</li>
+
 </ol><h3>访问应用</h3><p>当应用健康状态变为 Healthy 之后，我们就可以访问应用了。</p><p>在这之前，如果你已经在 example 命名空间下手动部署了示例应用，为了避免 Ingress 策略冲突，你需要先删除这个命名空间。</p><pre><code class="language-plain">$ kubectl delete ns example
 </code></pre><p>然后，使用浏览器访问 <a href="http://127.0.0.1">http://127.0.0.1</a>，你应该能看到示例应用的界面，如下图所示。</p><p><img src="https://static001.geekbang.org/resource/image/5b/58/5b67ae11fa94d69132955524d9dcyy58.png?wh=4320x2272" alt="图片"></p><p>到这里，ArgoCD 部分就配置完成了。</p><h2>连接 GitOps 工作流</h2><p>在完成 ArgoCD 的应用配置之后，我们就已经将示例应用的 Helm Chart 定义和集群资源关联起来了，但整个 GitOps 工作流还缺少非常重要的一部分，就是我在上面提到的自动更新 Helm Chart values.yaml 文件镜像版本的部分，我在下面这张示意图中用“❌”把这个环节标记了出来。</p><p><img src="https://static001.geekbang.org/resource/image/d2/0f/d214c5416ab33f2f876b74baecf4550f.jpg?wh=1920x607" alt=""></p><p>在这部分工作流没有打通之前，提交的新代码虽然会构建出新的镜像，但是 Helm Chart 定义的镜像版本并不会产生变化，<strong>这会导致 ArgoCD 不能自动更新集群内工作负载的镜像版本</strong>。</p><p>要解决这个问题，我们还需要在 GitHub Action 中添加自动修改 Helm Chart 并重新推送到仓库操作。</p><p>接下来，我们修改示例应用的 .github/workflows/build.yaml 文件，在“Build frontend and push”阶段后面添加一个新的阶段，代码如下。</p><pre><code class="language-powershell">- name: Update helm values.yaml
 &nbsp; uses: fjogeleit/yaml-update-action@main
@@ -130,12 +130,12 @@ data:
 &nbsp; .dockerconfigjson: &gt;-
 &nbsp; &nbsp; eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOnsidXNlcm5hbWUiOiJseXpoYW5nMTk5OSIsInBhc3N3b3JkIjoibXktdG9rZW4iLCJhdXRoIjoiYkhsNmFHRnVaekU1T1RrNmJYa3RkRzlyWlc0PSJ9fX0=
 </code></pre><p>这样，当 ArgoCD 部署应用时，会一并将拉取凭据部署到集群中，这就解决了镜像拉取权限的问题。</p><p>但是，Secret 对象并没有加密功能，<strong>这可能会导致凭据泄露。</strong>所以，我们需要对这些敏感信息进行加密处理。关于如何加密秘钥，我会在后续“多环境管理和安全”章节为你详细介绍。</p><h2>总结</h2><p>在这节课，我以示例应用为例，将 GitHub Action、应用定义以及 ArgoCD 连接起来，构建了完整的 GitOps 工作流。</p><p>通过这个例子我们会发现，建立完整的 GitOps 工作流涉及到下面这几个技术：</p><ol>
-<li>Docker 镜像</li>
-<li>CI 构建</li>
-<li>镜像仓库</li>
-<li>应用定义</li>
-<li>Kubernetes</li>
-<li>ArgoCD</li>
+Docker 镜像
+CI 构建
+镜像仓库
+应用定义
+Kubernetes
+ArgoCD
 </ol><p>在建立 GitOps 工作流的过程中，通常有两个难点。<strong>第一是如何进行技术选型和组合，第二是如何将它们连接起来。</strong></p><p>我先总结一下如何解决第一个问题：技术选型和组合。</p><p>在这节课的例子中，我使用了 GitHub Action 作为 CI 构建工具，此外，你还可以选择 GitLab CI 或者自托管的 Tekton 。对于镜像仓库，我使用了 DockerHub 来存储镜像，你也可以使用 GitHub Package 或者自建 Harbor 来存储镜像。最后，在应用定义方面，我使用了 Helm Chart 作为例子，你还可以选择 Kustomize 甚至是 Kubernetes Manifest 。</p><p>在建立 GitOps 的过程中，你可以根据团队实际的情况，对这些技术栈任意组合。</p><p>对于如何连接的问题，它最底层的追问是，在构建好镜像并将其推送到镜像仓库之后，怎么通知 ArgoCD 部署新镜像版本。</p><p>在这节课的例子中，我在 GitHub Action 里修改了 values.yaml 文件，并将其推送到了 Git 仓库，所以会产生新的 commit，进而达到通知 ArgoCD 的效果。</p><p><strong>这种方式虽然能解决问题，但在一些场景下可能并不适合</strong>。例如，在开发和发布相对独立的场景下，因为权限和安全的问题可能并不允许 CI 直接修改应用定义。在这种情况下，我们就可以使用另外一种方式来通知 ArgoCD，也就是 <strong>Argo CD Image Updater。</strong>它可以通过监听镜像版本的更新来触发 ArgoCD 同步，我们会在下一节课详细介绍。</p><h2>思考题</h2><p>最后，给你留一道思考题吧。</p><p>在 ArgoCD 自动同步完成后，应用的“CURRENT SYNC STATUS”会从“Synced”很快变为“OutOfSync”，这是为什么呢？如何解决？</p><p>欢迎你给我留言交流讨论，你也可以把这节课分享给更多的朋友一起阅读。我们下节课见。</p>
 <style>
     ul {
@@ -246,7 +246,7 @@ data:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -261,8 +261,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/cBh6rmNsSIbHEAGKiaq25yz9tqGuJEjbIYn2K0uFBLEe8lBNjL3SUOicibPbAO5SdH6TxV65kcCpK6FOB1hBr3PBQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -277,8 +277,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/ac/66/9bc49bcd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,8 +293,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/ac/66/9bc49bcd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -309,8 +309,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/83/51/aa521f2a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -325,8 +325,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/83/51/aa521f2a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -341,8 +341,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/63/ae/eb536e1d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -357,8 +357,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/16/a2/26ed8f44.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/55/51/c7bffc64.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2a/ff/a9d72102.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/63/ae/eb536e1d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,8 +437,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -453,8 +453,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/46/d3/e25d104a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -469,5 +469,4 @@ data:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

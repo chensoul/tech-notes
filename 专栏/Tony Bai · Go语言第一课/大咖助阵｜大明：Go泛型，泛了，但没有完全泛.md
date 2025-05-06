@@ -1,13 +1,13 @@
 <audio title="大咖助阵｜大明：Go泛型，泛了，但没有完全泛" src="https://static001.geekbang.org/resource/audio/f4/e5/f43905d1bdc0e34b6d6fe985c7efa6e5.mp3" controls="controls"></audio> 
-<p>你好，我是大明，一个专注于中间件研发的开源爱好者。</p><p>我们都知道，Go 泛型已经日渐成熟，距离发布正式版本已经不远了。目前已经有很多的开发者开始探索泛型会对 Go 编程带来什么影响。比如说，目前我们比较肯定的是泛型能够解决这一类的痛点：</p><ul>
-<li>数学计算：写出通用的方法来操作  <code>int</code> 、 <code>float</code> 类型；</li>
-<li>集合类型：例如用泛型来写堆、栈、队列等。虽然大部分类似的需求可以通过 <code>slice</code> 和  <code>channel</code> 来解决，但是始终有一些情况难以避免要设计特殊的集合类型，如有序 <code>Set</code> 和优先级队列；</li>
-<li><code>slice</code> 和  <code>map</code> 的辅助方法：典型的如 map-reduce API；</li>
-</ul><p>但是至今还是没有人讨论 Go 泛型的限制，以及这些限制会如何影响我们解决问题。</p><p>所以今天我将重点讨论这个问题，不过因为目前我主要是在设计和开发中间件，所以我会侧重于中间件来进行讨论，当然也会涉及业务开发的内容。你可以结合自己了解的 Go 泛型和现有的编程模式来学习这些限制，从而在将来 Go 泛型正式发布之后避开这些限制，写出优雅的 Go 泛型代码。</p><p>话不多说，我们现在开始讨论第一点：Go泛型存在哪些局限。</p><h2>Go 泛型的局限</h2><p>在早期泛型还处于提案阶段的时候，我就尝试过利用泛型来设计中间件。当然，即便到现在，我对泛型的应用依旧提留在尝试阶段。根据我一年多的不断尝试，以及我自己对中间件开发的理解，目前我认为影响最大的三个局限是：</p><!-- [[[read_end]]] --><ul>
-<li>Go 接口和结构体不支持泛型方法；</li>
-<li>泛型约束不能作为类型声明；</li>
-<li>泛型约束只能是接口，而不能是结构体。</li>
-</ul><p>接下来我们就来逐个分析。</p><h3><strong>Go 接口和结构体不支持泛型方法</strong></h3><p>这里需要我们注意的是，虽然 Go 接口或者结构体不允许声明泛型方法，但Go 接口或者结构体可以是泛型。</p><p>在原来没有泛型的时候，如果要设计一个可以处理任意类型的接口，我们只能使用 <code>interface{}</code> ，例如：</p><pre><code class="language-plain">type Orm interface {
+<p>你好，我是大明，一个专注于中间件研发的开源爱好者。</p><p>我们都知道，Go 泛型已经日渐成熟，距离发布正式版本已经不远了。目前已经有很多的开发者开始探索泛型会对 Go 编程带来什么影响。比如说，目前我们比较肯定的是泛型能够解决这一类的痛点：</p>
+数学计算：写出通用的方法来操作  <code>int</code> 、 <code>float</code> 类型；
+集合类型：例如用泛型来写堆、栈、队列等。虽然大部分类似的需求可以通过 <code>slice</code> 和  <code>channel</code> 来解决，但是始终有一些情况难以避免要设计特殊的集合类型，如有序 <code>Set</code> 和优先级队列；
+<code>slice</code> 和  <code>map</code> 的辅助方法：典型的如 map-reduce API；
+<p>但是至今还是没有人讨论 Go 泛型的限制，以及这些限制会如何影响我们解决问题。</p><p>所以今天我将重点讨论这个问题，不过因为目前我主要是在设计和开发中间件，所以我会侧重于中间件来进行讨论，当然也会涉及业务开发的内容。你可以结合自己了解的 Go 泛型和现有的编程模式来学习这些限制，从而在将来 Go 泛型正式发布之后避开这些限制，写出优雅的 Go 泛型代码。</p><p>话不多说，我们现在开始讨论第一点：Go泛型存在哪些局限。</p><h2>Go 泛型的局限</h2><p>在早期泛型还处于提案阶段的时候，我就尝试过利用泛型来设计中间件。当然，即便到现在，我对泛型的应用依旧提留在尝试阶段。根据我一年多的不断尝试，以及我自己对中间件开发的理解，目前我认为影响最大的三个局限是：</p><!-- [[[read_end]]] -->
+Go 接口和结构体不支持泛型方法；
+泛型约束不能作为类型声明；
+泛型约束只能是接口，而不能是结构体。
+<p>接下来我们就来逐个分析。</p><h3><strong>Go 接口和结构体不支持泛型方法</strong></h3><p>这里需要我们注意的是，虽然 Go 接口或者结构体不允许声明泛型方法，但Go 接口或者结构体可以是泛型。</p><p>在原来没有泛型的时候，如果要设计一个可以处理任意类型的接口，我们只能使用 <code>interface{}</code> ，例如：</p><pre><code class="language-plain">type Orm interface {
    Insert(data ...interface{}) (sql.Result, error)
 }
 </code></pre><p>在这种模式下，用户可以输入任何数据。但是如果用户混用不同类型，例如 <code>Insert(&amp;User{},&amp;Order{})</code> ，就会导致插入失败，而编译器并不能帮助用户检测到这种错误。</p><p>从利用 ORM 读写数据库的场景来看，我们是希望限制住  data 参数只能是单一类型的多个实例。那么在引入了泛型之后，我们可以声明一个泛型接口来达成这种约束：</p><pre><code class="language-plain">type Orm[T any] interface {
@@ -158,18 +158,18 @@ func (b *BaseEntity) SetId(id int64) {
 }
 func Insert[E Entity](e *E) {
 }
-</code></pre><p>看着这段代码，Java 背景的同学应该会觉得很眼熟，但是在 Go 里面更加习惯于直接访问字段，而不是使用 Getter/Setter。</p><p>但是如果只是少量使用，并且结合组合特性，那么效果也还算不错。例如在我们的例子里面，通过组合 <code>BaseEntity</code> ，我们解决了所有的结构体都要实现一遍  <code>Entity</code> 接口的问题。</p><h2>总结</h2><p>我们这里讨论了三个泛型的限制：</p><ul>
-<li>Go 接口和结构体不支持泛型方法；</li>
-<li>泛型约束不能作为类型声明；</li>
-<li>泛型约束只能是接口，而不能是结构体。</li>
-</ul><p>并且讨论了三个对应的、可行的解决思路：</p><ul>
-<li>Builder 模式；</li>
-<li>标记接口；</li>
-<li>Getter/Setter 接口。</li>
-</ul><p>从我个人看来，这些解决思路只能算是效果不错，但是不够优雅。所以我还是很期盼 Go 将来能够放开这种限制。毕竟在这三个约束之下，Go 泛型使用场景过于受限。</p><p>从我个人的工作经历出发，我觉得对于大多数中间件来说，可以使用泛型来提供对用户友好的 API，但是对于内部实现来说，使用泛型的收益非常有限。如果现在已有的代码风格就是过程式的，那么你就可以尝试用泛型将它完全重构一番。</p><p>总的来说，我对 Go 泛型的普及持有一种比较悲观的态度。我预计泛型从出来到大规模应用还有一段非常遥远的距离，甚至有些公司可能在长时间内为了保持代码风格统一，而禁用泛型特性。</p><h2>思考题</h2><ol>
-<li>如果你是中间件开发，你觉得 Go 泛型出来之后，你会用泛型来改造你维护的项目吗？</li>
-<li>如果你用了一些开源软件，你会希望它们的维护者暴露泛型 API 给你吗？</li>
-<li>从你的个人经验出发，你会希望 Go 泛型放开这些限制吗？</li>
+</code></pre><p>看着这段代码，Java 背景的同学应该会觉得很眼熟，但是在 Go 里面更加习惯于直接访问字段，而不是使用 Getter/Setter。</p><p>但是如果只是少量使用，并且结合组合特性，那么效果也还算不错。例如在我们的例子里面，通过组合 <code>BaseEntity</code> ，我们解决了所有的结构体都要实现一遍  <code>Entity</code> 接口的问题。</p><h2>总结</h2><p>我们这里讨论了三个泛型的限制：</p>
+Go 接口和结构体不支持泛型方法；
+泛型约束不能作为类型声明；
+泛型约束只能是接口，而不能是结构体。
+<p>并且讨论了三个对应的、可行的解决思路：</p>
+Builder 模式；
+标记接口；
+Getter/Setter 接口。
+<p>从我个人看来，这些解决思路只能算是效果不错，但是不够优雅。所以我还是很期盼 Go 将来能够放开这种限制。毕竟在这三个约束之下，Go 泛型使用场景过于受限。</p><p>从我个人的工作经历出发，我觉得对于大多数中间件来说，可以使用泛型来提供对用户友好的 API，但是对于内部实现来说，使用泛型的收益非常有限。如果现在已有的代码风格就是过程式的，那么你就可以尝试用泛型将它完全重构一番。</p><p>总的来说，我对 Go 泛型的普及持有一种比较悲观的态度。我预计泛型从出来到大规模应用还有一段非常遥远的距离，甚至有些公司可能在长时间内为了保持代码风格统一，而禁用泛型特性。</p><h2>思考题</h2><ol>
+如果你是中间件开发，你觉得 Go 泛型出来之后，你会用泛型来改造你维护的项目吗？
+如果你用了一些开源软件，你会希望它们的维护者暴露泛型 API 给你吗？
+从你的个人经验出发，你会希望 Go 泛型放开这些限制吗？
 </ol><p>欢迎在留言区分享你的看法，我们一起讨论。</p>
 <style>
     ul {
@@ -280,7 +280,7 @@ func Insert[E Entity](e *E) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -295,8 +295,8 @@ func Insert[E Entity](e *E) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/d4/cb/65cc1192.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -311,8 +311,8 @@ func Insert[E Entity](e *E) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/f4/58/383cd3a0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -327,8 +327,8 @@ func Insert[E Entity](e *E) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/f4/58/383cd3a0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -343,8 +343,8 @@ func Insert[E Entity](e *E) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -359,5 +359,4 @@ func Insert[E Entity](e *E) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

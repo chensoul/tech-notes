@@ -13,23 +13,23 @@
     var c,d byte = 0x11, 0x12
     println(Add(c,d)) // Add[byte](c, d)
 }
-</code></pre><p>通过这个例子我们可以看到，在没有泛型的情况下，我们需要针对不同类型重复实现相同的算法逻辑，比如上面例子提到的AddInt、AddInt64等。</p><p>这对于简单的、诸如上面这样的加法函数还可忍受，但对于复杂的算法，比如涉及复杂排序、查找、树、图等算法，以及一些容器类型（链表、栈、队列等）的实现时，缺少了泛型的支持还真是麻烦。</p><p>在没有泛型之前，Gopher们通常使用空接口类型interface{}，作为算法操作的对象的数据类型，不过这样做的不足之处也很明显：一是无法进行类型安全检查，二是性能有损失。</p><p><strong>那么回到前面的问题，既然泛型有这么多优点，为什么Go不早点加入泛型呢？</strong>其实这个问题在<a href="https://go.dev/doc/faq#generics">Go FAQ</a>中早有答案，我总结一下大概有三点主要理由：</p><ul>
-<li>这个语法特性不紧迫，不是Go早期的设计目标；</li>
-</ul><p>在Go诞生早期，很多基本语法特性的优先级都要高于泛型。此外，Go团队更多将语言的设计目标定位在规模化（scalability）、可读性、并发性上，泛型与这些主要目标关联性不强。等Go成熟后，Go团队会在适当时候引入泛型。</p><ul>
-<li>与简单的设计哲学有悖；</li>
-</ul><p>Go语言最吸睛的地方就是<strong>简单</strong>，简单也是Go设计哲学之首！但泛型这个语法特性会给语言带来复杂性，这种复杂性不仅体现在语法层面上引入了新的语法元素，也体现在类型系统和运行时层面上为支持泛型进行了复杂的实现。</p><ul>
-<li>尚未找到合适的、价值足以抵消其引入的复杂性的理想设计方案。</li>
-</ul><p>从Go开源那一天开始，Go团队就没有间断过对泛型的探索，并一直尝试寻找一个理想的泛型设计方案，但始终未能如愿。</p><p>直到近几年Go团队觉得Go已经逐渐成熟，是时候下决心解决Go社区主要关注的几个问题了，包括泛型、包依赖以及错误处理等，并安排伊恩·泰勒和罗伯特·格瑞史莫花费更多精力在泛型的设计方案上，这才有了在即将发布的Go 1.18版本中泛型语法特性的落地。</p><p>为了让你更清晰地看到Go团队在泛型上付出的努力，同时也能了解Go泛型的设计过程与来龙去脉，这里我简单整理了一个Go泛型设计的简史，你可以参考一下。</p><h2>Go泛型设计的简史</h2><p>Go核心团队对泛型的探索，是从<strong>2009年12月3日</strong>Russ Cox在其博客站点上发表的一篇文章开始的。在这篇叫<a href="https://research.swtch.com/generic">“泛型窘境”</a>的文章中，Russ Cox提出了Go泛型实现的三个可遵循的方法，以及每种方法的不足，也就是三个slow（拖慢）：</p><ul>
-<li><strong>拖慢程序员</strong>：不实现泛型，不会引入复杂性，但就像前面例子中那样，需要程序员花费精力重复实现AddInt、AddInt64等；</li>
-<li><strong>拖慢编译器</strong>：就像C++的泛型实现方案那样，通过增加编译器负担为每个类型实例生成一份单独的泛型函数的实现，这种方案产生了大量的代码，其中大部分是多余的，有时候还需要一个好的链接器来消除重复的拷贝；</li>
-<li><strong>拖慢执行性能</strong>：就像Java的泛型实现方案那样，通过隐式的装箱和拆箱操作消除类型差异，虽然节省了空间，但代码执行效率低。</li>
-</ul><p>在当时，三个slow之间需要取舍，就如同数据一致性的CAP原则一样，无法将三个slow同时消除。</p><p>之后，伊恩·泰勒主要负责跟进Go泛型方案的设计。从2010到2016年，伊恩·泰勒先后提出了几版泛型设计方案，它们是：</p><ul>
-<li>2010年6月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2010-06-type-functions.md">Type Functions</a>设计方案；</li>
-<li>2011年3月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2011-03-gen.md">Generalized Types</a>设计方案；</li>
-<li>2013年10月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2013-10-gen.md">Generalized Types设计方案更新版</a>；</li>
-<li>2013年12月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2013-12-type-params.md">Type Parameters</a>设计方案；</li>
-<li>2016年9月份，布莱恩·C·米尔斯提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2016-09-compile-time-functions.md">Compile-time Functions and First Class Types</a>设计方案。</li>
-</ul><p>虽然这些方案因为存在各种不足，最终都没有被接受，但这些探索为后续Go泛型的最终落地奠定了基础。</p><p>2017年7月，Russ Cox在GopherCon 2017大会上发表演讲“<a href="https://go.dev/blog/toward-go2">Toward Go 2</a>”，正式吹响Go向下一个阶段演化的号角，包括重点解决泛型、包依赖以及错误处理等Go社区最广泛关注的问题。</p><p>后来，在2018年8月，也就是GopherCon 2018大会结束后不久，Go核心团队发布了Go2 draft proposal，这里面涵盖了由伊恩·泰勒和罗伯特·格瑞史莫操刀主写的Go泛型的<a href="https://github.com/golang/proposal/blob/00fd2f65291738699cd265243559718f1fb7d8c5/design/go2draft-contracts.md">第一版draft proposal</a>。</p><p>这版设计草案引入了<strong>contract关键字</strong>来定义泛型类型参数（type parameter）的约束、类型参数放在普通函数参数列表前面的<strong>小括号</strong>中，并用type关键字声明。下面是这个草案的语法示例：</p><pre><code class="language-plain">// 第一版泛型技术草案中的典型泛型语法
+</code></pre><p>通过这个例子我们可以看到，在没有泛型的情况下，我们需要针对不同类型重复实现相同的算法逻辑，比如上面例子提到的AddInt、AddInt64等。</p><p>这对于简单的、诸如上面这样的加法函数还可忍受，但对于复杂的算法，比如涉及复杂排序、查找、树、图等算法，以及一些容器类型（链表、栈、队列等）的实现时，缺少了泛型的支持还真是麻烦。</p><p>在没有泛型之前，Gopher们通常使用空接口类型interface{}，作为算法操作的对象的数据类型，不过这样做的不足之处也很明显：一是无法进行类型安全检查，二是性能有损失。</p><p><strong>那么回到前面的问题，既然泛型有这么多优点，为什么Go不早点加入泛型呢？</strong>其实这个问题在<a href="https://go.dev/doc/faq#generics">Go FAQ</a>中早有答案，我总结一下大概有三点主要理由：</p>
+这个语法特性不紧迫，不是Go早期的设计目标；
+<p>在Go诞生早期，很多基本语法特性的优先级都要高于泛型。此外，Go团队更多将语言的设计目标定位在规模化（scalability）、可读性、并发性上，泛型与这些主要目标关联性不强。等Go成熟后，Go团队会在适当时候引入泛型。</p>
+与简单的设计哲学有悖；
+<p>Go语言最吸睛的地方就是<strong>简单</strong>，简单也是Go设计哲学之首！但泛型这个语法特性会给语言带来复杂性，这种复杂性不仅体现在语法层面上引入了新的语法元素，也体现在类型系统和运行时层面上为支持泛型进行了复杂的实现。</p>
+尚未找到合适的、价值足以抵消其引入的复杂性的理想设计方案。
+<p>从Go开源那一天开始，Go团队就没有间断过对泛型的探索，并一直尝试寻找一个理想的泛型设计方案，但始终未能如愿。</p><p>直到近几年Go团队觉得Go已经逐渐成熟，是时候下决心解决Go社区主要关注的几个问题了，包括泛型、包依赖以及错误处理等，并安排伊恩·泰勒和罗伯特·格瑞史莫花费更多精力在泛型的设计方案上，这才有了在即将发布的Go 1.18版本中泛型语法特性的落地。</p><p>为了让你更清晰地看到Go团队在泛型上付出的努力，同时也能了解Go泛型的设计过程与来龙去脉，这里我简单整理了一个Go泛型设计的简史，你可以参考一下。</p><h2>Go泛型设计的简史</h2><p>Go核心团队对泛型的探索，是从<strong>2009年12月3日</strong>Russ Cox在其博客站点上发表的一篇文章开始的。在这篇叫<a href="https://research.swtch.com/generic">“泛型窘境”</a>的文章中，Russ Cox提出了Go泛型实现的三个可遵循的方法，以及每种方法的不足，也就是三个slow（拖慢）：</p>
+<strong>拖慢程序员</strong>：不实现泛型，不会引入复杂性，但就像前面例子中那样，需要程序员花费精力重复实现AddInt、AddInt64等；
+<strong>拖慢编译器</strong>：就像C++的泛型实现方案那样，通过增加编译器负担为每个类型实例生成一份单独的泛型函数的实现，这种方案产生了大量的代码，其中大部分是多余的，有时候还需要一个好的链接器来消除重复的拷贝；
+<strong>拖慢执行性能</strong>：就像Java的泛型实现方案那样，通过隐式的装箱和拆箱操作消除类型差异，虽然节省了空间，但代码执行效率低。
+<p>在当时，三个slow之间需要取舍，就如同数据一致性的CAP原则一样，无法将三个slow同时消除。</p><p>之后，伊恩·泰勒主要负责跟进Go泛型方案的设计。从2010到2016年，伊恩·泰勒先后提出了几版泛型设计方案，它们是：</p>
+2010年6月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2010-06-type-functions.md">Type Functions</a>设计方案；
+2011年3月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2011-03-gen.md">Generalized Types</a>设计方案；
+2013年10月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2013-10-gen.md">Generalized Types设计方案更新版</a>；
+2013年12月份，伊恩·泰勒提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2013-12-type-params.md">Type Parameters</a>设计方案；
+2016年9月份，布莱恩·C·米尔斯提出的<a href="https://go.googlesource.com/proposal/+/master/design/15292/2016-09-compile-time-functions.md">Compile-time Functions and First Class Types</a>设计方案。
+<p>虽然这些方案因为存在各种不足，最终都没有被接受，但这些探索为后续Go泛型的最终落地奠定了基础。</p><p>2017年7月，Russ Cox在GopherCon 2017大会上发表演讲“<a href="https://go.dev/blog/toward-go2">Toward Go 2</a>”，正式吹响Go向下一个阶段演化的号角，包括重点解决泛型、包依赖以及错误处理等Go社区最广泛关注的问题。</p><p>后来，在2018年8月，也就是GopherCon 2018大会结束后不久，Go核心团队发布了Go2 draft proposal，这里面涵盖了由伊恩·泰勒和罗伯特·格瑞史莫操刀主写的Go泛型的<a href="https://github.com/golang/proposal/blob/00fd2f65291738699cd265243559718f1fb7d8c5/design/go2draft-contracts.md">第一版draft proposal</a>。</p><p>这版设计草案引入了<strong>contract关键字</strong>来定义泛型类型参数（type parameter）的约束、类型参数放在普通函数参数列表前面的<strong>小括号</strong>中，并用type关键字声明。下面是这个草案的语法示例：</p><pre><code class="language-plain">// 第一版泛型技术草案中的典型泛型语法
 
 contract stringer(x T) {
     var s string = x.String()
@@ -62,12 +62,12 @@ type SignedInteger interface {
 type SignedInteger interface {
 	~int | ~int8 | ~int16 | ~int32 | ~int64
 }
-</code></pre><p>那什么是type set（类型集合）呢？伊恩·泰勒给出了这个概念的定义：</p><ul>
-<li>每个类型都有一个type set；</li>
-<li>非接口类型的类型的type set中仅包含其自身。比如非接口类型T，它的type set中唯一的元素就是它自身：{T}；</li>
-<li>对于一个普通的、没有type list的普通接口类型来说，它的type set是一个无限集合。所有实现了这个接口类型所有方法的类型，都是该集合的一个元素，另外，由于该接口类型本身也声明了其所有方法，因此接口类型自身也是其Type set的一员；</li>
-<li>空接口类型interface{}的type set中囊括了所有可能的类型。</li>
-</ul><p>这样一来，我们可以试试用type set概念，重新表述一下一个类型T实现一个接口类型I。也就是当类型T是接口类型I的type set的一员时，T便实现了接口I；对于使用嵌入接口类型组合而成的接口类型，其type set就是其所有的嵌入的接口类型的type set的交集。</p><p>而对于一个带有自身Method的嵌入其他接口类型的接口类型，比如下面代码中的MyInterface3：</p><pre><code class="language-plain">type MyInterface3 interface {
+</code></pre><p>那什么是type set（类型集合）呢？伊恩·泰勒给出了这个概念的定义：</p>
+每个类型都有一个type set；
+非接口类型的类型的type set中仅包含其自身。比如非接口类型T，它的type set中唯一的元素就是它自身：{T}；
+对于一个普通的、没有type list的普通接口类型来说，它的type set是一个无限集合。所有实现了这个接口类型所有方法的类型，都是该集合的一个元素，另外，由于该接口类型本身也声明了其所有方法，因此接口类型自身也是其Type set的一员；
+空接口类型interface{}的type set中囊括了所有可能的类型。
+<p>这样一来，我们可以试试用type set概念，重新表述一下一个类型T实现一个接口类型I。也就是当类型T是接口类型I的type set的一员时，T便实现了接口I；对于使用嵌入接口类型组合而成的接口类型，其type set就是其所有的嵌入的接口类型的type set的交集。</p><p>而对于一个带有自身Method的嵌入其他接口类型的接口类型，比如下面代码中的MyInterface3：</p><pre><code class="language-plain">type MyInterface3 interface {
 	E1
 	E2
 	MyMethod03()
@@ -109,9 +109,9 @@ func main() {
     Sort[book](bookshelf) // 泛型函数调用
 }
 </code></pre><p>根据Go泛型的实现原理，上面的泛型函数调用Sort[book]（<a href="bookshelf">book</a>shelf）会分成两个阶段：</p><p>第一个阶段就是具化（instantiation）。</p><p>形象点说，<strong>具化（instantiation）就好比一家生产“排序机器”的工厂根据要排序的对象的类型，将这样的机器生产出来的过程</strong>。我们继续举前面的例子来分析一下，整个具化过程如下：</p><ol>
-<li>工厂接单：<strong>Sort[book]</strong>，发现要排序的对象类型为book；</li>
-<li>模具检查与匹配：检查book类型是否满足模具的约束要求（也就是是否实现了约束定义中的Less方法）。如果满足，就将其作为类型实参替换Sort函数中的类型形参，结果为<strong>Sort[book]</strong>，如果不满足，编译器就会报错；</li>
-<li>生产机器：将泛型函数Sort具化为一个<strong>新函数</strong>，这里我们把它起名为<strong>booksort</strong>，其函数原型为<strong>func([]book)</strong>。本质上<strong>booksort := Sort[book]</strong>。</li>
+工厂接单：<strong>Sort[book]</strong>，发现要排序的对象类型为book；
+模具检查与匹配：检查book类型是否满足模具的约束要求（也就是是否实现了约束定义中的Less方法）。如果满足，就将其作为类型实参替换Sort函数中的类型形参，结果为<strong>Sort[book]</strong>，如果不满足，编译器就会报错；
+生产机器：将泛型函数Sort具化为一个<strong>新函数</strong>，这里我们把它起名为<strong>booksort</strong>，其函数原型为<strong>func([]book)</strong>。本质上<strong>booksort := Sort[book]</strong>。
 </ol><p>第二阶段是调用（invocation）。</p><p>一旦“排序机器”被生产出来，那么它就可以对目标对象进行排序了，这和普通的函数调用没有区别。这里就相当于调用booksort（bookshelf），整个过程只需要检查传入的函数实参（bookshelf）的类型与booksort函数原型中的形参类型（[]book）是否匹配就可以了。</p><p>我们用伪代码来表述上面两个过程：</p><pre><code class="language-plain">Sort[book](bookshelf)
 
 &lt;=&gt;
@@ -133,11 +133,11 @@ func main() {
     iv.Dump()
     sv.Dump()
 }
-</code></pre><p>在这段代码中，我们在使用Vector[T]之前都显式用类型实参对泛型类型进行了具化，从而得到具化后的类型Vector[int]和Vector[string]。 Vector[int]的底层类型为[]int，Vector[string]的底层类型为[]string。然后我们再对具化后的类型进行操作。</p><p>以上就是Go泛型语法特性的一些主要语法概念，我们可以看到，泛型的加入确实进一步提高了程序员的开发效率，大幅提升了算法的重用性。</p><p>那么，Go泛型方案对Go程序的运行时性能又带来了哪些影响呢？我们接下来就来通过例子验证一下。</p><h2>Go泛型的性能</h2><p>我们创建一个性能基准测试的例子，参加这次测试的三位选手分别来自：</p><ul>
-<li>Go标准库sort包（非泛型版）的Ints函数；</li>
-<li>Go团队维护golang.org/x/exp/slices中的泛型版Sort函数；</li>
-<li>对golang.org/x/exp/slices中的泛型版Sort函数进行改造得到的、仅针对[]int进行排序的Sort函数。</li>
-</ul><p>相关的源码较多，我这里就不贴出来了，你可以到<a href="https://github.com/bigwhite/publication/tree/master/column/timegeek/go-first-course/go-generics">这里</a>下载相关源码。</p><p>下面是使用Go 1.18beta2版本在macOS上运行该测试的结果：</p><pre><code class="language-plain">$go test -bench .          
+</code></pre><p>在这段代码中，我们在使用Vector[T]之前都显式用类型实参对泛型类型进行了具化，从而得到具化后的类型Vector[int]和Vector[string]。 Vector[int]的底层类型为[]int，Vector[string]的底层类型为[]string。然后我们再对具化后的类型进行操作。</p><p>以上就是Go泛型语法特性的一些主要语法概念，我们可以看到，泛型的加入确实进一步提高了程序员的开发效率，大幅提升了算法的重用性。</p><p>那么，Go泛型方案对Go程序的运行时性能又带来了哪些影响呢？我们接下来就来通过例子验证一下。</p><h2>Go泛型的性能</h2><p>我们创建一个性能基准测试的例子，参加这次测试的三位选手分别来自：</p>
+Go标准库sort包（非泛型版）的Ints函数；
+Go团队维护golang.org/x/exp/slices中的泛型版Sort函数；
+对golang.org/x/exp/slices中的泛型版Sort函数进行改造得到的、仅针对[]int进行排序的Sort函数。
+<p>相关的源码较多，我这里就不贴出来了，你可以到<a href="https://github.com/bigwhite/publication/tree/master/column/timegeek/go-first-course/go-generics">这里</a>下载相关源码。</p><p>下面是使用Go 1.18beta2版本在macOS上运行该测试的结果：</p><pre><code class="language-plain">$go test -bench .          
 goos: darwin
 goarch: amd64
 pkg: demo
@@ -258,7 +258,7 @@ func ReadAll(r io.Reader) ([]byte, error)                 // 正确的作法
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ba/ce/fd45714f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -273,8 +273,8 @@ func ReadAll(r io.Reader) ([]byte, error)                 // 正确的作法
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/4c/12/f0c145d4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -289,8 +289,8 @@ func ReadAll(r io.Reader) ([]byte, error)                 // 正确的作法
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/42/65/5bfd0a65.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -305,8 +305,8 @@ func ReadAll(r io.Reader) ([]byte, error)                 // 正确的作法
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/72/65/68bd8177.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -321,8 +321,8 @@ func ReadAll(r io.Reader) ([]byte, error)                 // 正确的作法
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/c6/14/cbbdb191.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -337,5 +337,4 @@ func ReadAll(r io.Reader) ([]byte, error)                 // 正确的作法
   </div>
 </div>
 </div>
-</li>
-</ul>
+

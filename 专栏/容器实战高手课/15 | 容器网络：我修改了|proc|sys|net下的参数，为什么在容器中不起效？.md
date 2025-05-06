@@ -264,12 +264,12 @@ proc /proc/sys proc ro,relatime 0 0
 
 为什么“/proc/sys/” 在容器里是只读mount呢？ 这是因为runC当初出于安全的考虑，把容器中所有/proc和/sys相关的目录缺省都做了read-only mount的处理。详细的说明你可以去看看这两个commits:
 
-<li>
+
 [Mount /proc and /sys read-only, except in privileged containers](https://github.com/opencontainers/runc/commit/5a6b042e5395660ac8a6e3cc33227ca66df7c835)
-</li>
-<li>
+
+
 [Make /proc writable, but not /proc/sys and /proc/sysrq-trigger](https://github.com/opencontainers/runc/commit/73c607b7ad5cea5c913f96dff17bca668534ad18)
-</li>
+
 
 那我们应该怎么来修改容器中Network Namespace的网络参数呢？
 

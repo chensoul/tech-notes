@@ -166,8 +166,8 @@ HotSpot虚拟机中，intrinsic的实现方式分为两种。
 除了`Unsafe`类的方法之外，HotSpot虚拟机中的intrinsic还包括下面的几种。
 
 1. `StringBuilder`和`StringBuffer`类的方法。HotSpot虚拟机将优化利用这些方法构造字符串的方式，以尽量减少需要复制内存的情况。
-<li>`String`类、`StringLatin1`类、`StringUTF16`类和`Arrays`类的方法。HotSpot虚拟机将使用SIMD指令（single instruction multiple data，即用一条指令处理多个数据）对这些方法进行优化。<br />
-举个例子，`Arrays.equals(byte[], byte[])`方法原本是逐个字节比较，在使用了SIMD指令之后，可以放入16字节的XMM寄存器中（甚至是64字节的ZMM寄存器中）批量比较。</li>
+`String`类、`StringLatin1`类、`StringUTF16`类和`Arrays`类的方法。HotSpot虚拟机将使用SIMD指令（single instruction multiple data，即用一条指令处理多个数据）对这些方法进行优化。<br />
+举个例子，`Arrays.equals(byte[], byte[])`方法原本是逐个字节比较，在使用了SIMD指令之后，可以放入16字节的XMM寄存器中（甚至是64字节的ZMM寄存器中）批量比较。
 1. 基本类型的包装类、`Object`类、`Math`类、`System`类中各个功能性方法，反射API、`MethodHandle`类中与调用机制相关的方法，压缩、加密相关方法。这部分intrinsic则比较简单，这里就不详细展开了。如果你有感兴趣的，可以自行查阅资料，或者在文末留言。
 
 如果你想知道HotSpot虚拟机定义的所有intrinsic，那么你可以直接查阅OpenJDK代码[2]。（该链接是Java 12的intrinsic列表。Java 8的intrinsic列表可以查阅这一链接[3]。）

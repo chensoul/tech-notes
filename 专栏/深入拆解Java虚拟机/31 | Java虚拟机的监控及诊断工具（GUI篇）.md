@@ -67,8 +67,8 @@ JFR的性能开销很小，在默认配置下平均低于1%。与其他工具相
 1. 瞬时事件（Instant Event），用户关心的是它们发生与否，例如异常、线程启动事件。
 1. 持续事件（Duration Event），用户关心的是它们的持续时间，例如垃圾回收事件。
 1. 计时事件（Timed Event），是时长超出指定阈值的持续事件。
-<li>取样事件（Sample Event），是周期性取样的事件。<br />
-取样事件的其中一个常见例子便是方法抽样（Method Sampling），即每隔一段时间统计各个线程的栈轨迹。如果在这些抽样取得的栈轨迹中存在一个反复出现的方法，那么我们可以推测该方法是热点方法。</li>
+取样事件（Sample Event），是周期性取样的事件。<br />
+取样事件的其中一个常见例子便是方法抽样（Method Sampling），即每隔一段时间统计各个线程的栈轨迹。如果在这些抽样取得的栈轨迹中存在一个反复出现的方法，那么我们可以推测该方法是热点方法。
 
 JFR的取样事件要比其他工具更加精确。以方法抽样为例，其他工具通常基于JVMTI（[Java Virtual Machine Tool Interface](https://docs.oracle.com/en/java/javase/11/docs/specs/jvmti.html)）的`GetAllStackTraces` API。该API依赖于安全点机制，其获得的栈轨迹总是在安全点上，由此得出的结论未必精确。JFR则不然，它不依赖于安全点机制，因此其结果相对来说更加精确。
 

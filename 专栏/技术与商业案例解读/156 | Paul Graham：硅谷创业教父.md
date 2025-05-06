@@ -38,15 +38,15 @@ Hacker News自然是成名了，但是Arc没有什么人搭理。作为LISP骨�
 
 和对LISP偏爱齐名，乃至更有名的是他对创业的热爱。格雷厄姆在自己论坛上写的文章，不只是LISP，更有他对创业的思考，这些文章前后时间跨度很大，也文章非常多，也造成了非常广泛的影响。我个人比较推崇下面几篇，排名不分先后：
 
-<li>
+
 How to Get Startup Ideas
-</li>
-<li>
+
+
 Do Things That Don’t Scale
-</li>
-<li>
+
+
 Startup=Growth
-</li>
+
 
 除了写文章表达他对创业的热爱和看法，他还在2005年与老搭档罗伯特·莫里斯（Robert Morris）等人共同创办了Y Combinator，给创业公司提供孵化器模式。顺便说一句，合伙人之一的杰西卡·利文斯通（Jessica Livingston）后来成了他的老婆。
 

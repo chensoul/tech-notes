@@ -60,20 +60,20 @@ PageRank被提出后不久，就有学者开始针对PageRank模型和算法的�
 
 **参考文献**
 
-<li>
+
 Sergey Brin and Lawrence Page. The anatomy of a large-scale hypertextual Web search engine. **Proceedings of the seventh international conference on World Wide Web 7 (WWW7)**, Philip H. Enslow, Jr. and Allen Ellis (Eds.). Elsevier Science Publishers B. V., Amsterdam, The Netherlands, The Netherlands, 107-117, 1998.
-</li>
-<li>
+
+
 Langville, Amy N.; Meyer, Carl D. Deeper Inside PageRank. **Internet Math**. no. 3, 335-380, 2003.
-</li>
+
 
 **论文链接**
 
-<li>
+
 [The anatomy of a large-scale hypertextual Web search engine](http://infolab.stanford.edu/~backrub/google.html)
-</li>
-<li>
+
+
 [Deeper Inside PageRank](http://meyer.math.ncsu.edu/Meyer/PS_Files/DeeperInsidePR.pdf)
-</li>
+
 
 

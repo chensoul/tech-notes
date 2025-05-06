@@ -1,8 +1,8 @@
 <audio title="32｜实战演练：玩转Kubernetes（3）" src="https://static001.geekbang.org/resource/audio/6e/f2/6e8f32130cf704efd9362035f6f937f2.mp3" controls="controls"></audio> 
-<p>你好，我是Chrono。</p><p>到今天，我们的“高级篇”课程也要结束了。比起前面的“初级篇”“中级篇”来说，这里的知识点比较多，难度也要高一些。如果你能够一篇不漏地学习下来，相信一定对Kubernetes有更深层次的认识和理解。</p><p>今天的这节课还是来对前面的知识做回顾与总结，提炼出文章里的学习要点和重点，你也可以顺便检验一下自己的掌握程度，试试在不回看课程的情况下，自己能不能流畅说出关联的操作细节。</p><p>复习之后，我们就来进行最后一次实战演练了。首先会继续改进贯穿课程始终的WordPress网站，把MariaDB改成StatefulSet，加上NFS持久化存储；然后我们会在Kubernetes集群里安装Dashboard，综合实践Ingress、namespace的用法。</p><h2>要点回顾一：API对象</h2><p>“高级篇”可以分成三个部分，第一部分讲的是PersistentVolume、StatefulSet等API对象。</p><p>（<a href="https://time.geekbang.org/column/article/542376">24讲</a>）<strong>PersistentVolume简称PV，是Kubernetes对持久化存储的抽象</strong>，代表了LocalDisk、NFS、Ceph等存储设备，和CPU、内存一样，属于集群的公共资源。</p><p>因为不同存储设备之间的差异很大，为了更好地描述PV特征，就出现了StorageClass，它的作用是分类存储设备，让我们更容易去选择PV对象。</p><!-- [[[read_end]]] --><p>PV一般由系统管理员来创建，我们如果要使用PV就要用PVC（PersistentVolumeClaim）去申请，说清楚需求的容量、访问模式等参数，然后Kubernetes就会查找最合适的PV分配给我们使用。</p><p>（<a href="https://time.geekbang.org/column/article/542458">25讲</a>）手动创建PV的工作量很大，麻烦而且容易出错，所以就有了“动态存储卷”的概念，需要<strong>在StorageClass里绑定一个Provisioner对象，由它来代替人工，根据PVC自动创建出符合要求的PV</strong>。</p><p>有了PV和PVC，我们就可以在Pod里用“persistentVolumeClaim”来引用PVC，创建出可供容器使用的Volume，然后在容器里用“volumeMounts”把它挂载到某个路径上，这样容器就可以读写PV，实现数据的持久化存储了。</p><p>（<a href="https://time.geekbang.org/column/article/547750">26讲</a>）持久化存储的一个重要应用领域就是保存应用的状态数据，<strong>管理有状态的应用，就要使用新的对象StatefulSet</strong>，可以认为它是管理无状态应用对象Deployment的一个特例。</p><p>StatefulSet对象的YAML描述和Deployment非常像，“spec”里只是多了一个“serviceName”字段，但它部署应用的方式却与Deployment差距很大。</p><p>Deployment创建的Pod是随机的名字，而StatefulSet会对Pod顺序编号、顺序创建，保证应用有一个确定的启动先后次序，这样就可以实现主从、主备等关系。</p><p>在使用Service为StatefulSet创建服务的时候，它也会为每个Pod单独创建域名，同样也是顺序编号，保证Pod有稳定的网络标识，外部用户就可以用这个域名来准确地访问到某个具体的Pod。</p><p>StatefulSet还使用“volumeClaimTemplates”字段来定义持久化存储，里面其实就是一个PVC，每个Pod可以用这个模板来生成自己的PVC去申请PV，实现存储卷与Pod的独立绑定。</p><p>通过<strong>启动顺序、稳定域名和存储模板</strong>这三个关键能力，StatefulSet就可以很好地处理Redis、MySQL等有状态应用了。</p><h2>要点回顾二：应用管理</h2><p>“高级篇”第二部分讲的是应用管理，包括滚动更新、资源配额和健康检查等内容。</p><p>（<a href="https://time.geekbang.org/column/article/547301">27讲</a>）在Kubernetes里部署好应用后，我们还需要对它做持续的运维管理，其中一项任务是版本的更新和回退。</p><p>版本更新很简单，只要编写一个新的YAML（Deployment、DaemonSet、StatefulSet），再用 <code>kubectl apply</code> 应用就可以了。Kubernetes采用的是<strong>“滚动更新”策略，实际上是两个同步进行的“扩容”和“缩容”动作</strong>，这样在更新的过程中始终会有Pod处于可用状态，能够平稳地对外提供服务。</p><p>应用的更新历史可以用命令 <code>kubectl rollout history</code> 查看，如果有什么意外，就可以用 <code>kubectl rollout undo</code> 来回退。这两个命令相当于给我们的更新流程上了一个保险，可以放心大胆操作，失败就用“S/L大法”。</p><p>（<a href="https://time.geekbang.org/column/article/548736">28讲</a>）为了让Pod里的容器能够稳定运行，我们可以采用<strong>资源配额</strong>和<strong>检查探针</strong>这两种手段。</p><p>资源配额能够限制容器申请的CPU和内存数量，不至于过多或者过少，保持在一个合理的程度，更有利于Kubernetes调度。</p><p>检查探针是Kubernetes内置的应用监控工具，有Startup、Liveness、Readiness三种，分别探测启动、存活、就绪状态，探测的方式也有exec、tcpSocket、httpGet三种。组合运用这些就可以灵活地检查容器的状态，Kubernetes发现不可用就会重启容器，让应用在总体上处于健康水平。</p><h2>要点回顾三：集群管理</h2><p>“高级篇”第三部分讲的是集群管理，有名字空间、系统监控和网络通信等知识点。</p><p>（<a href="https://time.geekbang.org/column/article/548750">29讲</a>）Kubernetes的集群里虽然有很多计算资源，但毕竟是有限的，除了要给Pod加上资源配额，我们也要为集群加上资源配额，方法就是用名字空间，把整体的资源池切分成多个小块，按需分配给不同的用户使用。</p><p>名字空间的资源配额使用的是“ResourceQuota”，除了基本的CPU和内存，它还能够限制存储容量和各种API对象的数量，这样就可以避免多用户互相挤占，更高效地利用集群资源。</p><p>（<a href="https://time.geekbang.org/column/article/550598">30讲</a>）系统监控是集群管理的另一个重要方面，Kubernetes提供了Metrics Server和Prometheus两个工具：</p><ul>
-<li><strong>Metrics Server</strong>专门用来收集Kubernetes核心资源指标，可以用 <code>kubectl top</code> 来查看集群的状态，它也是水平自动伸缩对象HorizontalPodAutoscaler的前提条件。</li>
-<li><strong>Prometheus</strong>，继Kubernetes之后的第二个CNCF毕业项目，是云原生监控领域的“事实标准”，在集群里部署之后就可以用Grafana可视化监控各种指标，还可以集成自动报警等功能。</li>
-</ul><p>（<a href="https://time.geekbang.org/column/article/551711">31讲</a>）对于底层的基础网络设施，Kubernetes定义了平坦的网络模型“IP-per-pod”，实现它就要符合CNI标准。常用的网络插件有Flannel、Calico、Cilium等，Flannel使用Overlay模式，性能较低，Calico使用Route模式，性能较高。</p><p>现在，“高级篇”的众多知识要点我们都完整地过了一遍，你是否已经都理解、掌握了它们呢？</p><h2>搭建WordPress网站</h2><p>接下来我们就来在<a href="https://time.geekbang.org/column/article/539420">第22讲</a>的基础上继续优化WordPress网站，其中的关键是让数据库MariaDB实现数据持久化。</p><p>网站的整体架构图变化不大，前面的Nginx、WordPress还是原样，只需要修改MariaDB：</p><p><img src="https://static001.geekbang.org/resource/image/7c/1b/7cd3726d03ae12172b9073d1abf9fe1b.jpg?wh=1920x967" alt="图片"></p><p>因为MariaDB由Deployment改成了StatefulSet，所以我们要修改YAML，添加“serviceName”“volumeClaimTemplates”这两个字段，定义网络标识和NFS动态存储卷，然后在容器部分用“volumeMounts”挂载到容器里的数据目录“/var/lib/mysql”。</p><p>修改后的YAML就是这个样子：</p><pre><code class="language-yaml">apiVersion: apps/v1
+<p>你好，我是Chrono。</p><p>到今天，我们的“高级篇”课程也要结束了。比起前面的“初级篇”“中级篇”来说，这里的知识点比较多，难度也要高一些。如果你能够一篇不漏地学习下来，相信一定对Kubernetes有更深层次的认识和理解。</p><p>今天的这节课还是来对前面的知识做回顾与总结，提炼出文章里的学习要点和重点，你也可以顺便检验一下自己的掌握程度，试试在不回看课程的情况下，自己能不能流畅说出关联的操作细节。</p><p>复习之后，我们就来进行最后一次实战演练了。首先会继续改进贯穿课程始终的WordPress网站，把MariaDB改成StatefulSet，加上NFS持久化存储；然后我们会在Kubernetes集群里安装Dashboard，综合实践Ingress、namespace的用法。</p><h2>要点回顾一：API对象</h2><p>“高级篇”可以分成三个部分，第一部分讲的是PersistentVolume、StatefulSet等API对象。</p><p>（<a href="https://time.geekbang.org/column/article/542376">24讲</a>）<strong>PersistentVolume简称PV，是Kubernetes对持久化存储的抽象</strong>，代表了LocalDisk、NFS、Ceph等存储设备，和CPU、内存一样，属于集群的公共资源。</p><p>因为不同存储设备之间的差异很大，为了更好地描述PV特征，就出现了StorageClass，它的作用是分类存储设备，让我们更容易去选择PV对象。</p><!-- [[[read_end]]] --><p>PV一般由系统管理员来创建，我们如果要使用PV就要用PVC（PersistentVolumeClaim）去申请，说清楚需求的容量、访问模式等参数，然后Kubernetes就会查找最合适的PV分配给我们使用。</p><p>（<a href="https://time.geekbang.org/column/article/542458">25讲</a>）手动创建PV的工作量很大，麻烦而且容易出错，所以就有了“动态存储卷”的概念，需要<strong>在StorageClass里绑定一个Provisioner对象，由它来代替人工，根据PVC自动创建出符合要求的PV</strong>。</p><p>有了PV和PVC，我们就可以在Pod里用“persistentVolumeClaim”来引用PVC，创建出可供容器使用的Volume，然后在容器里用“volumeMounts”把它挂载到某个路径上，这样容器就可以读写PV，实现数据的持久化存储了。</p><p>（<a href="https://time.geekbang.org/column/article/547750">26讲</a>）持久化存储的一个重要应用领域就是保存应用的状态数据，<strong>管理有状态的应用，就要使用新的对象StatefulSet</strong>，可以认为它是管理无状态应用对象Deployment的一个特例。</p><p>StatefulSet对象的YAML描述和Deployment非常像，“spec”里只是多了一个“serviceName”字段，但它部署应用的方式却与Deployment差距很大。</p><p>Deployment创建的Pod是随机的名字，而StatefulSet会对Pod顺序编号、顺序创建，保证应用有一个确定的启动先后次序，这样就可以实现主从、主备等关系。</p><p>在使用Service为StatefulSet创建服务的时候，它也会为每个Pod单独创建域名，同样也是顺序编号，保证Pod有稳定的网络标识，外部用户就可以用这个域名来准确地访问到某个具体的Pod。</p><p>StatefulSet还使用“volumeClaimTemplates”字段来定义持久化存储，里面其实就是一个PVC，每个Pod可以用这个模板来生成自己的PVC去申请PV，实现存储卷与Pod的独立绑定。</p><p>通过<strong>启动顺序、稳定域名和存储模板</strong>这三个关键能力，StatefulSet就可以很好地处理Redis、MySQL等有状态应用了。</p><h2>要点回顾二：应用管理</h2><p>“高级篇”第二部分讲的是应用管理，包括滚动更新、资源配额和健康检查等内容。</p><p>（<a href="https://time.geekbang.org/column/article/547301">27讲</a>）在Kubernetes里部署好应用后，我们还需要对它做持续的运维管理，其中一项任务是版本的更新和回退。</p><p>版本更新很简单，只要编写一个新的YAML（Deployment、DaemonSet、StatefulSet），再用 <code>kubectl apply</code> 应用就可以了。Kubernetes采用的是<strong>“滚动更新”策略，实际上是两个同步进行的“扩容”和“缩容”动作</strong>，这样在更新的过程中始终会有Pod处于可用状态，能够平稳地对外提供服务。</p><p>应用的更新历史可以用命令 <code>kubectl rollout history</code> 查看，如果有什么意外，就可以用 <code>kubectl rollout undo</code> 来回退。这两个命令相当于给我们的更新流程上了一个保险，可以放心大胆操作，失败就用“S/L大法”。</p><p>（<a href="https://time.geekbang.org/column/article/548736">28讲</a>）为了让Pod里的容器能够稳定运行，我们可以采用<strong>资源配额</strong>和<strong>检查探针</strong>这两种手段。</p><p>资源配额能够限制容器申请的CPU和内存数量，不至于过多或者过少，保持在一个合理的程度，更有利于Kubernetes调度。</p><p>检查探针是Kubernetes内置的应用监控工具，有Startup、Liveness、Readiness三种，分别探测启动、存活、就绪状态，探测的方式也有exec、tcpSocket、httpGet三种。组合运用这些就可以灵活地检查容器的状态，Kubernetes发现不可用就会重启容器，让应用在总体上处于健康水平。</p><h2>要点回顾三：集群管理</h2><p>“高级篇”第三部分讲的是集群管理，有名字空间、系统监控和网络通信等知识点。</p><p>（<a href="https://time.geekbang.org/column/article/548750">29讲</a>）Kubernetes的集群里虽然有很多计算资源，但毕竟是有限的，除了要给Pod加上资源配额，我们也要为集群加上资源配额，方法就是用名字空间，把整体的资源池切分成多个小块，按需分配给不同的用户使用。</p><p>名字空间的资源配额使用的是“ResourceQuota”，除了基本的CPU和内存，它还能够限制存储容量和各种API对象的数量，这样就可以避免多用户互相挤占，更高效地利用集群资源。</p><p>（<a href="https://time.geekbang.org/column/article/550598">30讲</a>）系统监控是集群管理的另一个重要方面，Kubernetes提供了Metrics Server和Prometheus两个工具：</p>
+<strong>Metrics Server</strong>专门用来收集Kubernetes核心资源指标，可以用 <code>kubectl top</code> 来查看集群的状态，它也是水平自动伸缩对象HorizontalPodAutoscaler的前提条件。
+<strong>Prometheus</strong>，继Kubernetes之后的第二个CNCF毕业项目，是云原生监控领域的“事实标准”，在集群里部署之后就可以用Grafana可视化监控各种指标，还可以集成自动报警等功能。
+<p>（<a href="https://time.geekbang.org/column/article/551711">31讲</a>）对于底层的基础网络设施，Kubernetes定义了平坦的网络模型“IP-per-pod”，实现它就要符合CNI标准。常用的网络插件有Flannel、Calico、Cilium等，Flannel使用Overlay模式，性能较低，Calico使用Route模式，性能较高。</p><p>现在，“高级篇”的众多知识要点我们都完整地过了一遍，你是否已经都理解、掌握了它们呢？</p><h2>搭建WordPress网站</h2><p>接下来我们就来在<a href="https://time.geekbang.org/column/article/539420">第22讲</a>的基础上继续优化WordPress网站，其中的关键是让数据库MariaDB实现数据持久化。</p><p>网站的整体架构图变化不大，前面的Nginx、WordPress还是原样，只需要修改MariaDB：</p><p><img src="https://static001.geekbang.org/resource/image/7c/1b/7cd3726d03ae12172b9073d1abf9fe1b.jpg?wh=1920x967" alt="图片"></p><p>因为MariaDB由Deployment改成了StatefulSet，所以我们要修改YAML，添加“serviceName”“volumeClaimTemplates”这两个字段，定义网络标识和NFS动态存储卷，然后在容器部分用“volumeMounts”挂载到容器里的数据目录“/var/lib/mysql”。</p><p>修改后的YAML就是这个样子：</p><pre><code class="language-yaml">apiVersion: apps/v1
 kind: StatefulSet
 metadata:
 &nbsp; labels:
@@ -61,12 +61,12 @@ data:
 &nbsp; PASSWORD: '123'
 &nbsp; NAME: 'db'
 </code></pre><p>改完这两个YAML，我们就可以逐个创建MariaDB、WordPress、Ingress等对象了。</p><p>和之前一样，访问NodePort的“30088”端口，或者是用Ingress Controller的“wp.test”域名，都可以进入WordPress网站：</p><p><img src="https://static001.geekbang.org/resource/image/fc/46/fc3b52f96f138f01b23e3a7487730746.png?wh=916x1166" alt="图片"></p><p>StatefulSet的持久化存储是否生效了呢？</p><p>你可以把这些对象都删除后重新创建，再进入网站，看看是否原来的数据依然存在。或者更简单一点，直接查看NFS的存储目录，应该可以看到MariaDB生成的一些数据库文件：</p><p><img src="https://static001.geekbang.org/resource/image/42/18/428886b77e4797dc7ded5a43yyc0b218.png?wh=1920x124" alt="图片"></p><p>这两种方式都能够证明，我们的MariaDB使用StatefulSet部署后数据已经保存在了磁盘上，不会因为对象的销毁而丢失。</p><p>到这里，第一个小实践你就已经完成了，给自己鼓鼓劲，我们一起来做第二个实践，在Kubernetes集群里安装Dashboard。</p><h2>部署Dashboard</h2><p>在“初级篇”的实战演练课里（<a href="https://time.geekbang.org/column/article/534644">第15讲</a>），我简单介绍了Kubernetes的图形管理界面，也就是Dashboard，不知道你是否还有印象。当时Dashboard是直接内置在minikube里的，不需要安装，一个命令启动，就能在浏览器里直观地管理Kubernetes集群了，非常方便。</p><p>那现在我们用kubeadm部署了实际的多节点集群，能否也用上Dashboard呢？接下来我就带你来一起动手，从零开始安装Dashboard。</p><p>首先，你应该先去Dashboard的项目网站（<a href="https://github.com/kubernetes/dashboard">https://github.com/kubernetes/dashboard</a>），看一下它的说明文档，了解一下它的基本情况。</p><p>它的安装很简单，只需要一个YAML文件，可以直接下载：</p><pre><code class="language-plain">wget https://raw.githubusercontent.com/kubernetes/dashboard/v2.6.0/aio/deploy/recommended.yaml
-</code></pre><p>这个YAML里包含了很多对象，虽然文件比较大，但现在的你应该基本都能够看懂了，要点有这么几个：</p><ul>
-<li>所有的对象都属于“kubernetes-dashboard”名字空间。</li>
-<li>Dashboard使用Deployment部署了一个实例，端口号是8443。</li>
-<li>容器启用了Liveness探针，使用HTTPS方式检查存活状态。</li>
-<li>Service对象使用的是443端口，它映射了Dashboard的8443端口。</li>
-</ul><p>使用命令 <code>kubectl apply</code> 就可以轻松部署Dashboard了：</p><pre><code class="language-plain">kubectl apply -f dashboard.yaml
+</code></pre><p>这个YAML里包含了很多对象，虽然文件比较大，但现在的你应该基本都能够看懂了，要点有这么几个：</p>
+所有的对象都属于“kubernetes-dashboard”名字空间。
+Dashboard使用Deployment部署了一个实例，端口号是8443。
+容器启用了Liveness探针，使用HTTPS方式检查存活状态。
+Service对象使用的是443端口，它映射了Dashboard的8443端口。
+<p>使用命令 <code>kubectl apply</code> 就可以轻松部署Dashboard了：</p><pre><code class="language-plain">kubectl apply -f dashboard.yaml
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/c5/79/c56f8936e187047a2b7d100f7ae0f779.png?wh=1586x250" alt="图片"></p><h2>部署Ingress/Ingress Controller</h2><p>不过，为了给我们的实战增加一点难度，我们可以在前面配一个Ingress入口，用反向代理的方式来访问它。</p><p>由于Dashboard默认使用的是加密的HTTPS协议，拒绝明文HTTP访问，所以我们要先生成证书，让Ingress也走HTTPS协议。</p><p>简单起见，我直接用Linux里的命令行工具“openssl”来生成一个自签名的证书（如果你有条件，也可以考虑找CA网站申请免费证书）：</p><pre><code class="language-plain">openssl req -x509 -days 365 -out k8s.test.crt -keyout k8s.test.key \
 &nbsp; -newkey rsa:2048 -nodes -sha256 \
 &nbsp; &nbsp; -subj '/CN=k8s.test' -extensions EXT -config &lt;( \
@@ -278,7 +278,7 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2f/85/6f/1654f4b9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,8 +293,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/oib0a89lqtOhJL1UvfUp4uTsRLrDbhoGk9jLiciazxMu0COibJsFCZDypK1ZFcHEJc9d9qgbjvgR41ImL6FNPoVlWA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -309,8 +309,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/95/af/b7f8dc43.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -325,8 +325,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/c7/89/16437396.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -341,8 +341,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/45/a9/3d48d6a2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -357,8 +357,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2f/85/6f/1654f4b9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/99/87/98ebb20e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/8b/06/fb3be14a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/33/27/e5a74107.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,8 +437,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -453,8 +453,8 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/98/ad/f9d755f2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -469,5 +469,4 @@ kubectl describe secrets -n kubernetes-dashboard admin-user-token-xxxx
   </div>
 </div>
 </div>
-</li>
-</ul>
+

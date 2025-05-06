@@ -1,12 +1,12 @@
 <audio title="30 _ ORM：CURD 神器 GORM 包介绍及实战" src="https://static001.geekbang.org/resource/audio/45/6b/4516bc60yya708d0b2155cb61f12be6b.mp3" controls="controls"></audio> 
-<p>你好，我是孔令飞。</p><p>在用Go开发项目时，我们免不了要和数据库打交道。每种语言都有优秀的ORM可供选择，在Go中也不例外，比如<a href="https://github.com/go-gorm/gorm">gorm</a>、<a href="https://github.com/go-xorm/xorm">xorm</a>、<a href="https://github.com/gohouse/gorose">gorose</a>等。目前，GitHub上 star数最多的是GORM，它也是当前Go项目中使用最多的ORM。</p><p>IAM项目也使用了GORM。这一讲，我就来详细讲解下GORM的基础知识，并介绍iam-apiserver是如何使用GORM，对数据进行CURD操作的。</p><h2>GORM基础知识介绍</h2><p>GORM是Go语言的ORM包，功能强大，调用方便。像腾讯、华为、阿里这样的大厂，都在使用GORM来构建企业级的应用。GORM有很多特性，开发中常用的核心特性如下：</p><ul>
-<li>功能全。使用ORM操作数据库的接口，GORM都有，可以满足我们开发中对数据库调用的各类需求。</li>
-<li>支持钩子方法。这些钩子方法可以应用在Create、Save、Update、Delete、Find方法中。</li>
-<li>开发者友好，调用方便。</li>
-<li>支持Auto Migration。</li>
-<li>支持关联查询。</li>
-<li>支持多种关系数据库，例如MySQL、Postgres、SQLite、SQLServer等。</li>
-</ul><p>GORM有两个版本，<a href="https://github.com/jinzhu/gorm">V1</a>和<a href="https://github.com/go-gorm/gorm">V2</a>。遵循用新不用旧的原则，IAM项目使用了最新的V2版本。</p><!-- [[[read_end]]] --><h2>通过示例学习GORM</h2><p>接下来，我们先快速看一个使用GORM的示例，通过该示例来学习GORM。示例代码存放在<a href="https://github.com/marmotedu/gopractise-demo/blob/main/gorm/main.go">marmotedu/gopractise-demo/gorm/main.go</a>文件中。因为代码比较长，你可以使用以下命令克隆到本地查看：</p><pre><code class="language-bash">$ mkdir -p $GOPATH/src/github.com/marmotedu
+<p>你好，我是孔令飞。</p><p>在用Go开发项目时，我们免不了要和数据库打交道。每种语言都有优秀的ORM可供选择，在Go中也不例外，比如<a href="https://github.com/go-gorm/gorm">gorm</a>、<a href="https://github.com/go-xorm/xorm">xorm</a>、<a href="https://github.com/gohouse/gorose">gorose</a>等。目前，GitHub上 star数最多的是GORM，它也是当前Go项目中使用最多的ORM。</p><p>IAM项目也使用了GORM。这一讲，我就来详细讲解下GORM的基础知识，并介绍iam-apiserver是如何使用GORM，对数据进行CURD操作的。</p><h2>GORM基础知识介绍</h2><p>GORM是Go语言的ORM包，功能强大，调用方便。像腾讯、华为、阿里这样的大厂，都在使用GORM来构建企业级的应用。GORM有很多特性，开发中常用的核心特性如下：</p>
+功能全。使用ORM操作数据库的接口，GORM都有，可以满足我们开发中对数据库调用的各类需求。
+支持钩子方法。这些钩子方法可以应用在Create、Save、Update、Delete、Find方法中。
+开发者友好，调用方便。
+支持Auto Migration。
+支持关联查询。
+支持多种关系数据库，例如MySQL、Postgres、SQLite、SQLServer等。
+<p>GORM有两个版本，<a href="https://github.com/jinzhu/gorm">V1</a>和<a href="https://github.com/go-gorm/gorm">V2</a>。遵循用新不用旧的原则，IAM项目使用了最新的V2版本。</p><!-- [[[read_end]]] --><h2>通过示例学习GORM</h2><p>接下来，我们先快速看一个使用GORM的示例，通过该示例来学习GORM。示例代码存放在<a href="https://github.com/marmotedu/gopractise-demo/blob/main/gorm/main.go">marmotedu/gopractise-demo/gorm/main.go</a>文件中。因为代码比较长，你可以使用以下命令克隆到本地查看：</p><pre><code class="language-bash">$ mkdir -p $GOPATH/src/github.com/marmotedu
 $ cd $GOPATH/src/github.com/marmotedu
 $ git clone https://github.com/marmotedu/gopractise-demo
 $ cd gopractise-demo/gorm/
@@ -16,14 +16,14 @@ $ cd gopractise-demo/gorm/
 2020/10/17 15:15:51 totalcount: 1
 2020/10/17 15:15:51 	code: D42, price: 200
 2020/10/17 15:15:51 totalcount: 0
-</code></pre><p>在企业级Go项目开发中，使用GORM库主要用来完成以下数据库操作：</p><ul>
-<li>连接和关闭数据库。连接数据库时，可能需要设置一些参数，比如最大连接数、最大空闲连接数、最大连接时长等。</li>
-<li>插入表记录。可以插入一条记录，也可以批量插入记录。</li>
-<li>更新表记录。可以更新某一个字段，也可以更新多个字段。</li>
-<li>查看表记录。可以查看某一条记录，也可以查看符合条件的记录列表。</li>
-<li>删除表记录。可以删除某一个记录，也可以批量删除。删除还支持永久删除和软删除。</li>
-<li>在一些小型项目中，还会用到GORM的表结构自动迁移功能。</li>
-</ul><p>GORM功能强大，上面的示例代码展示的是比较通用的一种操作方式。</p><p>上述代码中，首先定义了一个GORM模型（Models），Models是标准的Go struct，用来代表数据库中的一个表结构。我们可以给 Models 添加 TableName 方法，来告诉 GORM 该Models映射到数据库中的哪张表。Models定义如下：</p><pre><code class="language-go">type Product struct {
+</code></pre><p>在企业级Go项目开发中，使用GORM库主要用来完成以下数据库操作：</p>
+连接和关闭数据库。连接数据库时，可能需要设置一些参数，比如最大连接数、最大空闲连接数、最大连接时长等。
+插入表记录。可以插入一条记录，也可以批量插入记录。
+更新表记录。可以更新某一个字段，也可以更新多个字段。
+查看表记录。可以查看某一条记录，也可以查看符合条件的记录列表。
+删除表记录。可以删除某一个记录，也可以批量删除。删除还支持永久删除和软删除。
+在一些小型项目中，还会用到GORM的表结构自动迁移功能。
+<p>GORM功能强大，上面的示例代码展示的是比较通用的一种操作方式。</p><p>上述代码中，首先定义了一个GORM模型（Models），Models是标准的Go struct，用来代表数据库中的一个表结构。我们可以给 Models 添加 TableName 方法，来告诉 GORM 该Models映射到数据库中的哪张表。Models定义如下：</p><pre><code class="language-go">type Product struct {
     gorm.Model
     Code  string `gorm:"column:code"`
     Price uint   `gorm:"column:price"`
@@ -108,12 +108,12 @@ if d.Error != nil {
 func (a *Animal) TableName() string {
     return "animal"
 }
-</code></pre><p>上面的代码中，通过 <code>primaryKey</code> 标签指定主键，使用 <code>column</code> 标签指定列名，通过给Models添加 <code>TableName</code> 方法指定表名。</p><p>数据库表通常会包含4个字段。</p><ul>
-<li>ID：自增字段，也作为主键。</li>
-<li>CreatedAt：记录创建时间。</li>
-<li>UpdatedAt：记录更新时间。</li>
-<li>DeletedAt：记录删除时间（软删除时有用）。</li>
-</ul><p>GORM也预定义了包含这4个字段的Models，在我们定义自己的Models时，可以直接内嵌到结构体内，例如：</p><pre><code class="language-go">type Animal struct {
+</code></pre><p>上面的代码中，通过 <code>primaryKey</code> 标签指定主键，使用 <code>column</code> 标签指定列名，通过给Models添加 <code>TableName</code> 方法指定表名。</p><p>数据库表通常会包含4个字段。</p>
+ID：自增字段，也作为主键。
+CreatedAt：记录创建时间。
+UpdatedAt：记录更新时间。
+DeletedAt：记录删除时间（软删除时有用）。
+<p>GORM也预定义了包含这4个字段的Models，在我们定义自己的Models时，可以直接内嵌到结构体内，例如：</p><pre><code class="language-go">type Animal struct {
     gorm.Model
     AnimalID int64     `gorm:"column:animalID"` // 将列名设为 `animalID`
     Birthday time.Time `gorm:"column:birthday"` // 将列名设为 `birthday`
@@ -141,11 +141,11 @@ sqlDB.SetConnMaxLifetime(time.Hour)    // 设置MySQL的空闲连接最大存活
 }
 user := User{Name: "Jinzhu", Age: 18, Birthday: time.Now()}
 result := db.Create(&amp;user) // 通过数据的指针来创建
-</code></pre><p>db.Create函数会返回如下3个值：</p><ul>
-<li>user.ID：返回插入数据的主键，这个是直接赋值给user变量。</li>
-<li>result.Error：返回error。</li>
-<li>result.RowsAffected：返回插入记录的条数。</li>
-</ul><p>当需要插入的数据量比较大时，可以批量插入，以提高插入性能：</p><pre><code class="language-go">var users = []User{{Name: "jinzhu1"}, {Name: "jinzhu2"}, {Name: "jinzhu3"}}
+</code></pre><p>db.Create函数会返回如下3个值：</p>
+user.ID：返回插入数据的主键，这个是直接赋值给user变量。
+result.Error：返回error。
+result.RowsAffected：返回插入记录的条数。
+<p>当需要插入的数据量比较大时，可以批量插入，以提高插入性能：</p><pre><code class="language-go">var users = []User{{Name: "jinzhu1"}, {Name: "jinzhu2"}, {Name: "jinzhu3"}}
 DB.Create(&amp;users)
 
 for _, user := range users {
@@ -157,7 +157,7 @@ db.Where("name = ?", "jinzhu").Delete(&amp;user)
 db.Delete(&amp;User{}, 10)
 </code></pre><p>不过，我更喜欢使用db.Where的方式进行删除，这种方式有两个优点。</p><p>第一个优点是删除方式更通用。使用db.Where不仅可以根据主键删除，还能够随意组合条件进行删除。</p><p>第二个优点是删除方式更显式，这意味着更易读。如果使用<code>db.Delete(&amp;User{}, 10)</code>，你还需要确认User的主键，如果记错了主键，还可能会引入Bug。</p><p>此外，GORM也支持批量删除：</p><pre><code class="language-go">db.Where("name in (?)", []string{"jinzhu", "colin"}).Delete(&amp;User{})
 </code></pre><p>GORM支持两种删除方法：软删除和永久删除。下面我来分别介绍下。</p><ol>
-<li>软删除</li>
+软删除
 </ol><p>软删除是指执行Delete时，记录不会被从数据库中真正删除。GORM会将 <code>DeletedAt</code> 设置为当前时间，并且不能通过正常的方式查询到该记录。如果模型包含了一个 <code>gorm.DeletedAt</code> 字段，GORM在执行删除操作时，会软删除该记录。</p><p>下面的删除方法就是一个软删除：</p><pre><code class="language-go">// UPDATE users SET deleted_at="2013-10-29 10:23" WHERE age = 20;
 db.Where("age = ?", 20).Delete(&amp;User{})
 
@@ -166,7 +166,7 @@ db.Where("age = 20").Find(&amp;user)
 </code></pre><p>可以看到，GORM并没有真正把记录从数据库删除掉，而是只更新了 <code>deleted_at</code> 字段。在查询时，GORM查询条件中新增了<code>AND deleted_at IS NULL</code>条件，所以这些被设置过 <code>deleted_at</code> 字段的记录不会被查询到。对于一些比较重要的数据，我们可以通过软删除的方式删除记录，软删除可以使这些重要的数据后期能够被恢复，并且便于以后的排障。</p><p>我们可以通过下面的方式查找被软删除的记录：</p><pre><code class="language-go">// SELECT * FROM users WHERE age = 20;
 db.Unscoped().Where("age = 20").Find(&amp;users)
 </code></pre><ol start="2">
-<li>永久删除</li>
+永久删除
 </ol><p>如果想永久删除一条记录，可以使用Unscoped：</p><pre><code class="language-go">// DELETE FROM orders WHERE id=10;
 db.Unscoped().Delete(&amp;order)
 </code></pre><p>或者，你也可以在模型中去掉gorm.DeletedAt。</p><h3>更新记录</h3><p>GORM中，最常用的更新方法如下：</p><pre><code class="language-go">db.First(&amp;user)
@@ -180,7 +180,7 @@ db.Model(&amp;User{}).Where("name = ?", "colin").Update("age", 200)
 </code></pre><p>也可以指定更新多个列：</p><pre><code class="language-go">// UPDATE users SET name='hello', age=18, updated_at = '2013-11-17 21:34:10' WHERE name = 'colin';
 db.Model(&amp;user).Where("name", "colin").Updates(User{Name: "hello", Age: 18, Active: false})
 </code></pre><p>这里要注意，这个方法只会更新非零值的字段。</p><h3>查询数据</h3><p>GORM支持不同的查询方法，下面我来讲解三种在开发中经常用到的查询方式，分别是检索单个记录、查询所有符合条件的记录和智能选择字段。</p><ol>
-<li>检索单个记录</li>
+检索单个记录
 </ol><p>下面是检索单个记录的示例代码：</p><pre><code class="language-go">// 获取第一条记录（主键升序）
 // SELECT * FROM users ORDER BY id LIMIT 1;
 db.First(&amp;user)
@@ -195,13 +195,13 @@ result.Error        // returns error
 // 检查 ErrRecordNotFound 错误
 errors.Is(result.Error, gorm.ErrRecordNotFound)
 </code></pre><p>如果model类型没有定义主键，则按第一个字段排序。</p><ol start="2">
-<li>查询所有符合条件的记录</li>
+查询所有符合条件的记录
 </ol><p>示例代码如下：</p><pre><code class="language-go">users := make([]*User, 0)
 
 // SELECT * FROM users WHERE name &lt;&gt; 'jinzhu';
 db.Where("name &lt;&gt; ?", "jinzhu").Find(&amp;users)
 </code></pre><ol start="3">
-<li>智能选择字段</li>
+智能选择字段
 </ol><p>你可以通过Select方法，选择特定的字段。我们可以定义一个较小的结构体来接受选定的字段：</p><pre><code class="language-go">type APIUser struct {
   ID   uint
   Name string
@@ -210,18 +210,18 @@ db.Where("name &lt;&gt; ?", "jinzhu").Find(&amp;users)
 // SELECT `id`, `name` FROM `users` LIMIT 10;
 db.Model(&amp;User{}).Limit(10).Find(&amp;APIUser{})
 </code></pre><p>除了上面讲的三种常用的基本查询方法，GORM还支持高级查询，下面我来介绍下。</p><h3>高级查询</h3><p>GORM支持很多高级查询功能，这里我主要介绍4种。</p><ol>
-<li>指定检索记录时的排序方式</li>
+指定检索记录时的排序方式
 </ol><p>示例代码如下：</p><pre><code class="language-go">// SELECT * FROM users ORDER BY age desc, name;
 db.Order("age desc, name").Find(&amp;users)
 </code></pre><ol start="2">
-<li>Limit &amp; Offset</li>
+Limit &amp; Offset
 </ol><p>Offset指定从第几条记录开始查询，Limit指定返回的最大记录数。Offset和Limit值为-1时，消除Offset和Limit条件。另外，Limit和Offset位置不同，效果也不同。</p><pre><code class="language-go">// SELECT * FROM users OFFSET 5 LIMIT 10;
 db.Limit(10).Offset(5).Find(&amp;users)
 </code></pre><ol start="3">
-<li>Distinct</li>
+Distinct
 </ol><p>Distinct可以从数据库记录中选择不同的值。</p><pre><code class="language-go">db.Distinct("name", "age").Order("name, age desc").Find(&amp;results)
 </code></pre><ol start="4">
-<li>Count</li>
+Count
 </ol><p>Count可以获取匹配的条数。</p><pre><code class="language-go">var count int64
 // SELECT count(1) FROM users WHERE name = 'jinzhu'; (count)
 db.Model(&amp;User{}).Where("name = ?", "jinzhu").Count(&amp;count)
@@ -281,11 +281,11 @@ db.Exec("UPDATE orders SET shipped_at=? WHERE id IN ?", time.Now(), []int64{1,2,
 
 &nbsp; &nbsp; return db, nil
 }
-</code></pre><p>上述代码中，我们先创建了一个 <code>*gorm.DB</code> 类型的实例，并对该实例进行了如下设置：</p><ul>
-<li>通过SetMaxOpenConns方法，设置了MySQL的最大连接数（推荐100）。</li>
-<li>通过SetConnMaxLifetime方法，设置了MySQL的空闲连接最大存活时间（推荐10s）。</li>
-<li>通过SetMaxIdleConns方法，设置了MySQL的最大空闲连接数（推荐100）。</li>
-</ul><p>GetMySQLFactoryOr函数最后创建了datastore类型的变量mysqlFactory，该变量是仓库层的变量。mysqlFactory变量中，又包含了 <code>*gorm.DB</code> 类型的字段 <code>db</code> 。</p><p><strong>最终</strong><strong>，</strong>我们通过仓库层的变量mysqlFactory，调用其 <code>db</code> 字段提供的方法来完成数据库的CURD操作。例如，创建密钥、更新密钥、删除密钥、获取密钥详情、查询密钥列表，具体代码如下（代码位于<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/store/mysql/secret.go">secret.go</a>文件中）：</p><pre><code class="language-go">// Create creates a new secret.
+</code></pre><p>上述代码中，我们先创建了一个 <code>*gorm.DB</code> 类型的实例，并对该实例进行了如下设置：</p>
+通过SetMaxOpenConns方法，设置了MySQL的最大连接数（推荐100）。
+通过SetConnMaxLifetime方法，设置了MySQL的空闲连接最大存活时间（推荐10s）。
+通过SetMaxIdleConns方法，设置了MySQL的最大空闲连接数（推荐100）。
+<p>GetMySQLFactoryOr函数最后创建了datastore类型的变量mysqlFactory，该变量是仓库层的变量。mysqlFactory变量中，又包含了 <code>*gorm.DB</code> 类型的字段 <code>db</code> 。</p><p><strong>最终</strong><strong>，</strong>我们通过仓库层的变量mysqlFactory，调用其 <code>db</code> 字段提供的方法来完成数据库的CURD操作。例如，创建密钥、更新密钥、删除密钥、获取密钥详情、查询密钥列表，具体代码如下（代码位于<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/store/mysql/secret.go">secret.go</a>文件中）：</p><pre><code class="language-go">// Create creates a new secret.
 func (s *secrets) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
 	return s.db.Create(&amp;secret).Error
 }
@@ -347,12 +347,12 @@ func (s *secrets) List(ctx context.Context, username string, opts metav1.ListOpt
 
 	return ret, d.Error
 }
-</code></pre><p>上面的代码中， <code>s.db</code> 就是 <code>*gorm.DB</code> 类型的字段。</p><p>上面的代码段执行了以下操作：</p><ul>
-<li>通过 <code>s.db.Save</code> 来更新数据库表的各字段；</li>
-<li>通过 <code>s.db.Unscoped</code> 来永久性从表中删除一行记录。对于支持软删除的资源，我们还可以通过 <code>opts.Unscoped</code> 选项来控制是否永久删除记录。 <code>true</code> 永久删除， <code>false</code> 软删除，默认软删除。</li>
-<li>通过 <code>errors.Is(err, gorm.ErrRecordNotFound)</code> 来判断GORM返回的错误是否是没有找到记录的错误类型。</li>
-<li>通过下面两行代码，来获取查询条件name的值：</li>
-</ul><pre><code class="language-go">selector, _ := fields.ParseSelector(opts.FieldSelector)&nbsp; &nbsp;&nbsp;
+</code></pre><p>上面的代码中， <code>s.db</code> 就是 <code>*gorm.DB</code> 类型的字段。</p><p>上面的代码段执行了以下操作：</p>
+通过 <code>s.db.Save</code> 来更新数据库表的各字段；
+通过 <code>s.db.Unscoped</code> 来永久性从表中删除一行记录。对于支持软删除的资源，我们还可以通过 <code>opts.Unscoped</code> 选项来控制是否永久删除记录。 <code>true</code> 永久删除， <code>false</code> 软删除，默认软删除。
+通过 <code>errors.Is(err, gorm.ErrRecordNotFound)</code> 来判断GORM返回的错误是否是没有找到记录的错误类型。
+通过下面两行代码，来获取查询条件name的值：
+<pre><code class="language-go">selector, _ := fields.ParseSelector(opts.FieldSelector)&nbsp; &nbsp;&nbsp;
 name, _ := selector.RequiresExactMatch("name")
 </code></pre><p>我们的整个调用链是：控制层 -&gt; 业务层 -&gt; 仓库层。这里你可能要问：<strong>我们<strong><strong>是</strong></strong>如何<strong><strong>调用</strong></strong>到<strong><strong>仓库层的</strong></strong>实例mysqlFactory<strong><strong>的</strong></strong>呢？</strong></p><p>这是因为我们的控制层实例包含了业务层的实例。在创建控制层实例时，我们传入了业务层的实例：</p><pre><code class="language-go">type UserController struct {&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
 &nbsp; &nbsp; srv srvv1.Service&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
@@ -472,8 +472,8 @@ func PrintProducts(db *gorm.DB) {
 	}
 }
 </code></pre><p>此外，GORM还支持原生查询SQL和原生执行SQL，可以满足更加复杂的SQL场景。</p><p>GORM中，还有一个非常有用的功能是支持Hooks。Hooks可以在执行某个CURD操作前被调用。在Hook中，可以添加一些非常有用的功能，例如生成唯一ID。目前，GORM支持 <code>BeforeXXX</code> 、 <code>AfterXXX</code> 和 <code>AfterFind</code> Hook，其中 <code>XXX</code> 可以是 Save、Create、Delete、Update。</p><p>最后，我还介绍了IAM项目的GORM实战，具体使用方式跟总结中的示例代码大体保持一致，你可以返回文稿查看。</p><h2>课后练习</h2><ol>
-<li>GORM支持AutoMigrate功能，思考下，你的生产环境是否可以使用AutoMigrate功能，为什么？</li>
-<li>查看<a href="https://gorm.io/zh_CN/docs/index.html">GORM官方文档</a>，看下如何用GORM实现事务回滚功能。</li>
+GORM支持AutoMigrate功能，思考下，你的生产环境是否可以使用AutoMigrate功能，为什么？
+查看<a href="https://gorm.io/zh_CN/docs/index.html">GORM官方文档</a>，看下如何用GORM实现事务回滚功能。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -584,7 +584,7 @@ func PrintProducts(db *gorm.DB) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -599,8 +599,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -615,8 +615,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83equY82MMjfvGtzlo8fhT9fdKO5LjWoy0P8pfCmiaFJS0v8Z4ibzrmwHjib9CnmgMiaYMhPyja7qS6KqiaQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -631,8 +631,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -647,8 +647,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/5f/e2/e6d3d9bf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -663,8 +663,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/8f/61/cf0d0a95.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -679,8 +679,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/20/1e/18/9d1f1439.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -695,8 +695,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -711,8 +711,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/75/00/618b20da.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -727,8 +727,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -743,8 +743,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/80/67/4e381da5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -759,8 +759,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/14/5b/a1656a72.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -775,8 +775,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -791,8 +791,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/a5/5b/164dc7d2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -807,8 +807,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -823,8 +823,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/8f/cf/890f82d6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -839,8 +839,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/52/40/e57a736e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -855,8 +855,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/20/02/e4/700e5bcd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -871,8 +871,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/9a/6f/c4490cf2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -887,8 +887,8 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -903,5 +903,4 @@ func PrintProducts(db *gorm.DB) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -1,8 +1,8 @@
 <audio title="加餐｜如何拉取私有的Go Module？" src="https://static001.geekbang.org/resource/audio/fb/ab/fbd10a60e63acf6ce627ed473f08e6ab.mp3" controls="controls"></audio> 
-<p>你好，我是Tony Bai。</p><p>我们这门课程上线以来收到了同学们的众多留言与热烈反馈，在这些留言和反馈中，有关Go Module的问题占比比较大，其中又以下面这两个问题比较突出：</p><ul>
-<li>在某module尚未发布到类似GitHub这样的网站前，如何import这个本地的module？</li>
-<li>如何拉取私有module？</li>
-</ul><p>借这次加餐机会，今天我就针对这两个问题和你聊聊我知道的一些解决方案。</p><p>首先我们先来看第一个问题：如何导入本地的module。</p><h2>导入本地module</h2><p>在前面的06和07讲，我们已经系统讲解了Go Module构建模式。Go Module从Go 1.11版本开始引入到Go中，现在它已经成为了Go语言的依赖管理与构建的标准，因此，我也一直建议你彻底抛弃Gopath构建模式，全面拥抱Go Module构建模式。并且，这门课中的所有例子和实战小项目，我使用的都是Go Module构建模式。</p><p>当我们的项目依赖已发布在GitHub等代码托管站点的公共Go Module时，Go命令工具可以很好地完成依赖版本选择以及Go Module拉取的工作。</p><p><strong>不过，如果我们的项目依赖的是本地正在开发、尚未发布到公共站点上的Go Module，那么我们应该如何做呢？</strong>我们来看一个例子。</p><!-- [[[read_end]]] --><p>假设你有一个项目，这个项目中的module a依赖module b，而module b是你另外一个项目中的module，它本来是要发布到<code>github.com/user/b</code>上的。</p><p>但此时此刻，module b还没有发布到公共托管站点上，它源码还在你的开发机器上。也就是说，go命令无法在<code>github.com/user/b</code>上找到并拉取module a的依赖module b，这时，如果你针对module a所在项目使用go mod tidy命令，就会收到类似下面这样的报错信息：</p><pre><code class="language-plain">$go mod tidy
+<p>你好，我是Tony Bai。</p><p>我们这门课程上线以来收到了同学们的众多留言与热烈反馈，在这些留言和反馈中，有关Go Module的问题占比比较大，其中又以下面这两个问题比较突出：</p>
+在某module尚未发布到类似GitHub这样的网站前，如何import这个本地的module？
+如何拉取私有module？
+<p>借这次加餐机会，今天我就针对这两个问题和你聊聊我知道的一些解决方案。</p><p>首先我们先来看第一个问题：如何导入本地的module。</p><h2>导入本地module</h2><p>在前面的06和07讲，我们已经系统讲解了Go Module构建模式。Go Module从Go 1.11版本开始引入到Go中，现在它已经成为了Go语言的依赖管理与构建的标准，因此，我也一直建议你彻底抛弃Gopath构建模式，全面拥抱Go Module构建模式。并且，这门课中的所有例子和实战小项目，我使用的都是Go Module构建模式。</p><p>当我们的项目依赖已发布在GitHub等代码托管站点的公共Go Module时，Go命令工具可以很好地完成依赖版本选择以及Go Module拉取的工作。</p><p><strong>不过，如果我们的项目依赖的是本地正在开发、尚未发布到公共站点上的Go Module，那么我们应该如何做呢？</strong>我们来看一个例子。</p><!-- [[[read_end]]] --><p>假设你有一个项目，这个项目中的module a依赖module b，而module b是你另外一个项目中的module，它本来是要发布到<code>github.com/user/b</code>上的。</p><p>但此时此刻，module b还没有发布到公共托管站点上，它源码还在你的开发机器上。也就是说，go命令无法在<code>github.com/user/b</code>上找到并拉取module a的依赖module b，这时，如果你针对module a所在项目使用go mod tidy命令，就会收到类似下面这样的报错信息：</p><pre><code class="language-plain">$go mod tidy
 go: finding module for package github.com/user/b
 github.com/user/a imports
     github.com/user/b: cannot find module providing package github.com/user/b: module github.com/user/b: reading https://goproxy.io/github.com/user/b/@v/list: 404 Not Found
@@ -183,7 +183,7 @@ paths:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -198,8 +198,8 @@ paths:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -214,8 +214,8 @@ paths:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/28/22/ebc770dc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -230,8 +230,8 @@ paths:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/92/4f/ff04156a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -246,8 +246,8 @@ paths:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/a8/33/b71635c1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -262,8 +262,8 @@ paths:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/22/b1/54/6d663b95.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -278,8 +278,8 @@ paths:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/0a/a4/828a431f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -294,5 +294,4 @@ paths:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

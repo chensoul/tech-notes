@@ -25,111 +25,111 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;第一堂“云原生”课.md">01 第一堂“云原生”课.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;容器基本概念.md">02 容器基本概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;Kubernetes&#32;核心概念.md">03 Kubernetes 核心概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;理解&#32;Pod&#32;和容器设计模式.md">04 理解 Pod 和容器设计模式.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;应用编排与管理：核心原理.md">05 应用编排与管理：核心原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;应用编排与管理.md">06 应用编排与管理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="07&#32;应用编排与管理：Job&#32;&amp;&#32;DaemonSet.md">07 应用编排与管理：Job &amp; DaemonSet.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;应用配置管理.md">08 应用配置管理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用存储和持久化数据卷：核心知识.md">09 应用存储和持久化数据卷：核心知识.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用存储和持久化数据卷：存储快照与拓扑调度(至天).md">10 应用存储和持久化数据卷：存储快照与拓扑调度(至天).md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;可观测性：你的应用健康吗？（莫源）.md">11 可观测性：你的应用健康吗？（莫源）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;可观测性-监控与日志（莫源）.md">12 可观测性-监控与日志（莫源）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;Kubernetes&#32;网络概念及策略控制（叶磊）.md">13 Kubernetes 网络概念及策略控制（叶磊）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;Kubernetes&#32;Service（溪恒）.md">14 Kubernetes Service（溪恒）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;从&#32;0&#32;开始创作云原生应用（殷达）.md">15 从 0 开始创作云原生应用（殷达）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;深入解析&#32;Linux&#32;容器（华敏）.md">16 深入解析 Linux 容器（华敏）.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -188,30 +188,30 @@
 <h3>需求来源</h3>
 <h4>Job 背景问题</h4>
 <p>首先我们来看一下 Job 的需求来源。我们知道 K8s 里面，最小的调度单元是 Pod，我们可以直接通过 Pod 来运行任务进程。这样做将会产生以下几种问题：</p>
-<ul>
-<li>我们如何保证 Pod 内进程正确的结束？</li>
-<li>如何保证进程运行失败后重试？</li>
-<li>如何管理多个任务，且任务之间有依赖关系？</li>
-<li>如何并行地运行任务，并管理任务的队列大小？</li>
-</ul>
+
+我们如何保证 Pod 内进程正确的结束？
+如何保证进程运行失败后重试？
+如何管理多个任务，且任务之间有依赖关系？
+如何并行地运行任务，并管理任务的队列大小？
+
 <h4>Job：管理任务的控制器</h4>
 <p>我们来看一下 Kubernetes 的 Job 为我们提供了什么功能：</p>
-<ul>
-<li>首先 kubernetes 的 Job 是一个管理任务的控制器，它可以创建一个或多个 Pod 来指定 Pod 的数量，并可以监控它是否成功地运行或终止；</li>
-<li>我们可以根据 Pod 的状态来给 Job 设置重置的方式及重试的次数；</li>
-<li>我们还可以根据依赖关系，保证上一个任务运行完成之后再运行下一个任务；</li>
-<li>同时还可以控制任务的并行度，根据并行度来确保 Pod 运行过程中的并行次数和总体完成大小。</li>
-</ul>
+
+首先 kubernetes 的 Job 是一个管理任务的控制器，它可以创建一个或多个 Pod 来指定 Pod 的数量，并可以监控它是否成功地运行或终止；
+我们可以根据 Pod 的状态来给 Job 设置重置的方式及重试的次数；
+我们还可以根据依赖关系，保证上一个任务运行完成之后再运行下一个任务；
+同时还可以控制任务的并行度，根据并行度来确保 Pod 运行过程中的并行次数和总体完成大小。
+
 <h3>用例解读</h3>
 <p>我们根据一个实例来看一下Job是如何来完成下面的应用的。</p>
 <h4>Job 语法</h4>
 <p><img src="assets/FlJHcV-dW9UFVax6IaehPYtKCld-" alt="avatar" /></p>
 <p>上图是 Job 最简单的一个 yaml 格式，这里主要新引入了一个 kind 叫 Job，这个 Job 其实就是 job-controller 里面的一种类型。 然后 metadata 里面的 name 来指定这个 Job 的名称，下面 spec.template 里面其实就是 pod 的 spec。</p>
 <p>这里面的内容都是一样的，唯一多了两个点：</p>
-<ul>
-<li>第一个是 restartPolicy，在 Job 里面我们可以设置 Never、OnFailure、Always 这三种重试策略。在希望 Job 需要重新运行的时候，我们可以用 Never；希望在失败的时候再运行，再重试可以用 OnFailure；或者不论什么情况下都重新运行时 Alway；</li>
-<li>另外，Job 在运行的时候不可能去无限的重试，所以我们需要一个参数来控制重试的次数。这个 backoffLimit 就是来保证一个 Job 到底能重试多少次。</li>
-</ul>
+
+第一个是 restartPolicy，在 Job 里面我们可以设置 Never、OnFailure、Always 这三种重试策略。在希望 Job 需要重新运行的时候，我们可以用 Never；希望在失败的时候再运行，再重试可以用 OnFailure；或者不论什么情况下都重新运行时 Alway；
+另外，Job 在运行的时候不可能去无限的重试，所以我们需要一个参数来控制重试的次数。这个 backoffLimit 就是来保证一个 Job 到底能重试多少次。
+
 <p>所以在 Job 里面，我们主要重点关注的一个是 <strong>restartPolicy 重启策略</strong>和 <strong>backoffLimit 重试次数限制</strong>。</p>
 <h4>Job 状态</h4>
 <p><img src="assets/Fo9k3bh5T3hAJxqA-3hFXVRkYF70" alt="avatar" /></p>
@@ -225,10 +225,10 @@
 <h4>并行运行 Job</h4>
 <p>我们有时候有些需求：希望 Job 运行的时候可以最大化的并行，并行出 n 个 Pod 去快速地执行。同时，由于我们的节点数有限制，可能也不希望同时并行的 Pod 数过多，有那么一个管道的概念，我们可以希望最大的并行度是多少，Job 控制器都可以帮我们来做到。</p>
 <p>这里主要看两个参数：<strong>一个是 completions，一个是 parallelism。</strong></p>
-<ul>
-<li>首先第一个参数是用来指定本 Pod 队列执行次数。可能这个不是很好理解，其实可以把它认为是这个 Job 指定的可以运行的总次数。比如这里设置成 8，即这个任务一共会被执行 8 次；</li>
-<li>第二个参数代表这个并行执行的个数。所谓并行执行的次数，其实就是一个管道或者缓冲器中缓冲队列的大小，把它设置成 2，也就是说这个 Job 一定要执行 8 次，每次并行 2 个 Pod，这样的话，一共会执行 4 个批次。</li>
-</ul>
+
+首先第一个参数是用来指定本 Pod 队列执行次数。可能这个不是很好理解，其实可以把它认为是这个 Job 指定的可以运行的总次数。比如这里设置成 8，即这个任务一共会被执行 8 次；
+第二个参数代表这个并行执行的个数。所谓并行执行的次数，其实就是一个管道或者缓冲器中缓冲队列的大小，把它设置成 2，也就是说这个 Job 一定要执行 8 次，每次并行 2 个 Pod，这样的话，一共会执行 4 个批次。
+
 <h4>查看并行 Job 运行</h4>
 <p><img src="assets/FsfyKX4pZ6ltGRES3Ma1GoCcb-64" alt="avatar" /></p>
 <p>下面来看一下它的实际运行效果，上图就是当这个 Job 整体运行完毕之后可以看到的效果，首先看到 job 的名字，然后看到它一共创建出来了 8 个 pod，执行了 2 分 23 秒，这是创建的时间。</p>
@@ -238,12 +238,12 @@
 <p><img src="assets/Fv2wyMUcvFwpxCSrNUDdBEP4LeE9" alt="avatar" /></p>
 <p>下面来介绍另外一个 Job，叫做 CronJob，其实也可以叫定时运行 Job。CronJob 其实和 Job 大体是相似的，唯一的不同点就是它可以设计一个时间。比如说可以定时在几点几分执行，特别适合晚上做一些清理任务，还有可以几分钟执行一次，几小时执行一次等等，这就叫定时任务。</p>
 <p>定时任务和 Job 相比会多几个不同的字段：</p>
-<ul>
-<li><strong>schedule</strong>：schedule 这个字段主要是设置时间格式，它的时间格式和 Linux 的 crontime 是一样的，所以直接根据 Linux 的 crontime 书写格式来书写就可以了。举个例子： */1 指每分钟去执行一下 Job，这个 Job 需要做的事情就是打印出大约时间，然后打印出“Hello from the kubernetes cluster” 这一句话；</li>
-<li>**startingDeadlineSeconds：**即：每次运行 Job 的时候，它最长可以等多长时间，有时这个 Job 可能运行很长时间也不会启动。所以这时，如果超过较长时间的话，CronJob 就会停止这个 Job；</li>
-<li><strong>concurrencyPolicy</strong>：就是说是否允许并行运行。所谓的并行运行就是，比如说我每分钟执行一次，但是这个 Job 可能运行的时间特别长，假如两分钟才能运行成功，也就是第二个 Job 要到时间需要去运行的时候，上一个 Job 还没完成。如果这个 policy 设置为 true 的话，那么不管你前面的 Job 是否运行完成，每分钟都会去执行；如果是 false，它就会等上一个 Job 运行完成之后才会运行下一个；</li>
-<li>**JobsHistoryLimit：**这个就是每一次 CronJob 运行完之后，它都会遗留上一个 Job 的运行历史、查看时间。当然这个额不能是无限的，所以需要设置一下历史存留数，一般可以设置默认 10 个或 100 个都可以，这主要取决于每个人集群不同，然后根据每个人的集群数来确定这个时间。</li>
-</ul>
+
+<strong>schedule</strong>：schedule 这个字段主要是设置时间格式，它的时间格式和 Linux 的 crontime 是一样的，所以直接根据 Linux 的 crontime 书写格式来书写就可以了。举个例子： */1 指每分钟去执行一下 Job，这个 Job 需要做的事情就是打印出大约时间，然后打印出“Hello from the kubernetes cluster” 这一句话；
+**startingDeadlineSeconds：**即：每次运行 Job 的时候，它最长可以等多长时间，有时这个 Job 可能运行很长时间也不会启动。所以这时，如果超过较长时间的话，CronJob 就会停止这个 Job；
+<strong>concurrencyPolicy</strong>：就是说是否允许并行运行。所谓的并行运行就是，比如说我每分钟执行一次，但是这个 Job 可能运行的时间特别长，假如两分钟才能运行成功，也就是第二个 Job 要到时间需要去运行的时候，上一个 Job 还没完成。如果这个 policy 设置为 true 的话，那么不管你前面的 Job 是否运行完成，每分钟都会去执行；如果是 false，它就会等上一个 Job 运行完成之后才会运行下一个；
+**JobsHistoryLimit：**这个就是每一次 CronJob 运行完之后，它都会遗留上一个 Job 的运行历史、查看时间。当然这个额不能是无限的，所以需要设置一下历史存留数，一般可以设置默认 10 个或 100 个都可以，这主要取决于每个人集群不同，然后根据每个人的集群数来确定这个时间。
+
 <h3>操作演示</h3>
 <h4>Job 的编排文件</h4>
 <p>下面看一下具体如何使用 Job。</p>
@@ -287,31 +287,31 @@
 <h3>需求来源</h3>
 <h4>DaemonSet 背景问题</h4>
 <p>下面介绍第二个控制器：**DaemonSet。**同样的问题：如果我们没有 DaemonSet 会怎么样？下面有几个需求：</p>
-<ul>
-<li>首先如果希望每个节点都运行同样一个 pod 怎么办？</li>
-<li>如果新节点加入集群的时候，想要立刻感知到它，然后去部署一个 pod，帮助我们初始化一些东西，这个需求如何做？</li>
-<li>如果有节点退出的时候，希望对应的 pod 会被删除掉，应该怎么操作？</li>
-<li>如果 pod 状态异常的时候，我们需要及时地监控这个节点异常，然后做一些监控或者汇报的一些动作，那么这些东西运用什么控制器来做？</li>
-</ul>
+
+首先如果希望每个节点都运行同样一个 pod 怎么办？
+如果新节点加入集群的时候，想要立刻感知到它，然后去部署一个 pod，帮助我们初始化一些东西，这个需求如何做？
+如果有节点退出的时候，希望对应的 pod 会被删除掉，应该怎么操作？
+如果 pod 状态异常的时候，我们需要及时地监控这个节点异常，然后做一些监控或者汇报的一些动作，那么这些东西运用什么控制器来做？
+
 <h4>DaemonSet：守护进程控制器</h4>
 <p>DaemonSet 也是 Kubernetes 提供的一个 default controller，它实际是做一个守护进程的控制器，它能帮我们做到以下几件事情：</p>
-<ul>
-<li>首先能保证集群内的每一个节点都运行一组相同的 pod；</li>
-<li>同时还能根据节点的状态保证新加入的节点自动创建对应的 pod；</li>
-<li>在移除节点的时候，能删除对应的 pod；</li>
-<li>而且它会跟踪每个 pod 的状态，当这个 pod 出现异常、Crash 掉了，会及时地去 recovery 这个状态。</li>
-</ul>
+
+首先能保证集群内的每一个节点都运行一组相同的 pod；
+同时还能根据节点的状态保证新加入的节点自动创建对应的 pod；
+在移除节点的时候，能删除对应的 pod；
+而且它会跟踪每个 pod 的状态，当这个 pod 出现异常、Crash 掉了，会及时地去 recovery 这个状态。
+
 <h3>用例解读</h3>
 <h4>DaemonSet 语法</h4>
 <p>下面举个例子来看一下，DaemonSet.yaml 会稍微长一些。</p>
 <p><img src="assets/Fn0gBsJY1Ugr9_M7kNFjcKV3O-0D" alt="avatar" /></p>
 <p>首先是 kind:DaemonSet。如果前面学过 deployment 后，其实我们再看这个 yaml 会比较简单。例如它会有 matchLabel，通过 matchLabel 去管理对应所属的 pod，这个 pod.label 也要和这个 DaemonSet.controller.label 想匹配，它才能去根据 label.selector 去找到对应的管理 Pod。下面 spec.container 里面的东西都是一致的。</p>
 <p>这里用 fluentd 来做例子。DaemonSet 最常用的点在于以下几点内容：</p>
-<ul>
-<li>首先是存储，GlusterFS 或者 Ceph 之类的东西，需要每台节点上都运行一个类似于 Agent 的东西，DaemonSet 就能很好地满足这个诉求；</li>
-<li>另外，对于日志收集，比如说 logstash 或者 fluentd，这些都是同样的需求，需要每台节点都运行一个 Agent，这样的话，我们可以很容易搜集到它的状态，把各个节点里面的信息及时地汇报到上面；</li>
-<li>还有一个就是，需要每个节点去运行一些监控的事情，也需要每个节点去运行同样的事情，比如说 Promethues 这些东西，也需要 DaemonSet 的支持。</li>
-</ul>
+
+首先是存储，GlusterFS 或者 Ceph 之类的东西，需要每台节点上都运行一个类似于 Agent 的东西，DaemonSet 就能很好地满足这个诉求；
+另外，对于日志收集，比如说 logstash 或者 fluentd，这些都是同样的需求，需要每台节点都运行一个 Agent，这样的话，我们可以很容易搜集到它的状态，把各个节点里面的信息及时地汇报到上面；
+还有一个就是，需要每个节点去运行一些监控的事情，也需要每个节点去运行同样的事情，比如说 Promethues 这些东西，也需要 DaemonSet 的支持。
+
 <h4>查看 DaemonSet 状态</h4>
 <p><img src="assets/FukQvePjfaEKTrUJeuGIOznO4Qf5" alt="avatar" /></p>
 <p>创建完 DaemonSet 之后，我们可以使用 kubectl get DaemonSet（DaemonSet 缩写为 ds）。可以看到 DaemonSet 返回值和 deployment 特别像，即它当前一共有正在运行的几个，然后我们需要几个，READY 了几个。当然这里面，READY 都是只有 Pod，所以它最后创建出来所有的都是 pod。</p>
@@ -319,10 +319,10 @@
 <h4>更新 DaemonSet</h4>
 <p><img src="assets/FgVuatnFylUD_LRK6upX1PxBbwIQ" alt="avatar" /></p>
 <p>其实 DaemonSet 和 deployment 特别像，它也有两种更新策略：一个是 <strong>RollingUpdate</strong>，另一个是 <strong>OnDelete</strong>。</p>
-<ul>
-<li>RollingUpdate 其实比较好理解，就是会一个一个的更新。先更新第一个 pod，然后老的 pod 被移除，通过健康检查之后再去见第二个 pod，这样对于业务上来说会比较平滑地升级，不会中断；</li>
-<li>OnDelete 其实也是一个很好的更新策略，就是模板更新之后，pod 不会有任何变化，需要我们手动控制。我们去删除某一个节点对应的 pod，它就会重建，不删除的话它就不会重建，这样的话对于一些我们需要手动控制的特殊需求也会有特别好的作用。</li>
-</ul>
+
+RollingUpdate 其实比较好理解，就是会一个一个的更新。先更新第一个 pod，然后老的 pod 被移除，通过健康检查之后再去见第二个 pod，这样对于业务上来说会比较平滑地升级，不会中断；
+OnDelete 其实也是一个很好的更新策略，就是模板更新之后，pod 不会有任何变化，需要我们手动控制。我们去删除某一个节点对应的 pod，它就会重建，不删除的话它就不会重建，这样的话对于一些我们需要手动控制的特殊需求也会有特别好的作用。
+
 <h3>操作演示</h3>
 <h4>DaemonSet 的编排</h4>
 <p>下面举一个例子。比如说我们去改了些 DaemonSet 的镜像，然后看到了它的状态，它就会去一个一个地更新。</p>
@@ -348,10 +348,10 @@
 <p>当有 node 状态节点发生变化时，它会通过一个内存消息队列发进来，然后DaemonSet controller 会去 watch 这个状态，看一下各个节点上是都有对应的 Pod，如果没有的话就去创建。当然它会去做一个对比，如果有的话，它会比较一下版本，然后加上刚才提到的是否去做 RollingUpdate？如果没有的话就会重新创建，Ondelete 删除 pod 的时候也会去做 check 它做一遍检查，是否去更新，或者去创建对应的 pod。</p>
 <p>当然最后的时候，如果全部更新完了之后，它会把整个 DaemonSet 的状态去更新到 API Server 上，完成最后全部的更新。</p>
 <h2>本节总结</h2>
-<ul>
-<li>Job &amp; CronJobs 基础操作与概念解析：本节详细介绍了 Job 和 CronJob 的概念，并通过两个实际的例子介绍了 Job 和 CronJob 的使用，对于 Job 和 CronJob 内的各种功能便签都进行了详细的演示；</li>
-<li>DaemonSet 基础操作与概念解析：通过类比 Deployment 控制器，我们理解了一下 DaemonSet 控制器的工作流程与方式，并且通过对 DaemonSet 的更新了解了滚动更新的概念和相对应的操作方式。</li>
-</ul>
+
+Job &amp; CronJobs 基础操作与概念解析：本节详细介绍了 Job 和 CronJob 的概念，并通过两个实际的例子介绍了 Job 和 CronJob 的使用，对于 Job 和 CronJob 内的各种功能便签都进行了详细的演示；
+DaemonSet 基础操作与概念解析：通过类比 Deployment 控制器，我们理解了一下 DaemonSet 控制器的工作流程与方式，并且通过对 DaemonSet 的更新了解了滚动更新的概念和相对应的操作方式。
+
 </div>
                     </div>
                     <div>

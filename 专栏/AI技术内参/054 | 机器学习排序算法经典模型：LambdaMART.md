@@ -56,32 +56,32 @@ NDCG和其他一系列搜索评价指标都是更加注重头部的相关度。�
 
 **参考文献**
 
-<li>
+
 Burges, C.; Shaked, T.; Renshaw, E.; Lazier, A.; Deeds, M.; Hamilton, N. &amp; Hullender, G. Learning to Rank Using Gradient Descent. **Proceedings of the 22nd International Conference on Machine Learning**, ACM, 89-96, 2005.
-</li>
-<li>
+
+
 Burges, C. J.; Ragno, R. &amp; Le, Q. V. Schölkopf, B.; Platt, J. C. &amp; Hoffman, T. (Eds.). Learning to Rank with Nonsmooth Cost Functions. **Advances in Neural Information Processing Systems 19**, MIT Press, 193-200,  2007.
-</li>
-<li>
+
+
 Wu, Q.; Burges, C. J.; Svore, K. M. &amp; Gao, J. Adapting Boosting for Information Retrieval Measures. **Information Retrieval**, Kluwer Academic Publishers, 13, 254-270, 2010.
-</li>
-<li>
+
+
 Chapelle, O. &amp; Chang, Y.Chapelle, O.; Chang, Y. &amp; Liu, T.-Y. (Eds.). Yahoo! Learning to Rank Challenge Overview. **Proceedings of the Learning to Rank Challenge**, PMLR, 14, 1-24, 2011.
-</li>
+
 
 **论文链接**
 
-<li>
+
 [Learning to Rank Using Gradient Descent](https://icml.cc/2015/wp-content/uploads/2015/06/icml_ranking.pdf)
-</li>
-<li>
+
+
 [Learning to Rank with Nonsmooth Cost Functions](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.62.1530&amp;rep=rep1&amp;type=pdf)
-</li>
-<li>
+
+
 [Adapting Boosting for Information Retrieval Measures](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.157.5117&amp;rep=rep1&amp;type=pdf)
-</li>
-<li>
+
+
 [Yahoo! Learning to Rank Challenge Overview](http://proceedings.mlr.press/v14/chapelle11a/chapelle11a.pdf)
-</li>
+
 
 

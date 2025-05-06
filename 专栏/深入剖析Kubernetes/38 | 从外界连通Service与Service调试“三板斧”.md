@@ -216,18 +216,18 @@ I1027 22:14:54.040223    5063 proxier.go:294] Adding new service &quot;kube-syst
 
 如果kube-proxy一切正常，你就应该仔细查看宿主机上的iptables了。而**一个iptables模式的Service对应的规则，我在上一篇以及这一篇文章里已经全部介绍到了，它们包括：**
 
-<li>
+
 KUBE-SERVICES或者KUBE-NODEPORTS规则对应的Service的入口链，这个规则应该与VIP和Service端口一一对应；
-</li>
-<li>
+
+
 KUBE-SEP-(hash)规则对应的DNAT链，这些规则应该与Endpoints一一对应；
-</li>
-<li>
+
+
 KUBE-SVC-(hash)规则对应的负载均衡链，这些规则的数目应该与 Endpoints 数目一致；
-</li>
-<li>
+
+
 如果是NodePort模式的话，还有POSTROUTING处的SNAT链。
-</li>
+
 
 通过查看这些链的数量、转发目的地址、端口、过滤条件等信息，你就能很容易发现一些异常的蛛丝马迹。
 

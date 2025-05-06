@@ -106,15 +106,15 @@ gRPC服务端创建采用Build模式，对底层服务绑定、transportServer�
 
 gRPC服务端创建关键流程分析：
 
-<li>
+
 **NettyServer实例创建：**gRPC服务端创建，首先需要初始化NettyServer，它是gRPC基于Netty 4.1 HTTP/2协议栈之上封装的HTTP/2服务端。NettyServer实例由NettyServerBuilder的buildTransportServer方法构建，NettyServer构建完成之后，监听指定的Socket地址，即可实现基于HTTP/2协议的请求消息接入。
-</li>
-<li>
+
+
 **绑定IDL定义的服务接口实现类：**gRPC与其它一些RPC框架的差异点是服务接口实现类的调用并不是通过动态代理和反射机制，而是通过proto工具生成代码，在服务端启动时，将服务接口实现类实例注册到gRPC内部的服务注册中心上。请求消息接入之后，可以根据服务名和方法名，直接调用启动时注册的服务实例，而不需要通过反射的方式进行调用，性能更优。
-</li>
-<li>
+
+
 **gRPC服务实例（ServerImpl）构建：**ServerImpl负责整个gRPC服务端消息的调度和处理，创建ServerImpl实例过程中，会对服务端依赖的对象进行初始化，例如Netty的线程池资源、gRPC的线程池、内部的服务注册类（InternalHandlerRegistry）等，ServerImpl初始化完成之后，就可以调用NettyServer的start方法启动HTTP/2服务端，接收gRPC客户端的服务调用请求。
-</li>
+
 
 ## 2.3 服务端service调用流程
 
@@ -136,17 +136,17 @@ gRPC请求消息接入流程如下：
 
 关键流程解读如下：
 
-<li>
+
 Netty 4.1提供了HTTP/2底层协议栈，通过Http2ConnectionHandler及其依赖的其它类库，实现了HTTP/2消息的统一接入和处理。
 通过注册Http2FrameListener监听器，可以回调接收HTTP2协议的消息头、消息体、优先级、Ping、SETTINGS等。
 gRPC通过FrameListener重载Http2FrameListener的onDataRead、onHeadersRead等方法，将Netty的HTTP/2消息转发到gRPC的NettyServerHandler中；
-</li>
-<li>
+
+
 Netty的HTTP/2协议接入仍然是通过ChannelHandler的CodeC机制实现，它并不影响NIO线程模型。
 因此，理论上各种协议、以及同一个协议的多个服务端实例可以共用同一个NIO线程池（NioEventLoopGroup）,也可以独占。
 在实践中独占模式普遍会存在线程资源占用过载问题，很容易出现句柄等资源泄漏。
 在gRPC中，为了避免该问题，默认采用共享池模式创建NioEventLoopGroup，所有的gRPC服务端实例，都统一从SharedResourceHolder分配NioEventLoopGroup资源，实现NioEventLoopGroup的共享。
-</li>
+
 
 ### 2.3.2 gRPC消息头和消息体处理
 
@@ -156,31 +156,31 @@ gRPC消息头的处理入口是NettyServerHandler的onHeadersRead()，处理流�
 
 处理流程如下：
 
-<li>
+
 对HTTP Header的Content-Type校验，此处必须是&quot;application/grpc&quot;；
-</li>
-<li>
+
+
 从HTTP Header的URL中提取接口和方法名，以HelloWorldServer为例，它的method为：“helloworld.Greeter/SayHello”；
-</li>
-<li>
+
+
 <p>将Netty的HTTP Header转换成gRPC内部的Metadata，Metadata内部维护了一个键值对的二维数组namesAndValues，以及一系列的类型转换方法（点击放大图片）：<br />
 <img src="https://static001.geekbang.org/resource/image/7c/b9/7c833bc328f64ef864b430c45d68fab9.png" alt="" /></p>
-</li>
-<li>
+
+
 创建NettyServerStream对象，它持有了Sink和TransportState类，负责将消息封装成GrpcFrameCommand，与底层Netty进行交互，实现协议消息的处理；
-</li>
-<li>
+
+
 创建NettyServerStream之后，会触发ServerTransportListener的streamCreated方法，在该方法中，主要完成了消息上下文和gRPC业务监听器的创建；
-</li>
-<li>
+
+
 gRPC上下文创建：CancellableContext创建之后，支持超时取消，如果gRPC客户端请求消息在Http Header中携带了“grpc-timeout”，系统在创建CancellableContext的同时会启动一个延时定时任务，延时周期为超时时间，一旦该定时器成功执行，就会调用CancellableContext.CancellationListener的cancel方法，发送CancelServerStreamCommand指令；
-</li>
-<li>
+
+
 JumpToApplicationThreadServerStreamListener的创建：它是ServerImpl的内部类，从命名上基本可以看出它的用途，即从ServerStream跳转到应用线程中进行服务调用，gRPC服务端的接口调用主要通过JumpToApplicationThreadServerStreamListener的messageRead和halfClosed方法完成；
-</li>
-<li>
+
+
 将NettyServerStream的TransportState缓存到Netty的Http2Stream中，当处理请求消息体时，可以根据streamId获取到Http2Stream，进而根据“streamKey”还原NettyServerStream的TransportState，进行后续处理。
-</li>
+
 
 gRPC消息体的处理入口是NettyServerHandler的onDataRead()，处理流程如下所示：
 
@@ -188,12 +188,12 @@ gRPC消息体的处理入口是NettyServerHandler的onDataRead()，处理流程�
 
 消息体处理比较简单，下面就关键技术点进行讲解：
 
-<li>
+
 因为Netty HTTP/2协议Http2FrameListener分别提供了onDataRead和onHeadersRead回调方法，所以gRPC NettyServerHandler在处理完消息头之后需要缓存上下文，以便后续处理消息体时使用；
-</li>
-<li>
+
+
 onDataRead和onHeadersRead方法都是由Netty的NIO线程负责调度，但是在执行onDataRead的过程中发生了线程切换，如下所示（ServerTransportListenerImpl类）：
-</li>
+
 
 ```
 wrappedExecutor.execute(new ContextRunnable(context) {
@@ -224,15 +224,15 @@ wrappedExecutor.execute(new ContextRunnable(context) {
 
 中间的交互流程比较复杂，涉及的类较多，但是关键步骤主要有三个：
 
-<li>
+
 **解码：**对HTTP/2 Body进行应用层解码，转换成服务端接口的请求参数，解码的关键就是调用requestMarshaller.parse(input)，将PB码流转换成Java对象；
-</li>
-<li>
+
+
 **路由：**根据URL中的方法名从内部服务注册中心查询到对应的服务实例，路由的关键是调用registry.lookupMethod(methodName)获取到ServerMethodDefinition对象；
-</li>
-<li>
+
+
 **调用：**调用服务端接口实现类的指定方法，实现RPC调用，与一些RPC框架不同的是，此处调用是Java本地接口调用，非反射调用，性能更优，它的实现关键是UnaryRequestMethod.invoke(request, responseObserver)方法。
-</li>
+
 
 ### 2.3.4 响应消息发送
 
@@ -242,17 +242,17 @@ wrappedExecutor.execute(new ContextRunnable(context) {
 
 响应消息的发送原理如下：
 
-<li>
+
 分别发送gRPC HTTP/2响应消息头和消息体，由NettyServerStream的Sink将响应消息封装成SendResponseHeadersCommand和SendGrpcFrameCommand，加入到WriteQueue中；
-</li>
-<li>
+
+
 <p>WriteQueue通过Netty的NioEventLoop线程进行消息处理，NioEventLoop将SendResponseHeadersCommand和SendGrpcFrameCommand写入到Netty的<br />
 Channel中，进而触发DefaultChannelPipeline的<br />
 write(Object msg,    ChannelPromise promise)操作；</p>
-</li>
-<li>
+
+
 响应消息通过ChannelPipeline职责链进行调度，触发NettyServerHandler的sendResponseHeaders和sendGrpcFrame方法，调用Http2ConnectionEncoder的writeHeaders和writeData方法，将响应消息通过Netty的HTTP/2协议栈发送给客户端。
-</li>
+
 
 需要指出的是，请求消息的接收、服务调用以及响应消息发送，多次发生NIO线程和应用线程之间的互相切换，以及并行处理。因此上述流程中的一些步骤，并不是严格按照图示中的顺序执行的，后续线程模型章节，会做分析和介绍。
 
@@ -362,12 +362,12 @@ Builder addService(ServerServiceDefinition service) {
 
 ### 3.2.3 service调用
 
-<li>
+
 <p>**gRPC消息的接收：**<br />
 gRPC消息的接入由Netty HTTP/2协议栈回调gRPC的FrameListener，进而调用NettyServerHandler的onHeadersRead(ChannelHandlerContext ctx, int streamId, Http2Headers headers)和onDataRead(int streamId, ByteBuf data, int padding, boolean endOfStream)，代码如下所示：<br />
 <img src="https://static001.geekbang.org/resource/image/90/8c/90c06120c24587569abd596cb889ac8c.png" alt="" /></p>
 消息头和消息体的处理，主要由MessageDeframer的deliver方法完成，相关代码如下（MessageDeframer类）：
-</li>
+
 
 ```
 if (inDelivery) {
@@ -402,9 +402,9 @@ public T parse(InputStream stream) {
 
 ```
 
-<li>**gRPC响应消息发送：**<br />
+**gRPC响应消息发送：**<br />
 响应消息分为两部分发送：响应消息头和消息体，分别被封装成不同的WriteQueue.AbstractQueuedCommand，插入到WriteQueue中。<br />
-消息头封装代码（NettyServerStream类）：</li>
+消息头封装代码（NettyServerStream类）：
 
 ```
 public void writeHeaders(Metadata headers) {
@@ -465,8 +465,8 @@ private void sendGrpcFrame(ChannelHandlerContext ctx, SendGrpcFrameCommand cmd,
 
 ```
 
-<li>服务接口实例调用：<br />
-经过一系列预处理，最终由ServerCalls的ServerCallHandler调用服务接口实例，代码如下（ServerCalls类）：</li>
+服务接口实例调用：<br />
+经过一系列预处理，最终由ServerCalls的ServerCallHandler调用服务接口实例，代码如下（ServerCalls类）：
 
 ```
 return new EmptyServerCallListener&lt;ReqT&gt;() {
@@ -511,36 +511,36 @@ gRPC的线程由Netty线程 + gRPC应用线程组成，它们之间的交互和�
 
 它的工作流程总结如下：
 
-<li>
+
 从主线程池（bossGroup）中随机选择一个Reactor线程作为Acceptor线程，用于绑定监听端口，接收客户端连接；
-</li>
-<li>
+
+
 Acceptor线程接收客户端连接请求之后创建新的SocketChannel，将其注册到主线程池（bossGroup）的其它Reactor线程上，由其负责接入认证、握手等操作；
-</li>
-<li>
+
+
 步骤2完成之后，应用层的链路正式建立，将SocketChannel从主线程池的Reactor线程的多路复用器上摘除，重新注册到Sub线程池（workerGroup）的线程上，用于处理I/O的读写操作。
-</li>
+
 
 Netty Server使用的NIO线程实现是NioEventLoop，它的职责如下：
 
-<li>
+
 作为服务端Acceptor线程，负责处理客户端的请求接入；
-</li>
-<li>
+
+
 作为客户端Connecor线程，负责注册监听连接操作位，用于判断异步连接结果；
-</li>
-<li>
+
+
 作为I/O线程，监听网络读操作位，负责从SocketChannel中读取报文；
-</li>
-<li>
+
+
 作为I/O线程，负责向SocketChannel写入报文发送给对方，如果发生写半包，会自动注册监听写事件，用于后续继续发送半包数据，直到数据全部发送完成；
-</li>
-<li>
+
+
 作为定时任务线程，可以执行定时任务，例如链路空闲检测和发送心跳消息等；
-</li>
-<li>
+
+
 作为线程执行器可以执行普通的任务Task（Runnable）。
-</li>
+
 
 ### 3.3.2 gRPC service 线程模型
 

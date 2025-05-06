@@ -25,195 +25,195 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;搭建学习环境准备篇.md">01 搭建学习环境准备篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;RocketMQ&#32;核心概念扫盲篇.md">02 RocketMQ 核心概念扫盲篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;消息发送&#32;API&#32;详解与版本变迁说明.md">03 消息发送 API 详解与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;结合实际应用场景谈消息发送.md">04 结合实际应用场景谈消息发送.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;消息发送核心参数与工作原理详解.md">05 消息发送核心参数与工作原理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;消息发送常见错误与解决方案.md">06 消息发送常见错误与解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;事务消息使用及方案选型思考.md">07 事务消息使用及方案选型思考.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;消息消费&#32;API&#32;与版本变迁说明.md">08 消息消费 API 与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;DefaultMQPushConsumer&#32;核心参数与工作原理.md">09 DefaultMQPushConsumer 核心参数与工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;DefaultMQPushConsumer&#32;使用示例与注意事项.md">10 DefaultMQPushConsumer 使用示例与注意事项.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;DefaultLitePullConsumer&#32;核心参数与实战.md">11 DefaultLitePullConsumer 核心参数与实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;结合实际场景再聊&#32;DefaultLitePullConsumer&#32;的使用.md">12 结合实际场景再聊 DefaultLitePullConsumer 的使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;结合实际场景顺序消费、消息过滤实战.md">13 结合实际场景顺序消费、消息过滤实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;消息消费积压问题排查实战.md">14 消息消费积压问题排查实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;RocketMQ&#32;常用命令实战.md">15 RocketMQ 常用命令实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;RocketMQ&#32;集群性能摸高.md">16 RocketMQ 集群性能摸高.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;RocketMQ&#32;集群性能调优.md">17 RocketMQ 集群性能调优.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;RocketMQ&#32;集群平滑运维.md">18 RocketMQ 集群平滑运维.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;RocketMQ&#32;集群监控（一）.md">19 RocketMQ 集群监控（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;RocketMQ&#32;集群监控（二）.md">20 RocketMQ 集群监控（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;RocketMQ&#32;集群告警.md">21 RocketMQ 集群告警.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;RocketMQ&#32;集群踩坑记.md">22 RocketMQ 集群踩坑记.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;消息轨迹、ACL&#32;与多副本搭建.md">23 消息轨迹、ACL 与多副本搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;RocketMQ-Console&#32;常用页面指标获取逻辑.md">24 RocketMQ-Console 常用页面指标获取逻辑.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;RocketMQ&#32;Nameserver&#32;背后的设计理念.md">25 RocketMQ Nameserver 背后的设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Java&#32;并发编程实战.md">26 Java 并发编程实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="27&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（一）.md">27 从 RocketMQ 学基于文件的编程模式（一）.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（二）.md">28 从 RocketMQ 学基于文件的编程模式（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;从&#32;RocketMQ&#32;学&#32;Netty&#32;网络编程技巧.md">29 从 RocketMQ 学 Netty 网络编程技巧.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;RocketMQ&#32;学习方法之我见.md">30 RocketMQ 学习方法之我见.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -296,10 +296,10 @@ MappedByteBuffer mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, 
 
 </code></pre>
 <p>实现要点如下：</p>
-<ul>
-<li>首先需要通过 RandomAccessFile 构建一个文件写入通道 FileChannel，提供基于块写入的通道。</li>
-<li>通过 FileChannel 的 map 方法创建内存映射。</li>
-</ul>
+
+首先需要通过 RandomAccessFile 构建一个文件写入通道 FileChannel，提供基于块写入的通道。
+通过 FileChannel 的 map 方法创建内存映射。
+
 <p>**在 Linux 操作系统中，MappedByteBuffer 基本可以看成是页缓存（PageCache）。**在 Linux 操作系统中的内存使用策略时，会最大可能的利用机器的物理内存，并常驻内存中，就是所谓的页缓存，只有当操作系统的内存不够的情况下，会采用缓存置换算法例如 LRU，将不常用的页缓存回收，即操作系统会自动管理这部分内存，无需使用者关心。如果从页缓存中查询数据时未命中，会产生缺页中断，由操作系统自动将文件中的内容加载到页缓存。</p>
 <p>内存映射，将磁盘数据映射到磁盘，通过向内存映射中写入数据，这些数据并不会立即同步到磁盘，需用定时刷盘或由操作系统决定何时将数据持久化到磁盘。故存储的在页缓存的中的数据，如果 RocketMQ Broker 进程异常退出，存储在页缓存中的数据并不会丢失，操作系统会定时页缓存中的数据持久化到磁盘，做到安全可靠。<strong>不过如果是机器断电等异常情况，存储在页缓存中的数据就有可能丢失。</strong></p>
 <h3>顺序写</h3>
@@ -316,8 +316,8 @@ MappedByteBuffer mappedByteBuffer = this.fileChannel.map(MapMode.READ_WRITE, 0, 
 <p><img src="assets/20200909224052719.png" alt="7" /></p>
 <p>在结合上图 MappedFile selectMappedBuffer 方法，我们来阐述其实现要点：</p>
 <ol>
-<li>对 MappedByteBuffer slice 是通过调用 hold 增加一次引用，即引用该 ByteBuffer 的引用计数器加一。</li>
-<li>对返回后的 ByteBuffer，被封装在 SelectMappedBufferResult 中，该 ByteBuffer 的使用者在使用完毕后，会释放它，这个时候 ReferenceResource 的 release 方法会被调用，引用计数器会减一。</li>
+对 MappedByteBuffer slice 是通过调用 hold 增加一次引用，即引用该 ByteBuffer 的引用计数器加一。
+对返回后的 ByteBuffer，被封装在 SelectMappedBufferResult 中，该 ByteBuffer 的使用者在使用完毕后，会释放它，这个时候 ReferenceResource 的 release 方法会被调用，引用计数器会减一。
 </ol>
 </div>
                     </div>

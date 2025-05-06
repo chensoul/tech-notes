@@ -14,18 +14,18 @@ JVM  TI属于[Java Platform Debugger Architecture](https://docs.oracle.com/javas
 
 从Java SE 5开始，Java平台调试体系就使用JVM TI替代了之前的JVMPI和JVMDI。如果你对这部分背景还不熟悉，强烈推荐先阅读下面这几篇文章：
 
-<li>
+
 [深入 Java 调试体系：第 1 部分，JPDA 体系概览](https://www.ibm.com/developerworks/cn/java/j-lo-jpda1/index.html)
-</li>
-<li>
+
+
 [深入 Java 调试体系：第 2 部分，JVMTI 和 Agent 实现](https://www.ibm.com/developerworks/cn/java/j-lo-jpda2/index.html)
-</li>
-<li>
+
+
 [深入 Java 调试体系：第 3 部分，JDWP 协议及实现](https://www.ibm.com/developerworks/cn/java/j-lo-jpda3/index.html)
-</li>
-<li>
+
+
 [深入 Java 调试体系：第 4 部分，Java 调试接口（JDI）](https://www.ibm.com/developerworks/cn/java/j-lo-jpda4/index.html)
-</li>
+
 
 虽然Java已经使用了JVM TI很多年，但从源码上看在Android 8.0才[集成](http://androidxref.com/8.0.0_r4/xref/art/runtime/openjdkjvmti/)了JVM  TI v1.2，主要是需要在Runtime中支持修改内存中的Dex和监控全局的事件。有了JVM  TI的支持，我们可以实现很多调试工具没有实现的功能，或者定制我们自己的Debug工具来获取我们关心的数据。
 
@@ -37,90 +37,90 @@ JVM  TI属于[Java Platform Debugger Architecture](https://docs.oracle.com/javas
 
 **线程相关事件 -&gt; 监控线程创建堆栈、锁信息**
 
-<li>
+
 ThreadStart ：线程在执行方法前产生线程启动事件。
-</li>
-<li>
+
+
 ThreadEnd：线程结束事件。
-</li>
-<li>
+
+
 MonitorWait：wait方法调用后。
-</li>
-<li>
+
+
 MonitorWaited：wait方法完成等待。
-</li>
-<li>
+
+
 MonitorContendedEnter：当线程试图获取一个已经被其他线程持有的对象锁时。
-</li>
-<li>
+
+
 MonitorContendedEntered：当线程获取到对象锁继续执行时。
-</li>
+
 
 **类加载准备事件 -&gt; 监控类加载**
 
-<li>
+
 ClassFileLoadHook：在类加载之前触发。
-</li>
-<li>
+
+
 ClassLoad：某个类首次被加载。
-</li>
-<li>
+
+
 ClassPrepare：某个类的准备阶段完成。
-</li>
+
 
 **异常事件 -&gt; 监控异常信息**
 
-<li>
+
 Exception：有异常抛出的时候。
-</li>
-<li>
+
+
 ExceptionCatch：当捕获到一个异常时候。
-</li>
+
 
 **调试相关**
 
-<li>
+
 SingleStep：步进事件，可以实现相当细粒度的字节码执行序列，这个功能可以探查多线程下的字节码执行序列。
-</li>
-<li>
+
+
 Breakpoint：当线程执行到一个带断点的位置，断点可以通过JVMTI SetBreakpoint方法来设置。
-</li>
+
 
 **方法执行**
 
-<li>
+
 FramePop：当方法执行到retrun指令或者出现异常时候产生，手动调用NofityFramePop JVM TI函数也可产生该事件。
-</li>
-<li>
+
+
 MethodEntry：当开始执行一个Java方法的时候。
-</li>
-<li>
+
+
 MethodExit：当方法执行完成后，产生异常退出时。
-</li>
-<li>
+
+
 FieldAccess：当访问了设置了观察点的属性时产生事件，观察点使用SetFieldAccessWatch函数设置。
-</li>
-<li>
+
+
 FieldModification：当设置了观察点的属性值被修改后，观察点使用SetFieldModificationWatch设置。
-</li>
+
 
 **GC -&gt; 监控GC事件与时间**
 
-<li>
+
 GarbageCollectionStart：GC启动时。
-</li>
-<li>
+
+
 GarbageCollectionFinish：GC结束后。
-</li>
+
 
 **对象事件 -&gt; 监控内存分配**
 
-<li>
+
 ObjectFree：GC释放一个对象时。
-</li>
-<li>
+
+
 VMObjectAlloc：虚拟机分配一个对象的时候。
-</li>
+
 
 **其他**
 
@@ -272,15 +272,15 @@ com.dodola.jvmti I/jvmti: ==========触发 GCFinish=======
 
 JVM  TI可以在虚拟机运行的状态下对字节码进行修改，可以通过下面三种方式修改字节码。
 
-<li>
+
 Static：在虚拟机加载Class文件之前，对字节码修改。该方式一般不采用。
-</li>
-<li>
+
+
 Load-Time：在虚拟机加载某个Class时，可以通过JVM  TI回调拿到该类的字节码，会触发ClassFileLoadHook回调函数，该方法由于ClassLoader机制只会触发一次，由于我们Attach Agent的时候经常是在虚拟机执行一段时间之后，所以并不能修改已经加载的Class比如Object，所以需要根据Class的加载时机选择该方法。
-</li>
-<li>
+
+
 Dynamic：对于已经载入的Class文件也可以通过JVM  TI机制修改，当系统调用函数RetransformClasses时会触发ClassFileLoadHook，此时可以对字节码进行修改，该方法最为实用。
-</li>
+
 
 传统的JVM操作的是Java Bytecode，Android里的字节码操作的是[Dalvik Bytecode](https://source.android.com/devices/tech/dalvik/dalvik-bytecode)，Dalvik Bytecode是寄存器实现的，操作起来相对JavaBytecode来说要相对容易一些，可以不用处理本地变量和操作数栈的交互。
 

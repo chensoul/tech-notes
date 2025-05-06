@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -242,16 +242,16 @@
 <h2>安装基础组件</h2>
 <h3>前期准备</h3>
 <p>使用 <code>kubeadm</code> 前，我们需要提前做一些准备。</p>
-<ul>
-<li>
+
+
 <p><strong>我们需要禁用 swap</strong>。通过之前的学习，我们知道每个节点上都有个必须的组件，名为 <code>kubelet</code>，自 K8S 1.8 开始，启动 <code>kubelet</code> 时，需要禁用 <code>swap</code> 。或者需要更改 <code>kubelet</code> 的启动参数 <code>--fail-swap-on=false</code>。</p>
 <p>虽说可以更改参数让其可用，但是我建议还是禁用 <code>swap</code> 除非你的集群有特殊的需求，比如：有大内存使用的需求，但又想节约成本；或者你知道你将要做什么，否则可能会出现一些非预期的情况，尤其是做了内存限制的时候，当某个 Pod 达到内存限制的时候，它可能会溢出到 swap 中，这会导致 K8S 无法正常进行调度。</p>
 <p>如何禁用：</p>
 <ol>
-<li>使用 <code>sudo cat /proc/swaps</code> 验证 swap 配置的设备和文件。</li>
-<li>通过 <code>swapoff -a</code> 关闭 swap 。</li>
-<li>使用 <code>sudo blkid</code> 或者 <code>sudo lsblk</code> 可查看到我们的设备属性，请注意输出结果中带有 <code>swap</code> 字样的信息。</li>
-<li>将 <code>/etc/fstab</code> 中和上一条命令中输出的，和 swap 相关的挂载点都删掉，以免在机器重启或重挂载时，再挂载 <code>swap</code> 分区。</li>
+使用 <code>sudo cat /proc/swaps</code> 验证 swap 配置的设备和文件。
+通过 <code>swapoff -a</code> 关闭 swap 。
+使用 <code>sudo blkid</code> 或者 <code>sudo lsblk</code> 可查看到我们的设备属性，请注意输出结果中带有 <code>swap</code> 字样的信息。
+将 <code>/etc/fstab</code> 中和上一条命令中输出的，和 swap 相关的挂载点都删掉，以免在机器重启或重挂载时，再挂载 <code>swap</code> 分区。
 </ol>
 <p>执行完上述操作，<code>swap</code> 便会被禁用，当然你也可以再次通过上述命令，或者 <code>free</code> 命令来确认是否还有 <code>swap</code> 存在。</p>
 <pre><code>[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="02706d6d76426f6371766770">[email&#160;protected]</a> ~]# free 
@@ -259,21 +259,21 @@
 Mem:        1882748       85608     1614836       16808      182304     1630476
 Swap:             0           0           0
 </code></pre>
-</li>
-<li>
+
+
 <p>通过 <code>sudo cat /sys/class/dmi/id/product_uuid</code> 可查看机器的 <code>product_uuid</code> 请确保要搭建集群的所有节点的 <code>product_uuid</code> 均不相同。同时所有节点的 Mac 地址也不能相同，通过 <code>ip a</code> 或者 <code>ifconfig -a</code> 可进行查看。</p>
 <p>我们在第二章提到过，每个 Node 都有一些信息会被记录进集群内，而此处我们需要保证的这些唯一的信息，便会记录在集群的 <code>nodeInfo</code> 中，比如 <code>product_uuid</code> 在集群内以 <code>systemUUID</code> 来表示。具体信息我们可以通过集群的 <code>API Server</code> 获取到，在后面的章节会详细讲述。</p>
-</li>
-<li>
+
+
 <p>第三章中，我们已经谈过 K8S 是 C/S 架构，在启动后，会固定监听一些端口用于提供服务。可以通过 <code>sudo netstat -ntlp |grep -E '6443|23[79,80]|1025[0,1,2]'</code> 查看这些端口是否被占用，如果被占用，请手动释放。</p>
 <p>如果你执行上述命令时，提示 <code>command not found</code>，则表明你需要先安装 <code>netstat</code>，在 CentOS 系统中需要通过 <code>sudo yum install net-tools</code> 安装，而在 Debian/Ubuntu 系统中，则需要通过 <code>sudo apt install net-tools</code> 进行安装。</p>
-</li>
-<li>
+
+
 <p>前面我们也提到了，我们需要一个容器运行时，通常情况下是 <code>Docker</code>，我们可以通过<a href="https://docs.docker.com/install/overview/">官方的 Docker 文档</a> 进行安装，安装完成后记得启动服务。</p>
 <p>官方推荐使用 <code>17.03</code> ，但我建议你可以直接安装 <code>18.03</code> 或者更新的版本，因为 <code>17.03</code> 版本的 Docker 已经在 2018 年 3 月 <code>EOL</code>（End Of Life）了。对于更新版本的 Docker，虽然 K8S 尚未在新版本中经过大量测试，但毕竟新版本有很多 Bugfix 和新特性的增加，也能规避一些可能遇到的问题（比如个别情况下 container 不会自动删除的情况 (17.09) ）。</p>
 <p>另外，由于 Docker 的 API 都是带有版本的，且有良好的兼容性，当使用低版本 API 请求时会自动降级，所以一般情况下也不会有什么问题。</p>
-</li>
-</ul>
+
+
 <h3>安装 kubectl</h3>
 <p>第三章中，我们已经说过 <code>kubectl</code> 是集群的客户端，我们现在搭建集群时，也必须要安装它，用于验证集群功能。</p>
 <p>安装步骤在第 4 章已经详细说明了，此处不做赘述，可查阅第 4 章或参考下面的内容。</p>
@@ -354,10 +354,10 @@ Created symlink from /etc/systemd/system/multi-user.target.wants/kubelet.service
 <p>此时，我们的前期准备已经基本完成，可以使用 <code>kubeadm</code> 来创建集群了。别着急，在此之前，我们还需要安装两个工具，名为<code>crictl</code> 和 <code>socat</code>。</p>
 <h3>安装前置依赖 crictl</h3>
 <p><code>crictl</code> 包含在 <a href="https://github.com/kubernetes-sigs/cri-tools.git"><code>cri-tools</code></a> 项目中，这个项目中包含两个工具：</p>
-<ul>
-<li><code>crictl</code> 是 <code>kubelet</code> CRI (Container Runtime Interface) 的 CLI 。</li>
-<li><code>critest</code> 是 <code>kubelet</code> CRI 的测试工具集。</li>
-</ul>
+
+<code>crictl</code> 是 <code>kubelet</code> CRI (Container Runtime Interface) 的 CLI 。
+<code>critest</code> 是 <code>kubelet</code> CRI 的测试工具集。
+
 <p>安装可以通过进入 <code>cri-tools</code> 项目的 <a href="https://github.com/kubernetes-sigs/cri-tools/releases">Release 页面</a> ，根据项目 <a href="https://github.com/kubernetes-sigs/cri-tools#current-status">README</a> 文件中的版本兼容关系，选择自己所需的安装包，下载即可，由于我们安装 K8S 1.11.3 所以选择最新的 v1.11.x 的安装包。</p>
 <p><img src="assets/1660f7cee66145d1" alt="img" /></p>
 <pre><code>[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7a5b8b8a397bab6a4a3b2a5">[email&#160;protected]</a> ~]# wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v1.11.1/crictl-v1.11.1-linux-amd64.tar.gz
@@ -447,8 +447,8 @@ The connection to the server localhost:8080 was refused - did you specify the ri
 <p><code>kubectl get nodes</code> 可查看集群中 <code>Node</code> 信息，同样报错。</p>
 <p>在上面我们提到过，K8S 默认会监听一些端口，但并不是 <code>8080</code> 端口，由此可知，我们的 <code>kubectl</code> 配置有误。</p>
 <h3>配置 kubectl</h3>
-<ul>
-<li>
+
+
 <p>使用 <code>kubectl</code> 的参数 <code>--kubeconfig</code> 或者环境变量 <code>KUBECONFIG</code> 。</p>
 <pre><code>[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4e3c21213a0e232f3d3a2b3c">[email&#160;protected]</a> ~]# kubectl --kubeconfig /etc/kubernetes/admin.conf get nodes                                                
 NAME      STATUS     ROLES     AGE       VERSION
@@ -458,8 +458,8 @@ master    NotReady   master    13h       v1.11.3
 NAME      STATUS     ROLES     AGE       VERSION
 master    NotReady   master    13h       v1.11.3
 </code></pre>
-</li>
-<li>
+
+
 <p>使用传参的方式未免太繁琐，我们也可以更改默认配置文件</p>
 <pre><code>[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="33415c5c47735e5240475641">[email&#160;protected]</a> ~]# mkdir -p $HOME/.kube
 [<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c6e7373685c717d6f68796e">[email&#160;protected]</a> ~]# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
@@ -468,8 +468,8 @@ master    NotReady   master    13h       v1.11.3
 NAME      STATUS     ROLES     AGE       VERSION
 master    NotReady   master    13h       v1.11.3
 </code></pre>
-</li>
-</ul>
+
+
 <h3>配置集群网络</h3>
 <p>通过上面的配置，我们已经可以正常获取 <code>Node</code> 信息。但通过第 2 章，我们了解到 <code>Node</code> 都有 <code>status</code>，而此时我们唯一的 <code>Node</code> 是 <code>NotReady</code>。我们通过给 <code>kubectl</code> 传递 <code>-o</code> 参数更改输出格式，查看更详细的情况。</p>
 <pre><code>[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ceef3f3e8dcf1fdefe8f9ee">[email&#160;protected]</a> ~]# kubectl get nodes -o yaml

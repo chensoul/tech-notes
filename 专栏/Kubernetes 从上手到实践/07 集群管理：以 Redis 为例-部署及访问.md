@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -303,12 +303,12 @@ kubernetes   ClusterIP   10.96.0.1    &lt;none&gt;        443/TCP   16m        &
 <p>通过使用 <code>kubectl</code> 查看，能看到主要会显示 <code>Service</code> 的名称，类型，IP，端口及创建时间和选择器等。我们来具体拆解下。</p>
 <h4>类型</h4>
 <p><code>Service</code> 目前有 4 种类型：</p>
-<ul>
-<li><code>ClusterIP</code>： 是 K8S 当前默认的 <code>Service</code> 类型。将 service 暴露于一个仅集群内可访问的虚拟 IP 上。</li>
-<li><code>NodePort</code>： 是通过在集群内所有 <code>Node</code> 上都绑定固定端口的方式将服务暴露出来，这样便可以通过 <code>&lt;NodeIP&gt;:&lt;NodePort&gt;</code> 访问服务了。</li>
-<li><code>LoadBalancer</code>： 是通过 <code>Cloud Provider</code> 创建一个外部的负载均衡器，将服务暴露出来，并且会自动创建外部负载均衡器路由请求所需的 <code>Nodeport</code> 或 <code>ClusterIP</code> 。</li>
-<li><code>ExternalName</code>： 是通过将服务由 DNS CNAME 的方式转发到指定的域名上将服务暴露出来，这需要 <code>kube-dns</code> 1.7 或更高版本支持。</li>
-</ul>
+
+<code>ClusterIP</code>： 是 K8S 当前默认的 <code>Service</code> 类型。将 service 暴露于一个仅集群内可访问的虚拟 IP 上。
+<code>NodePort</code>： 是通过在集群内所有 <code>Node</code> 上都绑定固定端口的方式将服务暴露出来，这样便可以通过 <code>&lt;NodeIP&gt;:&lt;NodePort&gt;</code> 访问服务了。
+<code>LoadBalancer</code>： 是通过 <code>Cloud Provider</code> 创建一个外部的负载均衡器，将服务暴露出来，并且会自动创建外部负载均衡器路由请求所需的 <code>Nodeport</code> 或 <code>ClusterIP</code> 。
+<code>ExternalName</code>： 是通过将服务由 DNS CNAME 的方式转发到指定的域名上将服务暴露出来，这需要 <code>kube-dns</code> 1.7 或更高版本支持。
+
 <h4>实践</h4>
 <p>上面已经说完了 <code>Service</code> 的基本类型，而我们也已经部署了一个 Redis ,当还无法访问到该服务，接下来我们将刚才部署的 Redis 服务暴露出来。</p>
 <pre><code>➜  ~ kubectl expose deploy/redis --port=6379 --protocol=TCP --target-port=6379 --name=redis-server  
@@ -319,13 +319,13 @@ kubernetes     ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP    49m   
 redis-server   ClusterIP   10.108.105.63   &lt;none&gt;        6379/TCP   4s        run=redis
 </code></pre>
 <p>通过 <code>kubectl expose</code> 命令将 redis server 暴露出来，这里需要进行下说明：</p>
-<ul>
-<li><code>port</code>： 是 <code>Service</code> 暴露出来的端口，可通过此端口访问 <code>Service</code>。</li>
-<li><code>protocol</code>： 是所用协议。当前 K8S 支持 TCP/UDP 协议，在 1.12 版本中实验性的加入了对 <a href="https://zh.wikipedia.org/zh-hans/流控制传输协议">SCTP 协议</a>的支持。默认是 TCP 协议。</li>
-<li><code>target-port</code>： 是实际服务所在的目标端口，请求由 <code>port</code> 进入通过上述指定 <code>protocol</code> 最终流向这里配置的端口。</li>
-<li><code>name</code>： <code>Service</code> 的名字，它的用处主要在 dns 方面。</li>
-<li><code>type</code>： 是前面提到的类型，如果没指定默认是 <code>ClusterIP</code>。</li>
-</ul>
+
+<code>port</code>： 是 <code>Service</code> 暴露出来的端口，可通过此端口访问 <code>Service</code>。
+<code>protocol</code>： 是所用协议。当前 K8S 支持 TCP/UDP 协议，在 1.12 版本中实验性的加入了对 <a href="https://zh.wikipedia.org/zh-hans/流控制传输协议">SCTP 协议</a>的支持。默认是 TCP 协议。
+<code>target-port</code>： 是实际服务所在的目标端口，请求由 <code>port</code> 进入通过上述指定 <code>protocol</code> 最终流向这里配置的端口。
+<code>name</code>： <code>Service</code> 的名字，它的用处主要在 dns 方面。
+<code>type</code>： 是前面提到的类型，如果没指定默认是 <code>ClusterIP</code>。
+
 <p>现在我们的 redis 是使用的默认类型 <code>ClusterIP</code>，所以并不能直接通过外部进行访问，我们使用 <code>port-forward</code> 的方式让它可在集群外部访问。</p>
 <pre><code>➜  ~ kubectl port-forward svc/redis-server 6379:6379
 Forwarding from 127.0.0.1:6379 -&gt; 6379

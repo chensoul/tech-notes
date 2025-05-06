@@ -25,207 +25,207 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;学好&#32;Netty，是你修炼&#32;Java&#32;内功的必经之路.md">00 学好 Netty，是你修炼 Java 内功的必经之路.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;初识&#32;Netty：为什么&#32;Netty&#32;这么流行？.md">01  初识 Netty：为什么 Netty 这么流行？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;纵览全局：把握&#32;Netty&#32;整体架构脉络.md">02  纵览全局：把握 Netty 整体架构脉络.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;引导器作用：客户端和服务端启动都要做些什么？.md">03  引导器作用：客户端和服务端启动都要做些什么？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;事件调度层：为什么&#32;EventLoop&#32;是&#32;Netty&#32;的精髓？.md">04 事件调度层：为什么 EventLoop 是 Netty 的精髓？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;服务编排层：Pipeline&#32;如何协调各类&#32;Handler&#32;？.md">05  服务编排层：Pipeline 如何协调各类 Handler ？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;粘包拆包问题：如何获取一个完整的网络包？.md">06  粘包拆包问题：如何获取一个完整的网络包？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;接头暗语：如何利用&#32;Netty&#32;实现自定义协议通信？.md">07  接头暗语：如何利用 Netty 实现自定义协议通信？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="08&#32;&#32;开箱即用：Netty&#32;支持哪些常用的解码器？.md">08  开箱即用：Netty 支持哪些常用的解码器？.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;数据传输：writeAndFlush&#32;处理流程剖析.md">09  数据传输：writeAndFlush 处理流程剖析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;双刃剑：合理管理&#32;Netty&#32;堆外内存.md">10  双刃剑：合理管理 Netty 堆外内存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;另起炉灶：Netty&#32;数据传输载体&#32;ByteBuf&#32;详解.md">11  另起炉灶：Netty 数据传输载体 ByteBuf 详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;他山之石：高性能内存分配器&#32;jemalloc&#32;基本原理.md">12  他山之石：高性能内存分配器 jemalloc 基本原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;举一反三：Netty&#32;高性能内存管理设计（上）.md">13  举一反三：Netty 高性能内存管理设计（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;举一反三：Netty&#32;高性能内存管理设计（下）.md">14  举一反三：Netty 高性能内存管理设计（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;轻量级对象回收站：Recycler&#32;对象池技术解析.md">15  轻量级对象回收站：Recycler 对象池技术解析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;IO&#32;加速：与众不同的&#32;Netty&#32;零拷贝技术.md">16  IO 加速：与众不同的 Netty 零拷贝技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;源码篇：从&#32;Linux&#32;出发深入剖析服务端启动流程.md">17  源码篇：从 Linux 出发深入剖析服务端启动流程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;源码篇：解密&#32;Netty&#32;Reactor&#32;线程模型.md">18  源码篇：解密 Netty Reactor 线程模型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;源码篇：一个网络请求在&#32;Netty&#32;中的旅程.md">19  源码篇：一个网络请求在 Netty 中的旅程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;技巧篇：Netty&#32;的&#32;FastThreadLocal&#32;究竟比&#32;ThreadLocal&#32;快在哪儿？.md">20  技巧篇：Netty 的 FastThreadLocal 究竟比 ThreadLocal 快在哪儿？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;技巧篇：延迟任务处理神器之时间轮&#32;HashedWheelTimer.md">21  技巧篇：延迟任务处理神器之时间轮 HashedWheelTimer.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;技巧篇：高性能无锁队列&#32;Mpsc&#32;Queue.md">22  技巧篇：高性能无锁队列 Mpsc Queue.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;架构设计：如何实现一个高性能分布式&#32;RPC&#32;框架.md">23  架构设计：如何实现一个高性能分布式 RPC 框架.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;服务发布与订阅：搭建生产者和消费者的基础框架.md">24  服务发布与订阅：搭建生产者和消费者的基础框架.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;远程通信：通信协议设计以及编解码的实现.md">25  远程通信：通信协议设计以及编解码的实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;服务治理：服务发现与负载均衡机制的实现.md">26  服务治理：服务发现与负载均衡机制的实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;&#32;动态代理：为用户屏蔽&#32;RPC&#32;调用的底层细节.md">27  动态代理：为用户屏蔽 RPC 调用的底层细节.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;实战总结：RPC&#32;实战总结与进阶延伸.md">28  实战总结：RPC 实战总结与进阶延伸.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;&#32;编程思想：Netty&#32;中应用了哪些设计模式？.md">29  编程思想：Netty 中应用了哪些设计模式？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;&#32;实践总结：Netty&#32;在项目开发中的一些最佳实践.md">30  实践总结：Netty 在项目开发中的一些最佳实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;结束语&#32;&#32;技术成长之路：如何打造自己的技术体系.md">31 结束语  技术成长之路：如何打造自己的技术体系.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -373,9 +373,9 @@ Receive client : [123
 </code></pre>
 <h3>特殊分隔符解码器 DelimiterBasedFrameDecoder</h3>
 <p>使用特殊分隔符解码器 DelimiterBasedFrameDecoder 之前我们需要了解以下几个属性的作用。</p>
-<ul>
-<li><strong>delimiters</strong></li>
-</ul>
+
+<strong>delimiters</strong>
+
 <p>delimiters 指定特殊分隔符，通过写入 ByteBuf 作为<strong>参数</strong>传入。delimiters 的类型是 ByteBuf 数组，所以我们可以同时指定多个分隔符，但是最终会选择长度最短的分隔符进行消息拆分。</p>
 <p>例如接收方收到的数据为：</p>
 <pre><code>+--------------+
@@ -398,17 +398,17 @@ Receive client : [123
 
 +----------+
 </code></pre>
-<ul>
-<li><strong>maxLength</strong></li>
-</ul>
+
+<strong>maxLength</strong>
+
 <p>maxLength 是报文最大长度的限制。如果超过 maxLength 还没有检测到指定分隔符，将会抛出 TooLongFrameException。可以说 maxLength 是对程序在极端情况下的一种<strong>保护措施</strong>。</p>
-<ul>
-<li><strong>failFast</strong></li>
-</ul>
+
+<strong>failFast</strong>
+
 <p>failFast 与 maxLength 需要搭配使用，通过设置 failFast 可以控制抛出 TooLongFrameException 的时机，可以说 Netty 在细节上考虑得面面俱到。如果 failFast=true，那么在超出 maxLength 会立即抛出 TooLongFrameException，不再继续进行解码。如果 failFast=false，那么会等到解码出一个完整的消息后才会抛出 TooLongFrameException。</p>
-<ul>
-<li><strong>stripDelimiter</strong></li>
-</ul>
+
+<strong>stripDelimiter</strong>
+
 <p>stripDelimiter 的作用是判断解码后得到的消息是否去除分隔符。如果 stripDelimiter=false，特定分隔符为 \n，那么上述数据包解码出的结果为：</p>
 <pre><code>+-------+---------+
 
@@ -469,9 +469,9 @@ io.netty.handler.codec.TooLongFrameException: frame length exceeds 10: 13 - disc
 <h3>长度域解码器 LengthFieldBasedFrameDecoder</h3>
 <p>长度域解码器 LengthFieldBasedFrameDecoder 是解决 TCP 拆包/粘包问题最常用的**解码器。**它基本上可以覆盖大部分基于长度拆包场景，开源消息中间件 RocketMQ 就是使用 LengthFieldBasedFrameDecoder 进行解码的。LengthFieldBasedFrameDecoder 相比 FixedLengthFrameDecoder 和 DelimiterBasedFrameDecoder 要复杂一些，接下来我们就一起学习下这个强大的解码器。</p>
 <p>首先我们同样先了解 LengthFieldBasedFrameDecoder 中的几个重要属性，这里我主要把它们分为两个部分：<strong>长度域解码器特有属性</strong>以及<strong>与其他解码器（如特定分隔符解码器）的相似的属性</strong>。</p>
-<ul>
-<li><strong>长度域解码器特有属性。</strong></li>
-</ul>
+
+<strong>长度域解码器特有属性。</strong>
+
 <pre><code>// 长度字段的偏移量，也就是存放长度数据的起始位置
 
 private final int lengthFieldOffset; 
@@ -506,9 +506,9 @@ private final int initialBytesToStrip;
 
 private final int lengthFieldEndOffset;
 </code></pre>
-<ul>
-<li><strong>与固定长度解码器和特定分隔符解码器相似的属性。</strong></li>
-</ul>
+
+<strong>与固定长度解码器和特定分隔符解码器相似的属性。</strong>
+
 <pre><code>private final int maxFrameLength; // 报文最大限制长度
 
 private final boolean failFast; // 是否立即抛出 TooLongFrameException，与 maxFrameLength 搭配使用
@@ -532,12 +532,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +--------+----------------+      +--------+----------------+
 </code></pre>
 <p>上述协议是最基本的格式，报文只包含消息长度 Length 和消息内容 Content 字段，其中 Length 为 16 进制表示，共占用 2 字节，Length 的值 0x000C 代表 Content 占用 12 字节。该协议对应的解码器参数组合如下：</p>
-<ul>
-<li>lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。</li>
-<li>lengthFieldLength = 2，协议设计的固定长度。</li>
-<li>lengthAdjustment = 0，Length 字段只包含消息长度，不需要做任何修正。</li>
-<li>initialBytesToStrip = 0，解码后内容依然是 Length + Content，不需要跳过任何初始字节。</li>
-</ul>
+
+lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。
+lengthFieldLength = 2，协议设计的固定长度。
+lengthAdjustment = 0，Length 字段只包含消息长度，不需要做任何修正。
+initialBytesToStrip = 0，解码后内容依然是 Length + Content，不需要跳过任何初始字节。
+
 <p><strong>示例 2：解码结果需要截断。</strong></p>
 <pre><code>BEFORE DECODE (14 bytes)         AFTER DECODE (12 bytes)
 
@@ -550,12 +550,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +--------+----------------+      +----------------+
 </code></pre>
 <p>示例 2 和示例 1 的区别在于解码后的结果只包含消息内容，其他的部分是不变的。该协议对应的解码器参数组合如下：</p>
-<ul>
-<li>lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。</li>
-<li>lengthFieldLength = 2，协议设计的固定长度。</li>
-<li>lengthAdjustment = 0，Length 字段只包含消息长度，不需要做任何修正。</li>
-<li>initialBytesToStrip = 2，跳过 Length 字段的字节长度，解码后 ByteBuf 中只包含 Content字段。</li>
-</ul>
+
+lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。
+lengthFieldLength = 2，协议设计的固定长度。
+lengthAdjustment = 0，Length 字段只包含消息长度，不需要做任何修正。
+initialBytesToStrip = 2，跳过 Length 字段的字节长度，解码后 ByteBuf 中只包含 Content字段。
+
 <p><strong>示例 3：长度字段包含消息长度和消息内容所占的字节。</strong></p>
 <pre><code>BEFORE DECODE (14 bytes)         AFTER DECODE (14 bytes)
 
@@ -568,12 +568,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +--------+----------------+      +--------+----------------+
 </code></pre>
 <p>与前两个示例不同的是，示例 3 的 Length 字段包含 Length 字段自身的固定长度以及 Content 字段所占用的字节数，Length 的值为 0x000E（2 + 12 = 14 字节），在 Length 字段值（14 字节）的基础上做 lengthAdjustment（-2）的修正，才能得到真实的 Content 字段长度，所以对应的解码器参数组合如下：</p>
-<ul>
-<li>lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。</li>
-<li>lengthFieldLength = 2，协议设计的固定长度。</li>
-<li>lengthAdjustment = -2，长度字段为 14 字节，需要减 2 才是拆包所需要的长度。</li>
-<li>initialBytesToStrip = 0，解码后内容依然是 Length + Content，不需要跳过任何初始字节。</li>
-</ul>
+
+lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。
+lengthFieldLength = 2，协议设计的固定长度。
+lengthAdjustment = -2，长度字段为 14 字节，需要减 2 才是拆包所需要的长度。
+initialBytesToStrip = 0，解码后内容依然是 Length + Content，不需要跳过任何初始字节。
+
 <p><strong>示例 4：基于长度字段偏移的解码。</strong></p>
 <pre><code>BEFORE DECODE (17 bytes)                      AFTER DECODE (17 bytes)
 
@@ -586,12 +586,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +----------+----------+----------------+      +----------+----------+----------------+
 </code></pre>
 <p>示例 4 中 Length 字段不再是报文的起始位置，Length 字段的值为 0x00000C，表示 Content 字段占用 12 字节，该协议对应的解码器参数组合如下：</p>
-<ul>
-<li>lengthFieldOffset = 2，需要跳过 Header 1 所占用的 2 字节，才是 Length 的起始位置。</li>
-<li>lengthFieldLength = 3，协议设计的固定长度。</li>
-<li>lengthAdjustment = 0，Length 字段只包含消息长度，不需要做任何修正。</li>
-<li>initialBytesToStrip = 0，解码后内容依然是完整的报文，不需要跳过任何初始字节。</li>
-</ul>
+
+lengthFieldOffset = 2，需要跳过 Header 1 所占用的 2 字节，才是 Length 的起始位置。
+lengthFieldLength = 3，协议设计的固定长度。
+lengthAdjustment = 0，Length 字段只包含消息长度，不需要做任何修正。
+initialBytesToStrip = 0，解码后内容依然是完整的报文，不需要跳过任何初始字节。
+
 <p><strong>示例 5：长度字段与内容字段不再相邻。</strong></p>
 <pre><code>BEFORE DECODE (17 bytes)                      AFTER DECODE (17 bytes)
 
@@ -604,12 +604,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +----------+----------+----------------+      +----------+----------+----------------+
 </code></pre>
 <p>示例 5 中的 Length 字段之后是 Header 1，Length 与 Content 字段不再相邻。Length 字段所表示的内容略过了 Header 1 字段，所以也需要通过 lengthAdjustment 修正才能得到 Header + Content 的内容。示例 5 所对应的解码器参数组合如下：</p>
-<ul>
-<li>lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。</li>
-<li>lengthFieldLength = 3，协议设计的固定长度。</li>
-<li>lengthAdjustment = 2，由于 Header + Content 一共占用 2 + 12 = 14 字节，所以 Length 字段值（12 字节）加上 lengthAdjustment（2 字节）才能得到 Header + Content 的内容（14 字节）。</li>
-<li>initialBytesToStrip = 0，解码后内容依然是完整的报文，不需要跳过任何初始字节。</li>
-</ul>
+
+lengthFieldOffset = 0，因为 Length 字段就在报文的开始位置。
+lengthFieldLength = 3，协议设计的固定长度。
+lengthAdjustment = 2，由于 Header + Content 一共占用 2 + 12 = 14 字节，所以 Length 字段值（12 字节）加上 lengthAdjustment（2 字节）才能得到 Header + Content 的内容（14 字节）。
+initialBytesToStrip = 0，解码后内容依然是完整的报文，不需要跳过任何初始字节。
+
 <p><strong>示例 6：基于长度偏移和长度修正的解码。</strong></p>
 <pre><code>BEFORE DECODE (16 bytes)                       AFTER DECODE (13 bytes)
 
@@ -622,12 +622,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +------+--------+------+----------------+      +------+----------------+
 </code></pre>
 <p>示例 6 中 Length 字段前后分为别 HDR1 和 HDR2 字段，各占用 1 字节，所以既需要做长度字段的偏移，也需要做 lengthAdjustment 修正，具体修正的过程与 示例 5 类似。对应的解码器参数组合如下：</p>
-<ul>
-<li>lengthFieldOffset = 1，需要跳过 HDR1 所占用的 1 字节，才是 Length 的起始位置。</li>
-<li>lengthFieldLength = 2，协议设计的固定长度。</li>
-<li>lengthAdjustment = 1，由于 HDR2 + Content 一共占用 1 + 12 = 13 字节，所以 Length 字段值（12 字节）加上 lengthAdjustment（1）才能得到 HDR2 + Content 的内容（13 字节）。</li>
-<li>initialBytesToStrip = 3，解码后跳过 HDR1 和 Length 字段，共占用 3 字节。</li>
-</ul>
+
+lengthFieldOffset = 1，需要跳过 HDR1 所占用的 1 字节，才是 Length 的起始位置。
+lengthFieldLength = 2，协议设计的固定长度。
+lengthAdjustment = 1，由于 HDR2 + Content 一共占用 1 + 12 = 13 字节，所以 Length 字段值（12 字节）加上 lengthAdjustment（1）才能得到 HDR2 + Content 的内容（13 字节）。
+initialBytesToStrip = 3，解码后跳过 HDR1 和 Length 字段，共占用 3 字节。
+
 <p><strong>示例 7：长度字段包含除 Content 外的多个其他字段。</strong></p>
 <pre><code>BEFORE DECODE (16 bytes)                       AFTER DECODE (13 bytes)
 
@@ -640,12 +640,12 @@ private long bytesToDiscard; // 累计丢弃的字节数
 +------+--------+------+----------------+      +------+----------------+
 </code></pre>
 <p>示例 7 与 示例 6 的区别在于 Length 字段记录了整个报文的长度，包含 Length 自身所占字节、HDR1 、HDR2 以及 Content 字段的长度，解码器需要知道如何进行 lengthAdjustment 调整，才能得到 HDR2 和 Content 的内容。所以我们可以采用如下的解码器参数组合：</p>
-<ul>
-<li>lengthFieldOffset = 1，需要跳过 HDR1 所占用的 1 字节，才是 Length 的起始位置。</li>
-<li>lengthFieldLength = 2，协议设计的固定长度。</li>
-<li>lengthAdjustment = -3，Length 字段值（16 字节）需要减去 HDR1（1 字节） 和 Length 自身所占字节长度（2 字节）才能得到 HDR2 和 Content 的内容（1 + 12 = 13 字节）。</li>
-<li>initialBytesToStrip = 3，解码后跳过 HDR1 和 Length 字段，共占用 3 字节。</li>
-</ul>
+
+lengthFieldOffset = 1，需要跳过 HDR1 所占用的 1 字节，才是 Length 的起始位置。
+lengthFieldLength = 2，协议设计的固定长度。
+lengthAdjustment = -3，Length 字段值（16 字节）需要减去 HDR1（1 字节） 和 Length 自身所占字节长度（2 字节）才能得到 HDR2 和 Content 的内容（1 + 12 = 13 字节）。
+initialBytesToStrip = 3，解码后跳过 HDR1 和 Length 字段，共占用 3 字节。
+
 <p>以上 7 种示例涵盖了 LengthFieldBasedFrameDecoder 大部分的使用场景，你是否学会了呢？最后留一个小任务，在上一节课程中我们设计了一个较为通用的协议，如下所示。如何使用长度域解码器 LengthFieldBasedFrameDecoder 完成该协议的解码呢？抓紧自己尝试下吧。</p>
 <pre><code>+---------------------------------------------------------------+
 

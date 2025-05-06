@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -227,13 +227,13 @@
 <p>责任链模式: 通过责任链模式, 你可以为某个请求创建一个对象链. 每个对象依序检查此请求并对其进行处理或者将它传给链中的下一个对象。</p>
 <h4>FilterChain</h4>
 <p>在软件开发的常接触的责任链模式是FilterChain，它体现在很多软件设计中：</p>
-<ul>
-<li><strong>比如Spring Security框架中</strong></li>
-</ul>
+
+<strong>比如Spring Security框架中</strong>
+
 <p><img src="assets/tomcat-x-pipline-6.jpg" alt="img" /></p>
-<ul>
-<li><strong>比如HttpServletRequest处理的过滤器中</strong></li>
-</ul>
+
+<strong>比如HttpServletRequest处理的过滤器中</strong>
+
 <p>当一个request过来的时候，需要对这个request做一系列的加工，使用责任链模式可以使每个加工组件化，减少耦合。也可以使用在当一个request过来的时候，需要找到合适的加工方式。当一个加工方式不适合这个request的时候，传递到下一个加工方法，该加工方式再尝试对request加工。</p>
 <p>网上找了图，这里我们后文将通过Tomcat请求处理向你阐述。</p>
 <p><img src="assets/tomcat-x-pipline-5.jpg" alt="img" /></p>
@@ -244,29 +244,29 @@
 <blockquote>
 <p>第一个维度：管道聚合有很多不同<strong>类型</strong>，每种类型都与其他聚合计算不同的信息，但是可以将这些类型分为两类：</p>
 </blockquote>
-<ul>
-<li><strong>父级</strong> 父级聚合的输出提供了一组管道聚合，它可以计算新的存储桶或新的聚合以添加到现有存储桶中。</li>
-<li><strong>兄弟</strong> 同级聚合的输出提供的管道聚合，并且能够计算与该同级聚合处于同一级别的新聚合。</li>
-</ul>
+
+<strong>父级</strong> 父级聚合的输出提供了一组管道聚合，它可以计算新的存储桶或新的聚合以添加到现有存储桶中。
+<strong>兄弟</strong> 同级聚合的输出提供的管道聚合，并且能够计算与该同级聚合处于同一级别的新聚合。
+
 <blockquote>
 <p>第二个维度：根据<strong>功能设计</strong>的意图</p>
 </blockquote>
 <p>比如前置聚合可能是Bucket聚合，后置的可能是基于Metric聚合，那么它就可以成为一类管道</p>
 <p>进而引出了：<code>xxx bucket</code>(是不是很容易理解了 @pdai)</p>
-<ul>
-<li>
+
+
 <p>Bucket聚合 -&gt; Metric聚合</p>
 <p>： bucket聚合的结果，成为下一步metric聚合的输入</p>
-<ul>
-<li>Average bucket</li>
-<li>Min bucket</li>
-<li>Max bucket</li>
-<li>Sum bucket</li>
-<li>Stats bucket</li>
-<li>Extended stats bucket</li>
-</ul>
-</li>
-</ul>
+
+Average bucket
+Min bucket
+Max bucket
+Sum bucket
+Stats bucket
+Extended stats bucket
+
+
+
 <p>对构建体系而言，理解上面的已经够了，其它的类型不过是锦上添花而言。</p>
 <h2>一些例子</h2>
 <blockquote>
@@ -302,17 +302,17 @@
   }
 }
 </code></pre>
-<ul>
-<li>嵌套的bucket聚合：聚合出按月价格的直方图</li>
-<li>Metic聚合：对上面的聚合再求平均值。</li>
-</ul>
+
+嵌套的bucket聚合：聚合出按月价格的直方图
+Metic聚合：对上面的聚合再求平均值。
+
 <p><strong>字段类型</strong>：</p>
-<ul>
-<li>buckets_path：指定聚合的名称，支持多级嵌套聚合。</li>
-<li>gap_policy 当管道聚合遇到不存在的值，有点类似于term等聚合的(missing)时所采取的策略，可选择值为：skip、insert_zeros。</li>
-<li>skip：此选项将丢失的数据视为bucket不存在。它将跳过桶并使用下一个可用值继续计算。</li>
-<li>format 用于格式化聚合桶的输出(key)。</li>
-</ul>
+
+buckets_path：指定聚合的名称，支持多级嵌套聚合。
+gap_policy 当管道聚合遇到不存在的值，有点类似于term等聚合的(missing)时所采取的策略，可选择值为：skip、insert_zeros。
+skip：此选项将丢失的数据视为bucket不存在。它将跳过桶并使用下一个可用值继续计算。
+format 用于格式化聚合桶的输出(key)。
+
 <p>输出结果如下</p>
 <pre><code class="language-json">{
   &quot;took&quot;: 11,

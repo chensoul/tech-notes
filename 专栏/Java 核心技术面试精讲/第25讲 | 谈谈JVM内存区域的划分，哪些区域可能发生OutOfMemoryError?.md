@@ -36,12 +36,12 @@ JVM内部的概念庞杂，对于初学者比较晦涩，我的建议是在工�
 
 今天这一讲作为Java虚拟机内存管理的开篇，我会侧重于：
 
-<li>
+
 分析广义上的JVM内存结构或者说Java进程内存结构。
-</li>
-<li>
+
+
 谈到Java内存模型，不可避免的要涉及OutOfMemory（OOM）问题，那么在Java里面存在哪些种OOM的可能性，分别对应哪个内存区域的异常状况呢？
-</li>
+
 
 注意，具体JVM的内存结构，其实取决于其实现，不同厂商的JVM，或者同一厂商发布的不同版本，都有可能存在一定差异。我在下面的分析中，还会介绍Oracle Hotspot JVM的部分设计变化。
 
@@ -54,12 +54,12 @@ JVM内部的概念庞杂，对于初学者比较晦涩，我的建议是在工�
 
 我这里简要介绍两点区别：
 
-<li>
+
 直接内存（Direct Memory）区域，它就是我在[专栏第12讲](http://time.geekbang.org/column/article/8393)中谈到的Direct Buffer所直接分配的内存，也是个容易出现问题的地方。尽管，在JVM工程师的眼中，并不认为它是JVM内部内存的一部分，也并未体现JVM内存模型中。
-</li>
-<li>
+
+
 JVM本身是个本地程序，还需要其他的内存去完成各种基本任务，比如，JIT Compiler在运行时对热点方法进行编译，就会将编译后的方法储存在Code Cache里面；GC等功能需要运行在本地线程之中，类似部分都需要占用内存空间。这些是实现JVM JIT等功能的需要，但规范中并不涉及。
-</li>
+
 
 如果深入到JVM的实现细节，你会发现一些结论似乎有些模棱两可，比如：
 
@@ -75,12 +75,12 @@ JVM本身是个本地程序，还需要其他的内存去完成各种基本任�
 
 这里面隐含着一层意思是，在抛出OutOfMemoryError之前，通常垃圾收集器会被触发，尽其所能去清理出空间，例如：
 
-<li>
+
 我在[专栏第4讲](http://time.geekbang.org/column/article/6970)的引用机制分析中，已经提到了JVM会去尝试回收软引用指向的对象等。
-</li>
-<li>
+
+
 在[java.nio.BIts.reserveMemory()](http://hg.openjdk.java.net/jdk/jdk/file/9f62267e79df/src/java.base/share/classes/java/nio/Bits.java) 方法中，我们能清楚的看到，System.gc()会被调用，以清理空间，这也是为什么在大量使用NIO的Direct Buffer之类时，通常建议不要加下面的参数，毕竟是个最后的尝试，有可能避免一定的内存不足问题。
-</li>
+
 
 ```
 -XX:+DisableExplicitGC
@@ -91,21 +91,21 @@ JVM本身是个本地程序，还需要其他的内存去完成各种基本任�
 
 从我前面分析的数据区的角度，除了程序计数器，其他区域都有可能会因为可能的空间不足发生OutOfMemoryError，简单总结如下：
 
-<li>
+
 堆内存不足是最常见的OOM原因之一，抛出的错误信息是“java.lang.OutOfMemoryError:Java heap space”，原因可能千奇百怪，例如，可能存在内存泄漏问题；也很有可能就是堆的大小不合理，比如我们要处理比较可观的数据量，但是没有显式指定JVM堆大小或者指定数值偏小；或者出现JVM处理引用不及时，导致堆积起来，内存无法释放等。
-</li>
-<li>
+
+
 而对于Java虚拟机栈和本地方法栈，这里要稍微复杂一点。如果我们写一段程序不断的进行递归调用，而且没有退出条件，就会导致不断地进行压栈。类似这种情况，JVM实际会抛出StackOverFlowError；当然，如果JVM试图去扩展栈空间的的时候失败，则会抛出OutOfMemoryError。
-</li>
-<li>
+
+
 对于老版本的Oracle JDK，因为永久代的大小是有限的，并且JVM对永久代垃圾回收（如，常量池回收、卸载不再需要的类型）非常不积极，所以当我们不断添加新类型的时候，永久代出现OutOfMemoryError也非常多见，尤其是在运行时存在大量动态类型生成的场合；类似Intern字符串缓存占用太多空间，也会导致OOM问题。对应的异常信息，会标记出来和永久代相关：“java.lang.OutOfMemoryError: PermGen space”。
-</li>
-<li>
+
+
 随着元数据区的引入，方法区内存已经不再那么窘迫，所以相应的OOM有所改观，出现OOM，异常信息则变成了：“java.lang.OutOfMemoryError: Metaspace”。
-</li>
-<li>
+
+
 直接内存不足，也会导致OOM，这个已经[专栏第11讲](http://time.geekbang.org/column/article/8369)介绍过。
-</li>
+
 
 今天是JVM内存部分的第一讲，算是我们先进行了热身准备，我介绍了主要的内存区域，以及在不同版本Hotspot JVM内部的变化，并且分析了各区域是否可能产生OutOfMemoryError，以及OOME发生的典型情况。
 

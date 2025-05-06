@@ -25,213 +25,213 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;我应该站在谁的肩膀上&#32;-&#32;OSI&#32;vs&#32;TCPIP模型.md">01 我应该站在谁的肩膀上 - OSI vs TCPIP模型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/02%20%E4%B8%87%E4%B8%88%E9%AB%98%E6%A5%BC%E5%B9%B3%E5%9C%B0%E8%B5%B7-%20%E7%89%A9%E7%90%86%E5%B1%82%20+%20%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.md">02 万丈高楼平地起- 物理层 + 数据链路层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;OSI的灵魂就是我&#32;-&#32;网络层.md">03 OSI的灵魂就是我 - 网络层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;要快还是要稳你说好了&#32;-&#32;传输层.md">04 要快还是要稳你说好了 - 传输层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;是时候展现真正的技术了&#32;-&#32;应用层.md">05 是时候展现真正的技术了 - 应用层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;重回小学课堂&#32;-&#32;二进制101.md">06 重回小学课堂 - 二进制101.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/07%201+1%20=%202%E5%90%97%EF%BC%9F%20-%20%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E8%AE%A1%E7%AE%97.md">07 1+1 = 2吗？ - 二进制的计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;16进制又是个什么鬼？&#32;-&#32;16进制的讲解.md">08 16进制又是个什么鬼？ - 16进制的讲解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;我想有个家&#32;-&#32;什么是IP地址.md">09 我想有个家 - 什么是IP地址.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;我可是住二环的人&#32;-&#32;IP地址的组成和分类.md">10 我可是住二环的人 - IP地址的组成和分类.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;我已经没地方住了吗&#32;-&#32;IPv6.md">11 我已经没地方住了吗 - IPv6.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;向左还是向右&#32;-&#32;IP路由.md">12 向左还是向右 - IP路由.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;我能给你安全感&#32;-&#32;TCP（一）.md">13 我能给你安全感 - TCP（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;我那不为人知的秘密是什么&#32;-&#32;TCP（二）.md">14 我那不为人知的秘密是什么 - TCP（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;不问收没收到，就问快不快&#32;-&#32;UDP.md">15 不问收没收到，就问快不快 - UDP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;我为什么与众不同&#32;-&#32;TCP高级篇（拥塞模型）.md">16 我为什么与众不同 - TCP高级篇（拥塞模型）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;来，先看看我的家谱&#32;-&#32;HTTP的身世.md">17 来，先看看我的家谱 - HTTP的身世.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;我都这么成功了，你却说我不行&#32;-&#32;HTTP&#32;的特点和缺点.md">18 我都这么成功了，你却说我不行 - HTTP 的特点和缺点.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;我老了，让我儿子来吧&#32;-&#32;HTTP2.md">19 我老了，让我儿子来吧 - HTTP2.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;稳重的大外甥&#32;-&#32;HTTPS.md">20 稳重的大外甥 - HTTPS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;HTTP的高级篇&#32;-&#32;HTTPClient（Java）.md">21 HTTP的高级篇 - HTTPClient（Java）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="22&#32;想来我家，你自己查呀&#32;-&#32;DNS.md">22 想来我家，你自己查呀 - DNS.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;来的早，不如来得巧&#32;-&#32;NAT.md">23 来的早，不如来得巧 - NAT.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;辛苦的邮政&#32;-&#32;SMTP.md">24 辛苦的邮政 - SMTP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;你就是看不见我&#32;-&#32;VPN.md">25 你就是看不见我 - VPN.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;黑客的好帮手&#32;-&#32;SSH.md">26 黑客的好帮手 - SSH.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;你可以得到我的心，却得不到我的人&#32;-&#32;物理安全设备.md">27 你可以得到我的心，却得不到我的人 - 物理安全设备.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;你怎么证明你就是你&#32;-&#32;身份验证和访问控制.md">28 你怎么证明你就是你 - 身份验证和访问控制.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（一）.md">29 我要怎么藏好我的考研资料 - 网络攻击（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（二）.md">30 我要怎么藏好我的考研资料 - 网络攻击（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;如何保护我的考研资料&#32;-&#32;网络攻击防范.md">31 如何保护我的考研资料 - 网络攻击防范.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;Linux网络安全&#32;-&#32;安全实战.md">32 Linux网络安全 - 安全实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;结语.md">33 结语.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -325,17 +325,17 @@ m.root-servers.net 202.12.27.33, 2001:dc3::35         WIDE Project
 <p>#### DNS的结构 DNS的最高的级别就是我们上面提到的Root，一共有13个。然后下面就是.com，.net ….，这个叫做Top Level Domain也可以简写成TLD。ICANN（Internet Corporation for Assigned Names）负责大部分TLD的分配。专门负责TLD的叫做TLD服务器。然后根据不同的Top Level会有Second Level，比如.Mil很明显就是军方使用，下面可以有Army，Navy。Edu很明显是教育，下面可以有MIT，Berkeley，然后就是比如csdn的Domain在.net的下面，这样看起来是不是就很清楚了。</p>
 <h4>DNS Zone</h4>
 <p>DNS Zone一共有两种</p>
-<ul>
-<li>Forward Lookup Zone（正向查找） - 这个是Host Name to IP，就是你给我Hostname，我给你查IP</li>
-<li>Reverse Lookup Zone（反向查找） - 和老大相比，这个老二并不怎么受欢迎，那就是给你IP，找到对应的HostName，什么地方会用到呢？比如Microsoft Exchange Servers和其他的邮件服务器去验证这个源域名来确保这个邮件是来自于合法的域名，当然还有一些比较老的工具，比如NSLookup，traceroute，SMTP</li>
-</ul>
+
+Forward Lookup Zone（正向查找） - 这个是Host Name to IP，就是你给我Hostname，我给你查IP
+Reverse Lookup Zone（反向查找） - 和老大相比，这个老二并不怎么受欢迎，那就是给你IP，找到对应的HostName，什么地方会用到呢？比如Microsoft Exchange Servers和其他的邮件服务器去验证这个源域名来确保这个邮件是来自于合法的域名，当然还有一些比较老的工具，比如NSLookup，traceroute，SMTP
+
 <h4>DNS Zone Type</h4>
 <h5>主区域（Primary Zone）</h5>
-<ul>
-<li>权威的区域信息。</li>
-<li>具有区域数据的读/写副本。</li>
-<li>接受来自客户端的动态更新或动态DNS。</li>
-</ul>
+
+权威的区域信息。
+具有区域数据的读/写副本。
+接受来自客户端的动态更新或动态DNS。
+
 <h5>次要区域（Secondary Zone）</h5>
 <p>看这个例子，比如说你有一个网站，同时有两个办公地点，北京和上海。在北京的站点，有一个DNS服务器。在上海的站点则没有。假设你有50个客户，他们都被指向北京站点以使用该DNS服务器。在两者之间，我们有一个WAN链接，但是你为了贪图小便宜吧，这不是最大的WAN链接。有的时候它就会崩溃了，上海站点中的可怜用户无法再访问任何需要DNS解析的内容了。要解决此问题，你可以复制一份你网站DNS区域从北京站点到上海站点的服务器，然后你可以将所有50个客户端指向该本地上海DNS服务器。使用客户端DNS配置，你可以配置多个DNS服务器供客户端查询。因此，如果你希望将这些客户端指向北京站点，则可以在这些客户端上具有主DNS服务器，然后将它们指向上海站点，则可以具有辅助DNS服务器。也可以反过来，由你自己来决定怎么设计这种模式。一旦你在上海站点上关闭了DNS服务器，你的客户端就可以将所有查询本地发送到该DNS服务器，而他们不再需要依靠不稳定的WAN链接。辅助DNS区域，我们获得辅助DNS区域的方式是执行区域传输。从主DNS服务器获取区域的副本。</p>
 <h5>DNS 区域传输 （Zone Transfer)</h5>
@@ -344,27 +344,27 @@ m.root-servers.net 202.12.27.33, 2001:dc3::35         WIDE Project
 <h5>缓存DNS服务器 （Cache Only DNS Server）</h5>
 <p>这是最简单的DNS服务器</p>
 <ol>
-<li>你所要做的就是安装DNS，工作就完成了！</li>
-<li>它不包含任何区域（zone）。</li>
-<li>缓存是在一段时间内建立的。</li>
+你所要做的就是安装DNS，工作就完成了！
+它不包含任何区域（zone）。
+缓存是在一段时间内建立的。
 </ol>
 <p>发生的情况是，你将客户端配置为将其DNS查询发送到上面没有区域的DNS服务器。客户询问该服务器的任何问题，都必须走出去并找到答案。找到答案后，会将答案放入其本地缓存中。因此，这就是仅缓存DNS服务器的工作方式，它会在一段时间内建立缓存。重新启动该服务器后，将刷新缓存。</p>
 <h4>资源记录(Resource Record)</h4>
 <p>在正向查找区域中可以放置不同类型的资源记录，其中一部分普通的。还有其他一些根据你所运行的DNS不同而产生的特定类型的资源记录。</p>
 <h5>普通资源记录(Common Resource Record)</h5>
-<ul>
-<li>主机记录是最常见的资源记录之一。 A记录是IPv4 host记录。AAAA就是IPv6 host记录。</li>
-<li>PTR或指针记录是驻留在反向查找区域中的记录，这些记录指向正向查找区域中的主机记录。</li>
-<li>CName是计算机的昵称。如果你的环境中有一台服务器，并且你希望所有人出于任何原因使用不同的名称来访问它，则可以将CName记录设置为指向主机记录。比如你的地址可能是sfredsddsd.com，你完全可以改为shuaige.com这样其他的人也好记。</li>
-<li>SRV记录或服务定位记录表示机器上运行的不同类型的服务。例如，在Microsoft环境中，如果客户端计算机想要查找域控制器，则它将向DNS服务器发送查询，询问该域的SRV记录，然后它将获得一个域控制器的列表，该列表它可以针对用户的任何目的进行身份验证。</li>
-<li>MX记录。这些是邮件交换记录，它们表示邮件服务器。在Microsoft环境中，它将是交换服务器。</li>
-<li>NAPTR。通常用于互联网电话中的应用。一个例子就是会话发起协议（SIP）中服务器和用户地址的映射。</li>
-</ul>
+
+主机记录是最常见的资源记录之一。 A记录是IPv4 host记录。AAAA就是IPv6 host记录。
+PTR或指针记录是驻留在反向查找区域中的记录，这些记录指向正向查找区域中的主机记录。
+CName是计算机的昵称。如果你的环境中有一台服务器，并且你希望所有人出于任何原因使用不同的名称来访问它，则可以将CName记录设置为指向主机记录。比如你的地址可能是sfredsddsd.com，你完全可以改为shuaige.com这样其他的人也好记。
+SRV记录或服务定位记录表示机器上运行的不同类型的服务。例如，在Microsoft环境中，如果客户端计算机想要查找域控制器，则它将向DNS服务器发送查询，询问该域的SRV记录，然后它将获得一个域控制器的列表，该列表它可以针对用户的任何目的进行身份验证。
+MX记录。这些是邮件交换记录，它们表示邮件服务器。在Microsoft环境中，它将是交换服务器。
+NAPTR。通常用于互联网电话中的应用。一个例子就是会话发起协议（SIP）中服务器和用户地址的映射。
+
 <h5>特殊的资源记录(Special Resource Record)</h5>
-<ul>
-<li>NS或Name Server（DNS Server)。名称服务器记录表示DNS正在该服务器上运行，这就是使它成为Name Server的原因。</li>
-<li>SOA或Start of Authority或者是一个提供权威信息的DNS服务器。</li>
-</ul>
+
+NS或Name Server（DNS Server)。名称服务器记录表示DNS正在该服务器上运行，这就是使它成为Name Server的原因。
+SOA或Start of Authority或者是一个提供权威信息的DNS服务器。
+
 <p>把以上的原理了解清楚了，你的DNS知识就也足够了。</p>
 </div>
                     </div>

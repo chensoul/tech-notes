@@ -1,9 +1,9 @@
 <audio title="21｜自动化（上）：DRY，如何自动化一切重复性劳动？" src="https://static001.geekbang.org/resource/audio/8a/e5/8a6ba2c895ae06e904365aca534f12e5.mp3" controls="controls"></audio> 
-<p>你好，我是轩脉刃。</p><p>不知道你有没有听过这种说法，优秀程序员应该有三大美德：懒惰、急躁和傲慢，这句话是Perl语言的发明者Larry Wall说的。其中懒惰这一点指的就是，程序员为了懒惰，不重复做同样的事情，会思考是否能把一切重复性的劳动自动化（don’t repeat yourself）。</p><p>而框架开发到这里，我们也需要思考，有哪些重复性劳动可以自动化么？</p><p>从第十章到现在我们一直在说，框架核心是服务提供者，在开发具体应用时，一定会有很多需求要创建各种各样的服务，毕竟“一切皆服务”；而每次创建服务的时候，我们都需要至少编写三个文件，服务接口、服务提供者、服务实例。<strong>如果能自动生成三个文件，提供一个“自动化创建服务的工具”，应该能节省不少的操作</strong>。</p><p>说到创建工具，我们经常需要为了一个事情而创建一个命令行工具，而每次创建命令行工具，也都需要创建固定的Command.go文件，其中有固定的Command结构，这些代码我们能不能偷个懒，“<strong>自动化创建命令行工具</strong>”呢？</p><p>另外之前我们做过几次中间件的迁移，先将源码拷贝复制，再修改对应的Gin路径，这个操作也是颇为繁琐的。那么，我们是否可以写一个“<strong>自动化中间件迁移工具</strong>”，一个命令自动复制和替换呢？</p><!-- [[[read_end]]] --><p>这些命令都是可以实现的，这节课我们就来尝试完成这三项自动化，“自动化创建服务工具”， “自动化创建命令行工具”，以及“自动化中间件迁移工具”。</p><h2>自动化创建服务工具</h2><p>在创建各种各样的服务时，“自动化创建服务工具”能帮我们节省不少开发时间。我们先思考下这个工具应该如何实现。</p><p>既然之前已经引入cobra，将框架修改为可以支持命令行工具，创建命令并不是一个难事，我们来定义一套创建服务的provider 命令即可。照旧先设计好要创建的命令，再一一实现。</p><h3>命令创建</h3><p>“自动化创建服务工具”如何设计命令层级呢？我们设计一个一级命令和两个二级命令：</p><ul>
-<li><code>./hade provider</code> 一级命令，provider，打印帮助信息；</li>
-<li><code>./hade provider new</code> 二级命令，创建一个服务；</li>
-<li><code>./hade provider list</code> 二级命令，列出容器内的所有服务，列出它们的字符串凭证。</li>
-</ul><p>首先将provider的这两个二级命令，都存放在command/provider.go中。而对应的一级命令 providerCommand 是一个打印帮助信息的空实现。</p><pre><code class="language-go">// providerCommand 一级命令
+<p>你好，我是轩脉刃。</p><p>不知道你有没有听过这种说法，优秀程序员应该有三大美德：懒惰、急躁和傲慢，这句话是Perl语言的发明者Larry Wall说的。其中懒惰这一点指的就是，程序员为了懒惰，不重复做同样的事情，会思考是否能把一切重复性的劳动自动化（don’t repeat yourself）。</p><p>而框架开发到这里，我们也需要思考，有哪些重复性劳动可以自动化么？</p><p>从第十章到现在我们一直在说，框架核心是服务提供者，在开发具体应用时，一定会有很多需求要创建各种各样的服务，毕竟“一切皆服务”；而每次创建服务的时候，我们都需要至少编写三个文件，服务接口、服务提供者、服务实例。<strong>如果能自动生成三个文件，提供一个“自动化创建服务的工具”，应该能节省不少的操作</strong>。</p><p>说到创建工具，我们经常需要为了一个事情而创建一个命令行工具，而每次创建命令行工具，也都需要创建固定的Command.go文件，其中有固定的Command结构，这些代码我们能不能偷个懒，“<strong>自动化创建命令行工具</strong>”呢？</p><p>另外之前我们做过几次中间件的迁移，先将源码拷贝复制，再修改对应的Gin路径，这个操作也是颇为繁琐的。那么，我们是否可以写一个“<strong>自动化中间件迁移工具</strong>”，一个命令自动复制和替换呢？</p><!-- [[[read_end]]] --><p>这些命令都是可以实现的，这节课我们就来尝试完成这三项自动化，“自动化创建服务工具”， “自动化创建命令行工具”，以及“自动化中间件迁移工具”。</p><h2>自动化创建服务工具</h2><p>在创建各种各样的服务时，“自动化创建服务工具”能帮我们节省不少开发时间。我们先思考下这个工具应该如何实现。</p><p>既然之前已经引入cobra，将框架修改为可以支持命令行工具，创建命令并不是一个难事，我们来定义一套创建服务的provider 命令即可。照旧先设计好要创建的命令，再一一实现。</p><h3>命令创建</h3><p>“自动化创建服务工具”如何设计命令层级呢？我们设计一个一级命令和两个二级命令：</p>
+<code>./hade provider</code> 一级命令，provider，打印帮助信息；
+<code>./hade provider new</code> 二级命令，创建一个服务；
+<code>./hade provider list</code> 二级命令，列出容器内的所有服务，列出它们的字符串凭证。
+<p>首先将provider的这两个二级命令，都存放在command/provider.go中。而对应的一级命令 providerCommand 是一个打印帮助信息的空实现。</p><pre><code class="language-go">// providerCommand 一级命令
 var providerCommand = &amp;cobra.Command{
    Use:   "provider",
    Short: "服务提供相关命令",
@@ -243,11 +243,11 @@ func (s *{{.|title}}Service) Foo() string {
 
 </code></pre><p>最后我们验证一下这个创建服务命令。同样编译./hade 命令之后，执行 <code>./hade provider new</code> , 定义服务凭证为user，目录名称同样为user。<br>
 <img src="https://static001.geekbang.org/resource/image/b7/3c/b7ae3ba7edee1ce7a216e891d1b8e23c.png?wh=620x193" alt=""></p><p>能看到 app/provider/ 目录下创建了user文件夹，其中有contract.go、provider.go、service.go三个文件：<br>
-<img src="https://static001.geekbang.org/resource/image/46/e6/46900bb2ea53135b890763687f4cc0e6.png?wh=376x276" alt=""></p><p>其中每个文件的定义都完整，且可以直接再次编译通过，验证完成！</p><h2>自动化创建命令行工具</h2><p>到这里我们就完成了创建服务工具的自动化。开头提到具体运营一个应用的时候，我们也会经常需要创建一个自定义的命令行。比如运营一个网站，可能会创建一个命令来统计网站注册人数，也可能要创建一个命令来定期检查是否有违禁的文章需要封禁等。所以自动创建命令行工具在实际工作中是非常有必要的。</p><p>同服务命令一样，我们可以有一套创建命令行工具的命令。</p><ul>
-<li><code>./hade command</code> 一级命令，显示帮助信息</li>
-<li><code>./hade command list</code> 二级命令，列出所有控制台命令</li>
-<li><code>./hade command new</code> 二级命令，创建一个控制台命令</li>
-</ul><p>command相关的命令和provider的命令的实现基本是一致的。这里我们简要解说下重点，具体对应的代码详情可以参考GitHub上的<a href="https://github.com/gohade/coredemo/blob/geekbang/21/framework/command/cmd.go">framework/command/cmd.go</a> 文件。</p><p>一级命令./hade command 我们就不说了，是简单地显示帮助信息。</p><p>二级命令 ./hade command list。功能是列出所有的控制台命令。这个功能实际上和直接调用 ./hade 显示的帮助信息差不多，把一级根命令全部列了出来，只不过我们使用了一个更为语义化的 ./hade command list 来显示。<br>
+<img src="https://static001.geekbang.org/resource/image/46/e6/46900bb2ea53135b890763687f4cc0e6.png?wh=376x276" alt=""></p><p>其中每个文件的定义都完整，且可以直接再次编译通过，验证完成！</p><h2>自动化创建命令行工具</h2><p>到这里我们就完成了创建服务工具的自动化。开头提到具体运营一个应用的时候，我们也会经常需要创建一个自定义的命令行。比如运营一个网站，可能会创建一个命令来统计网站注册人数，也可能要创建一个命令来定期检查是否有违禁的文章需要封禁等。所以自动创建命令行工具在实际工作中是非常有必要的。</p><p>同服务命令一样，我们可以有一套创建命令行工具的命令。</p>
+<code>./hade command</code> 一级命令，显示帮助信息
+<code>./hade command list</code> 二级命令，列出所有控制台命令
+<code>./hade command new</code> 二级命令，创建一个控制台命令
+<p>command相关的命令和provider的命令的实现基本是一致的。这里我们简要解说下重点，具体对应的代码详情可以参考GitHub上的<a href="https://github.com/gohade/coredemo/blob/geekbang/21/framework/command/cmd.go">framework/command/cmd.go</a> 文件。</p><p>一级命令./hade command 我们就不说了，是简单地显示帮助信息。</p><p>二级命令 ./hade command list。功能是列出所有的控制台命令。这个功能实际上和直接调用 ./hade 显示的帮助信息差不多，把一级根命令全部列了出来，只不过我们使用了一个更为语义化的 ./hade command list 来显示。<br>
 <img src="https://static001.geekbang.org/resource/image/85/9e/85fd992ca12552e3d5fef51994b1079e.png?wh=946x722" alt=""></p><p>它的实现也并不复杂，具体就是使用Root().Commands() 方法遍历一级跟命令的所有一级命令。</p><pre><code class="language-go">// cmdListCommand 列出所有的控制台命令
 var cmdListCommand = &amp;cobra.Command{
    Use:   "list",
@@ -281,22 +281,22 @@ var {{.|title}}Command = &amp;cobra.Command{
       return nil
    },
 }
-</code></pre><p>实现步骤也很简单：survery 交互先要求用户输入命令名称；然后要求用户输入文件夹名称，记得检查命令名称和文件夹名称是否合理；之后创建文件夹 app/console/command/xxx 和文件 app/console/command/xxx/xxx.go；最后使用template将模版写入文件中。</p><h2>自动化中间件迁移工具</h2><p>除了服务工具和命令行工具的创建，对于中间件，我们在开发过程中也是经常会使用创建的，同样的，可以为中间件定义一系列的命令来自动化。</p><ul>
-<li><code>./hade middleware</code> 一级命令，显示帮助信息</li>
-<li><code>./hade middleware list</code> 二级命令，列出所有的业务中间件</li>
-<li><code>./hade middleware new</code> 二级命令，创建一个新的业务中间件</li>
-<li><code>./hade middleware migrate</code> 二级命令，迁移Gin已有的中间件</li>
-</ul><p>其中的前面三个命令基本上和provider、command 命令如出一辙，我们就不赘述了，同样你可以通过GitHub 上的<a href="https://github.com/gohade/coredemo/blob/geekbang/21/framework/command/middleware.go">framework/command/middleware.go 文件</a>参考其具体实现，相信你可以顺利写出来。</p><p>这里重点说一下  <code>./hade middleware migrate</code> 命令。</p><p>不知道你有没有好奇，为什么迁移也要写一个命令？当时在将Gin迁移进入hade框架的时候我们说，Gin作为一个成熟的开源作品，有丰富的中间件库，存放GitHub的一个项目 <a href="https://github.com/gin-contrib/">gin-contrib</a> 中。那么在开发过程中，我们一定会经常需要使用到这些中间件。</p><p>但是由于这些中间件使用到的Gin框架的地址为 ：</p><pre><code class="language-plain">github.com/gin-gonic/gin
+</code></pre><p>实现步骤也很简单：survery 交互先要求用户输入命令名称；然后要求用户输入文件夹名称，记得检查命令名称和文件夹名称是否合理；之后创建文件夹 app/console/command/xxx 和文件 app/console/command/xxx/xxx.go；最后使用template将模版写入文件中。</p><h2>自动化中间件迁移工具</h2><p>除了服务工具和命令行工具的创建，对于中间件，我们在开发过程中也是经常会使用创建的，同样的，可以为中间件定义一系列的命令来自动化。</p>
+<code>./hade middleware</code> 一级命令，显示帮助信息
+<code>./hade middleware list</code> 二级命令，列出所有的业务中间件
+<code>./hade middleware new</code> 二级命令，创建一个新的业务中间件
+<code>./hade middleware migrate</code> 二级命令，迁移Gin已有的中间件
+<p>其中的前面三个命令基本上和provider、command 命令如出一辙，我们就不赘述了，同样你可以通过GitHub 上的<a href="https://github.com/gohade/coredemo/blob/geekbang/21/framework/command/middleware.go">framework/command/middleware.go 文件</a>参考其具体实现，相信你可以顺利写出来。</p><p>这里重点说一下  <code>./hade middleware migrate</code> 命令。</p><p>不知道你有没有好奇，为什么迁移也要写一个命令？当时在将Gin迁移进入hade框架的时候我们说，Gin作为一个成熟的开源作品，有丰富的中间件库，存放GitHub的一个项目 <a href="https://github.com/gin-contrib/">gin-contrib</a> 中。那么在开发过程中，我们一定会经常需要使用到这些中间件。</p><p>但是由于这些中间件使用到的Gin框架的地址为 ：</p><pre><code class="language-plain">github.com/gin-gonic/gin
 </code></pre><p>而我们的Gin框架地址为：</p><pre><code class="language-plain">github.com/gohade/hade/framework/gin
 </code></pre><p>所以我们不能使用import直接使用这些中间件，那么有没有一个办法，能直接一键迁移gin-contrib下的某个中间件呢？比如  <code>git@github.com:gin-contrib/cors.git</code> ，直接拷贝并且自动修改好Gin框架引用地址，放到我们的 app/http/middleware/ 目录中。</p><p>于是就有了这个  <code>./hade middleware migragte</code> 命令。下面就梳理一下这个命令的逻辑步骤。以下载cors中间件为例，我们的思路是从GitHub上将这个<a href="https://github.com/gin-contrib/cors">cors项目</a>复制下来，<strong>并且删除这个项目的一些不必要的文件</strong>。</p><p>什么是不必要的文件呢？.git目录、go.mod、go.sum，这些都是作为一个“项目”才会需要的，而我们要把项目中的这些删掉，让它成为一个文件，存放在我们的app/http/middleware/cors目录下。最后再遍历这个目录的所有文件，将所有出现“github.com/gin-gonic/gin” 的地方替换为“github.com/gohade/hade/framework/gin”就可以了。</p><p>从git上复制一个项目，在Golang中可以使用一个第三方库 <a href="https://github.com/go-git/go-git">go-git</a>，这个第三方库已经有2.7k 个star，且基于Apache 的Licence，是可以直接import使用的。目前这个库最新的版本为v5。</p><p>它的使用方式如下：</p><pre><code class="language-go">_, err := git.PlainClone("/tmp/foo", false, &amp;git.CloneOptions{
     URL:      "https://github.com/go-git/go-git",
     Progress: os.Stdout,
 })
 </code></pre><p>将某个Git的URL地址使用gitclone，下载到/tmp/foo目录，并且把输出也输出到控制台。</p><p>我们也可以使用这样的方式进行复制。具体的代码逻辑也不难，归纳一下，migrate的实现步骤如下：</p><ol>
-<li>参数中获取中间件名称；</li>
-<li>使用go-git，将对应的gin-contrib的项目clone到目录/app/http/middleware；</li>
-<li>删除不必要的文件go.mod、go.sum、.git；</li>
-<li>替换关键字 “github.com/gin-gonic/gin”。</li>
+参数中获取中间件名称；
+使用go-git，将对应的gin-contrib的项目clone到目录/app/http/middleware；
+删除不必要的文件go.mod、go.sum、.git；
+替换关键字 “github.com/gin-gonic/gin”。
 </ol><p>在framework/command/middleware.go中，对应的代码如下：</p><pre><code class="language-go">// 从gin-contrib中迁移中间件
 var middlewareMigrateCommand = &amp;cobra.Command{
    Use:   "migrate",
@@ -490,7 +490,7 @@ func Routes(r *gin.Engine) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/b2/e0/bf56878a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -505,8 +505,8 @@ func Routes(r *gin.Engine) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/70/67/0c1359c2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -521,8 +521,8 @@ func Routes(r *gin.Engine) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/d6/98/e2d8f2a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -537,5 +537,4 @@ func Routes(r *gin.Engine) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

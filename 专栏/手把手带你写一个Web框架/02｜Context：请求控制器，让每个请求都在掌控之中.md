@@ -13,10 +13,10 @@ func WithDeadline(parent Context, d time.Time) (Context, CancelFunc){}
 
 //函数句柄
 type CancelFunc func() 
-</code></pre><p>这个库虽然不大，但是设计感强，比较抽象，并不是很好理解。所以这里，我把 Context 的其他字段省略了。现在，我们只理解核心的 Done() 方法和 CancelFunc 这两个函数就可以了。</p><p>在树形逻辑链条上，<strong>一个节点其实有两个角色：一是下游树的管理者；二是上游树的被管理者</strong>，那么就对应需要有两个能力：</p><ul>
-<li>一个是能让整个下游树结束的能力，也就是函数句柄 CancelFunc；</li>
-<li>另外一个是在上游树结束的时候被通知的能力，也就是 Done()方法。同时因为通知是需要不断监听的，所以 Done() 方法需要通过 channel 作为返回值让使用方进行监听。</li>
-</ul><p>看<a href="https://pkg.go.dev/context@go1.15.5">官方代码</a>示例：</p><pre><code class="language-go">package main
+</code></pre><p>这个库虽然不大，但是设计感强，比较抽象，并不是很好理解。所以这里，我把 Context 的其他字段省略了。现在，我们只理解核心的 Done() 方法和 CancelFunc 这两个函数就可以了。</p><p>在树形逻辑链条上，<strong>一个节点其实有两个角色：一是下游树的管理者；二是上游树的被管理者</strong>，那么就对应需要有两个能力：</p>
+一个是能让整个下游树结束的能力，也就是函数句柄 CancelFunc；
+另外一个是在上游树结束的时候被通知的能力，也就是 Done()方法。同时因为通知是需要不断监听的，所以 Done() 方法需要通过 channel 作为返回值让使用方进行监听。
+<p>看<a href="https://pkg.go.dev/context@go1.15.5">官方代码</a>示例：</p><pre><code class="language-go">package main
 
 import (
 	"context"
@@ -43,10 +43,10 @@ func main() {
 
 }
 </code></pre><p>主线程创建了一个 1 毫秒结束的定时器 Context，在定时器结束的时候，主线程会通过 Done()函数收到事件结束通知，然后主动调用函数句柄 cancelFunc 来通知所有子 Context 结束（这个例子比较简单没有子 Context）。</p><p>我打个更形象的比喻，CancelFunc 和 Done 方法就像是电话的话筒和听筒，话筒 CancelFunc，用来告诉管辖范围内的所有 Context 要进行自我终结，而通过监听听筒 Done 方法，我们就能听到上游父级管理者的终结命令。</p><p>总之，<strong>CancelFunc 是主动让下游结束，而 Done 是被上游通知结束</strong>。</p><p>搞懂了具体实现方法，我们回过头来看这三个库函数 WithCancel / WithDeadline / WithTimeout 就很好理解了。</p><p>它们的本质就是“通过定时器来自动触发终结通知”，WithTimeout 设置若干秒后通知触发终结，WithDeadline 设置未来某个时间点触发终结。</p><p>对应到 Context 代码中，它们的功能就是：<strong>为一个父节点生成一个带有 Done 方法的子节点，并且返回子节点的 CancelFunc 函数句柄</strong>。</p><p><img src="https://static001.geekbang.org/resource/image/90/c5/900361486571bb703261d2cfd56e87c5.jpg?wh=1920x1080" alt=""><br>
-我们用一张图来辅助解释一下，Context的使用会形成一个树形结构，下游指的是树形结构中的子节点及所有子节点的子树，而上游指的是当前节点的父节点。比如图中圈起来的部分，当WithTimeout调用CancelFunc的时候，所有下游的With系列产生的Context都会从Done中收到消息。</p><h2>Context 是怎么产生的</h2><p>现在我们已经了解标准库 context 的设计思路了，在开始写代码之前，我们还要把 Context 放到 net/http 的主流程逻辑中，其中有两个问题要搞清楚：<strong>Context 在哪里产生？它的上下游逻辑是什么？</strong></p><p>要回答这两个问题，可以用我们在上一讲介绍的思维导图方法，因为主流程已经拎清楚了，现在你只需要把其中 Context 有关的代码再详细过一遍，然后在思维导图上标记出来就可以了。</p><p>这里，我已经把 Context 的关键代码都用蓝色背景做了标记，你可以检查一下自己有没有标漏。</p><p><img src="https://static001.geekbang.org/resource/image/79/a4/79a3c7eafc3ccfbe1b162e646902c5a4.png?wh=1413x906" alt=""></p><p>照旧看图梳理代码流程，来看蓝色部分，从前到后的层级梳理就不再重复讲了，我们看关键位置。</p><p>从图中最后一层的代码 req.ctx = ctx 中看到，每个连接的 Context 最终是放在 request 结构体中的。</p><p>而且这个时候， Context 已经有多层父节点。因为，在代码中，每执行一次 WithCancel、WithValue，就封装了一层 Context，我们通过这一张流程图能清晰看到最终 Context 的生成层次。</p><p><img src="https://static001.geekbang.org/resource/image/dd/22/ddbca0e4d1c66ed417b9de97c338ae22.jpg?wh=1920x1080" alt=""></p><p>你发现了吗，<strong>其实每个连接的 Context 都是基于 baseContext 复制来的</strong>。对应到代码中就是，在为某个连接开启 Goroutine 的时候，为当前连接创建了一个 connContext，这个 connContext 是基于 server 中的 Context 而来，而 server 中 Context 的基础就是 baseContext。</p><p>所以，Context 从哪里产生这个问题，我们就解决了，但是如果我们想要对 Context 进行必要的修改，还要从上下游逻辑中，找到它的修改点在哪里。</p><p>生成最终的 Context 的流程中，net/http 设计了<strong>两处可以注入修改</strong>的地方，都在 Server 结构里面，一处是 BaseContext，另一处是 ConnContext。</p><ul>
-<li>BaseContext 是整个 Context 生成的源头，如果我们不希望使用默认的 context.Backgroud()，可以替换这个源头。</li>
-<li>而在每个连接生成自己要使用的 Context 时，会调用 ConnContext ，它的第二个参数是 net.Conn，能让我们对某些特定连接进行设置，比如要针对性设置某个调用 IP。</li>
-</ul><p>这两个函数的定义我写在下面的代码里了，展示一下，你可以看看。</p><pre><code class="language-go">type Server struct {
+我们用一张图来辅助解释一下，Context的使用会形成一个树形结构，下游指的是树形结构中的子节点及所有子节点的子树，而上游指的是当前节点的父节点。比如图中圈起来的部分，当WithTimeout调用CancelFunc的时候，所有下游的With系列产生的Context都会从Done中收到消息。</p><h2>Context 是怎么产生的</h2><p>现在我们已经了解标准库 context 的设计思路了，在开始写代码之前，我们还要把 Context 放到 net/http 的主流程逻辑中，其中有两个问题要搞清楚：<strong>Context 在哪里产生？它的上下游逻辑是什么？</strong></p><p>要回答这两个问题，可以用我们在上一讲介绍的思维导图方法，因为主流程已经拎清楚了，现在你只需要把其中 Context 有关的代码再详细过一遍，然后在思维导图上标记出来就可以了。</p><p>这里，我已经把 Context 的关键代码都用蓝色背景做了标记，你可以检查一下自己有没有标漏。</p><p><img src="https://static001.geekbang.org/resource/image/79/a4/79a3c7eafc3ccfbe1b162e646902c5a4.png?wh=1413x906" alt=""></p><p>照旧看图梳理代码流程，来看蓝色部分，从前到后的层级梳理就不再重复讲了，我们看关键位置。</p><p>从图中最后一层的代码 req.ctx = ctx 中看到，每个连接的 Context 最终是放在 request 结构体中的。</p><p>而且这个时候， Context 已经有多层父节点。因为，在代码中，每执行一次 WithCancel、WithValue，就封装了一层 Context，我们通过这一张流程图能清晰看到最终 Context 的生成层次。</p><p><img src="https://static001.geekbang.org/resource/image/dd/22/ddbca0e4d1c66ed417b9de97c338ae22.jpg?wh=1920x1080" alt=""></p><p>你发现了吗，<strong>其实每个连接的 Context 都是基于 baseContext 复制来的</strong>。对应到代码中就是，在为某个连接开启 Goroutine 的时候，为当前连接创建了一个 connContext，这个 connContext 是基于 server 中的 Context 而来，而 server 中 Context 的基础就是 baseContext。</p><p>所以，Context 从哪里产生这个问题，我们就解决了，但是如果我们想要对 Context 进行必要的修改，还要从上下游逻辑中，找到它的修改点在哪里。</p><p>生成最终的 Context 的流程中，net/http 设计了<strong>两处可以注入修改</strong>的地方，都在 Server 结构里面，一处是 BaseContext，另一处是 ConnContext。</p>
+BaseContext 是整个 Context 生成的源头，如果我们不希望使用默认的 context.Backgroud()，可以替换这个源头。
+而在每个连接生成自己要使用的 Context 时，会调用 ConnContext ，它的第二个参数是 net.Conn，能让我们对某些特定连接进行设置，比如要针对性设置某个调用 IP。
+<p>这两个函数的定义我写在下面的代码里了，展示一下，你可以看看。</p><pre><code class="language-go">type Server struct {
 	...
 
     // BaseContext 用来为整个链条创建初始化 Context
@@ -124,21 +124,21 @@ type Context struct {
 func (ctx *Context) Done() &lt;-chan struct{} {
 	return ctx.BaseContext().Done()
 }
-</code></pre><p>这里举例了两个method的实现，其他的都大同小异就不在文稿里展示，你可以先自己写，然后对照我放在<a href="https://github.com/gohade/coredemo/blob/geekbang/02/framework/context.go">GitHub</a>上的完整代码检查一下。</p><p>自己封装的 Context 最终需要提供四类功能函数：</p><ul>
-<li>base 封装基本的函数功能，比如获取 http.Request 结构</li>
-<li>context 实现标准 Context 接口</li>
-<li>request 封装了 http.Request 的对外接口</li>
-<li>response 封装了 http.ResponseWriter 对外接口</li>
-</ul><p>完成之后，使用我们的IDE里面的结构查看器（每个IDE显示都不同），就能查看到如下的函数列表：<img src="https://static001.geekbang.org/resource/image/3c/cc/3c0c98741275beb7bdf5d6333b0c91cc.jpg?wh=1248x1456" alt=""></p><p>有了我们自己封装的 Context 之后，控制器就非常简化了。把框架定义的 ControllerHandler 放在框架目录下的controller.go文件中：</p><pre><code class="language-go">type ControllerHandler func(c *Context) error
+</code></pre><p>这里举例了两个method的实现，其他的都大同小异就不在文稿里展示，你可以先自己写，然后对照我放在<a href="https://github.com/gohade/coredemo/blob/geekbang/02/framework/context.go">GitHub</a>上的完整代码检查一下。</p><p>自己封装的 Context 最终需要提供四类功能函数：</p>
+base 封装基本的函数功能，比如获取 http.Request 结构
+context 实现标准 Context 接口
+request 封装了 http.Request 的对外接口
+response 封装了 http.ResponseWriter 对外接口
+<p>完成之后，使用我们的IDE里面的结构查看器（每个IDE显示都不同），就能查看到如下的函数列表：<img src="https://static001.geekbang.org/resource/image/3c/cc/3c0c98741275beb7bdf5d6333b0c91cc.jpg?wh=1248x1456" alt=""></p><p>有了我们自己封装的 Context 之后，控制器就非常简化了。把框架定义的 ControllerHandler 放在框架目录下的controller.go文件中：</p><pre><code class="language-go">type ControllerHandler func(c *Context) error
 </code></pre><p>把处理业务的控制器放在业务目录下的controller.go文件中：</p><pre><code class="language-go">func FooControllerHandler(ctx *framework.Context) error {
 	return ctx.Json(200, map[string]interface{}{
 		"code": 0,
 	})
 }
 </code></pre><p>参数只有一个 framework.Context，是不是清爽很多，这都归功于刚完成的自定义 Context。</p><h2>为单个请求设置超时</h2><p>上面我们封装了自定义的 Context，从设计层面实现了标准库的Context。下面回到我们这节课核心要解决的问题，为单个请求设置超时。</p><p>如何使用自定义 Context 设置超时呢？结合前面分析的标准库思路，我们三步走完成：</p><ol>
-<li>继承 request 的 Context，创建出一个设置超时时间的 Context；</li>
-<li>创建一个新的 Goroutine 来处理具体的业务逻辑；</li>
-<li>设计事件处理顺序，当前 Goroutine 监听超时时间 Contex 的 Done()事件，和具体的业务处理结束事件，哪个先到就先处理哪个。</li>
+继承 request 的 Context，创建出一个设置超时时间的 Context；
+创建一个新的 Goroutine 来处理具体的业务逻辑；
+设计事件处理顺序，当前 Goroutine 监听超时时间 Contex 的 Done()事件，和具体的业务处理结束事件，哪个先到就先处理哪个。
 </ol><p>理清步骤，我们就可以在业务的controller.go文件中完成业务逻辑了。<strong>第一步生成一个超时的 Context</strong>：</p><pre><code class="language-go">durationCtx, cancel := context.WithTimeout(c.BaseContext(), time.Duration(1*time.Second))
 // 这里记得当所有事情处理结束后调用 cancel，告知 durationCtx 的后续 Context 结束
 defer cancel()
@@ -187,8 +187,8 @@ go func() {
         c.Json(500, "time out")
 	}
 </code></pre><p>接收到结束事件，只需要打印日志，但是，在接收到异常事件和超时事件的时候，我们希望告知浏览器前端“异常或者超时了”，所以会使用 c.Json 来返回一个字符串信息。</p><p>三步走到这里就完成了对某个请求的超时设置，你可以通过 go build、go run 尝试启动下这个服务。如果你在浏览器开启一个请求之后，浏览器不会等候事件处理 10s，而在等待我们设置的超时事件 1s 后，页面显示“time out”就结束这个请求了，就说明我们为某个事件设置的超时生效了。</p><h2>边界场景</h2><p>到这里，我们的超时逻辑设置就结束且生效了。但是，这样的代码逻辑只能算是及格，为什么这么说呢？因为它并没有覆盖所有的场景。</p><p>我们的代码逻辑要再严谨一些，<strong>把边界场景也考虑进来</strong>。这里有两种可能：</p><ol>
-<li>异常事件、超时事件触发时，需要往 responseWriter 中写入信息，这个时候如果有其他 Goroutine 也要操作 responseWriter，会不会导致 responseWriter 中的信息出现乱序？</li>
-<li>超时事件触发结束之后，已经往 responseWriter 中写入信息了，这个时候如果有其他 Goroutine 也要操作 responseWriter， 会不会导致 responseWriter 中的信息重复写入？</li>
+异常事件、超时事件触发时，需要往 responseWriter 中写入信息，这个时候如果有其他 Goroutine 也要操作 responseWriter，会不会导致 responseWriter 中的信息出现乱序？
+超时事件触发结束之后，已经往 responseWriter 中写入信息了，这个时候如果有其他 Goroutine 也要操作 responseWriter， 会不会导致 responseWriter 中的信息重复写入？
 </ol><p>你先分析第一个问题，是很有可能出现的。方案不难想到，我们要保证在事件处理结束之前，不允许任何其他 Goroutine 操作 responseWriter，这里可以使用一个锁（sync.Mutex）对 responseWriter 进行写保护。</p><p>在框架文件夹的context.go中对Context结构进行一些设置：</p><pre><code class="language-go">type Context struct {
 	// 写保护机制
 	writerMux&nbsp; *sync.Mutex
@@ -376,7 +376,7 @@ The Context should be the first parameter.</p>
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/70/67/0c1359c2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -391,8 +391,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/c3/3f/d96c1b97.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -407,8 +407,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/af/fd/a1708649.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -423,8 +423,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -439,8 +439,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ab/29/e4f7fb3c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -455,8 +455,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/39/93/bcafe00f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -471,8 +471,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/65/df/11406608.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -487,8 +487,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/41/37/b89f3d67.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -503,8 +503,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/30/3c/0668d6ae.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -519,8 +519,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/57/2a/a00a3ce7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -535,8 +535,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -551,8 +551,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -567,8 +567,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Qn1PDx7xA7jKFZr4vHibmsvoZ7bwUCzHTg3uywiaESCgFTTMibPpKdZOfrqTXtdQXxUJqFqmLAj5NoIFMJpYibbcOQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -583,8 +583,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/f1/39/b0960780.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -599,8 +599,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/08/01/da970033.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -615,8 +615,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/8c/f9/e1dab0ca.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -631,8 +631,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/61/77/e4d198a6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -647,8 +647,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/0a/23/c26f4e50.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -663,8 +663,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/d7/f1/ce10759d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -679,8 +679,8 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTK6xwUp8JiaFNPNSlNxubQlTgcxl02Yc1eiaOzvj75Wob9AYVdsYwAapowkkicenhV0Y02dW2yibPicHDg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -695,5 +695,4 @@ The Context should be the first parameter.</p>
   </div>
 </div>
 </div>
-</li>
-</ul>
+

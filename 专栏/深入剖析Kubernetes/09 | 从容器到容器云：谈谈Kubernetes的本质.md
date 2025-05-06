@@ -6,12 +6,12 @@
 
 从这个结构中我们不难看出，一个正在运行的Linux容器，其实可以被“一分为二”地看待：
 
-<li>
+
 一组联合挂载在/var/lib/docker/aufs/mnt上的rootfs，这一部分我们称为“容器镜像”（Container Image），是容器的静态视图；
-</li>
-<li>
+
+
 一个由Namespace+Cgroups构成的隔离环境，这一部分我们称为“容器运行时”（Container Runtime），是容器的动态视图。
-</li>
+
 
 更进一步地说，作为一名开发者，我并不关心容器运行时的差异。因为，在整个“开发-测试-发布”的流程中，真正承载着容器信息进行传递的，是容器镜像，而不是容器运行时。
 
@@ -187,12 +187,12 @@ Kubernetes项目提供了一种叫作Secret的对象，它其实是一个保存�
 
 比如，我现在已经制作好了一个Nginx容器镜像，希望让平台帮我启动这个镜像。并且，我要求平台帮我运行两个完全相同的Nginx副本，以负载均衡的方式共同对外提供服务。
 
-<li>
+
 如果是自己DIY的话，可能需要启动两台虚拟机，分别安装两个Nginx，然后使用keepalived为这两个虚拟机做一个虚拟IP。
-</li>
-<li>
+
+
 而如果使用Kubernetes项目呢？你需要做的则是编写如下这样一个YAML文件（比如名叫nginx-deployment.yaml）：
-</li>
+
 
 ```
 apiVersion: apps/v1
@@ -252,11 +252,11 @@ $ kubectl create -f nginx-deployment.yaml
 
 ## 思考题
 
-<li>
+
 这今天的分享中，我介绍了Kubernetes项目的架构。你是否了解了Docker Swarm（SwarmKit项目）和Kubernetes在架构上和使用方法上的异同呢？
-</li>
-<li>
+
+
 在Kubernetes之前，很多项目都没办法管理“有状态”的容器，即，不能从一台宿主机“迁移”到另一台宿主机上的容器。你是否能列举出，阻止这种“迁移”的原因都有哪些呢？
-</li>
+
 
 感谢你的收听，欢迎你给我留言，也欢迎分享给更多的朋友一起阅读。

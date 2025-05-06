@@ -25,189 +25,189 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;架构的演进.md">01 架构的演进.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Serverless&#32;的价值.md">02 Serverless 的价值.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;常见&#32;Serverless&#32;架构模式.md">03 常见 Serverless 架构模式.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;Serverless&#32;技术选型.md">04 Serverless 技术选型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;函数计算简介.md">05 函数计算简介.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;函数计算是如何工作的？.md">06 函数计算是如何工作的？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;函数粘合云服务提供端到端解决方案.md">07 函数粘合云服务提供端到端解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;函数计算的开发与配置.md">08 函数计算的开发与配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;函数的调试与部署.md">09 函数的调试与部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;自动化&#32;CI&amp;CD&#32;与灰度发布.md">10 自动化 CI&amp;CD 与灰度发布.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;函数计算的可观测性.md">11 函数计算的可观测性.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;典型案例&#32;1：函数计算在音视频场景实践.md">12 典型案例 1：函数计算在音视频场景实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;典型案例&#32;3：十分钟搭建弹性可扩展的&#32;Web&#32;API.md">13 典型案例 3：十分钟搭建弹性可扩展的 Web API.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;Serverless&#32;Kubernetes&#32;容器服务介绍.md">14 Serverless Kubernetes 容器服务介绍.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Serverless&#32;Kubernetes&#32;应用部署及扩缩容.md">15 Serverless Kubernetes 应用部署及扩缩容.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;使用&#32;Spot&#32;低成本运行&#32;Job&#32;任务.md">16 使用 Spot 低成本运行 Job 任务.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;低成本运行&#32;Spark&#32;数据计算.md">17 低成本运行 Spark 数据计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;GPU&#32;机器学习开箱即用.md">18 GPU 机器学习开箱即用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="19&#32;基于&#32;Knative&#32;低成本部署在线应用，灵活自动伸缩.md">19 基于 Knative 低成本部署在线应用，灵活自动伸缩.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;快速构建&#32;JenkinsGitlab&#32;持续集成环境.md">20 快速构建 JenkinsGitlab 持续集成环境.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;在线应用的&#32;Serverless&#32;实践.md">21 在线应用的 Serverless 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;通过&#32;IDEMaven&#32;部署&#32;Serverless&#32;应用实践.md">22 通过 IDEMaven 部署 Serverless 应用实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;企业级&#32;CICD&#32;工具部署&#32;Serverless&#32;应用的落地实践.md">23 企业级 CICD 工具部署 Serverless 应用的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;Serverless&#32;应用如何管理日志&amp;持久化数据.md">24 Serverless 应用如何管理日志&amp;持久化数据.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;Serverless&#32;应用引擎产品的流量负载均衡和路由策略配置实践.md">25 Serverless 应用引擎产品的流量负载均衡和路由策略配置实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Spring&#32;CloudDubbo&#32;应用无缝迁移到&#32;Serverless&#32;架构.md">26 Spring CloudDubbo 应用无缝迁移到 Serverless 架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;SAE&#32;应用分批发布与无损下线的最佳实践.md">27 SAE 应用分批发布与无损下线的最佳实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Serverless%20%E6%8A%80%E6%9C%AF%E5%85%AC%E5%BC%80%E8%AF%BE%EF%BC%88%E5%AE%8C%EF%BC%89/28%20%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7+%20SAE%20%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B%E8%BD%BB%E6%9D%BE%E5%BA%94%E5%AF%B9%E5%A4%A7%E4%BF%83.md">28 如何通过压测工具+ SAE 弹性能力轻松应对大促.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;SAE&#32;极致应用部署效率.md">29 SAE 极致应用部署效率.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -268,25 +268,25 @@
 <p>在这个大趋势下，我们再来看 IaaS 架构的演进方向。最初企业上云都是基于 VM 的方式在使用云资源，企业线上服务都是通过 Ansible、Saltstack、Puppet 或者 Chef 等工具裸部在 VM 中的。直接在 VM 中启动应用，导致线上服务对 VM 的环境配置有很强的依赖，而后伴随着容器技术的崛起，大家开始通过容器的方式在 VM 中部署应用。</p>
 <p>但如果有十几个甚至几十个应用需要部署，就需要在成百上千的 VM 快速部署、升级应用，这是一件非常令人头疼的事情。而 Kubernetes 很好地解决了这些问题，所以现在大家开始通过 Kubernetes 方式使用云资源。随着 Kubernetes 的流行，各大云厂商都开始提供 Serverless Kubernetes 服务，用户无需维护 Kubernetes 集群，即可直接通过 Kubernetes 语义使用云的能力。</p>
 <p>既然 Kubernetes 已经非常好了，为什么还需要 Knative 呢？要回答这个问题，我们先梳理一下 Serverless 应用都有哪些共同特质：</p>
-<ul>
-<li>按需使用，自动弹性</li>
-</ul>
+
+按需使用，自动弹性
+
 <p>按需使用云资源，业务量上涨的时候自动扩容，业务量下降的时候自动缩容，所以需要自动弹性能力。</p>
-<ul>
-<li>灰度发布</li>
-</ul>
+
+灰度发布
+
 <p>要能支持多版本管理，应用升级的时候可以使用各种灰度发布策略上线新的版本。</p>
-<ul>
-<li>流量管理</li>
-</ul>
+
+流量管理
+
 <p>能够管理南北流量，可以按照流量百分比对不同版本进行灰度。</p>
-<ul>
-<li>负载均衡、服务发现</li>
-</ul>
+
+负载均衡、服务发现
+
 <p>应用弹性过程中自动增加或者减少实例数量，流量管理需要具备负载均衡和服务发现的功能。</p>
-<ul>
-<li>Gateway</li>
-</ul>
+
+Gateway
+
 <p>多个应用部署在同一个集群中，需要一个接入层网关对多个应用以及同一个应用的不同版本进行流量的管理。</p>
 <p>随着 Kubernetes 和云原生概念的崛起，第一直觉可能是直接在 Kubernetes 之上部署 Serverless 应用。那么，如果要在原生的 Kubernetes 上部署 Serverless 应用我们可能会怎么做？</p>
 <p><img src="assets/2020-09-27-030703.png" alt="image.png" /></p>
@@ -296,15 +296,15 @@
 <p>所以传统的这种按照 Deployment 实例数发布的灰度策略和弹性配置天然是冲突的。而如果按照流量比例进行灰度就不会有这个问题，这可能就要引入 Istio 的能力。</p>
 <p><img src="assets/2020-09-27-030704.png" alt="image.png" /></p>
 <p>引入 Istio 作为 Gateway 组件，Istio 除了管理同一个应用的流量灰度，还能对不同的应用进行流量管理。看起来很好，但是我们再仔细分析一下存在什么问题。先梳理一下在原生 K8s 之上手动管理 Serverless 应用都需要做什么：</p>
-<ul>
-<li>Deployment</li>
-<li>Service</li>
-<li>HPA</li>
-<li>Ingress</li>
-<li>Istio</li>
-<li>VirtualService</li>
-<li>Gateway</li>
-</ul>
+
+Deployment
+Service
+HPA
+Ingress
+Istio
+VirtualService
+Gateway
+
 <p>这些资源是每一个应用维护一份，如果是多个应用就要维护多份。这些资源散落在 K8s 内，根本看不出来应用的概念，另外管理起来也非常繁琐。</p>
 <p><img src="assets/2020-09-27-030705.png" alt="image.png" /></p>
 <p>Serverless 应用需要的是面向应用的管理动作，比如应用托管、升级、回滚、灰度发布、流量管理以及弹性等功能。而 Kubernetes 提供的是 IaaS 的使用抽象。所以 Kubernetes 和 Serverless 应用之间少了一层应用编排的抽象。</p>
@@ -328,11 +328,11 @@
 <p>为了解决上述问题，我们把 Knative 和阿里云做了深度的融合。用户还是按照 Knative 的原生语义使用，但底层的 Controller 、Gateway 都深度嵌入到阿里云体系内。这样既保证了用户可以无厂商锁定风险地以 Knative API 使用云资源，还能享受到阿里云基础设施的已有优势。</p>
 <p><img src="assets/2020-09-27-030711.png" alt="image.png" /></p>
 <p>首先是 Gateway 和云的融合，直接使用阿里云 SLB 作为 Gateway，使用云产品 SLB 的好处有：</p>
-<ul>
-<li>云产品级别的支撑，提供 SLA 保障；</li>
-<li>按需付费，不需要出 IaaS 资源；</li>
-<li>用户无需承担运维成本，不用考虑高可用问题，云产品自带高可用能力。</li>
-</ul>
+
+云产品级别的支撑，提供 SLA 保障；
+按需付费，不需要出 IaaS 资源；
+用户无需承担运维成本，不用考虑高可用问题，云产品自带高可用能力。
+
 <p><img src="assets/2020-09-27-030713.png" alt="image.png" /></p>
 <p>除了 Gateway 组件以外，Knative Serving Controller 也需要一定的成本，所以我们把 Knative Serving Controller 和阿里云容器服务也进行了融合。用户只需要拥有一个 Serverless Kubernetes 集群并开通 Knative 功能就可以基于 Knative API 使用云的能力，并且用户无需为 Knative Controller 付出任何成本。</p>
 <p><img src="assets/2020-09-27-030714.png" alt="image.png" /></p>

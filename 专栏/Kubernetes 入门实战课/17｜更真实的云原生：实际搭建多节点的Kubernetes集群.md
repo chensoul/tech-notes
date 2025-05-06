@@ -61,11 +61,11 @@ for name in `kubeadm config images list --kubernetes-version v1.23.3`; do
 &nbsp; &nbsp; docker tag $repo/$src_name $name
 &nbsp; &nbsp; docker rmi $repo/$src_name
 done
-</code></pre><p>第二种方法速度快，但也有隐患，万一网站不提供服务，或者改动了镜像就比较危险了。</p><p>所以你可以把这两种方法结合起来，先用脚本从国内镜像仓库下载，然后再用minikube里的镜像做对比，只要IMAGE ID是一样就说明镜像是正确的。</p><p>这张截图就是Kubernetes 1.23.3的镜像列表（amd64/arm64），你在安装时可以参考：</p><p><img src="https://static001.geekbang.org/resource/image/11/5c/11d9d4c91b08d95e82e75406a4d3aa5c.png?wh=1920x353" alt="图片" title="amd64"></p><p><img src="https://static001.geekbang.org/resource/image/52/6c/528d9913620015f594988e648eeac66c.png?wh=1920x420" alt="图片" title="arm64"></p><h2>安装Master节点</h2><p>准备工作都做好了，现在就可以开始正式安装Kubernetes了，我们先从Master节点开始。</p><p>kubeadm的用法非常简单，只需要一个命令 <code>kubeadm init</code> 就可以把组件在Master节点上运行起来，不过它还有很多参数用来调整集群的配置，你可以用 <code>-h</code> 查看。这里我只说一下我们实验环境用到的3个参数：</p><ul>
-<li><strong>--pod-network-cidr</strong>，设置集群里Pod的IP地址段。</li>
-<li><strong>--apiserver-advertise-address</strong>，设置apiserver的IP地址，对于多网卡服务器来说很重要（比如VirtualBox虚拟机就用了两块网卡），可以指定apiserver在哪个网卡上对外提供服务。</li>
-<li><strong>--kubernetes-version</strong>，指定Kubernetes的版本号。</li>
-</ul><p>下面的这个安装命令里，我指定了Pod的地址段是“10.10.0.0/16”，apiserver的服务地址是“192.168.10.210”，Kubernetes的版本号是“1.23.3”：</p><pre><code class="language-plain">sudo kubeadm init \
+</code></pre><p>第二种方法速度快，但也有隐患，万一网站不提供服务，或者改动了镜像就比较危险了。</p><p>所以你可以把这两种方法结合起来，先用脚本从国内镜像仓库下载，然后再用minikube里的镜像做对比，只要IMAGE ID是一样就说明镜像是正确的。</p><p>这张截图就是Kubernetes 1.23.3的镜像列表（amd64/arm64），你在安装时可以参考：</p><p><img src="https://static001.geekbang.org/resource/image/11/5c/11d9d4c91b08d95e82e75406a4d3aa5c.png?wh=1920x353" alt="图片" title="amd64"></p><p><img src="https://static001.geekbang.org/resource/image/52/6c/528d9913620015f594988e648eeac66c.png?wh=1920x420" alt="图片" title="arm64"></p><h2>安装Master节点</h2><p>准备工作都做好了，现在就可以开始正式安装Kubernetes了，我们先从Master节点开始。</p><p>kubeadm的用法非常简单，只需要一个命令 <code>kubeadm init</code> 就可以把组件在Master节点上运行起来，不过它还有很多参数用来调整集群的配置，你可以用 <code>-h</code> 查看。这里我只说一下我们实验环境用到的3个参数：</p>
+<strong>--pod-network-cidr</strong>，设置集群里Pod的IP地址段。
+<strong>--apiserver-advertise-address</strong>，设置apiserver的IP地址，对于多网卡服务器来说很重要（比如VirtualBox虚拟机就用了两块网卡），可以指定apiserver在哪个网卡上对外提供服务。
+<strong>--kubernetes-version</strong>，指定Kubernetes的版本号。
+<p>下面的这个安装命令里，我指定了Pod的地址段是“10.10.0.0/16”，apiserver的服务地址是“192.168.10.210”，Kubernetes的版本号是“1.23.3”：</p><pre><code class="language-plain">sudo kubeadm init \
 &nbsp; &nbsp; --pod-network-cidr=10.10.0.0/16 \
 &nbsp; &nbsp; --apiserver-advertise-address=192.168.10.210 \
 &nbsp; &nbsp; --kubernetes-version=v1.23.3
@@ -97,10 +97,10 @@ kubectl get pod -o wide
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/73/e9/73651e5f178e2daf6eaf7ac262e230e9.png?wh=1584x188" alt="图片"></p><p>会看到Pod运行在Worker节点上，IP地址是“10.10.1.2”，表明我们的Kubernetes集群部署成功。</p><h2>小结</h2><p>好了，把Master节点和Worker节点都安装好，我们今天的任务就算是基本完成了。</p><p>后面Console节点的部署工作更加简单，它只需要安装一个kubectl，然后复制“config”文件就行，你可以直接在Master节点上用“scp”远程拷贝，例如：</p><pre><code class="language-plain">scp `which kubectl` chrono@192.168.10.208:~/
 scp ~/.kube/config chrono@192.168.10.208:~/.kube
 </code></pre><p>今天的过程多一些，要点我列在了下面：</p><ol>
-<li>kubeadm是一个方便易用的Kubernetes工具，能够部署生产级别的Kubernetes集群。</li>
-<li>安装Kubernetes之前需要修改主机的配置，包括主机名、Docker配置、网络设置、交换分区等。</li>
-<li>Kubernetes的组件镜像存放在gcr.io，国内下载比较麻烦，可以考虑从minikube或者国内镜像网站获取。</li>
-<li>安装Master节点需要使用命令 <code>kubeadm init</code>，安装Worker节点需要使用命令 <code>kubeadm join</code>，还要部署Flannel等网络插件才能让集群正常工作。</li>
+kubeadm是一个方便易用的Kubernetes工具，能够部署生产级别的Kubernetes集群。
+安装Kubernetes之前需要修改主机的配置，包括主机名、Docker配置、网络设置、交换分区等。
+Kubernetes的组件镜像存放在gcr.io，国内下载比较麻烦，可以考虑从minikube或者国内镜像网站获取。
+安装Master节点需要使用命令 <code>kubeadm init</code>，安装Worker节点需要使用命令 <code>kubeadm join</code>，还要部署Flannel等网络插件才能让集群正常工作。
 </ol><p>因为这些操作都是各种Linux命令，全手动敲下来确实很繁琐，所以我把这些步骤都做成了Shell脚本放在了GitHub上（<a href="https://github.com/chronolaw/k8s_study/tree/master/admin">https://github.com/chronolaw/k8s_study/tree/master/admin</a>），你可以下载后直接运行。</p><h2>课下作业</h2><p>最后的课下作业是实际动手操作，请你多花费一些时间，用虚拟机创建出集群节点，再用kubeadm部署出这个多节点的Kubernetes环境，在接下来的“中级篇”和“高级篇”里我们就会在这个Kubernetes集群里做实验。</p><p>安装部署过程中有任何疑问，欢迎在留言区留言，我会第一时间回复你。如果觉得有帮助，也欢迎分享给自己身边的朋友一起学习，下节课见。</p><p><img src="https://static001.geekbang.org/resource/image/d3/41/d3d76937e5f4eb6545a07b96bc731e41.jpg?wh=1920x2513" alt="图片"></p>
 <style>
     ul {
@@ -211,7 +211,7 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/30/65/d6/20670fd5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -226,8 +226,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -242,8 +242,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/5d/11/e1f36640.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -258,8 +258,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJo05FofKFWYN3joX4OyCfVrU2kK7xvKdZ4Ho7bof893fE0jXk1OcB5sKLk4C1SviaNlibAiaCtp8aww/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -274,8 +274,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/82/ec/99b480e8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -290,8 +290,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/95/8a/d74cdda5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -306,8 +306,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/06/ff/047a7150.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -322,8 +322,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/99/f0/d9343049.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -338,8 +338,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/27/77ca2bc2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -354,8 +354,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/72/67/aa52812a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -370,8 +370,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/89/ad/4efd929a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -386,8 +386,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/94/25/3bf277e5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -402,8 +402,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -418,8 +418,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/f8/25/06c86919.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -434,8 +434,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/2b/22/441c4e51.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -450,8 +450,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/67/d6/2f5cb85c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -466,8 +466,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -482,8 +482,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/d9/cf061262.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -498,8 +498,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqF6ViaDyAibEKbcKfWoGXe8lCbb8wqes5g3JezHWNLf4DIl92QwXX43HWv408BxzkOKmKb2HpKJuIw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -514,8 +514,8 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/b9/8b/d0763d9a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -530,5 +530,4 @@ scp ~/.kube/config chrono@192.168.10.208:~/.kube
   </div>
 </div>
 </div>
-</li>
-</ul>
+

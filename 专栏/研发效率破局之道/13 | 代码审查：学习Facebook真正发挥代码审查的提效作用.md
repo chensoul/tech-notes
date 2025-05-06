@@ -65,13 +65,13 @@
 
 至于具体的工具集，我这里给出两个例子：
 
-<li>
+
 <p>第一个例子是Facebook采用的方式。他们使用Phabricator作为代码审查工具。同时直接使用原生的Git Server作为代码仓服务器。用户将改动提交到Phabricator，然后进行机器和人工审查。检查通过后，Phabircator负责将代码推送到Git Server上，或者用户手动将本地改动Push到Git Server上。<br>
 这个工作流使用的是原生Git Server管理主仓，如果你要使用GitLab或者GitHub也可以。关于机器审查的配置，Phabricator提供大量的钩子和插件机制，非常方便。具体细节你可以参考[Phabricator官方文档](https://secure.phabricator.com/book/phabricator/)。</p>
-</li>
-<li>
+
+
 第二个例子是使用GitLab、Jenkins和SonarQube进行配置。具体使用GitLab管理代码，代码入库后通过钩子触发Jenkins，Jenkins从GitLab获取代码，运行构建，并通过Sonar分析结果。这里有一篇[不错的文章](https://www.jianshu.com/p/e111eb15da90)供你参考。
-</li>
+
 
 好了，以上就是今天文章的第一部分，引入代码审查的三个步骤：一是，就代码审查的工作量达成共识；二是，选择试点团队；三是，确定审查工具和流程。接下来，我们来看本文的第二大部分：成功推进代码审查的关键操作。
 

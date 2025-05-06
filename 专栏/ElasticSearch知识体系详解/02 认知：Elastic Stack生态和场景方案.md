@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -295,13 +295,13 @@
 <p>数据分散，跨集群的搜索</p>
 <p><img src="assets/es-introduce-2-10.png" alt="img" /></p>
 <h2>参考文章</h2>
-<ul>
-<li>https://www.elastic.co/cn/elasticsearch/</li>
-<li>https://www.elastic.co/pdf/architecture-best-practices.pdf</li>
-<li>https://www.elastic.co/guide/en/logstash/current/deploying-and-scaling.html</li>
-<li>https://www.cnblogs.com/supersnowyao/p/11110703.html</li>
-<li>https://blog.51cto.com/wutengfei/2645627</li>
-</ul>
+
+https://www.elastic.co/cn/elasticsearch/
+https://www.elastic.co/pdf/architecture-best-practices.pdf
+https://www.elastic.co/guide/en/logstash/current/deploying-and-scaling.html
+https://www.cnblogs.com/supersnowyao/p/11110703.html
+https://blog.51cto.com/wutengfei/2645627
+
 </div>
                     </div>
                     <div>

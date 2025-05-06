@@ -31,11 +31,11 @@
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "total_data_set_size_in_bytes": 15882899598,
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; "reserved_in_bytes": 0
 &nbsp; &nbsp; &nbsp; &nbsp; },
-</code></pre><ul>
-<li>docs 统计了文档的数量，包括还没有从段（segments）里清除的已删除文档数量。</li>
-<li>shard_stats 统计了分片的数量。</li>
-<li>store 统计了存储的情况，包括主分片和副本分片总共耗费了多少物理存储。</li>
-</ul><p>indexing、get、search、merges、refresh、flush 等，都是类似的，统计了 Elasticsearch 各个关键环节的吞吐和耗时，其中比较关键的是 indexing、search、merge，下面是我的数据样例。</p><pre><code class="language-json">&nbsp; &nbsp; "indexing": {
+</code></pre>
+docs 统计了文档的数量，包括还没有从段（segments）里清除的已删除文档数量。
+shard_stats 统计了分片的数量。
+store 统计了存储的情况，包括主分片和副本分片总共耗费了多少物理存储。
+<p>indexing、get、search、merges、refresh、flush 等，都是类似的，统计了 Elasticsearch 各个关键环节的吞吐和耗时，其中比较关键的是 indexing、search、merge，下面是我的数据样例。</p><pre><code class="language-json">&nbsp; &nbsp; "indexing": {
 &nbsp; &nbsp; &nbsp; &nbsp; "index_total": 18595844,
 &nbsp; &nbsp; &nbsp; &nbsp; "index_time_in_millis": 1868991,
 &nbsp; &nbsp; &nbsp; &nbsp; "index_current": 0,
@@ -271,7 +271,7 @@ indices_level = ""
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -286,8 +286,8 @@ indices_level = ""
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/08/8b/1b7d0463.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -302,8 +302,8 @@ indices_level = ""
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/f3/8d/402e0e0f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -318,8 +318,8 @@ indices_level = ""
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/a1/69/0af5e082.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -334,5 +334,4 @@ indices_level = ""
   </div>
 </div>
 </div>
-</li>
-</ul>
+

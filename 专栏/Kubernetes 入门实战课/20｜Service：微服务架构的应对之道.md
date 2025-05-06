@@ -76,14 +76,14 @@ spec:
 &nbsp; type: NodePort
 </code></pre><p>然后创建对象，再查看它的状态：</p><pre><code class="language-plain">kubectl get svc
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/64/f9/643cf4690a42f723732f9f150021fff9.png?wh=1756x248" alt="图片"></p><p>就会看到“TYPE”变成了“NodePort”，而在“PORT”列里的端口信息也不一样，除了集群内部使用的“80”端口，还多出了一个“30651”端口，这就是Kubernetes在节点上为Service创建的专用映射端口。</p><p>因为这个端口号属于节点，外部能够直接访问，所以现在我们就可以不用登录集群节点或者进入Pod内部，直接在集群外使用任意一个节点的IP地址，就能够访问Service和它代理的后端服务了。</p><p>比如我现在所在的服务器是“192.168.10.208”，在这台主机上用curl访问Kubernetes集群的两个节点“192.168.10.210”“192.168.10.220”，就可以得到Nginx Pod的响应数据：</p><p><img src="https://static001.geekbang.org/resource/image/eb/75/eb917ecdf52cc3f266e6555bd7a1b075.png?wh=1076x666" alt="图片"></p><p>我把NodePort与Service、Deployment的对应关系画成了图，你看了应该就能更好地明白它的工作原理：</p><p><img src="https://static001.geekbang.org/resource/image/fy/4a/fyyebea67e4471aa53cb3a0e8ebe624a.jpg?wh=1920x940" alt="图片"></p><p>学到这里，你是不是觉得NodePort类型的Service很方便呢。</p><p>不过它也有一些缺点。</p><p>第一个缺点是它的端口数量很有限。Kubernetes为了避免端口冲突，默认只在“30000~32767”这个范围内随机分配，只有2000多个，而且都不是标准端口号，这对于具有大量业务应用的系统来说根本不够用。</p><p>第二个缺点是它会在每个节点上都开端口，然后使用kube-proxy路由到真正的后端Service，这对于有很多计算节点的大集群来说就带来了一些网络通信成本，不是特别经济。</p><p>第三个缺点，它要求向外界暴露节点的IP地址，这在很多时候是不可行的，为了安全还需要在集群外再搭一个反向代理，增加了方案的复杂度。</p><p>虽然有这些缺点，但NodePort仍然是Kubernetes对外提供服务的一种简单易行的方式，在其他更好的方式出现之前，我们也只能使用它。</p><h2>小结</h2><p>好了，今天我们学习了Service对象，它实现了负载均衡和服务发现技术，是Kubernetes应对微服务、服务网格等现代流行应用架构的解决方案。</p><p>我再小结一下今天的要点：</p><ol>
-<li>Pod的生命周期很短暂，会不停地创建销毁，所以就需要用Service来实现负载均衡，它由Kubernetes分配固定的IP地址，能够屏蔽后端的Pod变化。</li>
-<li>Service对象使用与Deployment、DaemonSet相同的“selector”字段，选择要代理的后端Pod，是松耦合关系。</li>
-<li>基于DNS插件，我们能够以域名的方式访问Service，比静态IP地址更方便。</li>
-<li>名字空间是Kubernetes用来隔离对象的一种方式，实现了逻辑上的对象分组，Service的域名里就包含了名字空间限定。</li>
-<li>Service的默认类型是“ClusterIP”，只能在集群内部访问，如果改成“NodePort”，就会在节点上开启一个随机端口号，让外界也能够访问内部的服务。</li>
+Pod的生命周期很短暂，会不停地创建销毁，所以就需要用Service来实现负载均衡，它由Kubernetes分配固定的IP地址，能够屏蔽后端的Pod变化。
+Service对象使用与Deployment、DaemonSet相同的“selector”字段，选择要代理的后端Pod，是松耦合关系。
+基于DNS插件，我们能够以域名的方式访问Service，比静态IP地址更方便。
+名字空间是Kubernetes用来隔离对象的一种方式，实现了逻辑上的对象分组，Service的域名里就包含了名字空间限定。
+Service的默认类型是“ClusterIP”，只能在集群内部访问，如果改成“NodePort”，就会在节点上开启一个随机端口号，让外界也能够访问内部的服务。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>为什么Service的IP地址是静态且虚拟的？出于什么目的，有什么好处？</li>
-<li>你了解负载均衡技术吗？它都有哪些算法，Service会用哪种呢？</li>
+为什么Service的IP地址是静态且虚拟的？出于什么目的，有什么好处？
+你了解负载均衡技术吗？它都有哪些算法，Service会用哪种呢？
 </ol><p>欢迎在留言区分享你的思考，以输出带动自己输入。到今天，你已经完成2/3的专栏学习了，回看一起学过的内容，不知你收获如何呢。</p><p>如果觉得有帮助，不妨分享给自己身边的朋友一起学习，我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/73/68/7370727f61e82f96acf0316456329968.jpg?wh=1920x2465" alt=""></p>
 <style>
     ul {
@@ -194,7 +194,7 @@ spec:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/06/7e/735968e2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -209,8 +209,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/99/87/98ebb20e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -225,8 +225,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/32/a8/d5bf5445.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -241,8 +241,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -257,8 +257,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKotsBr2icbYNYlRSlicGUD1H7lulSTQUAiclsEz9gnG5kCW9qeDwdYtlRMXic3V6sj9UrfKLPJnQojag/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -273,8 +273,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/23/81/3865297c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -289,8 +289,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/50/87/dde718fa.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -305,8 +305,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -321,8 +321,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/b2/91/714c0f07.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -337,8 +337,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -353,8 +353,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/05/93/3c3f2a6d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -369,8 +369,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/ef/f1/8b06801a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -385,8 +385,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/90/23/5c74e9b7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -401,8 +401,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2c/7e/f1efd18b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -417,8 +417,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIuj7Wx21ecNlPHCfBsQIchmFxVSlPepwUiaKh0RMGgDB0aibTM50ibQN06dDmbqjuQZUIdH4qiaRJkgQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -433,8 +433,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/3c/4d/3dec4bfe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -449,8 +449,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/f0/e9/1ff0a3d5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -465,8 +465,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/94/fe/5fbf1bdc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -481,8 +481,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/a2/3e/7d9812f2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -497,8 +497,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/a2/3e/7d9812f2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -513,5 +513,4 @@ spec:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

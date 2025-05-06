@@ -51,11 +51,11 @@ type Options struct {
    IdleTimeout time.Duration
    ...
 }
-</code></pre><p>这些配置项相信你也非常熟悉了，既有连接请求的配置项，也有连接池的配置项。</p><p>和Gorm的配置封装一样，我们想要给用户提供一个配置即用的缓存服务，需要做如下三个事情：</p><ul>
-<li>自定义一个数据结构，封装redis.Options结构</li>
-<li>让刚才自定义的结构能生成一个唯一标识（类似Gorm的DSN）</li>
-<li>支持通过配置文件加载这个结构，同时，支持通过Option可变参数来修改它</li>
-</ul><p>在framework/contract/redis.go中，我们首先定义<strong>RedisConfig数据结构</strong>，这个结构单纯封装redis.Options就行了，没有其他额外的参数需要设置：</p><pre><code class="language-go">// RedisConfig 为hade定义的Redis配置结构
+</code></pre><p>这些配置项相信你也非常熟悉了，既有连接请求的配置项，也有连接池的配置项。</p><p>和Gorm的配置封装一样，我们想要给用户提供一个配置即用的缓存服务，需要做如下三个事情：</p>
+自定义一个数据结构，封装redis.Options结构
+让刚才自定义的结构能生成一个唯一标识（类似Gorm的DSN）
+支持通过配置文件加载这个结构，同时，支持通过Option可变参数来修改它
+<p>在framework/contract/redis.go中，我们首先定义<strong>RedisConfig数据结构</strong>，这个结构单纯封装redis.Options就行了，没有其他额外的参数需要设置：</p><pre><code class="language-go">// RedisConfig 为hade定义的Redis配置结构
 type RedisConfig struct {
    *redis.Options
 </code></pre><p>同时为这个RedisConfig定义一个唯一标识，来标识一个redis.Client。这里我们选用了Addr、DB、UserName、Network 四个字段值来标识。<strong>基本上这四个字段加起来能标识“用什么账号登录哪个Redis地址的哪个database”了</strong>：</p><pre><code class="language-go">// UniqKey 用来唯一标识一个RedisConfig配置
@@ -76,11 +76,11 @@ type RedisService interface {
    // GetClient 获取redis连接实例
    GetClient(option ...RedisOption) (*redis.Client, error)
 }
-</code></pre><p>定义了一个RedisService，表示Redis服务对外提供的协议，它只有一个GetClient方法，通过这个方法能获取到Redis的一个连接实例redis.Client。</p><p>你能看到GetClient方法有一个可变参数RedisOption，这个可变参数是一个函数结构，参数中带有传递进入了的RedisConfig指针，所以<strong>这个RedisOption是有修改RedisConfig结构的能力的</strong>。</p><p>那具体提供哪些RedisOption函数呢？和ORM一样，我们要提供多层次的修改方案，包括默认配置、按照配置项进行配置，以及手动配置：</p><ul>
-<li>GetBaseConfig获取redis.yaml根目录下的Redis配置，作为默认配置</li>
-<li>GetConfigPath 根据指定配置路径获取Redis配置</li>
-<li>WithRedisConfig 可以直接修改RedisConfig中的redis.Options配置信息</li>
-</ul><p>在实现这三个函数之前，有必要先看一下我们的Redis配置文件cofig/testing/redis.yaml：</p><pre><code class="language-yaml">timeout: 10s # 连接超时
+</code></pre><p>定义了一个RedisService，表示Redis服务对外提供的协议，它只有一个GetClient方法，通过这个方法能获取到Redis的一个连接实例redis.Client。</p><p>你能看到GetClient方法有一个可变参数RedisOption，这个可变参数是一个函数结构，参数中带有传递进入了的RedisConfig指针，所以<strong>这个RedisOption是有修改RedisConfig结构的能力的</strong>。</p><p>那具体提供哪些RedisOption函数呢？和ORM一样，我们要提供多层次的修改方案，包括默认配置、按照配置项进行配置，以及手动配置：</p>
+GetBaseConfig获取redis.yaml根目录下的Redis配置，作为默认配置
+GetConfigPath 根据指定配置路径获取Redis配置
+WithRedisConfig 可以直接修改RedisConfig中的redis.Options配置信息
+<p>在实现这三个函数之前，有必要先看一下我们的Redis配置文件cofig/testing/redis.yaml：</p><pre><code class="language-yaml">timeout: 10s # 连接超时
 read_timeout: 2s # 读超时
 write_timeout: 2s # 写超时
 
@@ -104,10 +104,10 @@ type HadeRedis struct {
 
     lock *sync.RWMutex
 }
-</code></pre><p>在GetClient函数中，首先还是获取基本Redis配置 redisConfig，使用参数opts对redisConfig进行修改，最后判断当前redisConfig是否已经实例化了：</p><ul>
-<li>如果已经实例化，返回实例化redis.Client；</li>
-<li>如果未实例化，实例化redis.Client，返回实例化的redis.Client。</li>
-</ul><pre><code class="language-go">// GetClient 获取Client实例
+</code></pre><p>在GetClient函数中，首先还是获取基本Redis配置 redisConfig，使用参数opts对redisConfig进行修改，最后判断当前redisConfig是否已经实例化了：</p>
+如果已经实例化，返回实例化redis.Client；
+如果未实例化，实例化redis.Client，返回实例化的redis.Client。
+<pre><code class="language-go">// GetClient 获取Client实例
 func (app *HadeRedis) GetClient(option ...contract.RedisOption) (*redis.Client, error) {
     // 读取默认配置
     config := GetBaseConfig(app.container)
@@ -322,12 +322,12 @@ func (r *RedisCache) Remember(ctx context.Context, key string, timeout time.Dura
    }
    return nil
 }
-</code></pre><p>前面说过Remember方法是Cache-Aside模式的实现，它的逻辑是先判断缓存中是否有这个key，如果有的话，直接返回对象，如果没有的话，就调用RememberFunc方法来实例化这个对象，并且返回这个实例化对象。</p><p>好了，这里的framework/provider/cache/redis.go我们实现差不多了。</p><h2>验证</h2><p>来做验证，我们为缓存服务写一个简单的路由，在这个路由中：</p><ul>
-<li>获取缓存服务</li>
-<li>设置foo为key的缓存，值为bar</li>
-<li>获取foo为key的缓存，把值打印到控制台</li>
-<li>删除foo为key的缓存</li>
-</ul><pre><code class="language-go">// DemoCache cache的简单例子
+</code></pre><p>前面说过Remember方法是Cache-Aside模式的实现，它的逻辑是先判断缓存中是否有这个key，如果有的话，直接返回对象，如果没有的话，就调用RememberFunc方法来实例化这个对象，并且返回这个实例化对象。</p><p>好了，这里的framework/provider/cache/redis.go我们实现差不多了。</p><h2>验证</h2><p>来做验证，我们为缓存服务写一个简单的路由，在这个路由中：</p>
+获取缓存服务
+设置foo为key的缓存，值为bar
+获取foo为key的缓存，把值打印到控制台
+删除foo为key的缓存
+<pre><code class="language-go">// DemoCache cache的简单例子
 func (api *DemoApi) DemoCache(c *gin.Context) {
    logger := c.MustMakeLog()
    logger.Info(c, "request start", nil)
@@ -471,7 +471,7 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0a/da/dcf8f2b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -486,8 +486,8 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/7b/36/fd46331c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -502,8 +502,8 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/6b/23/ddad5282.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -518,8 +518,8 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/e2/52/56dbb738.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -534,8 +534,8 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/70/67/0c1359c2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -550,8 +550,8 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/f1/ed/4e249c6b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -566,5 +566,4 @@ func (api *DemoApi) DemoCache(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

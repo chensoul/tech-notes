@@ -25,213 +25,213 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;我应该站在谁的肩膀上&#32;-&#32;OSI&#32;vs&#32;TCPIP模型.md">01 我应该站在谁的肩膀上 - OSI vs TCPIP模型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/02%20%E4%B8%87%E4%B8%88%E9%AB%98%E6%A5%BC%E5%B9%B3%E5%9C%B0%E8%B5%B7-%20%E7%89%A9%E7%90%86%E5%B1%82%20+%20%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.md">02 万丈高楼平地起- 物理层 + 数据链路层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;OSI的灵魂就是我&#32;-&#32;网络层.md">03 OSI的灵魂就是我 - 网络层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;要快还是要稳你说好了&#32;-&#32;传输层.md">04 要快还是要稳你说好了 - 传输层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;是时候展现真正的技术了&#32;-&#32;应用层.md">05 是时候展现真正的技术了 - 应用层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;重回小学课堂&#32;-&#32;二进制101.md">06 重回小学课堂 - 二进制101.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/07%201+1%20=%202%E5%90%97%EF%BC%9F%20-%20%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E8%AE%A1%E7%AE%97.md">07 1+1 = 2吗？ - 二进制的计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;16进制又是个什么鬼？&#32;-&#32;16进制的讲解.md">08 16进制又是个什么鬼？ - 16进制的讲解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;我想有个家&#32;-&#32;什么是IP地址.md">09 我想有个家 - 什么是IP地址.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;我可是住二环的人&#32;-&#32;IP地址的组成和分类.md">10 我可是住二环的人 - IP地址的组成和分类.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;我已经没地方住了吗&#32;-&#32;IPv6.md">11 我已经没地方住了吗 - IPv6.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;向左还是向右&#32;-&#32;IP路由.md">12 向左还是向右 - IP路由.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;我能给你安全感&#32;-&#32;TCP（一）.md">13 我能给你安全感 - TCP（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;我那不为人知的秘密是什么&#32;-&#32;TCP（二）.md">14 我那不为人知的秘密是什么 - TCP（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;不问收没收到，就问快不快&#32;-&#32;UDP.md">15 不问收没收到，就问快不快 - UDP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;我为什么与众不同&#32;-&#32;TCP高级篇（拥塞模型）.md">16 我为什么与众不同 - TCP高级篇（拥塞模型）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;来，先看看我的家谱&#32;-&#32;HTTP的身世.md">17 来，先看看我的家谱 - HTTP的身世.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;我都这么成功了，你却说我不行&#32;-&#32;HTTP&#32;的特点和缺点.md">18 我都这么成功了，你却说我不行 - HTTP 的特点和缺点.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;我老了，让我儿子来吧&#32;-&#32;HTTP2.md">19 我老了，让我儿子来吧 - HTTP2.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;稳重的大外甥&#32;-&#32;HTTPS.md">20 稳重的大外甥 - HTTPS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;HTTP的高级篇&#32;-&#32;HTTPClient（Java）.md">21 HTTP的高级篇 - HTTPClient（Java）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;想来我家，你自己查呀&#32;-&#32;DNS.md">22 想来我家，你自己查呀 - DNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;来的早，不如来得巧&#32;-&#32;NAT.md">23 来的早，不如来得巧 - NAT.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;辛苦的邮政&#32;-&#32;SMTP.md">24 辛苦的邮政 - SMTP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;你就是看不见我&#32;-&#32;VPN.md">25 你就是看不见我 - VPN.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="26&#32;黑客的好帮手&#32;-&#32;SSH.md">26 黑客的好帮手 - SSH.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;你可以得到我的心，却得不到我的人&#32;-&#32;物理安全设备.md">27 你可以得到我的心，却得不到我的人 - 物理安全设备.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;你怎么证明你就是你&#32;-&#32;身份验证和访问控制.md">28 你怎么证明你就是你 - 身份验证和访问控制.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（一）.md">29 我要怎么藏好我的考研资料 - 网络攻击（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（二）.md">30 我要怎么藏好我的考研资料 - 网络攻击（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;如何保护我的考研资料&#32;-&#32;网络攻击防范.md">31 如何保护我的考研资料 - 网络攻击防范.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;Linux网络安全&#32;-&#32;安全实战.md">32 Linux网络安全 - 安全实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;结语.md">33 结语.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -294,22 +294,22 @@
 <p><img src="assets/20210219132423210.png" alt="在这里插入图片描述" /></p>
 <p>SSH使用起来可以说非常的简单实用，SSH可以在Windows 10计算机上本地使用。 SSH的验证方式有以下三种</p>
 <ol>
-<li>RSA rhost authentication。如果远程主机包含名为任一主机的文件，则RSA rhost身份验证起作用。如果这些文件中的任何一个包含标识客户端计算机及其当前用户的条目，并且主机服务器已经具有客户端主机密钥的兼容条目，则将允许登录。如果这些文件都不存在，并且很大程度上是由于Rhost系统本身内部的结构缺陷，那么默认情况下通常会出现这种情况，则客户端上运行的SSH程序将向服务器标识其想要的本地加密密钥对利用也就是第二种方式。
-<ul>
-<li>/etc/hosts.equiv</li>
-<li>/etc/ssh/shosts.equiv</li>
-<li>/home/username/.rhosts</li>
-<li>/home/username/.shosts</li>
-</ul>
-</li>
-<li>Private/pubic keypair authentication - 你首先需要一对密钥。如果还没有，则可以生成一个密钥对。使用ssh-keygen程序在Linux客户端上用户主目录中的ssh目录（.ssh）- 目录名称前面的点告诉Linux，这是一个隐藏文件，只能使用带-a标志的ls才能看到。ssh目录可以存在于任何单独的用户目录层次结构中，系统的etc目录下还有一个SSH目录，其中包含密钥对和两个配置文件。ssh<em>config文件确定该计算机在默认情况下将如何充当其他远程计算机上的客户端，而sshd</em>config文件将其行为作为远程客户端访问的主机的主机进行控制。
-<ul>
-<li>SSH user keys location - /home/username/.ssh</li>
-<li>SSH system keys location - /etc/ssh</li>
-<li>SSH configuration files /etc/ssh/ssh<em>config 和 /etc/ssh/sshd</em>config</li>
-</ul>
-</li>
-<li>Password authentication。如果前两个身份验证选项都不起作用，则服务器将提示客户端输入密码。出于安全原因，最好避免依赖密码。这对于SSH协议版本1和更现代的SSH协议版本2都是很常见的。此外，版本2还支持RSA，DSA和OpenPGP公钥算法</li>
+RSA rhost authentication。如果远程主机包含名为任一主机的文件，则RSA rhost身份验证起作用。如果这些文件中的任何一个包含标识客户端计算机及其当前用户的条目，并且主机服务器已经具有客户端主机密钥的兼容条目，则将允许登录。如果这些文件都不存在，并且很大程度上是由于Rhost系统本身内部的结构缺陷，那么默认情况下通常会出现这种情况，则客户端上运行的SSH程序将向服务器标识其想要的本地加密密钥对利用也就是第二种方式。
+
+/etc/hosts.equiv
+/etc/ssh/shosts.equiv
+/home/username/.rhosts
+/home/username/.shosts
+
+
+Private/pubic keypair authentication - 你首先需要一对密钥。如果还没有，则可以生成一个密钥对。使用ssh-keygen程序在Linux客户端上用户主目录中的ssh目录（.ssh）- 目录名称前面的点告诉Linux，这是一个隐藏文件，只能使用带-a标志的ls才能看到。ssh目录可以存在于任何单独的用户目录层次结构中，系统的etc目录下还有一个SSH目录，其中包含密钥对和两个配置文件。ssh<em>config文件确定该计算机在默认情况下将如何充当其他远程计算机上的客户端，而sshd</em>config文件将其行为作为远程客户端访问的主机的主机进行控制。
+
+SSH user keys location - /home/username/.ssh
+SSH system keys location - /etc/ssh
+SSH configuration files /etc/ssh/ssh<em>config 和 /etc/ssh/sshd</em>config
+
+
+Password authentication。如果前两个身份验证选项都不起作用，则服务器将提示客户端输入密码。出于安全原因，最好避免依赖密码。这对于SSH协议版本1和更现代的SSH协议版本2都是很常见的。此外，版本2还支持RSA，DSA和OpenPGP公钥算法
 </ol>
 <h3>Private/Publlic Key 详解</h3>
 <p>如果你接受ssh-keygen的默认值，它将创建两个文件分别称为id<em>rsa和id</em>rsa.pub。第一个文件是该对文件中的私有文件，应谨慎对待，并且永远不要暴露于不安全的网络中，例如将其作为电子邮件附件发送。通常，你将私钥保留在计算机上。系统将提示你创建一个密码短语，每次尝试基于密钥的远程登录时，本地计算机都希望你输入该密码短语。我将创建一个密码短语</p>
@@ -331,12 +331,12 @@
 <h3>基本调试</h3>
 <p>我们来探讨一些常见的SSH意外以及修复它们的方法。</p>
 <ol>
-<li>首先，客户端和服务器上是否都正确安装了SSH？</li>
+首先，客户端和服务器上是否都正确安装了SSH？
 </ol>
 <p><img src="assets/20210219132619886.png" alt="在这里插入图片描述" /></p>
 <p>如果从客户端计算机运行SSH返回“拒绝连接”错误，则可能值得检查服务器上的SSHD状态。以我的经验，当你使用一种或多种虚拟机时，这是一个特别常见的问题。只需几个命令就可以立即配置和启动容器或群集节点，因此很容易因疏忽而错过了您需要的基本工具（例如SSH服务器）的安装。</p>
 <ol>
-<li>出现“无主机路由”错误可能表明服务器本身甚至没有运行。</li>
+出现“无主机路由”错误可能表明服务器本身甚至没有运行。
 </ol>
 <p><img src="assets/20210219132633233.png" alt="在这里插入图片描述" /></p>
 <p>这通常是一个相对简单的问题。&quot;没有主机路由”消息也可能表示你的网络连接有问题。所有明显的连接故障排除步骤都可以试一下，包括对远程服务器执行ping操作；如果失败，则对你知道的服务器进行ping操作，例如8.8.8.8。这是Google的DNS服务器。当然你可以试着去ping百度的。你还应该检查自己的网络硬件，包括电缆连接，交换机和路由器，当然，也包括为远程服务器提供服务的硬件。如果所有检查都成功了，但仍然无法连接，请确保没有任何服务器或客户端防火墙规则阻止流量。记住默认的SSH端口是22，请尝试对本地网络接口和远程主机地址之间的端口22流量运行tcpdump。在这里，-n告诉tcpdump以其原始格式显示IP地址，以便我们可以在输出中更轻松地识别它们，-i指向我的本地网络接口。你可以在服务器上运行netstat-rn，以确保U根和G（使用网关）标志都已启动。如果有什么阻止你，则需要查看当前的防火墙设置。</p>

@@ -29,12 +29,12 @@ NAMESPACE: example
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-</code></pre><p>在上面这条命令中，我们指定了应用的名称为 my-kubernetes-example，Helm Chart 目录为 ./helm 目录，并且为应用指定了命名空间为 example。要注意的是，example 命名空间并不存在，所以我同时使用 --create-namespace 来让 Helm 自动创建这个命名空间。</p><p><strong>此外，这里还有一个非常重要的概念：Release Name</strong>。在安装时，我们需要指定 Release Name 也就是 my-kubernetes-example，它和 Helm Chart Name 有本质的区别。Release Name 是在安装时指定的，Helm Chart Name 在定义阶段就已经固定了。</p><p>注意，命令运行完成后，只能代表 Helm 已经将 Manifest 应用到了集群内，并不能表示应用已经就绪了。接下来 Kubernetes 集群会完成拉取镜像和 Pod 调度的操作，这些都是异步的。</p><h3>使用模板变量</h3><p>不过，刚才改造的最简单的 Helm Chart 并不能满足我们的目标。到目前为止，它只是一个纯静态的应用，无法应对多环境对配置差异的需求。</p><p>要将这个静态的 Helm Chart 改造成参数动态可控制的，<strong>我们需要用到模板变量和 values.yaml</strong>。</p><p>还记得我之前提到的 values.yaml 的概念吗？模板变量的值都会引自这个文件。在这个例子中，根据我们对不同环境配置差异化的要求，我抽象了这几个可配置项：</p><ul>
-<li>镜像版本</li>
-<li>HPA CPU 平均使用率</li>
-<li>是否启用集群内数据库</li>
-<li>数据库连接地址、账号和密码</li>
-</ul><p>这些可配置项都需要从 values.yaml 文件中读取，所以，你需要将下面的内容复制到 helm/values.yaml 文件内。</p><pre><code class="language-powershell">frontend:
+</code></pre><p>在上面这条命令中，我们指定了应用的名称为 my-kubernetes-example，Helm Chart 目录为 ./helm 目录，并且为应用指定了命名空间为 example。要注意的是，example 命名空间并不存在，所以我同时使用 --create-namespace 来让 Helm 自动创建这个命名空间。</p><p><strong>此外，这里还有一个非常重要的概念：Release Name</strong>。在安装时，我们需要指定 Release Name 也就是 my-kubernetes-example，它和 Helm Chart Name 有本质的区别。Release Name 是在安装时指定的，Helm Chart Name 在定义阶段就已经固定了。</p><p>注意，命令运行完成后，只能代表 Helm 已经将 Manifest 应用到了集群内，并不能表示应用已经就绪了。接下来 Kubernetes 集群会完成拉取镜像和 Pod 调度的操作，这些都是异步的。</p><h3>使用模板变量</h3><p>不过，刚才改造的最简单的 Helm Chart 并不能满足我们的目标。到目前为止，它只是一个纯静态的应用，无法应对多环境对配置差异的需求。</p><p>要将这个静态的 Helm Chart 改造成参数动态可控制的，<strong>我们需要用到模板变量和 values.yaml</strong>。</p><p>还记得我之前提到的 values.yaml 的概念吗？模板变量的值都会引自这个文件。在这个例子中，根据我们对不同环境配置差异化的要求，我抽象了这几个可配置项：</p>
+镜像版本
+HPA CPU 平均使用率
+是否启用集群内数据库
+数据库连接地址、账号和密码
+<p>这些可配置项都需要从 values.yaml 文件中读取，所以，你需要将下面的内容复制到 helm/values.yaml 文件内。</p><pre><code class="language-powershell">frontend:
   image: lyzhang1999/frontend
   tag: latest
   autoscaling:
@@ -171,14 +171,14 @@ NAMESPACE: remote-helm-staging
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
-</code></pre><p>在上面的安装命令中，oci://ghcr.io/lyzhang1999/helm/kubernetes-example 是 Helm Chart 的完整的地址，并标识了 OCI 关键字。</p><p>另外，version 字段指定的是 Helm Chart 的版本号。在安装时，同样可以使用 --set 或者指定 -f 参数来覆写 values.yaml 的字段。</p><h2>Helm 应用管理</h2><p>通过上面内容的学习，我相信你已经掌握了如何使用 Helm 来定义应用，在实际的工作中，这些知识也基本上够用了。当然，如果你希望深度使用 Helm，那么你还需要继续了解 Helm 应用管理功能和相关命令。</p><p>总结来说，Helm Chart 和 Manifest 之间一个最大的区别是，Helm 从应用的角度出发，提供了应用的管理功能，通常我们在实际使用 Helm 过程中会经常遇到下面几种场景。</p><ul>
-<li>调试 Helm Chart。</li>
-<li>查看已安装的 Helm Release。</li>
-<li>更新 Helm Release。</li>
-<li>查看 Helm Release 历史版本。</li>
-<li>回滚 Helm Release。</li>
-<li>卸载 Helm Release。</li>
-</ul><p>接下来我们来看如何使用 Helm 命令行工具来实现这些操作。</p><h3>调试 Helm Chart</h3><p>在编写 Helm Chart 的过程中，为了方便验证，我们会经常渲染完整的 Helm 模板而又不安装它，这时候你就可以使用 helm template 命令来调试 Helm Chart。</p><pre><code class="language-powershell">$ helm template ./helm -f ./helm/values-prod.yaml
+</code></pre><p>在上面的安装命令中，oci://ghcr.io/lyzhang1999/helm/kubernetes-example 是 Helm Chart 的完整的地址，并标识了 OCI 关键字。</p><p>另外，version 字段指定的是 Helm Chart 的版本号。在安装时，同样可以使用 --set 或者指定 -f 参数来覆写 values.yaml 的字段。</p><h2>Helm 应用管理</h2><p>通过上面内容的学习，我相信你已经掌握了如何使用 Helm 来定义应用，在实际的工作中，这些知识也基本上够用了。当然，如果你希望深度使用 Helm，那么你还需要继续了解 Helm 应用管理功能和相关命令。</p><p>总结来说，Helm Chart 和 Manifest 之间一个最大的区别是，Helm 从应用的角度出发，提供了应用的管理功能，通常我们在实际使用 Helm 过程中会经常遇到下面几种场景。</p>
+调试 Helm Chart。
+查看已安装的 Helm Release。
+更新 Helm Release。
+查看 Helm Release 历史版本。
+回滚 Helm Release。
+卸载 Helm Release。
+<p>接下来我们来看如何使用 Helm 命令行工具来实现这些操作。</p><h3>调试 Helm Chart</h3><p>在编写 Helm Chart 的过程中，为了方便验证，我们会经常渲染完整的 Helm 模板而又不安装它，这时候你就可以使用 helm template 命令来调试 Helm Chart。</p><pre><code class="language-powershell">$ helm template ./helm -f ./helm/values-prod.yaml
 ---
 # Source: kubernetes-example/templates/backend.yaml
 apiVersion: v1
@@ -221,8 +221,8 @@ Rollback was a success! Happy Helming!
 </code></pre><h3>卸载 Helm Release</h3><p>最后，要卸载 Helm Release，你可以使用 helm uninstall。</p><pre><code class="language-powershell">$ helm uninstall my-kubernetes-example -n example&nbsp; &nbsp; &nbsp;
 release "my-kubernetes-example" uninstalled
 </code></pre><h2>总结</h2><p>这节课，我们以示例应用为例子，介绍了如何使用 Helm Chart 来定义应用。</p><p>Helm Chart 实际上是由特定的文件和目录组成的，一个最简单的 Helm Chart 包含 Chart.yaml、values.yaml 和 templates 目录，当我们把这个特定的目录打包为 tgz 压缩文件时，实际上它也就是标准的 Helm Chart 格式。</p><p>相比较 Kustomize 和原生 Manifest，Helm Chart 更多是从“应用”的视角出发的，它为 Kubernetes 应用提供了打包、存储、发行和启动的能力，实际上它就是一个 Kubernetes 的应用包管理工具。此外，Helm 通过模板语言为我们提供了暴露应用关键参数的能力，使用者只需要关注安装参数而不需要去理解内部细节。</p><p>而 Kustomize 和 Manifest 则使用原生的 YAML 和 Kubernetes API 进行交互，不具备包管理的概念，所以在这方面它们之间有着本质的区别。</p><p>那么，<strong>如果把 Kubernetes 比作是操作系统，Helm Chart 其实就可以类比为 Windows 的应用安装包，它们都是应用的一种安装方式。</strong></p><p>在 Helm 的具体使用方面，我还介绍了如何通过 helm install 命令来安装两种类型的 Helm Chart，它们分别是本地目录和远端仓库。在安装时，它们都可以使用 --set 参数来对默认值覆写，也可以使用 -f 参数来指定新的 values.yaml 文件。此外，我还以 GitHub Package 为例子，介绍了如何打包 Helm Chart 并上传到 GitHub Package 仓库中。</p><p>最后，在 Helm 应用管理方面，我希望你能够熟记几条简单的命令，例如 helm list、helm upgrade 和 helm rollback 等，这些命令在工作中都是很常用的。</p><p>到这里，我们对应用定义的讲解就全部结束了，希望你能有所收获。</p><h2>思考题</h2><p>最后，给你留两道思考题吧。</p><ol>
-<li>请你结合<a href="https://time.geekbang.org/column/article/622743">第 16 讲</a>的内容，为示例应用配置 GitHub Action，要求是每次提交代码后都自动打包 Helm Chart，并将它上传到 GitHub Package 中。你可以将 GitHub Action Workflow 的 YAML 内容放到留言中。</li>
-<li>如何实现在同一个命名空间下对同一个 Helm Chart 安装多个 Helm Release？以示例应用为例，请你分享核心的思路。</li>
+请你结合<a href="https://time.geekbang.org/column/article/622743">第 16 讲</a>的内容，为示例应用配置 GitHub Action，要求是每次提交代码后都自动打包 Helm Chart，并将它上传到 GitHub Package 中。你可以将 GitHub Action Workflow 的 YAML 内容放到留言中。
+如何实现在同一个命名空间下对同一个 Helm Chart 安装多个 Helm Release？以示例应用为例，请你分享核心的思路。
 </ol><p>欢迎你给我留言交流讨论，你也可以把这节课分享给更多的朋友一起阅读。我们下节课见。</p>
 <style>
     ul {
@@ -333,7 +333,7 @@ release "my-kubernetes-example" uninstalled
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -348,8 +348,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -364,8 +364,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/cBh6rmNsSIbHEAGKiaq25yz9tqGuJEjbIYn2K0uFBLEe8lBNjL3SUOicibPbAO5SdH6TxV65kcCpK6FOB1hBr3PBQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -380,8 +380,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/d1/34/03dc9e03.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -396,8 +396,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/24/8246675f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -412,8 +412,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/24/8246675f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -428,8 +428,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/24/8246675f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -444,8 +444,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/24/8246675f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -460,8 +460,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/24/8246675f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -476,8 +476,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/24/8246675f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -492,8 +492,8 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -508,5 +508,4 @@ release "my-kubernetes-example" uninstalled
   </div>
 </div>
 </div>
-</li>
-</ul>
+

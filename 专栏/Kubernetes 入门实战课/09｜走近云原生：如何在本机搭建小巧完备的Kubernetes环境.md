@@ -17,13 +17,13 @@ minikube node list
 </code></pre><p>另外，kubectl还提供了命令自动补全的功能，你还应该再加上“<strong>kubectl completion</strong>”：</p><pre><code class="language-plain">source &lt;(kubectl completion bash)
 </code></pre><p>现在，我们就可以愉快地使用kubectl了：</p><p><img src="https://static001.geekbang.org/resource/image/ab/f9/abdc85efa4d3b25d779faec7c80b5ff9.png?wh=1920x202" alt="图片"></p><p>下面我们<strong>在Kubernetes里运行一个Nginx应用，命令与Docker一样，也是 <code>run</code>，不过形式上有点区别，需要用 <code>--image</code> 指定镜像</strong>，然后Kubernetes会自动拉取并运行：</p><pre><code class="language-plain">kubectl run ngx --image=nginx:alpine
 </code></pre><p>这里涉及Kubernetes里的一个非常重要的概念：<strong>Pod</strong>，你可以暂时把它理解成是“穿了马甲”的容器，查看Pod列表需要使用命令 <code>kubectl get pod</code>，它的效果类似 <code>docker ps</code>：</p><p><img src="https://static001.geekbang.org/resource/image/2a/95/2abb91592d0ff740134a5d7665cb7c95.png?wh=1352x304" alt="图片"></p><p>命令执行之后可以看到，在Kubernetes集群里就有了一个名字叫ngx的Pod正在运行，表示我们的这个单节点minikube环境已经搭建成功。</p><h2>小结</h2><p>好了，今天我们先了解了容器编排概念和Kubernetes的历史，然后在Linux虚拟机上安装了minikube和kubectl，运行了一个简单但完整的Kubernetes集群，实现了与云原生的“第一次亲密接触”。</p><p>那什么是云原生呢？这在CNCF上有明确的定义，不过我觉得太学术化了，我也不想机械重复，就讲讲我自己的通俗理解吧。</p><p>所谓的“云”，现在就指的是Kubernetes，那么“云原生”的意思就是应用的开发、部署、运维等一系列工作都要向Kubernetes看齐，使用容器、微服务、声明式API等技术，保证应用的整个生命周期都能够在Kubernetes环境里顺利实施，不需要附加额外的条件。</p><p>换句话说，“云原生”就是Kubernetes里的“原住民”，而不是从其他环境迁过来的“移民”。</p><p>最后照例小结一下今天的内容：</p><ol>
-<li>容器技术只解决了应用的打包、安装问题，面对复杂的生产环境就束手无策了，解决之道就是容器编排，它能够组织管理各个应用容器之间的关系，让它们顺利地协同运行。</li>
-<li>Kubernetes源自Google内部的Borg系统，也是当前容器编排领域的事实标准。minikube可以在本机搭建Kubernetes环境，功能很完善，适合学习研究。</li>
-<li>操作Kubernetes需要使用命令行工具kubectl，只有通过它才能与Kubernetes集群交互。</li>
-<li>kubectl的用法与docker类似，也可以拉取镜像运行，但操作的不是简单的容器，而是Pod。</li>
+容器技术只解决了应用的打包、安装问题，面对复杂的生产环境就束手无策了，解决之道就是容器编排，它能够组织管理各个应用容器之间的关系，让它们顺利地协同运行。
+Kubernetes源自Google内部的Borg系统，也是当前容器编排领域的事实标准。minikube可以在本机搭建Kubernetes环境，功能很完善，适合学习研究。
+操作Kubernetes需要使用命令行工具kubectl，只有通过它才能与Kubernetes集群交互。
+kubectl的用法与docker类似，也可以拉取镜像运行，但操作的不是简单的容器，而是Pod。
 </ol><p>另外还要说一下Kubernetes的官网（<a href="https://kubernetes.io/zh/">https://kubernetes.io/zh/</a>），里面有非常详细的文档，包括概念解释、入门教程、参考手册等等，最难得的是它有全中文版本，我们阅读起来完全不会有语言障碍，希望你有时间多上去看看，及时获取官方第一手知识。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>你是怎么理解容器编排和Kubernetes的？它们应该能够解决什么问题？</li>
-<li>你认为Kubernetes和Docker之间有什么区别？</li>
+你是怎么理解容器编排和Kubernetes的？它们应该能够解决什么问题？
+你认为Kubernetes和Docker之间有什么区别？
 </ol><p>欢迎积极留言参与讨论，觉得有收获也欢迎你转发给朋友一起学习，我们下节课见。</p><p><img src="https://static001.geekbang.org/resource/image/90/96/90a478eeb6ae8a6ccd988fedc3ab4096.jpg?wh=1920x3272" alt=""></p>
 <style>
     ul {
@@ -134,7 +134,7 @@ minikube node list
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/bb/74/edc07099.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -149,8 +149,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -165,8 +165,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -181,8 +181,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/92/4b/1262f052.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -197,8 +197,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -213,8 +213,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/6b/e9/7620ae7e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -229,8 +229,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/1f/90/bf183d37.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -245,8 +245,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKELX1Rd1vmLRWibHib8P95NA87F4zcj8GrHKYQL2RcLDVnxNy1ia2geTWgW6L2pWn2kazrPNZMRVrIg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -261,8 +261,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIERY97h7dmXbtur6rhZWA9Jb3TtSsJh7icDdFjdLmruTXC22qibOVTmW2a04TxMhxqtNJibYL1iaU7yQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -277,8 +277,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/c4/2b/b3f917ec.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,8 +293,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -309,8 +309,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -325,8 +325,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -341,8 +341,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/P5EIPG3R01kEcsSSm0UZlyysg3qak8qWQXlwKKIoCkdxKtyorxD6h4S7bVvNNBM9icynCGvZO0bA5jGNgy3oBiag/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -357,8 +357,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/42/df/a034455d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7e/25/3932dafd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,8 +437,8 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/45/27/4fbf8f6a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -453,5 +453,4 @@ minikube node list
   </div>
 </div>
 </div>
-</li>
-</ul>
+

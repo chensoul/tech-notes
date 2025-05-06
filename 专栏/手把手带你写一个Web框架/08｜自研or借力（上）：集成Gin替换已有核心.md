@@ -257,7 +257,7 @@ func BytesToString(b []byte) string {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9a/0f/da7ed75a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -272,8 +272,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5e/67/133d2da6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -288,8 +288,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/d0/7f/1ad28cd3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -304,8 +304,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -320,8 +320,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/3a/8c/fc2c3e5c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -336,8 +336,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/70/07/bb4e6568.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -352,8 +352,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/65/b7/058276dc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -368,8 +368,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://wx.qlogo.cn/mmopen/vi_32/1gKhS58rAibx6KHQhgJNL7k1jsiblXbwJwveqNU0zJJUKLTCDX51haJibicMd6ic3KREezXVqpWqTaGo2Gc9jfFGpdw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -384,8 +384,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -400,8 +400,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -416,8 +416,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -432,8 +432,8 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/70/67/0c1359c2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -448,5 +448,4 @@ func BytesToString(b []byte) string {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

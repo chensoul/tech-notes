@@ -357,12 +357,12 @@ $ docker push geektime/helloworld:v2
 
 前面我已经介绍过，容器技术使用了rootfs机制和Mount Namespace，构建出了一个同宿主机完全隔离开的文件系统环境。这时候，我们就需要考虑这样两个问题：
 
-<li>
+
 容器里进程新建的文件，怎么才能让宿主机获取到？
-</li>
-<li>
+
+
 宿主机上的文件和目录，怎么才能让容器里的进程访问到？
-</li>
+
 
 这正是Docker Volume要解决的问题：**Volume机制，允许你将宿主机上指定的目录或者文件，挂载到容器里面进行读取和修改操作。**
 
@@ -491,14 +491,14 @@ $ ls /var/lib/docker/aufs/mnt/6780d0778b8a/test
 
 ## 思考题
 
-<li>
+
 你在查看Docker容器的Namespace时，是否注意到有一个叫cgroup的Namespace？它是Linux 4.6之后新增加的一个Namespace，你知道它的作用吗？
-</li>
-<li>
+
+
 如果你执行docker run -v /home:/test的时候，容器镜像里的/test目录下本来就有内容的话，你会发现，在宿主机的/home目录下，也会出现这些内容。这是怎么回事？为什么它们没有被绑定挂载隐藏起来呢？（提示：Docker的“copyData”功能）
-</li>
-<li>
+
+
 请尝试给这个Python应用加上CPU和Memory限制，然后启动它。根据我们前面介绍的Cgroups的知识，请你查看一下这个容器的Cgroups文件系统的设置，是不是跟我前面的讲解一致。
-</li>
+
 
 感谢你的收听，欢迎你给我留言，也欢迎分享给更多的朋友一起阅读。

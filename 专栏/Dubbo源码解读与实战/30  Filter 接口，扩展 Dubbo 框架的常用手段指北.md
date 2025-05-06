@@ -25,315 +25,315 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;开篇词&#32;&#32;深入掌握&#32;Dubbo&#32;原理与实现，提升你的职场竞争力.md">00 开篇词  深入掌握 Dubbo 原理与实现，提升你的职场竞争力.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Dubbo&#32;源码环境搭建：千里之行，始于足下.md">01  Dubbo 源码环境搭建：千里之行，始于足下.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Dubbo&#32;的配置总线：抓住&#32;URL，就理解了半个&#32;Dubbo.md">02 Dubbo 的配置总线：抓住 URL，就理解了半个 Dubbo.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（上）.md">03  Dubbo SPI 精析，接口实现两极反转（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;Dubbo&#32;SPI&#32;精析，接口实现两极反转（下）.md">04  Dubbo SPI 精析，接口实现两极反转（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;海量定时任务，一个时间轮搞定.md">05  海量定时任务，一个时间轮搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（上）.md">06  ZooKeeper 与 Curator，求你别用 ZkClient 了（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;ZooKeeper&#32;与&#32;Curator，求你别用&#32;ZkClient&#32;了（下）.md">07  ZooKeeper 与 Curator，求你别用 ZkClient 了（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;代理模式与常见实现.md">08  代理模式与常见实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;Netty&#32;入门，用它做网络编程都说好（上）.md">09  Netty 入门，用它做网络编程都说好（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;Netty&#32;入门，用它做网络编程都说好（下）.md">10  Netty 入门，用它做网络编程都说好（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;简易版&#32;RPC&#32;框架实现（上）.md">11  简易版 RPC 框架实现（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;简易版&#32;RPC&#32;框架实现（下）.md">12  简易版 RPC 框架实现（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;本地缓存：降低&#32;ZooKeeper&#32;压力的一个常用手段.md">13  本地缓存：降低 ZooKeeper 压力的一个常用手段.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;重试机制是网络操作的基本保证.md">14  重试机制是网络操作的基本保证.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;ZooKeeper&#32;注册中心实现，官方推荐注册中心实践.md">15  ZooKeeper 注册中心实现，官方推荐注册中心实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;Dubbo&#32;Serialize&#32;层：多种序列化算法，总有一款适合你.md">16  Dubbo Serialize 层：多种序列化算法，总有一款适合你.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;Dubbo&#32;Remoting&#32;层核心接口分析：这居然是一套兼容所有&#32;NIO&#32;框架的设计？.md">17  Dubbo Remoting 层核心接口分析：这居然是一套兼容所有 NIO 框架的设计？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;Buffer&#32;缓冲区：我们不生产数据，我们只是数据的搬运工.md">18  Buffer 缓冲区：我们不生产数据，我们只是数据的搬运工.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（上）.md">19  Transporter 层核心实现：编解码与线程模型一文打尽（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;Transporter&#32;层核心实现：编解码与线程模型一文打尽（下）.md">20  Transporter 层核心实现：编解码与线程模型一文打尽（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（上）.md">21  Exchange 层剖析：彻底搞懂 Request-Response 模型（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;Exchange&#32;层剖析：彻底搞懂&#32;Request-Response&#32;模型（下）.md">22  Exchange 层剖析：彻底搞懂 Request-Response 模型（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;核心接口介绍，RPC&#32;层骨架梳理.md">23  核心接口介绍，RPC 层骨架梳理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（上）.md">24  从 Protocol 起手，看服务暴露和服务引用的全流程（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;从&#32;Protocol&#32;起手，看服务暴露和服务引用的全流程（下）.md">25  从 Protocol 起手，看服务暴露和服务引用的全流程（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（上）.md">26  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;&#32;加餐：直击&#32;Dubbo&#32;“心脏”，带你一起探秘&#32;Invoker（下）.md">27  加餐：直击 Dubbo “心脏”，带你一起探秘 Invoker（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;复杂问题简单化，代理帮你隐藏了多少底层细节？.md">28  复杂问题简单化，代理帮你隐藏了多少底层细节？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Dubbo%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB%E4%B8%8E%E5%AE%9E%E6%88%98-%E5%AE%8C/29%20%20%E5%8A%A0%E9%A4%90%EF%BC%9AHTTP%20%E5%8D%8F%E8%AE%AE%20+%20JSON-RPC%EF%BC%8CDubbo%20%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%B0%B1%E6%98%AF%E5%A6%82%E6%AD%A4%E7%AE%80%E5%8D%95.md">29  加餐：HTTP 协议 + JSON-RPC，Dubbo 跨语言就是如此简单.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="30&#32;&#32;Filter&#32;接口，扩展&#32;Dubbo&#32;框架的常用手段指北.md">30  Filter 接口，扩展 Dubbo 框架的常用手段指北.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;&#32;加餐：深潜&#32;Directory&#32;实现，探秘服务目录玄机.md">31  加餐：深潜 Directory 实现，探秘服务目录玄机.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;&#32;路由机制：请求到底怎么走，它说了算（上）.md">32  路由机制：请求到底怎么走，它说了算（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;&#32;路由机制：请求到底怎么走，它说了算（下）.md">33  路由机制：请求到底怎么走，它说了算（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="34&#32;&#32;加餐：初探&#32;Dubbo&#32;动态配置的那些事儿.md">34  加餐：初探 Dubbo 动态配置的那些事儿.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="35&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md">35  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="36&#32;&#32;负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md">36  负载均衡：公平公正物尽其用的负载均衡策略，这里都有（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="37&#32;&#32;集群容错：一个好汉三个帮（上）.md">37  集群容错：一个好汉三个帮（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="38&#32;&#32;集群容错：一个好汉三个帮（下）.md">38  集群容错：一个好汉三个帮（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="39&#32;&#32;加餐：多个返回值不用怕，Merger&#32;合并器来帮忙.md">39  加餐：多个返回值不用怕，Merger 合并器来帮忙.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="40&#32;&#32;加餐：模拟远程调用，Mock&#32;机制帮你搞定.md">40  加餐：模拟远程调用，Mock 机制帮你搞定.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="41&#32;&#32;加餐：一键通关服务发布全流程.md">41  加餐：一键通关服务发布全流程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="42&#32;&#32;加餐：服务引用流程全解析.md">42  加餐：服务引用流程全解析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="43&#32;&#32;服务自省设计方案：新版本新方案.md">43  服务自省设计方案：新版本新方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="44&#32;&#32;元数据方案深度剖析，如何避免注册中心数据量膨胀？.md">44  元数据方案深度剖析，如何避免注册中心数据量膨胀？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="45&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（上）.md">45  加餐：深入服务自省方案中的服务发布订阅（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="46&#32;&#32;加餐：深入服务自省方案中的服务发布订阅（下）.md">46  加餐：深入服务自省方案中的服务发布订阅（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="47&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（上）.md">47  配置中心设计与实现：集中化配置 and 本地化配置，我都要（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="48&#32;&#32;配置中心设计与实现：集中化配置&#32;and&#32;本地化配置，我都要（下）.md">48  配置中心设计与实现：集中化配置 and 本地化配置，我都要（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="49&#32;结束语&#32;&#32;认真学习，缩小差距.md">49 结束语  认真学习，缩小差距.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -447,11 +447,11 @@
 }
 </code></pre>
 <p>这里使用的 TimeoutCountDown 对象用于检测当前调用是否超时，其中有三个字段。</p>
-<ul>
-<li>timeoutInMillis（long 类型）：超时时间，单位为毫秒。</li>
-<li>deadlineInNanos（long 类型）：超时的时间戳，单位为纳秒。</li>
-<li>expired（boolean 类型）：标识当前 TimeoutCountDown 关联的调用是否已超时。</li>
-</ul>
+
+timeoutInMillis（long 类型）：超时时间，单位为毫秒。
+deadlineInNanos（long 类型）：超时的时间戳，单位为纳秒。
+expired（boolean 类型）：标识当前 TimeoutCountDown 关联的调用是否已超时。
+
 <p>在 TimeoutCountDown.isExpire() 方法中，会比较当前时间与 deadlineInNanos 字段记录的超时时间戳。正如上面看到的逻辑，如果请求超时，则不再发起远程调用，直接让 AsyncRpcResult 异常结束。</p>
 <h3>ActiveLimitFilter</h3>
 <p>ActiveLimitFilter 是 Consumer 端用于限制一个 Consumer 对于一个服务端方法的并发调用量，也可以称为“客户端限流”。下面我们就来看下 ActiveLimitFilter 的具体实现：</p>
@@ -510,21 +510,21 @@
 }
 </code></pre>
 <p>从 ActiveLimitFilter.invoke() 方法的代码中可以看到，其核心实现与 RpcStatus 对象密切相关。RpcStatus 中维护了两个集合，分别是：</p>
-<ul>
-<li>SERVICE_STATISTICS 集合（ConcurrentMap&lt;String, RpcStatus&gt; 类型），这个集合记录了当前 Consumer 调用每个服务的状态信息，其中 Key 是 URL，Value 是对应的 RpcStatus 对象；</li>
-<li>METHOD_STATISTICS 集合（ConcurrentMap&lt;String, ConcurrentMap&lt;String, RpcStatus&gt;&gt; 类型），这个集合记录了当前 Consumer 调用每个服务方法的状态信息，其中第一层 Key 是 URL ，第二层 Key 是方法名称，第三层是对应的 RpcStatus 对象。</li>
-</ul>
+
+SERVICE_STATISTICS 集合（ConcurrentMap&lt;String, RpcStatus&gt; 类型），这个集合记录了当前 Consumer 调用每个服务的状态信息，其中 Key 是 URL，Value 是对应的 RpcStatus 对象；
+METHOD_STATISTICS 集合（ConcurrentMap&lt;String, ConcurrentMap&lt;String, RpcStatus&gt;&gt; 类型），这个集合记录了当前 Consumer 调用每个服务方法的状态信息，其中第一层 Key 是 URL ，第二层 Key 是方法名称，第三层是对应的 RpcStatus 对象。
+
 <p>RpcStatus 中统计了很多调用相关的信息，核心字段有如下几个。</p>
-<ul>
-<li>active（AtomicInteger 类型）：当前并发度。这也是 ActiveLimitFilter 中关注的并发度。</li>
-<li>total（AtomicLong 类型）：调用的总数。</li>
-<li>failed（AtomicInteger 类型）：失败的调用数。</li>
-<li>totalElapsed（AtomicLong 类型）：所有调用的总耗时。</li>
-<li>failedElapsed（AtomicLong 类型）：所有失败调用的总耗时。</li>
-<li>maxElapsed（AtomicLong 类型）：所有调用中最长的耗时。</li>
-<li>failedMaxElapsed（AtomicLong 类型）：所有失败调用中最长的耗时。</li>
-<li>succeededMaxElapsed（AtomicLong 类型）：所有成功调用中最长的耗时。</li>
-</ul>
+
+active（AtomicInteger 类型）：当前并发度。这也是 ActiveLimitFilter 中关注的并发度。
+total（AtomicLong 类型）：调用的总数。
+failed（AtomicInteger 类型）：失败的调用数。
+totalElapsed（AtomicLong 类型）：所有调用的总耗时。
+failedElapsed（AtomicLong 类型）：所有失败调用的总耗时。
+maxElapsed（AtomicLong 类型）：所有调用中最长的耗时。
+failedMaxElapsed（AtomicLong 类型）：所有失败调用中最长的耗时。
+succeededMaxElapsed（AtomicLong 类型）：所有成功调用中最长的耗时。
+
 <p>另外，RpcStatus 提供了上述字段的 getter/setter 方法，用于读写这些字段值，这里不再展开分析。</p>
 <p>RpcStatus 中的 beginCount() 方法会在远程调用开始之前执行，其中会从 SERVICE_STATISTICS 集合和 METHOD_STATISTICS 集合中获取服务和服务方法对应的 RpcStatus 对象，然后分别将它们的 active 字段加一，相关实现如下：</p>
 <pre><code>public static boolean beginCount(URL url, String methodName, int max) {
@@ -775,10 +775,10 @@ appResponse.addObjectAttachments(RpcContext.getServerContext().getObjectAttachme
 }
 </code></pre>
 <p>在 writeLogSetToFile() 方法中，会按照 ACCESS_LOG_KEY 的值将日志信息写入不同的日志文件中：</p>
-<ul>
-<li>如果 ACCESS_LOG_KEY 配置的值为 true 或 default，会使用 Dubbo 默认提供的统一日志框架，输出到日志文件中；</li>
-<li>如果 ACCESS_LOG_KEY 配置的值不为 true 或 default，则 ACCESS_LOG_KEY 配置值会被当作 access log 文件的名称，AccessLogFilter 会创建相应的目录和文件，并完成日志的输出。</li>
-</ul>
+
+如果 ACCESS_LOG_KEY 配置的值为 true 或 default，会使用 Dubbo 默认提供的统一日志框架，输出到日志文件中；
+如果 ACCESS_LOG_KEY 配置的值不为 true 或 default，则 ACCESS_LOG_KEY 配置值会被当作 access log 文件的名称，AccessLogFilter 会创建相应的目录和文件，并完成日志的输出。
+
 <pre><code>private void writeLogSetToFile(String accessLog, Set&lt;AccessLogData&gt; logSet) {
 
     try {
@@ -1117,12 +1117,12 @@ public AccessLogFilter() {
 }
 </code></pre>
 <p>在 StatItem 中会记录如下一些关键信息。</p>
-<ul>
-<li>name（String 类型）：对应的 ServiceKey。</li>
-<li>rate（int 类型）：一段时间内能通过的 TPS 上限。</li>
-<li>token（LongAdder 类型）：初始值为 rate 值，每通过一个请求 token 递减一，当减为 0 时，不再通过任何请求，实现限流的作用。</li>
-<li>interval（long 类型）：重置 token 值的时间周期，这样就实现了在 interval 时间段内能够通过 rate 个请求的效果。</li>
-</ul>
+
+name（String 类型）：对应的 ServiceKey。
+rate（int 类型）：一段时间内能通过的 TPS 上限。
+token（LongAdder 类型）：初始值为 rate 值，每通过一个请求 token 递减一，当减为 0 时，不再通过任何请求，实现限流的作用。
+interval（long 类型）：重置 token 值的时间周期，这样就实现了在 interval 时间段内能够通过 rate 个请求的效果。
+
 <p>下面我们来看 StatItem 中 isAllowable() 方法的实现：</p>
 <pre><code>public boolean isAllowable() {
 
@@ -1151,17 +1151,17 @@ public AccessLogFilter() {
 <p>到这里，Dubbo 中提供的核心 Filter 实现就介绍完了。不过，还有 EchoFilter 和 ExceptionFilter 这两个实现没有详细介绍，就留给你自行分析了，相信在了解上述 Filter 实现之后，你就可以非常轻松地阅读这两个 Filter 的源码。</p>
 <h3>自定义 Filter 实践</h3>
 <p>在了解完 Dubbo 加载 Filter 的原理以及 Dubbo 提供的多种 Filter 实现之后，下面我们就开始动手实现一个自定义的 Filter 实现，来进一步扩展 Dubbo 的功能。这里我们编写两个自定义的 Filter 实现类—— JarVersionConsumerFilter 和 JarVersionProviderFilter。</p>
-<ul>
-<li>JarVersionConsumerFilter 会获取服务接口所在 jar 包的版本，并作为 attachment 随请求发送到 Provider 端。</li>
-<li>JarVersionProviderFilter 会统计请求中携带的 jar 包版本，并周期性打印（实践中一般会和监控数据一起生成报表）。</li>
-</ul>
+
+JarVersionConsumerFilter 会获取服务接口所在 jar 包的版本，并作为 attachment 随请求发送到 Provider 端。
+JarVersionProviderFilter 会统计请求中携带的 jar 包版本，并周期性打印（实践中一般会和监控数据一起生成报表）。
+
 <p>在实践中，我们可以通过这两个 Filter 实现，搞清楚当前所有 Consumer 端升级接口 jar 包的情况。</p>
 <p>首先，我们来看 JarVersionConsumerFilter 实现中的几个关键点。</p>
-<ul>
-<li>JarVersionConsumerFilter 被 @Activate 注解修饰，其中的 group 字段值为 CommonConstants.CONSUMER，会在 Consumer 端自动激活，order 字段值为 -1 ，是最后执行的 Filter。</li>
-<li>JarVersionConsumerFilter 中维护了一个 LoadingCache 用于缓存各个业务接口与对应 jar 包版本号之间的映射关系。</li>
-<li>在 invoke() 方法的实现中，会通过 LoadingCache 查询接口所在 jar 包的版本号，然后记录到 Invocation 的 attachment 之中，发送到 Provider 端。</li>
-</ul>
+
+JarVersionConsumerFilter 被 @Activate 注解修饰，其中的 group 字段值为 CommonConstants.CONSUMER，会在 Consumer 端自动激活，order 字段值为 -1 ，是最后执行的 Filter。
+JarVersionConsumerFilter 中维护了一个 LoadingCache 用于缓存各个业务接口与对应 jar 包版本号之间的映射关系。
+在 invoke() 方法的实现中，会通过 LoadingCache 查询接口所在 jar 包的版本号，然后记录到 Invocation 的 attachment 之中，发送到 Provider 端。
+
 <p>下面是 JarVersionConsumerFilter 的具体实现：</p>
 <pre><code>@Activate(group = {CommonConstants.CONSUMER}, order = -1)
 

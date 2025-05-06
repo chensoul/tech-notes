@@ -25,207 +25,207 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;学好&#32;Netty，是你修炼&#32;Java&#32;内功的必经之路.md">00 学好 Netty，是你修炼 Java 内功的必经之路.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;初识&#32;Netty：为什么&#32;Netty&#32;这么流行？.md">01  初识 Netty：为什么 Netty 这么流行？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;纵览全局：把握&#32;Netty&#32;整体架构脉络.md">02  纵览全局：把握 Netty 整体架构脉络.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;引导器作用：客户端和服务端启动都要做些什么？.md">03  引导器作用：客户端和服务端启动都要做些什么？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;事件调度层：为什么&#32;EventLoop&#32;是&#32;Netty&#32;的精髓？.md">04 事件调度层：为什么 EventLoop 是 Netty 的精髓？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;服务编排层：Pipeline&#32;如何协调各类&#32;Handler&#32;？.md">05  服务编排层：Pipeline 如何协调各类 Handler ？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;粘包拆包问题：如何获取一个完整的网络包？.md">06  粘包拆包问题：如何获取一个完整的网络包？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;接头暗语：如何利用&#32;Netty&#32;实现自定义协议通信？.md">07  接头暗语：如何利用 Netty 实现自定义协议通信？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;开箱即用：Netty&#32;支持哪些常用的解码器？.md">08  开箱即用：Netty 支持哪些常用的解码器？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;数据传输：writeAndFlush&#32;处理流程剖析.md">09  数据传输：writeAndFlush 处理流程剖析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;双刃剑：合理管理&#32;Netty&#32;堆外内存.md">10  双刃剑：合理管理 Netty 堆外内存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;另起炉灶：Netty&#32;数据传输载体&#32;ByteBuf&#32;详解.md">11  另起炉灶：Netty 数据传输载体 ByteBuf 详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;他山之石：高性能内存分配器&#32;jemalloc&#32;基本原理.md">12  他山之石：高性能内存分配器 jemalloc 基本原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;举一反三：Netty&#32;高性能内存管理设计（上）.md">13  举一反三：Netty 高性能内存管理设计（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;举一反三：Netty&#32;高性能内存管理设计（下）.md">14  举一反三：Netty 高性能内存管理设计（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;轻量级对象回收站：Recycler&#32;对象池技术解析.md">15  轻量级对象回收站：Recycler 对象池技术解析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;IO&#32;加速：与众不同的&#32;Netty&#32;零拷贝技术.md">16  IO 加速：与众不同的 Netty 零拷贝技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;源码篇：从&#32;Linux&#32;出发深入剖析服务端启动流程.md">17  源码篇：从 Linux 出发深入剖析服务端启动流程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;源码篇：解密&#32;Netty&#32;Reactor&#32;线程模型.md">18  源码篇：解密 Netty Reactor 线程模型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;源码篇：一个网络请求在&#32;Netty&#32;中的旅程.md">19  源码篇：一个网络请求在 Netty 中的旅程.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;技巧篇：Netty&#32;的&#32;FastThreadLocal&#32;究竟比&#32;ThreadLocal&#32;快在哪儿？.md">20  技巧篇：Netty 的 FastThreadLocal 究竟比 ThreadLocal 快在哪儿？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="21&#32;&#32;技巧篇：延迟任务处理神器之时间轮&#32;HashedWheelTimer.md">21  技巧篇：延迟任务处理神器之时间轮 HashedWheelTimer.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;技巧篇：高性能无锁队列&#32;Mpsc&#32;Queue.md">22  技巧篇：高性能无锁队列 Mpsc Queue.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;架构设计：如何实现一个高性能分布式&#32;RPC&#32;框架.md">23  架构设计：如何实现一个高性能分布式 RPC 框架.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;服务发布与订阅：搭建生产者和消费者的基础框架.md">24  服务发布与订阅：搭建生产者和消费者的基础框架.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;远程通信：通信协议设计以及编解码的实现.md">25  远程通信：通信协议设计以及编解码的实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;服务治理：服务发现与负载均衡机制的实现.md">26  服务治理：服务发现与负载均衡机制的实现.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;&#32;动态代理：为用户屏蔽&#32;RPC&#32;调用的底层细节.md">27  动态代理：为用户屏蔽 RPC 调用的底层细节.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;实战总结：RPC&#32;实战总结与进阶延伸.md">28  实战总结：RPC 实战总结与进阶延伸.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;&#32;编程思想：Netty&#32;中应用了哪些设计模式？.md">29  编程思想：Netty 中应用了哪些设计模式？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;&#32;实践总结：Netty&#32;在项目开发中的一些最佳实践.md">30  实践总结：Netty 在项目开发中的一些最佳实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;结束语&#32;&#32;技术成长之路：如何打造自己的技术体系.md">31 结束语  技术成长之路：如何打造自己的技术体系.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -288,11 +288,11 @@
 <p>首先，我们先了解下什么是定时任务？定时器有非常多的使用场景，大家在平时工作中应该经常遇到，例如生成月统计报表、财务对账、会员积分结算、邮件推送等，都是定时器的使用场景。定时器一般有三种表现形式：按固定周期定时执行、延迟一定时间后执行、指定某个时刻执行。</p>
 <p>定时器的本质是设计一种数据结构，能够存储和调度任务集合，而且 deadline 越近的任务拥有更高的优先级。那么定时器如何知道一个任务是否到期了呢？定时器需要通过轮询的方式来实现，每隔一个时间片去检查任务是否到期。</p>
 <p>所以定时器的内部结构一般需要一个任务队列和一个异步轮询线程，并且能够提供三种基本操作：</p>
-<ul>
-<li>Schedule 新增任务至任务集合；</li>
-<li>Cancel 取消某个任务；</li>
-<li>Run 执行到期的任务。</li>
-</ul>
+
+Schedule 新增任务至任务集合；
+Cancel 取消某个任务；
+Run 执行到期的任务。
+
 <p>JDK 原生提供了三种常用的定时器实现方式，分别为 Timer、DelayedQueue 和 ScheduledThreadPoolExecutor。下面我们逐一对它们进行介绍。</p>
 <h4>Timer</h4>
 <p>Timer 属于 JDK 比较早期版本的实现，它可以实现固定周期的任务，以及延迟任务。Timer 会起动一个异步线程去执行到期的任务，任务可以只被调度执行一次，也可以周期性反复执行多次。我们先来看下 Timer 是如何使用的，示例代码如下。</p>
@@ -393,11 +393,11 @@ timer.scheduleAtFixedRate(new TimerTask() {
 <p>相比于 Timer，DelayQueue 只实现了任务管理的功能，需要与异步线程配合使用。DelayQueue 使用优先级队列实现任务的优先级排序，新增 Schedule 和取消 Cancel 操作的时间复杂度也是 O(logn)。</p>
 <h4>ScheduledThreadPoolExecutor</h4>
 <p>上文中介绍的 Timer 其实目前并不推荐用户使用，它是存在不少设计缺陷的。</p>
-<ul>
-<li>Timer 是单线程模式。如果某个 TimerTask 执行时间很久，会影响其他任务的调度。</li>
-<li>Timer 的任务调度是基于系统绝对时间的，如果系统时间不正确，可能会出现问题。</li>
-<li>TimerTask 如果执行出现异常，Timer 并不会捕获，会导致线程终止，其他任务永远不会执行。</li>
-</ul>
+
+Timer 是单线程模式。如果某个 TimerTask 执行时间很久，会影响其他任务的调度。
+Timer 的任务调度是基于系统绝对时间的，如果系统时间不正确，可能会出现问题。
+TimerTask 如果执行出现异常，Timer 并不会捕获，会导致线程终止，其他任务永远不会执行。
+
 <p>为了解决 Timer 的设计缺陷，JDK 提供了功能更加丰富的 ScheduledThreadPoolExecutor。ScheduledThreadPoolExecutor 提供了周期执行任务和延迟执行任务的特性，下面通过一个例子先看下 ScheduledThreadPoolExecutor 如何使用。</p>
 <pre><code>public class ScheduledExecutorServiceTest {
 
@@ -564,14 +564,14 @@ timeout3: Mon Nov 09 19:57:09 CST 2020
 }
 </code></pre>
 <p>HashedWheelTimer 的构造函数清晰地列举出了几个核心属性：</p>
-<ul>
-<li><strong>threadFactory</strong>，线程池，但是只创建了一个线程；</li>
-<li><strong>tickDuration</strong>，时针每次 tick 的时间，相当于时针间隔多久走到下一个 slot；</li>
-<li><strong>unit</strong>，表示 tickDuration 的时间单位；</li>
-<li><strong>ticksPerWheel</strong>，时间轮上一共有多少个 slot，默认 512 个。分配的 slot 越多，占用的内存空间就越大；</li>
-<li><strong>leakDetection</strong>，是否开启内存泄漏检测；</li>
-<li><strong>maxPendingTimeouts</strong>，最大允许等待任务数。</li>
-</ul>
+
+<strong>threadFactory</strong>，线程池，但是只创建了一个线程；
+<strong>tickDuration</strong>，时针每次 tick 的时间，相当于时针间隔多久走到下一个 slot；
+<strong>unit</strong>，表示 tickDuration 的时间单位；
+<strong>ticksPerWheel</strong>，时间轮上一共有多少个 slot，默认 512 个。分配的 slot 越多，占用的内存空间就越大；
+<strong>leakDetection</strong>，是否开启内存泄漏检测；
+<strong>maxPendingTimeouts</strong>，最大允许等待任务数。
+
 <p>下面我们看下 HashedWheelTimer 是如何创建出来的，我们直接跟进 createWheel() 方法的源码：</p>
 <pre><code>private static HashedWheelBucket[] createWheel(int ticksPerWheel) {
 
@@ -807,13 +807,13 @@ private final Queue&lt;HashedWheelTimeout&gt; timeouts = PlatformDependent.newMp
 }
 </code></pre>
 <p>工作线程 Worker 的核心执行流程是代码中的 do-while 循环，只要 Worker 处于 STARTED 状态，就会执行 do-while 循环，我们把该过程拆分成为以下几个步骤，逐一分析。</p>
-<ul>
-<li>通过 waitForNextTick() 方法计算出时针到下一次 tick 的时间间隔，然后 sleep 到下一次 tick。</li>
-<li>通过位运算获取当前 tick 在 HashedWheelBucket 数组中对应的下标</li>
-<li>移除被取消的任务。</li>
-<li>从 Mpsc Queue 中取出任务加入对应的 HashedWheelBucket 中。</li>
-<li>执行当前 HashedWheelBucket 中的到期任务。</li>
-</ul>
+
+通过 waitForNextTick() 方法计算出时针到下一次 tick 的时间间隔，然后 sleep 到下一次 tick。
+通过位运算获取当前 tick 在 HashedWheelBucket 数组中对应的下标
+移除被取消的任务。
+从 Mpsc Queue 中取出任务加入对应的 HashedWheelBucket 中。
+执行当前 HashedWheelBucket 中的到期任务。
+
 <p>首先看下 waitForNextTick() 方法是如何计算等待时间的，源码如下：</p>
 <pre><code>private long waitForNextTick() {
 
@@ -1034,11 +1034,11 @@ public Set&lt;Timeout&gt; stop() {
 </code></pre>
 <p>如果当前线程是 Worker 线程，它是不能发起停止时间轮的操作的，是为了防止有定时任务发起停止时间轮的恶意操作。停止时间轮主要做了三件事，首先尝试通过 CAS 操作将工作线程的状态更新为 SHUTDOWN 状态，然后中断工作线程 Worker，最后将未处理的任务列表返回给上层。</p>
 <p>到此为止，HashedWheelTimer 的实现原理我们已经分析完了。再来回顾一下 HashedWheelTimer 的几个核心成员。</p>
-<ul>
-<li><strong>HashedWheelTimeout</strong>，任务的封装类，包含任务的到期时间 deadline、需要经历的圈数 remainingRounds 等属性。</li>
-<li><strong>HashedWheelBucket</strong>，相当于时间轮的每个 slot，内部采用双向链表保存了当前需要执行的 HashedWheelTimeout 列表。</li>
-<li><strong>Worker</strong>，HashedWheelTimer 的核心工作引擎，负责处理定时任务。</li>
-</ul>
+
+<strong>HashedWheelTimeout</strong>，任务的封装类，包含任务的到期时间 deadline、需要经历的圈数 remainingRounds 等属性。
+<strong>HashedWheelBucket</strong>，相当于时间轮的每个 slot，内部采用双向链表保存了当前需要执行的 HashedWheelTimeout 列表。
+<strong>Worker</strong>，HashedWheelTimer 的核心工作引擎，负责处理定时任务。
+
 <h3>时间轮进阶应用</h3>
 <p>Netty 中的时间轮是通过固定的时间间隔 tickDuration 进行推动的，如果长时间没有到期任务，那么会存在时间轮空推进的现象，从而造成一定的性能损耗。此外，如果任务的到期时间跨度很大，例如 A 任务 1s 后执行，B 任务 6 小时之后执行，也会造成空推进的问题。</p>
 <p>那么上述问题有没有什么解决方案呢？在研究 Kafka 的时候，Kafka 也有时间轮的应用，它的实现思路与 Netty 是存在区别的。因为 Kafka 面对的应用场景是更加严苛的，可能会存在各种时间粒度的定时任务，那么 Kafka 是否有解决时间跨度问题呢？我们接下来就简单介绍下 Kafka 的优化思路。</p>
@@ -1053,11 +1053,11 @@ public Set&lt;Timeout&gt; stop() {
 <h3>总结</h3>
 <p>HashedWheelTimer 的源码通俗易懂，其设计思想值得我们借鉴。在平时开发中如果有类似的任务处理机制，你可以尝试套用 HashedWheelTimer 的工作模式。</p>
 <p>HashedWheelTimer 并不是十全十美的，使用的时候需要清楚它存在的问题：</p>
-<ul>
-<li>如果长时间没有到期任务，那么会存在时间轮空推进的现象。</li>
-<li>只适用于处理耗时较短的任务，由于 Worker 是单线程的，如果一个任务执行的时间过长，会造成 Worker 线程阻塞。</li>
-<li>相比传统定时器的实现方式，内存占用较大。</li>
-</ul>
+
+如果长时间没有到期任务，那么会存在时间轮空推进的现象。
+只适用于处理耗时较短的任务，由于 Worker 是单线程的，如果一个任务执行的时间过长，会造成 Worker 线程阻塞。
+相比传统定时器的实现方式，内存占用较大。
+
 </div>
                     </div>
                     <div>

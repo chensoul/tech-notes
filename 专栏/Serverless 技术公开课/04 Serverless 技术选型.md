@@ -25,189 +25,189 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;架构的演进.md">01 架构的演进.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Serverless&#32;的价值.md">02 Serverless 的价值.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;常见&#32;Serverless&#32;架构模式.md">03 常见 Serverless 架构模式.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="04&#32;Serverless&#32;技术选型.md">04 Serverless 技术选型.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;函数计算简介.md">05 函数计算简介.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;函数计算是如何工作的？.md">06 函数计算是如何工作的？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;函数粘合云服务提供端到端解决方案.md">07 函数粘合云服务提供端到端解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;函数计算的开发与配置.md">08 函数计算的开发与配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;函数的调试与部署.md">09 函数的调试与部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;自动化&#32;CI&amp;CD&#32;与灰度发布.md">10 自动化 CI&amp;CD 与灰度发布.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;函数计算的可观测性.md">11 函数计算的可观测性.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;典型案例&#32;1：函数计算在音视频场景实践.md">12 典型案例 1：函数计算在音视频场景实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;典型案例&#32;3：十分钟搭建弹性可扩展的&#32;Web&#32;API.md">13 典型案例 3：十分钟搭建弹性可扩展的 Web API.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;Serverless&#32;Kubernetes&#32;容器服务介绍.md">14 Serverless Kubernetes 容器服务介绍.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Serverless&#32;Kubernetes&#32;应用部署及扩缩容.md">15 Serverless Kubernetes 应用部署及扩缩容.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;使用&#32;Spot&#32;低成本运行&#32;Job&#32;任务.md">16 使用 Spot 低成本运行 Job 任务.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;低成本运行&#32;Spark&#32;数据计算.md">17 低成本运行 Spark 数据计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;GPU&#32;机器学习开箱即用.md">18 GPU 机器学习开箱即用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;基于&#32;Knative&#32;低成本部署在线应用，灵活自动伸缩.md">19 基于 Knative 低成本部署在线应用，灵活自动伸缩.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;快速构建&#32;JenkinsGitlab&#32;持续集成环境.md">20 快速构建 JenkinsGitlab 持续集成环境.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;在线应用的&#32;Serverless&#32;实践.md">21 在线应用的 Serverless 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;通过&#32;IDEMaven&#32;部署&#32;Serverless&#32;应用实践.md">22 通过 IDEMaven 部署 Serverless 应用实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;企业级&#32;CICD&#32;工具部署&#32;Serverless&#32;应用的落地实践.md">23 企业级 CICD 工具部署 Serverless 应用的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;Serverless&#32;应用如何管理日志&amp;持久化数据.md">24 Serverless 应用如何管理日志&amp;持久化数据.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;Serverless&#32;应用引擎产品的流量负载均衡和路由策略配置实践.md">25 Serverless 应用引擎产品的流量负载均衡和路由策略配置实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Spring&#32;CloudDubbo&#32;应用无缝迁移到&#32;Serverless&#32;架构.md">26 Spring CloudDubbo 应用无缝迁移到 Serverless 架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;SAE&#32;应用分批发布与无损下线的最佳实践.md">27 SAE 应用分批发布与无损下线的最佳实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Serverless%20%E6%8A%80%E6%9C%AF%E5%85%AC%E5%BC%80%E8%AF%BE%EF%BC%88%E5%AE%8C%EF%BC%89/28%20%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7+%20SAE%20%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B%E8%BD%BB%E6%9D%BE%E5%BA%94%E5%AF%B9%E5%A4%A7%E4%BF%83.md">28 如何通过压测工具+ SAE 弹性能力轻松应对大促.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;SAE&#32;极致应用部署效率.md">29 SAE 极致应用部署效率.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -275,11 +275,11 @@
 <h4>2. 函数计算典型场景</h4>
 <p><img src="assets/2020-07-27-7.JPG" alt="image.gif" /></p>
 <p>从使用场景来说，主要有三类：</p>
-<ul>
-<li>Web 应用。可以是各种语言写的，这种可以使用 Serverless 框架新编写的程序，也可以是已有的应用。比如小程序后端、或者发布到 API 市场的 API 后端应用等。</li>
-<li>对计算能力有很强的弹性诉求的应用。比如 AI 推理、音视频处理、文档转换等。</li>
-<li>事件驱动型的应用。比如通过其他阿里云产品驱动的场景、Web Hook、定时任务等。函数计算已经与很多产品进行了打通，比如对象存储、表格存储、定时器、CDN、日志服务、云监控等，可以非常快速地组装出一些业务逻辑。</li>
-</ul>
+
+Web 应用。可以是各种语言写的，这种可以使用 Serverless 框架新编写的程序，也可以是已有的应用。比如小程序后端、或者发布到 API 市场的 API 后端应用等。
+对计算能力有很强的弹性诉求的应用。比如 AI 推理、音视频处理、文档转换等。
+事件驱动型的应用。比如通过其他阿里云产品驱动的场景、Web Hook、定时任务等。函数计算已经与很多产品进行了打通，比如对象存储、表格存储、定时器、CDN、日志服务、云监控等，可以非常快速地组装出一些业务逻辑。
+
 <h4>3. 函数计算核心竞争力</h4>
 <p><img src="assets/2020-07-27-10.JPG" alt="image.gif" /></p>
 <p>函数计算对客户的一个最大的价值，就是能够让用户只关注自己的业务逻辑开发，完全不需要管理运维，诸如计算资源、网络设置等都不需要关心。在隔离性上提供 vm 级别的隔离，保证用户在运行时的数据安全、运行时安全等；在可用性方面默认提供 3az 的高可用架构，保证客户默认就是高可用的最佳实践架构；在弹性方面，可以做到毫秒级的弹性效率，满足客户突发的流量冲击；在计费方面也非常灵活，真正按照用户的请求情况进行收费，也支持对 long run 的应用更友好的预付费模式。</p>

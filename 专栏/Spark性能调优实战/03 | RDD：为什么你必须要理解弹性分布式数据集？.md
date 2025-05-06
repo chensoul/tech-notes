@@ -138,11 +138,11 @@ case (startDate: String, endDate: String) =&gt;
 
 ## 每日一练
 
-<li>
+
 在日常的开发工作中，你遇到过“单机思维模式”吗？有哪些呢？
-</li>
-<li>
+
+
 除了我们今天讲的4大属性，RDD还有个很重要的属性：preferredLocations。按照经验，你认为在哪些情况下，preferredLocations很重要，会提升I/O效率，又在哪些环境中不起作用呢？为什么？
-</li>
+
 
 期待在留言区看到你的思考，也欢迎你分享工作中遇到过的“单机思维模式”，我们下节课见！

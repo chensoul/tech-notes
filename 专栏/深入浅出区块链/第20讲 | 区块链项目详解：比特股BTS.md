@@ -119,9 +119,9 @@
 
 附录：
 
-<li>【[http://bitshares.org/】](http://bitshares.org/】)
-</li>
-<li>【[https://github.com/bitshares/how.bitshares.works/tree/master/developers#bitshares-documentation-for-developpers】](https://github.com/bitshares/how.bitshares.works/tree/master/developers#bitshares-documentation-for-developpers】)
-</li>
+【[http://bitshares.org/】](http://bitshares.org/】)
+
+【[https://github.com/bitshares/how.bitshares.works/tree/master/developers#bitshares-documentation-for-developpers】](https://github.com/bitshares/how.bitshares.works/tree/master/developers#bitshares-documentation-for-developpers】)
+
 
 

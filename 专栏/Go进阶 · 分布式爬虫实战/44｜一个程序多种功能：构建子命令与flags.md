@@ -341,7 +341,7 @@ var GRPCListenAddress string
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83ep075ibtmxMf3eOYlBJ96CE9TEelLUwePaLqp8M75gWHEcM3za0voylA0oe9y3NiaboPB891rypRt7w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -356,8 +356,8 @@ var GRPCListenAddress string
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/9c/fb/7fe6df5b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -372,5 +372,4 @@ var GRPCListenAddress string
   </div>
 </div>
 </div>
-</li>
-</ul>
+

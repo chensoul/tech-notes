@@ -31,11 +31,11 @@ bitbucket.org/bigwhite/m1 v1.0.1 [v1.0.2]
 $go list -m -u all
 github.com/bigwhite/c1
 bitbucket.org/bigwhite/m1 v1.0.1 [v1.0.2]
-</code></pre><p>但是，一旦broken的m1版本（v1.0.2）进入到GoProxy的缓存，那么它的“危害性”就会“大肆传播”开。这时module m1的新消费者都将受到影响！</p><p>比如这里我们引入一个新的消费者c3，c3的首次构建就会因m1的损坏而报错：</p><p><img src="https://static001.geekbang.org/resource/image/73/00/737eb3121d9fa70387742de128eba500.jpg?wh=1920x1252" alt="图片"></p><p>到这里，糟糕的情况已经出现了！那我们怎么作废掉m1@v1.0.2版本来修复这个问题呢？</p><p>如果在GOPATH时代，废掉一个之前发的包版本是分分钟的事情，因为那时包消费者依赖的都是latest commit。包作者只要fix掉问题、提交并重新发布就可以了。</p><p>但是在Go Module时代，作废掉一个已经发布了的Go Module版本还真不是一件能轻易做好的事情。这很大程度是源于大量Go Module代理服务器的存在，Go Module代理服务器会将已发布的broken的module缓存起来。下面我们来看看可能的问题解决方法。</p><h3>修复broken版本并重新发布</h3><p>要解决掉这个问题，Go Module作者有一个很直接的解决方法，就是：<strong>修复broken的module版本并重新发布</strong>。它的操作步骤也很简单：m1的作者只需要删除掉远程的tag: v1.0.2，在本地fix掉问题，然后重新tag v1.0.2并push发布到bitbucket上的仓库中就可以了。</p><p>但这样做真的能生效么？</p><p>理论上，如果m1的所有消费者，都通过m1所在代码托管服务器（bitbucket）来获取m1的特定版本，那么这种方法还真能解决掉这个问题。对于已经get到broken v1.0.2的消费者来说，他们只需清除掉本地的module cache（go clean -modcache），然后再重新构建就可以了；对于m1的新消费者，他们直接得到的就是重新发布后的v1.0.2版本。</p><p>但现实的情况时，现在大家都是通过Goproxy服务来获取module的。</p><p>所以，一旦一个module版本被发布，当某个消费者通过他配置的goproxy获取这个版本时，这个版本就会在被缓存在对应的代理服务器上。后续m1的消费者通过这个goproxy服务器获取那个版本的m1时，请求不会再回到m1所在的源代码托管服务器。</p><p>这样，即便m1的源服务器上的v1.0.2版本得到了重新发布，散布在各个goproxy服务器上的broken v1.0.2也依旧存在，并且被“传播”到各个m1消费者的开发环境中，而重新发布后的v1.0.2版本却得不到“传播”的机会，我们还是用一张图来直观展示下这种“窘境”：</p><p><img src="https://static001.geekbang.org/resource/image/c0/2b/c07fba8655615046c49110fb91bb662b.jpg?wh=1920x1252" alt="图片"></p><p>因此，从消费者的角度看，m1的v1.0.2版本依旧是那个broken的版本，这种解决措施无效！</p><p>那你可能会问，如果m1的作者删除了bitbucket上的v1.0.2这个发布版本，各大goproxy服务器上的broken v1.0.2版本是否也会被同步删除呢？</p><p>遗憾地告诉你：不会。</p><p>Goproxy服务器当初的一个设计目标，就是尽可能地缓存更多module。所以，即便某个module的源码仓库都被删除了，这个module的各个版本依旧会缓存在goproxy服务器上，这个module的消费者依然可以正常获取这个module，并顺利构建。</p><p>因此，goproxy服务器当前的实现都没有主动删掉某个module缓存的特性。当然了，这可能也不是绝对的，毕竟不同goproxy服务的实现有所不同。</p><p>那这种问题该怎么解决呢？这种情况下，Go社区更为常见的解决方式就是<strong>发布module的新patch版本</strong></p><h3>发布module的新patch版本</h3><p>我们依然以上面的m1为例，现在我们废除掉v1.0.2，在本地修正问题后，直接打v1.0.3标签，并发布push到远程代码服务器上。这样m1的消费者以及module proxy的整体状态就变成这个样子了：</p><p><img src="https://static001.geekbang.org/resource/image/b7/35/b74c8b9182f3f195c11ff2e20964ed35.jpg?wh=1920x1045" alt="图片"></p><p>在这样的状态下，我们分别看看m1的消费者的情况：</p><ul>
-<li>对于依赖m1@v1.0.1版本的c1，在未手工更新依赖版本的情况下，它仍然可以保持成功的构建；</li>
-<li>对于m1的新消费者，比如c4，它首次构建时使用的就是m1的最新patch版v1.0.3，跨过了作废的v1.0.2，并成功完成构建；</li>
-<li>对于之前曾依赖v1.0.2版本的消费者c2来说，这个时候他们需要手工介入才能解决问题，也就是需要在c2环境中手工升级依赖版本到v1.0.3，这样c2也会得到成功构建。</li>
-</ul><p>那这样，我们错误版本的问题就得到了缓解。</p><p>从Go 1.16版本开始，Go Module作者还可以在go.mod中使用新增加的<a href="https://go.dev/ref/mod#go-mod-file-retract">retract指示符</a>，标识出哪些版本是作废的且不推荐使用的。retract的语法形式如下：</p><pre><code class="language-plain">// go.mod
+</code></pre><p>但是，一旦broken的m1版本（v1.0.2）进入到GoProxy的缓存，那么它的“危害性”就会“大肆传播”开。这时module m1的新消费者都将受到影响！</p><p>比如这里我们引入一个新的消费者c3，c3的首次构建就会因m1的损坏而报错：</p><p><img src="https://static001.geekbang.org/resource/image/73/00/737eb3121d9fa70387742de128eba500.jpg?wh=1920x1252" alt="图片"></p><p>到这里，糟糕的情况已经出现了！那我们怎么作废掉m1@v1.0.2版本来修复这个问题呢？</p><p>如果在GOPATH时代，废掉一个之前发的包版本是分分钟的事情，因为那时包消费者依赖的都是latest commit。包作者只要fix掉问题、提交并重新发布就可以了。</p><p>但是在Go Module时代，作废掉一个已经发布了的Go Module版本还真不是一件能轻易做好的事情。这很大程度是源于大量Go Module代理服务器的存在，Go Module代理服务器会将已发布的broken的module缓存起来。下面我们来看看可能的问题解决方法。</p><h3>修复broken版本并重新发布</h3><p>要解决掉这个问题，Go Module作者有一个很直接的解决方法，就是：<strong>修复broken的module版本并重新发布</strong>。它的操作步骤也很简单：m1的作者只需要删除掉远程的tag: v1.0.2，在本地fix掉问题，然后重新tag v1.0.2并push发布到bitbucket上的仓库中就可以了。</p><p>但这样做真的能生效么？</p><p>理论上，如果m1的所有消费者，都通过m1所在代码托管服务器（bitbucket）来获取m1的特定版本，那么这种方法还真能解决掉这个问题。对于已经get到broken v1.0.2的消费者来说，他们只需清除掉本地的module cache（go clean -modcache），然后再重新构建就可以了；对于m1的新消费者，他们直接得到的就是重新发布后的v1.0.2版本。</p><p>但现实的情况时，现在大家都是通过Goproxy服务来获取module的。</p><p>所以，一旦一个module版本被发布，当某个消费者通过他配置的goproxy获取这个版本时，这个版本就会在被缓存在对应的代理服务器上。后续m1的消费者通过这个goproxy服务器获取那个版本的m1时，请求不会再回到m1所在的源代码托管服务器。</p><p>这样，即便m1的源服务器上的v1.0.2版本得到了重新发布，散布在各个goproxy服务器上的broken v1.0.2也依旧存在，并且被“传播”到各个m1消费者的开发环境中，而重新发布后的v1.0.2版本却得不到“传播”的机会，我们还是用一张图来直观展示下这种“窘境”：</p><p><img src="https://static001.geekbang.org/resource/image/c0/2b/c07fba8655615046c49110fb91bb662b.jpg?wh=1920x1252" alt="图片"></p><p>因此，从消费者的角度看，m1的v1.0.2版本依旧是那个broken的版本，这种解决措施无效！</p><p>那你可能会问，如果m1的作者删除了bitbucket上的v1.0.2这个发布版本，各大goproxy服务器上的broken v1.0.2版本是否也会被同步删除呢？</p><p>遗憾地告诉你：不会。</p><p>Goproxy服务器当初的一个设计目标，就是尽可能地缓存更多module。所以，即便某个module的源码仓库都被删除了，这个module的各个版本依旧会缓存在goproxy服务器上，这个module的消费者依然可以正常获取这个module，并顺利构建。</p><p>因此，goproxy服务器当前的实现都没有主动删掉某个module缓存的特性。当然了，这可能也不是绝对的，毕竟不同goproxy服务的实现有所不同。</p><p>那这种问题该怎么解决呢？这种情况下，Go社区更为常见的解决方式就是<strong>发布module的新patch版本</strong></p><h3>发布module的新patch版本</h3><p>我们依然以上面的m1为例，现在我们废除掉v1.0.2，在本地修正问题后，直接打v1.0.3标签，并发布push到远程代码服务器上。这样m1的消费者以及module proxy的整体状态就变成这个样子了：</p><p><img src="https://static001.geekbang.org/resource/image/b7/35/b74c8b9182f3f195c11ff2e20964ed35.jpg?wh=1920x1045" alt="图片"></p><p>在这样的状态下，我们分别看看m1的消费者的情况：</p>
+对于依赖m1@v1.0.1版本的c1，在未手工更新依赖版本的情况下，它仍然可以保持成功的构建；
+对于m1的新消费者，比如c4，它首次构建时使用的就是m1的最新patch版v1.0.3，跨过了作废的v1.0.2，并成功完成构建；
+对于之前曾依赖v1.0.2版本的消费者c2来说，这个时候他们需要手工介入才能解决问题，也就是需要在c2环境中手工升级依赖版本到v1.0.3，这样c2也会得到成功构建。
+<p>那这样，我们错误版本的问题就得到了缓解。</p><p>从Go 1.16版本开始，Go Module作者还可以在go.mod中使用新增加的<a href="https://go.dev/ref/mod#go-mod-file-retract">retract指示符</a>，标识出哪些版本是作废的且不推荐使用的。retract的语法形式如下：</p><pre><code class="language-plain">// go.mod
 retract v1.0.0           // 作废v1.0.0版本
 retract [v1.1.0, v1.2.0] // 作废v1.1.0和v1.2.0两个版本
 </code></pre><p>我们还用m1为例，我们将m1的go.mod更新为如下内容：</p><pre><code class="language-plain">//m1的go.mod
@@ -184,7 +184,7 @@ m1
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ba/ce/fd45714f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -199,8 +199,8 @@ m1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/22/9b/4486d287.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -215,8 +215,8 @@ m1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cb/38/4c9cfdf4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -231,8 +231,8 @@ m1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -247,5 +247,4 @@ m1
   </div>
 </div>
 </div>
-</li>
-</ul>
+

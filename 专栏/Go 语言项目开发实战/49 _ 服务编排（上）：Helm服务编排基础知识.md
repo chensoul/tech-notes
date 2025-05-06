@@ -1,15 +1,15 @@
 <audio title="49 _ 服务编排（上）：Helm服务编排基础知识" src="https://static001.geekbang.org/resource/audio/bb/3b/bb754b89d8880b0cbbcyy5d397467c3b.mp3" controls="controls"></audio> 
-<p>你好，我是孔令飞。</p><p>我们将应用部署在Kubernetes时，可能需要创建多个服务。我就见过一个包含了40多个微服务的超大型应用，每个服务又包含了多个Kubernetes资源，比如 Service、Deployment、StatefulSet、ConfigMap等。相同的应用又要部署在不同的环境中，例如测试环境、预发环境、现网环境等，也就是说应用的配置也不同。</p><p>对于一个大型的应用，如果基于YAML文件一个一个地部署Kubernetes资源，是非常繁琐、低效的，而且这些YAML文件维护起来极其复杂，还容易出错。那么，有没有一种更加高效的方式？比如，像Docker镜像一样，将应用需要的Kubernetes资源文件全部打包在一起，通过这个包来整体部署和管理应用，从而降低应用部署和维护的复杂度。</p><p>答案是有。我们可以通过Helm Chart包来管理这些Kubernetes文件，并通过<code>helm</code>命令，基于Chart包来创建和管理应用。</p><p>接下来，我就来介绍下Helm的基础知识，并给你演示下如何基于Helm部署IAM应用。</p><h2>Helm基础知识介绍</h2><p>Helm目前是Kubernetes服务编排事实上的标准。Helm提供了多种功能来支持Kubernetes的服务编排，例如 <code>helm</code> 命令行工具、Chart包、Chart仓库等。下面，我就来详细介绍下。</p><!-- [[[read_end]]] --><h3>Helm是什么？</h3><p>Helm是Kubernetes的包管理器，类似于Python的 <code>pip</code> ，centos的 <code>yum</code> 。Helm主要用来管理Chart包。Helm Chart包中包含一系列YAML格式的Kubernetes资源定义文件，以及这些资源的配置，可以通过Helm Chart包来整体维护这些资源。</p><p>Helm也提供了一个<code>helm</code>命令行工具，该工具可以基于Chart包一键创建应用，在创建应用时，可以自定义Chart配置。应用发布者可以通过Helm打包应用、管理应用依赖关系、管理应用版本，并发布应用到软件仓库；对于使用者来说，使用Helm后不需要编写复杂的应用部署文件，可以非常方便地在Kubernetes上查找、安装、升级、回滚、卸载应用程序。</p><p>Helm最新的版本是v3，Helm3以Helm2的核心功能为基础，对Chart repo、发行版管理、安全性和library Charts进行了改进。和Helm2比起来，Helm3最明显的变化是删除了Tiller（Helm2 是一种 Client-Server 结构，客户端称为 Helm，服务器称为 Tiller）。Helm3还新增了一些功能，并废弃或重构了Helm2的部分功能，与Helm2不再兼容。此外，Helm3还引入了一些新的实验功能，包括OCI支持。</p><p>Helm3架构图如下：</p><p><img src="https://static001.geekbang.org/resource/image/9b/59/9bb9e2d495d8fbe5eab4d02d407c8059.jpg?wh=1920x1083" alt="图片"></p><p>上面的架构图中，核心是Helm Client（<code>helm</code>命令）和Helm Chart包。<code>helm</code>命令可以从<code>Chart Repository</code>中下载Helm Chart包，读取<code>kubeconfig</code>文件，并构建kube-apiserver REST API接口的HTTP请求。通过调用Kubernetes提供的REST API接口，将Chart包中包含的所有以YAML格式定义的Kubernetes资源，在Kubernetes集群中创建。</p><p>这些资源以Release的形式存在于Kubernetes集群中，每个Release又包含多个Kubernetes资源，例如Deployment、Pod、Service等。</p><h3>Helm中的三大基本概念</h3><p>要学习和使用Helm，一定要了解Helm中的三大基本概念，Helm的所有操作基本都是围绕着这些概念来进行的。下面我来介绍下Helm的三大基本概念。</p><ul>
-<li><strong>Chart：</strong> 代表一个Helm包。它包含了在Kubernetes集群中运行应用程序、工具或服务所需的所有YAML格式的资源定义文件。</li>
-<li><strong>Repository（仓库）：</strong> 它是用来存放和共享 Helm Chart的地方，类似于存放源码的GitHub的Repository，以及存放镜像的Docker的Repository。</li>
-<li><strong>Release：</strong>它是运行在 Kubernetes 集群中的 Chart 的实例。一个Chart通常可以在同一个集群中安装多次。每一次安装都会创建一个新的 Release。</li>
-</ul><h3>我们为什么要使用Helm？</h3><p>现在你对Helm已经有了一定了解，这里我再来详细介绍下为什么要使用Helm。</p><p>先来看下传统的应用部署模式：</p><p><img src="https://static001.geekbang.org/resource/image/c1/c4/c1f54e347b5db7850b57815abed99ec4.jpg?wh=1920x966" alt="图片"></p><p>我们有测试环境、预发环境、现网环境三个环境，每个环境中部署一个应用A，应用A中包含了多个服务，每个服务又包含了自己的配置，不同服务之间的配置有些是共享的，例如<code>配置A</code>。</p><p>每个服务由一个复杂的Kubernetes YAML格式的文件来定义并创建，可以看到如果靠传统的方式，去维护这些YAML格式文件，并在不同环境下使用不同的配置去创建应用，是一件非常复杂的工作，并且后期YAML文件和Kubernetes集群中部署应用的维护都很复杂。随着微服务规模越来越大，会面临以下挑战：</p><ul>
-<li>微服务化服务数量急剧增多，给服务管理带来了极大的挑战。</li>
-<li>服务数量急剧增多，增加了管理难度，对运维部署是一种挑战。</li>
-<li>服务数量的增多，对服务配置管理也提出了更高的要求。</li>
-<li>随着服务数量增加，服务依赖关系也变得更加复杂，服务依赖关系的管理难度增大。</li>
-<li>在环境信息管理方面，在新环境快速部署一个复杂应用变得更加困难。</li>
-</ul><p>所以，我们需要一种更好的方式，来维护和管理这些YAML文件和Kubernetes中部署的应用。Helm可以帮我们解决上面这些问题。</p><p>接下来，我们来看下Helm是如何解决这些问题的。</p><p>在Helm中，可以理解为主要包含两类文件：模板文件和配置文件。模板文件通常有多个，配置文件通常有一个。Helm的模板文件基于<code>text/template</code>模板文件，提供了更加强大的模板渲染能力。Helm可以将配置文件中的值渲染进模板文件中，最终生成一个可以部署的Kubernetes YAML格式的资源定义文件，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/ff/86/ffcc4eaf4071e19e2e0d317b1c536486.png?wh=1920x936" alt="图片"></p><p>上图中，我们将以下配置渲染进了模板中，生成了Kubernetes YAML文件：</p><pre><code class="language-yaml">replicas: 2
+<p>你好，我是孔令飞。</p><p>我们将应用部署在Kubernetes时，可能需要创建多个服务。我就见过一个包含了40多个微服务的超大型应用，每个服务又包含了多个Kubernetes资源，比如 Service、Deployment、StatefulSet、ConfigMap等。相同的应用又要部署在不同的环境中，例如测试环境、预发环境、现网环境等，也就是说应用的配置也不同。</p><p>对于一个大型的应用，如果基于YAML文件一个一个地部署Kubernetes资源，是非常繁琐、低效的，而且这些YAML文件维护起来极其复杂，还容易出错。那么，有没有一种更加高效的方式？比如，像Docker镜像一样，将应用需要的Kubernetes资源文件全部打包在一起，通过这个包来整体部署和管理应用，从而降低应用部署和维护的复杂度。</p><p>答案是有。我们可以通过Helm Chart包来管理这些Kubernetes文件，并通过<code>helm</code>命令，基于Chart包来创建和管理应用。</p><p>接下来，我就来介绍下Helm的基础知识，并给你演示下如何基于Helm部署IAM应用。</p><h2>Helm基础知识介绍</h2><p>Helm目前是Kubernetes服务编排事实上的标准。Helm提供了多种功能来支持Kubernetes的服务编排，例如 <code>helm</code> 命令行工具、Chart包、Chart仓库等。下面，我就来详细介绍下。</p><!-- [[[read_end]]] --><h3>Helm是什么？</h3><p>Helm是Kubernetes的包管理器，类似于Python的 <code>pip</code> ，centos的 <code>yum</code> 。Helm主要用来管理Chart包。Helm Chart包中包含一系列YAML格式的Kubernetes资源定义文件，以及这些资源的配置，可以通过Helm Chart包来整体维护这些资源。</p><p>Helm也提供了一个<code>helm</code>命令行工具，该工具可以基于Chart包一键创建应用，在创建应用时，可以自定义Chart配置。应用发布者可以通过Helm打包应用、管理应用依赖关系、管理应用版本，并发布应用到软件仓库；对于使用者来说，使用Helm后不需要编写复杂的应用部署文件，可以非常方便地在Kubernetes上查找、安装、升级、回滚、卸载应用程序。</p><p>Helm最新的版本是v3，Helm3以Helm2的核心功能为基础，对Chart repo、发行版管理、安全性和library Charts进行了改进。和Helm2比起来，Helm3最明显的变化是删除了Tiller（Helm2 是一种 Client-Server 结构，客户端称为 Helm，服务器称为 Tiller）。Helm3还新增了一些功能，并废弃或重构了Helm2的部分功能，与Helm2不再兼容。此外，Helm3还引入了一些新的实验功能，包括OCI支持。</p><p>Helm3架构图如下：</p><p><img src="https://static001.geekbang.org/resource/image/9b/59/9bb9e2d495d8fbe5eab4d02d407c8059.jpg?wh=1920x1083" alt="图片"></p><p>上面的架构图中，核心是Helm Client（<code>helm</code>命令）和Helm Chart包。<code>helm</code>命令可以从<code>Chart Repository</code>中下载Helm Chart包，读取<code>kubeconfig</code>文件，并构建kube-apiserver REST API接口的HTTP请求。通过调用Kubernetes提供的REST API接口，将Chart包中包含的所有以YAML格式定义的Kubernetes资源，在Kubernetes集群中创建。</p><p>这些资源以Release的形式存在于Kubernetes集群中，每个Release又包含多个Kubernetes资源，例如Deployment、Pod、Service等。</p><h3>Helm中的三大基本概念</h3><p>要学习和使用Helm，一定要了解Helm中的三大基本概念，Helm的所有操作基本都是围绕着这些概念来进行的。下面我来介绍下Helm的三大基本概念。</p>
+<strong>Chart：</strong> 代表一个Helm包。它包含了在Kubernetes集群中运行应用程序、工具或服务所需的所有YAML格式的资源定义文件。
+<strong>Repository（仓库）：</strong> 它是用来存放和共享 Helm Chart的地方，类似于存放源码的GitHub的Repository，以及存放镜像的Docker的Repository。
+<strong>Release：</strong>它是运行在 Kubernetes 集群中的 Chart 的实例。一个Chart通常可以在同一个集群中安装多次。每一次安装都会创建一个新的 Release。
+<h3>我们为什么要使用Helm？</h3><p>现在你对Helm已经有了一定了解，这里我再来详细介绍下为什么要使用Helm。</p><p>先来看下传统的应用部署模式：</p><p><img src="https://static001.geekbang.org/resource/image/c1/c4/c1f54e347b5db7850b57815abed99ec4.jpg?wh=1920x966" alt="图片"></p><p>我们有测试环境、预发环境、现网环境三个环境，每个环境中部署一个应用A，应用A中包含了多个服务，每个服务又包含了自己的配置，不同服务之间的配置有些是共享的，例如<code>配置A</code>。</p><p>每个服务由一个复杂的Kubernetes YAML格式的文件来定义并创建，可以看到如果靠传统的方式，去维护这些YAML格式文件，并在不同环境下使用不同的配置去创建应用，是一件非常复杂的工作，并且后期YAML文件和Kubernetes集群中部署应用的维护都很复杂。随着微服务规模越来越大，会面临以下挑战：</p>
+微服务化服务数量急剧增多，给服务管理带来了极大的挑战。
+服务数量急剧增多，增加了管理难度，对运维部署是一种挑战。
+服务数量的增多，对服务配置管理也提出了更高的要求。
+随着服务数量增加，服务依赖关系也变得更加复杂，服务依赖关系的管理难度增大。
+在环境信息管理方面，在新环境快速部署一个复杂应用变得更加困难。
+<p>所以，我们需要一种更好的方式，来维护和管理这些YAML文件和Kubernetes中部署的应用。Helm可以帮我们解决上面这些问题。</p><p>接下来，我们来看下Helm是如何解决这些问题的。</p><p>在Helm中，可以理解为主要包含两类文件：模板文件和配置文件。模板文件通常有多个，配置文件通常有一个。Helm的模板文件基于<code>text/template</code>模板文件，提供了更加强大的模板渲染能力。Helm可以将配置文件中的值渲染进模板文件中，最终生成一个可以部署的Kubernetes YAML格式的资源定义文件，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/ff/86/ffcc4eaf4071e19e2e0d317b1c536486.png?wh=1920x936" alt="图片"></p><p>上图中，我们将以下配置渲染进了模板中，生成了Kubernetes YAML文件：</p><pre><code class="language-yaml">replicas: 2
 tag: latest
 common:
     username: colin
@@ -26,10 +26,10 @@ $ echo 'source $HOME/.helm-completion.bash' &gt;&gt; ~/.bashrc
 $ bash
 </code></pre><p>执行 <code>helm comp&lt;TAB&gt;</code>，就会自动补全为<code>helm completion</code>。</p><h3>Helm快速入门</h3><p>你可以通过以下六个步骤，来快速创建一个Chart应用。</p><p><strong>第一步，初始化一个Helm Chart仓库。</strong></p><p>安装完Helm之后，就可以使用 <code>helm</code> 命令添加一个Chart仓库。类似于用来托管Docker镜像的DockerHub、用来托管代码的GitHub，Chart包也有一个托管平台，当前比较流行的Chart包托管平台是<a href="https://artifacthub.io/packages/search?kind=0">Artifact Hub</a>。</p><p>Artifact Hub上有很多Chart仓库，我们可以添加需要的Chart仓库，这里我们添加BitNami提供的Chart仓库：</p><pre><code class="language-bash">$ helm repo add bitnami https://charts.bitnami.com/bitnami # 添加 Chart Repository
 $ helm repo list # 查看添加的 Repository 列表
-</code></pre><p>添加完成后，我们可以通过<code>helm search</code>命令，来查询需要的Chart包。<code>helm search</code>支持两种不同的查询方式，这里我来介绍下。</p><ul>
-<li><code>helm search repo&lt;keyword&gt;</code>：从你使用 <code>helm repo add</code> 添加到本地 Helm 客户端中的仓库里查找。该命令基于本地数据进行搜索，无需连接外网。</li>
-<li><code>helm search hub&lt;keyword&gt;</code>：从 Artifact Hub 中查找并列出 Helm Charts。 Artifact Hub中存放了大量的仓库。</li>
-</ul><p>Helm 搜索使用模糊字符串匹配算法，所以你可以只输入名字的一部分。下面是一个<code>helm search</code>的示例：</p><pre><code class="language-bash">$ helm search repo bitnami
+</code></pre><p>添加完成后，我们可以通过<code>helm search</code>命令，来查询需要的Chart包。<code>helm search</code>支持两种不同的查询方式，这里我来介绍下。</p>
+<code>helm search repo&lt;keyword&gt;</code>：从你使用 <code>helm repo add</code> 添加到本地 Helm 客户端中的仓库里查找。该命令基于本地数据进行搜索，无需连接外网。
+<code>helm search hub&lt;keyword&gt;</code>：从 Artifact Hub 中查找并列出 Helm Charts。 Artifact Hub中存放了大量的仓库。
+<p>Helm 搜索使用模糊字符串匹配算法，所以你可以只输入名字的一部分。下面是一个<code>helm search</code>的示例：</p><pre><code class="language-bash">$ helm search repo bitnami
 NAME                                        	CHART VERSION	APP VERSION  	DESCRIPTION
 bitnami/bitnami-common                      	0.0.9        	0.0.9        	DEPRECATED Chart with custom templates used in ...
 bitnami/airflow                             	10.2.8       	2.1.2        	Apache Airflow is a platform to programmaticall...
@@ -39,12 +39,12 @@ bitnami/aspnet-core                         	1.3.14       	3.1.18       	ASP.NET
 bitnami/cassandra                           	8.0.2        	4.0.0        	Apache Cassandra is a free and open-source dist...
 bitnami/cert-manager                        	0.1.15       	1.5.1        	Cert Manager is a Kubernetes add-on to automate...
 # ... and many more
-</code></pre><p><strong>第二步，安装一个示例Chart。</strong></p><p>查询到自己需要的Helm Chart后，就可以通过<code>helm install</code>命令来安装一个Chart。<code>helm install</code>支持从多种源进行安装：</p><ul>
-<li>Chart的Repository。</li>
-<li>本地的Chart Archive，例如<code>helm install foo foo-1.0.0.tgz</code>。</li>
-<li>一个未打包的Chart路径，例如<code>helm install foo path/to/foo</code>。</li>
-<li>一个完整的URL，例如<code>helm install foo https://example.com/charts/foo-1.0.0.tgz</code>。</li>
-</ul><p>这里，我们选择通过<code>bitnami/mysql</code> Chart包来安装一个MySQL应用。你可以执行 <code>helm show chart bitnami/mysql</code> 命令，来简单了解这个Chart的基本信息。 或者，你也可以执行 <code>helm show all bitnami/mysql</code>，获取关于该Chart的所有信息。</p><p>接下来，就可以使用<code>helm install</code>命令来安装这个Chart包了。安装命令如下：</p><pre><code class="language-bash">$ helm repo update              # Make sure we get the latest list of charts
+</code></pre><p><strong>第二步，安装一个示例Chart。</strong></p><p>查询到自己需要的Helm Chart后，就可以通过<code>helm install</code>命令来安装一个Chart。<code>helm install</code>支持从多种源进行安装：</p>
+Chart的Repository。
+本地的Chart Archive，例如<code>helm install foo foo-1.0.0.tgz</code>。
+一个未打包的Chart路径，例如<code>helm install foo path/to/foo</code>。
+一个完整的URL，例如<code>helm install foo https://example.com/charts/foo-1.0.0.tgz</code>。
+<p>这里，我们选择通过<code>bitnami/mysql</code> Chart包来安装一个MySQL应用。你可以执行 <code>helm show chart bitnami/mysql</code> 命令，来简单了解这个Chart的基本信息。 或者，你也可以执行 <code>helm show all bitnami/mysql</code>，获取关于该Chart的所有信息。</p><p>接下来，就可以使用<code>helm install</code>命令来安装这个Chart包了。安装命令如下：</p><pre><code class="language-bash">$ helm repo update              # Make sure we get the latest list of charts
 $ helm install bitnami/mysql --generate-name
 NAME: mysql-1629528555
 LAST DEPLOYED: Sat Aug 21 14:49:19 2021
@@ -71,10 +71,10 @@ initdbScripts: {}
 # ... and many more
 </code></pre><p>然后，你可以使用 YAML 格式的文件，覆盖上述任意配置项，并在安装过程中使用该文件。</p><pre><code class="language-bash">$ echo '{auth.database: iam, auth.username: iam, auth.password: iam59!z$}' &gt; values.yaml
 $ helm install bitnami/mysql -f values.yaml --generate-name
-</code></pre><p>上述命令将为 MySQL 创建一个名称为 <code>iam</code> 的默认用户，密码为<code>iam59!z$</code>，并且授予该用户访问新建的 <code>iam</code> 数据库的权限。Chart 中的其他默认配置保持不变。</p><p>安装过程中，有两种传递配置数据的方式。</p><ul>
-<li><code>-f, --values</code>：使用 YAML 文件覆盖配置。可以指定多次，优先使用最右边的文件。</li>
-<li><code>--set</code>：通过命令行的方式对指定配置项进行覆盖。</li>
-</ul><p>如果同时使用两种方式，则 <code>--set</code> 中的值会被合并到 <code>--values</code> 中，但是 <code>--set</code> 中的值优先级更高。在<code>--set</code>中覆盖的内容会被保存在 ConfigMap 中。你可以通过 <code>helm get values &lt;release-name&gt;</code> 来查看指定 Release 中 <code>--set</code> 设置的值，也可以通过运行 <code>helm upgrade</code> 并指定 <code>--reset-values</code> 字段，来清除 <code>--set</code>中设置的值。</p><p><strong>这里我讲解下<code>--set</code>的格式和限制。</strong></p><p><code>--set</code> 选项使用<code>0</code>或多个<code>key-value</code> 对。最简单的用法类似于<code>--set name=value</code>，等价于下面这个 YAML 格式：</p><pre><code class="language-yaml">name: value
+</code></pre><p>上述命令将为 MySQL 创建一个名称为 <code>iam</code> 的默认用户，密码为<code>iam59!z$</code>，并且授予该用户访问新建的 <code>iam</code> 数据库的权限。Chart 中的其他默认配置保持不变。</p><p>安装过程中，有两种传递配置数据的方式。</p>
+<code>-f, --values</code>：使用 YAML 文件覆盖配置。可以指定多次，优先使用最右边的文件。
+<code>--set</code>：通过命令行的方式对指定配置项进行覆盖。
+<p>如果同时使用两种方式，则 <code>--set</code> 中的值会被合并到 <code>--values</code> 中，但是 <code>--set</code> 中的值优先级更高。在<code>--set</code>中覆盖的内容会被保存在 ConfigMap 中。你可以通过 <code>helm get values &lt;release-name&gt;</code> 来查看指定 Release 中 <code>--set</code> 设置的值，也可以通过运行 <code>helm upgrade</code> 并指定 <code>--reset-values</code> 字段，来清除 <code>--set</code>中设置的值。</p><p><strong>这里我讲解下<code>--set</code>的格式和限制。</strong></p><p><code>--set</code> 选项使用<code>0</code>或多个<code>key-value</code> 对。最简单的用法类似于<code>--set name=value</code>，等价于下面这个 YAML 格式：</p><pre><code class="language-yaml">name: value
 </code></pre><p>多个值之间使用逗号分割，因此<code>--set a=b,c=d</code> 的 YAML 表示是：</p><pre><code class="language-yaml">a: b
 c: d
 </code></pre><p><code>--set</code>还支持更复杂的表达式。例如，<code>--set outer.inner=value</code> 被转换成了：</p><pre><code class="language-yaml">outer:
@@ -103,11 +103,11 @@ auth:
 REVISION	UPDATED                 	STATUS    	CHART      	APP VERSION	DESCRIPTION
 1       	Sat Aug 21 14:49:19 2021	superseded	mysql-8.8.4	8.0.26     	Install complete
 2       	Sat Aug 21 15:14:45 2021	deployed  	mysql-8.8.4	8.0.26     	Upgrade complete
-</code></pre><p>你还可以指定一些其他的选项，来自定义 Helm 在安装、升级、回滚期间的行为。这里，我介绍一些常用的参数，供你参考。</p><ul>
-<li><code>--timeout</code>：一个 Go duration 类型的值，用来表示等待 Kubernetes 命令完成的超时时间，默认值为 <code>5m0s</code>。</li>
-<li><code>--no-hooks</code>：不运行当前命令的钩子。</li>
-<li><code>--wait</code>：表示必须要等到所有的 Pods 都处于 ready 状态、PVC 都被绑定、Deployments处在 ready 状态的Pods 个数达到最小值（Desired减去 maxUnavailable），才会标记该 Release 为成功。最长等待时间由 <code>--timeout</code> 值指定。如果达到超时时间，Release 将被标记为 <code>FAILED</code>。</li>
-</ul><p>这里需要注意，当 Deployment 的 replicas 被设置为1，但其滚动升级策略中的<code>maxUnavailable</code> 没有被设置为<code>0</code>时，<code>--wait</code> 将返回就绪，因为已经满足了最小 ready Pod 数。</p><p><strong>第六步，卸载Release。</strong></p><p>你可以使用<code>helm uninstall</code>命令卸载一个Release：</p><pre><code class="language-bash">$ helm  uninstall mysql-1629528555
+</code></pre><p>你还可以指定一些其他的选项，来自定义 Helm 在安装、升级、回滚期间的行为。这里，我介绍一些常用的参数，供你参考。</p>
+<code>--timeout</code>：一个 Go duration 类型的值，用来表示等待 Kubernetes 命令完成的超时时间，默认值为 <code>5m0s</code>。
+<code>--no-hooks</code>：不运行当前命令的钩子。
+<code>--wait</code>：表示必须要等到所有的 Pods 都处于 ready 状态、PVC 都被绑定、Deployments处在 ready 状态的Pods 个数达到最小值（Desired减去 maxUnavailable），才会标记该 Release 为成功。最长等待时间由 <code>--timeout</code> 值指定。如果达到超时时间，Release 将被标记为 <code>FAILED</code>。
+<p>这里需要注意，当 Deployment 的 replicas 被设置为1，但其滚动升级策略中的<code>maxUnavailable</code> 没有被设置为<code>0</code>时，<code>--wait</code> 将返回就绪，因为已经满足了最小 ready Pod 数。</p><p><strong>第六步，卸载Release。</strong></p><p>你可以使用<code>helm uninstall</code>命令卸载一个Release：</p><pre><code class="language-bash">$ helm  uninstall mysql-1629528555
 </code></pre><p>上述命令会从Kubernetes卸载 <code>mysql-1629528555</code>， 它将删除和该版本关联的所有资源（Service、Deployment、Pod、ConfigMap等），包括该Release的所有版本历史。</p><p>如果你在执行 <code>helm uninstall</code> 的时候提供<code>--keep-history</code> 选项， Helm将会保存版本历史。 你可以通过<code>helm status</code>命令查看该版本的信息：</p><pre><code class="language-bash">$ helm status mysql-1629528555
 Status: UNINSTALLED
 ...
@@ -125,8 +125,8 @@ Usage:
   helm get [command]
 # ... and many more
 </code></pre><p>我整理了一份命令列表，供你参考：</p><p><img src="https://static001.geekbang.org/resource/image/c4/bb/c4fa82cf7bf7fc5c98314419b1e0febb.png?wh=1920x4212" alt="图片"></p><p>上面这些命令中，有些提供了子命令和命令行参数，具体你可以执行<code>helm &lt;subcommand&gt; -h</code>来查看。</p><h2>总结</h2><p>今天，我介绍了Helm的基础知识，并给你演示了如何基于Helm部署IAM应用。</p><p>当一个应用包含了很多微服务时，手动在Kubernetes集群中部署、升级、回滚这些微服务是一件非常复杂的工作。这时候，我们就需要一个服务编排方案来编排这些服务，从而提高服务部署和维护的效率。</p><p>目前业界提供了多种服务编排方案，其中最流行的是Helm，Helm已经成为一个事实上的Kubernetes服务编排标准。</p><p>在Helm中，有Chart、Repository和Release三大基本概念。Chart 代表一个Helm包，里面包含了运行Kubernetes应用需要的所有资源定义YAML文件；Repository是Chart仓库，用来存放和共享 Helm Chart；Release是运行在 Kubernetes 集群中的 Chart 的实例。</p><p>我们可以通过&nbsp; <code>helm install [NAME] [CHART] [flags]</code> 来安装一个Chart包；通过 <code>helm upgrade [RELEASE] [CHART] [flags]</code> 来更新一个Helm Release；通过 <code>helm uninstall RELEASE_NAME [...] [flags]</code> 来卸载一个Helm Release。另外，<code>helm</code> 命令行工具还提供了其他的功能，你可以再回顾一遍。</p><h2>课后练习</h2><ol>
-<li>思考下，如果使用Helm创建服务，是否会存在先启动服务，再创建服务配置，从而导致服务启动时加载配置失败的问题？如果有，Helm可以怎样解决这个问题？</li>
-<li>尝试将IAM应用制作成一个Chart包，并通过Helm安装。</li>
+思考下，如果使用Helm创建服务，是否会存在先启动服务，再创建服务配置，从而导致服务启动时加载配置失败的问题？如果有，Helm可以怎样解决这个问题？
+尝试将IAM应用制作成一个Chart包，并通过Helm安装。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -237,7 +237,7 @@ Usage:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/59/b7/9db9c657.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -252,8 +252,8 @@ Usage:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/f3/ed/46299341.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -268,8 +268,8 @@ Usage:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -284,5 +284,4 @@ Usage:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

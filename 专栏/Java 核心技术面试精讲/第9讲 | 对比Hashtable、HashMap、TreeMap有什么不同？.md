@@ -20,15 +20,15 @@ TreeMap则是基于红黑树的一种提供顺序访问的Map，和HashMap不同
 
 很多朋友向我反馈，面试官似乎钟爱考察HashMap的设计和实现细节，所以今天我会增加相应的源码解读，主要专注于下面几个方面：
 
-<li>
+
 理解Map相关类似整体结构，尤其是有序数据结构的一些要点。
-</li>
-<li>
+
+
 从源码去分析HashMap的设计和实现要点，理解容量、负载因子等，为什么需要这些参数，如何影响Map的性能，实践中如何取舍等。
-</li>
-<li>
+
+
 理解树化改造的相关原理和改进原因。
-</li>
+
 
 除了典型的代码分析，还有一些有意思的并发相关问题也经常会被提到，如HashMap在并发环境可能出现[无限循环占用CPU](https://bugs.java.com/bugdatabase/view_bug.do?bug_id=6423457)、size不准确等诡异的问题。
 
@@ -50,18 +50,18 @@ HashMap等其他Map实现则是都扩展了AbstractMap，里面包含了通用�
 
 大部分使用Map的场景，通常就是放入、访问或者删除，而对顺序没有特别要求，HashMap在这种情况下基本是最好的选择。**HashMap的性能表现非常依赖于哈希码的有效性，请务必掌握hashCode和equals的一些基本约定**，比如：
 
-<li>
+
 equals相等，hashCode一定要相等。
-</li>
-<li>
+
+
 重写了hashCode也要重写equals。
-</li>
-<li>
+
+
 hashCode需要保持一致性，状态改变返回的哈希值仍然要一致。
-</li>
-<li>
+
+
 equals的对称、反射、传递等特性。
-</li>
+
 
 这方面内容网上有很多资料，我就不在这里详细展开了。
 
@@ -137,15 +137,15 @@ public V put(K key, V value) {
 
 前面提到，HashMap设计与实现是个非常高频的面试题，所以我会在这进行相对详细的源码解读，主要围绕：
 
-<li>
+
 HashMap内部实现基本点分析。
-</li>
-<li>
+
+
 容量（capacity）和负载系数（load factor）。
-</li>
-<li>
+
+
 树化 。
-</li>
+
 
 首先，我们来一起看看HashMap内部的结构，它可以看作是数组（Node&lt;K,V&gt;[] table）和链表结合组成的复合结构，数组被分为一个个桶（bucket），通过哈希值决定了键值对在这个数组的寻址；哈希值相同的键值对，则以链表形式存储，你可以参考下面的示意图。这里需要注意的是，如果链表大小超过阈值（TREEIFY_THRESHOLD, 8），图中的链表就会被改造为树形结构。
 
@@ -195,15 +195,15 @@ final V putVal(int hash, K key, V value, boolean onlyIfAbent,
 
 从putVal方法最初的几行，我们就可以发现几个有意思的地方：
 
-<li>
+
 如果表格是null，resize方法会负责初始化它，这从tab = resize()可以看出。
-</li>
-<li>
+
+
 resize方法兼顾两个职责，创建初始存储表格，或者在容量不满足需求的时候，进行扩容（resize）。
-</li>
-<li>
+
+
 在放置新的键值对的过程中，如果发生下面条件，就会发生扩容。
-</li>
+
 
 ```
 if (++size &gt; threshold)
@@ -263,15 +263,15 @@ final Node&lt;K,V&gt;[] resize() {
 
 依据resize源码，不考虑极端情况（容量理论最大极限由MAXIMUM_CAPACITY指定，数值为 1&lt;&lt;30，也就是2的30次方），我们可以归纳为：
 
-<li>
+
 门限值等于（负载因子）x（容量），如果构建HashMap的时候没有指定它们，那么就是依据相应的默认常量值。
-</li>
-<li>
+
+
 门限通常是以倍数进行调整 （newThr = oldThr &lt;&lt; 1），我前面提到，根据putVal中的逻辑，当元素个数超过门限大小时，则调整Map大小。
-</li>
-<li>
+
+
 扩容后，需要将老的数组中的元素重新放置到新的数组，这是扩容的一个主要开销来源。
-</li>
+
 
 3.容量、负载因子和树化
 
@@ -293,15 +293,15 @@ final Node&lt;K,V&gt;[] resize() {
 
 而对于负载因子，我建议：
 
-<li>
+
 如果没有特别需求，不要轻易进行更改，因为JDK自身的默认负载因子是非常符合通用场景的需求的。
-</li>
-<li>
+
+
 如果确实需要调整，建议不要设置超过0.75的数值，因为会显著增加冲突，降低HashMap的性能。
-</li>
-<li>
+
+
 如果使用太小的负载因子，按照上面的公式，预设容量值也进行调整，否则可能会导致更加频繁的扩容，增加无谓的开销，本身访问性能也会受影响。
-</li>
+
 
 我们前面提到了树化改造，对应逻辑主要在putVal和treeifyBin中。
 
@@ -320,12 +320,12 @@ final void treeifyBin(Node&lt;K,V&gt;[] tab, int hash) {
 
 上面是精简过的treeifyBin示意，综合这两个方法，树化改造的逻辑就非常清晰了，可以理解为，当bin的数量大于TREEIFY_THRESHOLD时：
 
-<li>
+
 如果容量小于MIN_TREEIFY_CAPACITY，只会进行简单的扩容。
-</li>
-<li>
+
+
 如果容量大于MIN_TREEIFY_CAPACITY ，则会进行树化改造。
-</li>
+
 
 那么，为什么HashMap要树化呢？
 

@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -244,12 +244,12 @@
 <p><code>Ingress</code> 是一组允许外部请求进入集群的路由规则的集合。它可以给 <code>Service</code> 提供集群外部访问的 URL，负载均衡，SSL 终止等。</p>
 <p>直白点说，<code>Ingress</code> 就类似起到了智能路由的角色，外部流量到达 <code>Ingress</code> ，再由它按已经制定好的规则分发到不同的后端服务中去。</p>
 <p>看起来它很像我们使用的负载均衡器之类的。那你可能会问，<code>Ingress</code> 与 <code>LoadBalancer</code> 类型的 <code>Service</code> 的区别是什么呢？</p>
-<ul>
-<li>
+
+
 <p><code>Ingress</code> 不是一种 <code>Service</code> 类型</p>
 <p><code>Ingress</code> 是 K8S 中的一种资源类型，我们可以直接通过 <code>kubectl get ingress</code> 的方式获取我们已有的 <code>Ingress</code> 资源。</p>
-</li>
-<li>
+
+
 <p><code>Ingress</code> 可以有多种控制器（实现）</p>
 <p>通过之前的介绍，我们知道 K8S 中有很多的 <code>Controller</code> (控制器)，而这些 <code>Controller</code> 已经打包进了 <code>kube-controller-manager</code> 中，通过 <code>--controllers</code> 参数控制启用哪些。</p>
 <p>但是 <code>Ingress</code> 的 <code>Controller</code> 并没有包含在其中，而且有多种选择。</p>
@@ -257,18 +257,18 @@
 <p>第三方的实现还有：基于 Envoy 的 <a href="https://github.com/heptio/contour">Contour</a>; F5 的 <a href="https://clouddocs.f5.com/products/connectors/k8s-bigip-ctlr/v1.7/">F5 BIG-IP Controller</a>; 基于 HAProxy 的 <a href="https://github.com/jcmoraisjr/haproxy-ingress">haproxy-ingress</a>; 基于 Istio 的 <a href="https://istio.io/docs/tasks/traffic-management/ingress/">Control Ingress Traffic</a>; 现代化的反向代理服务器 <a href="https://github.com/containous/traefik">Traefik</a>; 以及 Kong 支持的 <a href="https://konghq.com/blog/kubernetes-ingress-controller-for-kong/">Kong Ingress Controller for Kubernetes</a> 和 NGINX 官方支持的 <a href="https://github.com/nginxinc/kubernetes-ingress">NGINX Ingress Controller</a>。</p>
 <p>这里可以看到 K8S 社区和 NGINX 都有 NGINX Ingress Controller，很多人在一开始接触 Ingress 的时候便陷入了选择的苦恼中，除去前面的那些选择外，单 NGINX 的控制器就有两个，到底应该怎么选。</p>
 <p>这里提供两点建议：</p>
-<ul>
-<li>可能多数人使用的都是 NGINX 而非 NGINX Plus，如果你需要会话保持（Session persistence）的话，那你应该选择 K8S 社区维护的版本</li>
-<li>即使我们平时使用 NGINX 的时候，也常常会有动态配置的需求，如果你仍然有这样的需求，那你还是继续使用 K8S 社区维护的版本（其中内置了 Lua 支持）。</li>
-</ul>
-</li>
-</ul>
+
+可能多数人使用的都是 NGINX 而非 NGINX Plus，如果你需要会话保持（Session persistence）的话，那你应该选择 K8S 社区维护的版本
+即使我们平时使用 NGINX 的时候，也常常会有动态配置的需求，如果你仍然有这样的需求，那你还是继续使用 K8S 社区维护的版本（其中内置了 Lua 支持）。
+
+
+
 <h2>如何使用</h2>
 <p>前面也已经说到了，单纯的创建一个 <code>Ingress</code> 资源没什么意义，我们需要先配置一个 <code>Controller</code> ，才能让它正常工作。国内使用 GKE 的可能不是很多，为了更加通用，这里我们选择 K8S 社区维护的 NGINX Ingress Controller。</p>
 <h3>安装</h3>
 <p>整个安装过程其实也比较简单，具体步骤如下（以下步骤中都将直接展示该步骤所需的 YAML 配置文件）：</p>
-<ul>
-<li>
+
+
 <p>创建 <code>Namespace</code></p>
 <pre><code>apiVersion: v1
 kind: Namespace
@@ -279,8 +279,8 @@ metadata:
     app.kubernetes.io/part-of: ingress-nginx
 </code></pre>
 <p>将以上内容保存为 namespace.yaml 文件，然后执行 <code>kubectl apply -f namespace.yaml</code> 即可。以下步骤均类似，不再赘述。 注意：这里创建 <code>Namespace</code> 只是为了保持集群相对规范，非强制，但推荐此做法。</p>
-</li>
-<li>
+
+
 <p>创建 <code>ConfigMap</code></p>
 <pre><code>kind: ConfigMap
 apiVersion: v1
@@ -314,8 +314,8 @@ metadata:
 ---
 </code></pre>
 <p>这里创建了几个 <code>ConfigMap</code>，主要是给 <code>Controller</code> 使用。</p>
-</li>
-<li>
+
+
 <p>由于我们的集群使用 <code>kubeadm</code> 创建时，默认开启了 <code>RBAC</code> ，所以这里需要相应的创建对应的 <code>Role</code> 和 <code>RoleBinding</code>。</p>
 <pre><code>apiVersion: v1
 kind: ServiceAccount
@@ -461,8 +461,8 @@ subjects:
 ---
 </code></pre>
 <p>关于 <code>RBAC</code> 相关的内容，可查看第 8 节 《安全重点: 认证和授权》，了解此处的配置及其含义。</p>
-</li>
-<li>
+
+
 <p>部署 NGINX Ingress Controller</p>
 <pre><code>apiVersion: extensions/v1beta1
 kind: Deployment
@@ -554,17 +554,17 @@ NAME                                                  DESIRED   CURRENT   READY 
 replicaset.apps/nginx-ingress-controller-6f647f7866   1         1         1         75s
 </code></pre>
 <p>可以看到 NGINX Ingress Controller 已经部署成功。</p>
-</li>
-<li>
+
+
 <p><strong>将 NGINX Ingress Controller 暴露至集群外</strong></p>
 <p>经过前面的介绍，我们已经知道 Ingress 的作用在于将集群外的请求流量转向集群内的服务，而我们知道，默认情况下集群外和集群内是不互通的，所以必须将 NGINX Ingress Controller 暴露至集群外，以便让其能接受来自集群外的请求。</p>
 <p>将其暴露的方式有很多种，这里我们选择我们之前已经介绍过的 <code>NodePort</code> 的方式。选择它主要有以下原因：</p>
-<ul>
-<li>我们可以使用纯的 LB 实现完成服务暴露，比如 <a href="https://metallb.universe.tf/">MetalLB</a>，但它还处于 Beta 阶段，尚未有大规模生产环境使用的验证。</li>
-<li>我们可以直接使用宿主机的网络，只需设置 <code>hostNetwork: true</code> 即可，但这个方式可能会带来安全问题。</li>
-<li>我们可以选择 External IPs 的方式，但这种方式无法保留请求的源 IP，所以并不是很好。</li>
-<li>其实我们一般会选择自己提供边缘节点的方式，不过这种方式是建立在 <code>NodePort</code> 的方式之上，并且需要提供额外的组件，此处就暂不做展开了。</li>
-</ul>
+
+我们可以使用纯的 LB 实现完成服务暴露，比如 <a href="https://metallb.universe.tf/">MetalLB</a>，但它还处于 Beta 阶段，尚未有大规模生产环境使用的验证。
+我们可以直接使用宿主机的网络，只需设置 <code>hostNetwork: true</code> 即可，但这个方式可能会带来安全问题。
+我们可以选择 External IPs 的方式，但这种方式无法保留请求的源 IP，所以并不是很好。
+其实我们一般会选择自己提供边缘节点的方式，不过这种方式是建立在 <code>NodePort</code> 的方式之上，并且需要提供额外的组件，此处就暂不做展开了。
+
 <p>我们使用以下的配置，将 NGINX Ingress Controller 暴露至集群外</p>
 <pre><code>apiVersion: v1
 kind: Service
@@ -605,8 +605,8 @@ ingress-nginx   NodePort   10.0.38.53   &lt;none&gt;        80:30871/TCP,443:303
 &lt;/html&gt;
 </code></pre>
 <p>由于我们并没有设置任何的默认响应后端，所以当直接请求时，便返回 404 。</p>
-</li>
-</ul>
+
+
 <h3>实践</h3>
 <p>将我们的示例项目 <a href="https://github.com/tao12345666333/saythx">SayThx</a> 通过 <code>Ingress</code> 的方式进行访问。</p>
 <p>该示例项目的部署，不再进行赘述。可在 <a href="https://github.com/tao12345666333/saythx/blob/ingress/deploy/ingress.yaml">ingress 分支</a> 查看此处所需配置。</p>
@@ -628,8 +628,8 @@ spec:
           serviceName: saythx-frontend
           servicePort: 80
 </code></pre>
-<ul>
-<li>
+
+
 <p>创建</p>
 <pre><code>master $ kubectl apply -f ingress.yaml         
 ingress.extensions/saythx-ing created
@@ -637,13 +637,13 @@ master $ kubectl -n work get ing
 NAME         HOSTS                 ADDRESS   PORTS     AGE
 saythx-ing   saythx.moelove.info             80        23s
 </code></pre>
-</li>
-<li>
+
+
 <p>验证</p>
 <p>这里来解释下刚才的配置文件。首先，指定了 <code>host: saythx.moelove.info</code> 表示我们想要以 <code>saythx.moelove.info</code> 这个域名来访问它。<code>path</code> 直接写 <code>/</code> 表示所有的请求都转发至名为 <code>saythx-frontend</code> 的服务。</p>
 <p>与我们平时使用 NGINX 基本一致。 现在编辑本地的 HOSTS 文件绑定 Node 的IP 与 <code>saythx.moelove.info</code> 这个域名。使用浏览器进行访问 <code>saythx.moelove.info:刚才 Controller 使用 NodePort 暴露服务时的端口</code>：</p>
-</li>
-</ul>
+
+
 <p><img src="assets/167dc55e62bc0a88" alt="img" /></p>
 <pre><code>可以看到已经成功访问。
 </code></pre>

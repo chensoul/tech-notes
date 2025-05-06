@@ -32,21 +32,21 @@ UI优化究竟指的是什么呢？我认为所谓的UI优化，应该包含两�
 
 通过dp加上自适应布局可以基本解决屏幕碎片化的问题，也是Android推荐使用的[屏幕兼容性](https://developer.android.com/guide/practices/screens_support?hl=zh-cn)适配方案。但是它会存在两个比较大的问题：
 
-<li>
+
 不一致性。因为dpi与实际ppi的差异性，导致在相同分辨率的手机上，控件的实际大小会有所不同。
-</li>
-<li>
+
+
 效率。设计师的设计稿都是以px为单位的，开发人员为了UI适配，需要手动通过百分比估算出dp值。
-</li>
+
 
 除了直接dp适配之外，目前业界比较常用的UI适配方法主要有下面几种：
 
-<li>
+
 限制符适配方案。主要有宽高限定符与smallestWidth限定符适配方案，具体可以参考[《Android 目前稳定高效的UI适配方案》](https://mp.weixin.qq.com/s?__biz=MzAxMTI4MTkwNQ==&amp;mid=2650826034&amp;idx=1&amp;sn=5e86768d7abc1850b057941cdd003927&amp;chksm=80b7b1acb7c038ba8912b9a09f7e0d41eef13ec0cea19462e47c4e4fe6a08ab760fec864c777&amp;scene=21#wechat_redirect)[《smallestWidth 限定符适配方案》](https://mp.weixin.qq.com/s?__biz=MzAxMTI4MTkwNQ==&amp;mid=2650826381&amp;idx=1&amp;sn=5b71b7f1654b04a55fca25b0e90a4433&amp;chksm=80b7b213b7c03b0598f6014bfa2f7de12e1f32ca9f7b7fc49a2cf0f96440e4a7897d45c788fb&amp;scene=21#wechat_redirect)。
-</li>
-<li>
+
+
 今日头条适配方案。通过反射修正系统的density值，具体可以参考[《一种极低成本的Android屏幕适配方式》](https://mp.weixin.qq.com/s?__biz=MzI1MzYzMjE0MQ==&amp;mid=2247484502&amp;idx=2&amp;sn=a60ea223de4171dd2022bc2c71e09351&amp;scene=21#wechat_redirect)[《今日头条适配方案》](https://mp.weixin.qq.com/s/oSBUA7QKMWZURm1AHMyubA)。
-</li>
+
 
 **2. CPU与GPU**
 
@@ -82,18 +82,18 @@ Android系统为了弥补跟iOS的差距，在每个版本都做了大量的优�
 
 我曾经在一篇文章看过一个生动的比喻，如果把应用程序图形渲染过程当作一次绘画过程，那么绘画过程中Android的各个图形组件的作用是：
 
-<li>
+
 画笔：Skia或者OpenGL。我们可以用Skia画笔绘制2D图形，也可以用OpenGL来绘制2D/3D图形。正如前面所说，前者使用CPU绘制，后者使用GPU绘制。
-</li>
-<li>
+
+
 画纸：Surface。所有的元素都在Surface这张画纸上进行绘制和渲染。在Android中，Window是View的容器，每个窗口都会关联一个Surface。而WindowManager则负责管理这些窗口，并且把它们的数据传递给SurfaceFlinger。
-</li>
-<li>
+
+
 画板：Graphic Buffer。Graphic Buffer缓冲用于应用程序图形的绘制，在Android 4.1之前使用的是双缓冲机制；在Android 4.1之后，使用的是三缓冲机制。
-</li>
-<li>
+
+
 显示：SurfaceFlinger。它将WindowManager提供的所有Surface，通过硬件合成器Hardware Composer合成并输出到显示屏。
-</li>
+
 
 接下来我将通过Android渲染演进分析的方法，帮你进一步加深对Android渲染的理解。
 
@@ -105,18 +105,18 @@ Android系统为了弥补跟iOS的差距，在每个版本都做了大量的优�
 
 整个流程如上图所示：
 
-<li>
+
 Surface。每个View都由某一个窗口管理，而每一个窗口都关联有一个Surface。
-</li>
-<li>
+
+
 Canvas。通过Surface的lock函数获得一个Canvas，Canvas可以简单理解为Skia底层接口的封装。
-</li>
-<li>
+
+
 Graphic Buffer。SurfaceFlinger会帮我们托管一个[BufferQueue](https://source.android.com/devices/graphics/arch-bq-gralloc)，我们从BufferQueue中拿到Graphic Buffer，然后通过Canvas以及Skia将绘制内容栅格化到上面。
-</li>
-<li>
+
+
 SurfaceFlinger。通过Swap Buffer把Front Graphic Buffer的内容交给SurfaceFinger，最后硬件合成器Hardware Composer合成并输出到显示屏。
-</li>
+
 
 整个渲染流程是不是非常简单？但是正如我前面所说，CPU对于图形处理并不是那么高效，这个过程完全没有利用到GPU的高性能。
 
@@ -158,15 +158,15 @@ Project Butter主要包含两个组成部分，一个是VSYNC，一个是Triple 
 
 整个流程如下：
 
-<li>
+
 每个Surface对应的BufferQueue内部都有两个Graphic Buffer ，一个用于绘制一个用于显示。我们会把内容先绘制到离屏缓冲区（OffScreen Buffer），在需要显示时，才把离屏缓冲区的内容通过Swap Buffer复制到Front Graphic Buffer中。
-</li>
-<li>
+
+
 这样SurfaceFlinge就拿到了某个Surface最终要显示的内容，但是同一时间我们可能会有多个Surface。这里面可能是不同应用的Surface，也可能是同一个应用里面类似SurefaceView和TextureView，它们都会有自己单独的Surface。
-</li>
-<li>
+
+
 这个时候SurfaceFlinger把所有Surface要显示的内容统一交给Hareware Composer，它会根据位置、Z-Order顺序等信息合成为最终屏幕需要显示的内容，而这个内容会交给系统的帧缓冲区Frame Buffer来显示（Frame Buffer是非常底层的，可以理解为屏幕显示的抽象）。
-</li>
+
 
 如果你理解了双缓冲机制的原理，那就非常容易理解什么是三缓冲区了。如果只有两个Graphic Buffer缓存区A和B，如果CPU/GPU绘制过程较长，超过了一个VSYNC信号周期，因为缓冲区B中的数据还没有准备完成，所以只能继续展示A缓冲区的内容，这样缓冲区A和B都分别被显示设备和GPU占用，CPU无法准备下一帧的数据。
 
@@ -230,21 +230,21 @@ UI主线程“既当爹又当妈”，任务过于繁重。如果整个渲染过
 
 Android渲染架构非常庞大，而且演进得也非常快。如果你还有哪些不理解的地方，可以进一步阅读下面的参考资料：
 
-<li>
+
 2018 Google I/O：[Drawn out: how Android renders](https://www.youtube.com/watch?v=zdQRIYOST64)
-</li>
-<li>
+
+
 官方文档：[Android 图形架构](https://source.android.com/devices/graphics)
-</li>
-<li>
+
+
 浏览器渲染：[一颗像素的诞生](https://mp.weixin.qq.com/s/QoFrdmxdRJG5ETQp5Ua3-A)
-</li>
-<li>
+
+
 [Android 屏幕绘制机制及硬件加速](https://blog.csdn.net/qian520ao/article/details/81144167)
-</li>
-<li>
+
+
 [Android性能优化之渲染篇](http://hukai.me/android-performance-render/)
-</li>
+
 
 欢迎你点击“请朋友读”，把今天的内容分享给好友，邀请他一起学习。最后别忘了在评论区提交今天的作业，我也为认真完成作业的同学准备了丰厚的“学习加油礼包”，期待与你一起切磋进步哦。
 

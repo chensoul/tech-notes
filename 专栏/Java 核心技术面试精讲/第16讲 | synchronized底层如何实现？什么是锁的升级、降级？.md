@@ -28,12 +28,12 @@
 
 后面我会进一步分析：
 
-<li>
+
 从源码层面，稍微展开一些synchronized的底层实现，并补充一些上面答案中欠缺的细节，有同学反馈这部分容易被问到。如果你对Java底层源码有兴趣，但还没有找到入手点，这里可以成为一个切入点。
-</li>
-<li>
+
+
 理解并发包中java.util.concurrent.lock提供的其他锁实现，毕竟Java可不是只有ReentrantLock一种显式的锁类型，我会结合代码分析其使用。
-</li>
+
 
 ## 知识扩展
 
@@ -51,12 +51,12 @@ Java代码运行可能是解释模式也可能是编译模式（如果不记得�
 
 首先，synchronized的行为是JVM runtime的一部分，所以我们需要先找到Runtime相关的功能实现。通过在代码中查询类似“monitor_enter”或“Monitor Enter”，很直观的就可以定位到：
 
-<li>
+
 [sharedRuntime.cpp](http://hg.openjdk.java.net/jdk/jdk/file/6659a8f57d78/src/hotspot/share/runtime/sharedRuntime.cpp)/hpp，它是解释器和编译器运行时的基类。
-</li>
-<li>
+
+
 [synchronizer.cpp](https://hg.openjdk.java.net/jdk/jdk/file/896e80158d35/src/hotspot/share/runtime/synchronizer.cpp)/hpp，JVM同步相关的各种基础逻辑。
-</li>
+
 
 在sharedRuntime.cpp中，下面代码体现了synchronized的主要逻辑。
 
@@ -115,15 +115,15 @@ void ObjectSynchronizer::fast_enter(Handle obj, BasicLock* lock,
 
 我来分析下这段逻辑实现：
 
-<li>
+
 [biasedLocking](http://hg.openjdk.java.net/jdk/jdk/file/6659a8f57d78/src/hotspot/share/runtime/biasedLocking.cpp)定义了偏斜锁相关操作，revoke_and_rebias是获取偏斜锁的入口方法，revoke_at_safepoint则定义了当检测到安全点时的处理逻辑。
-</li>
-<li>
+
+
 如果获取偏斜锁失败，则进入slow_enter。
-</li>
-<li>
+
+
 这个方法里面同样检查是否开启了偏斜锁，但是从代码路径来看，其实如果关闭了偏斜锁，是不会进入这个方法的，所以算是个额外的保障性检查吧。
-</li>
+
 
 另外，如果你仔细查看[synchronizer.cpp](https://hg.openjdk.java.net/jdk/jdk/file/896e80158d35/src/hotspot/share/runtime/synchronizer.cpp)里，会发现不仅仅是synchronized的逻辑，包括从本地代码，也就是JNI，触发的Monitor动作，全都可以在里面找到（jni_enter/jni_exit）。
 
@@ -166,21 +166,21 @@ void ObjectSynchronizer::slow_enter(Handle obj, BasicLock* lock, TRAPS) {
 
 请结合我在代码中添加的注释，来理解如何从试图获取轻量级锁，逐步进入锁膨胀的过程。你可以发现这个处理逻辑，和我在这一讲最初介绍的过程是十分吻合的。
 
-<li>
+
 设置Displaced Header，然后利用cas_set_mark设置对象Mark Word，如果成功就成功获取轻量级锁。
-</li>
-<li>
+
+
 否则Displaced Header，然后进入锁膨胀阶段，具体实现在inflate方法中。
-</li>
+
 
 今天就不介绍膨胀的细节了，我这里提供了源代码分析的思路和样例，考虑到应用实践，再进一步增加源代码解读意义不大，有兴趣的同学可以参考我提供的[synchronizer.cpp](http://hg.openjdk.java.net/jdk/jdk/file/896e80158d35/src/hotspot/share/runtime/synchronizer.cpp)链接，例如：
 
-<li>
+
 **deflate_idle_monitors**是分析**锁降级**逻辑的入口，这部分行为还在进行持续改进，因为其逻辑是在安全点内运行，处理不当可能拖长JVM停顿（STW，stop-the-world）的时间。
-</li>
-<li>
+
+
 fast_exit或者slow_exit是对应的锁释放逻辑。
-</li>
+
 
 前面分析了synchronized的底层实现，理解起来有一定难度，下面我们来看一些相对轻松的内容。 我在上一讲对比了synchronized和ReentrantLock，Java核心类库中还有其他一些特别的锁类型，具体请参考下面的图。
 

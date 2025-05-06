@@ -46,15 +46,15 @@ afterInvoke(method, args, result);
 
 看起来这个方案好像挺不错的，但在实际使用中很快就发现这个方法有几个缺点。
 
-<li>
+
 性能极差。I/O操作调用非常频繁，因为使用动态代理和Java的大量字符串操作，导致性能比较差，无法达到线上使用的标准。
-</li>
-<li>
+
+
 无法监控Native代码。例如微信中有大量的I/O操作是在Native代码中，使用Java Hook方案无法监控到。
-</li>
-<li>
+
+
 兼容性差。Java Hook需要每个Android版本去兼容，特别是Android P增加对非公开API限制。
-</li>
+
 
 **2. Native Hook**
 
@@ -152,12 +152,12 @@ new StatFs(&quot;/data&quot;).getBlockSize()
 
 所以我们最终选择的判断条件为：
 
-<li>
+
 buffer size小于block size，这里一般为4KB。
-</li>
-<li>
+
+
 read/write的次数超过一定的阈值，例如5次，这主要是为了减少上报量。
-</li>
+
 
 buffer size不应该小于4KB，那它是不是越大越好呢？你可以通过下面的命令做一个简单的测试，读取测试应用的iotest文件，它的大小是40M。其中bs就是buffer size，bs分别使用不同的值，然后观察耗时。
 
@@ -212,12 +212,12 @@ echo 3 &gt; /proc/sys/vm/drop_caches
 
 如果频繁地读取某个文件，并且这个文件一直没有被写入更新，我们可以通过缓存来提升性能。不过为了减少上报量，我会增加以下几个条件：
 
-<li>
+
 重复读取次数超过3次，并且读取的内容相同。
-</li>
-<li>
+
+
 读取期间文件内容没有被更新，也就是没有发生过write。
-</li>
+
 
 加一层内存cache是最直接有效的办法，比较典型的场景是配置文件等一些数据模块的加载，如果没有内存cache，那么性能影响就比较大了。
 
@@ -240,12 +240,12 @@ public String readConfig() {
 
 到了这里，接下来还是查看源码寻找可以利用的Hook点。这个过程非常简单，CloseGuard中的REPORTER对象就是一个可以利用的点。具体步骤如下：
 
-<li>
+
 利用反射，把CloseGuard中的ENABLED值设为true。
-</li>
-<li>
+
+
 利用动态代理，把REPORTER替换成我们定义的proxy。
-</li>
+
 
 虽然在Android源码中，StrictMode已经预埋了很多的资源埋点。不过肯定还有埋点是没有的，比如MediaPlayer、程序内部的一些资源模块。所以在程序中也写了一个MyCloseGuard类，对希望增加监控的资源，可以手动增加埋点代码。
 
@@ -257,18 +257,18 @@ public String readConfig() {
 
 对于必不可少的I/O操作，我们需要思考是否有其他方式做进一步的优化。
 
-<li>
+
 对大文件使用mmap或者NIO方式。[MappedByteBuffer](https://developer.android.com/reference/java/nio/MappedByteBuffer)就是Java NIO中的mmap封装，正如上一期所说，对于大文件的频繁读写会有比较大的优化。
-</li>
-<li>
+
+
 安装包不压缩。对启动过程需要的文件，我们可以指定在安装包中不压缩，这样也会加快启动速度，但带来的影响是安装包体积增大。事实上Google Play非常希望我们不要去压缩library、resource、resource.arsc这些文件，这样对启动的内存和速度都会有很大帮助。而且不压缩文件带来只是安装包体积的增大，对于用户来说，Download size并没有增大。
-</li>
-<li>
+
+
 Buffer复用。我们可以利用[Okio](https://github.com/square/okio)开源库，它内部的ByteString和Buffer通过重用等技巧，很大程度上减少CPU和内存的消耗。
-</li>
-<li>
+
+
 存储结构和算法的优化。是否可以通过算法或者数据结构的优化，让我们可以尽量的少I/O甚至完全没有I/O。比如一些配置文件从启动完全解析，改成读取时才解析对应的项；替换掉XML、JSON这些格式比较冗余、性能比较较差的数据结构，当然在接下来我还会对数据存储这一块做更多的展开。
-</li>
+
 
 2013年我在做Multidex优化的时候，发现代码中会先将classes2.dex从APK文件中解压出来，然后再压缩到classes2.zip文件中。classes2.dex做了一次无用的解压和压缩，其实根本没有必要。
 

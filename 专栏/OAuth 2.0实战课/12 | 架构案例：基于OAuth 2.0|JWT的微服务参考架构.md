@@ -172,36 +172,36 @@ BFF服务可以用Node.js开发，也可以用Java/Spring等框架开发。
 
 <img src="https://static001.geekbang.org/resource/image/02/57/02affbdf32f005af65454f3acc4cd957.jpg" alt="">
 
-<li>
+
 用户访问这个第三方Web应用，点击登录链接。
-</li>
-<li>
+
+
 Web应用后台向ACME公司的IDP服务发送申请授权码请求（GET /authorize）。
-</li>
-<li>
+
+
 用户被重定向到ACME公司的IDP统一登录页面。
-</li>
-<li>
+
+
 用户进行认证和授权。
-</li>
-<li>
+
+
 IDP通过Login Service对用户进行认证。
-</li>
-<li>
+
+
 认证和授权通过，IDP返回授权码。
-</li>
-<li>
+
+
 Web应用获得授权码，再向IDP服务的令牌获取端点发起请求（POST /oauth2/token, grant_type=authorization-code）。
-</li>
-<li>
+
+
 IDP校验授权码，校验通过则返回有效OAuth 2.0令牌（根据需要也可以返回刷新令牌）。
-</li>
-<li>
+
+
 Web应用创建用户Session，将OAuth 2.0令牌保存在Session中，然后返回登录成功到用户端。
-</li>
-<li>
+
+
 用户浏览器中记录Session Cookie，登录成功。
-</li>
+
 
 之后，第三方Web应用如果需要和ACME电商平台交互，可直接通过网关调用微服务，请求HTTP header中带上OAuth 2.0访问令牌即可。后续的服务调用流程，和前面的“第一方应用+资源拥有者凭据模式”类似。
 

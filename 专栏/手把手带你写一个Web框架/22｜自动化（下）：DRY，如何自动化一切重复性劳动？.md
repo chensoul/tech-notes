@@ -1,10 +1,10 @@
 <audio title="22｜自动化（下）：DRY，如何自动化一切重复性劳动？" src="https://static001.geekbang.org/resource/audio/85/30/851ff737f10175312d38f6dc5e54e730.mp3" controls="controls"></audio> 
-<p>你好，我是轩脉刃。</p><p>上一节课我们增加了自动化创建服务工具、命令行工具，以及中间件迁移工具。你会发现，这些工具实现起来并不复杂，但是在实际工作中却非常有用。今天我们继续思考还能做点什么。</p><p>我们的框架是定义了业务的目录结构的，每次创建一个新的应用，都需要将AppService中定义的目录结构创建好，如果这个行为能自动化，实现<strong>一个命令就能创建一个定义好所有目录结构，甚至有demo示例的新应用</strong>呢？是不是有点心动，这就是我们今天要实现的工具了，听起来功能有点庞大，所以我们还是慢慢来，先设计再实现。</p><h2>初始化脚手架设计</h2><p>这个功能倒不是什么新想法，有用过Vue的同学就知道，Vue官网有介绍一个 <code>vue create</code> <a href="https://cli.vuejs.org/zh/guide/creating-a-project.html">命令</a>，可以从零开始创建一个包含基本Vue结构的目录，这个目录可以直接编译运行。</p><p>在初始化一个Vue项目的时候，大多数刚接触Vue的同学对框架的若干文件还不熟悉，很容易建立错误vue的目录结构，而这个工具能帮Vue新手们有效规避这种错误。</p><p>同理，我们的框架也有基本的hade结构的目录，初学者在创建hade应用的时候，也大概率容易建立错误目录。所以参考这一点，让自己的框架也有这么一个命令，能直接创建一个新的包含hade框架业务脚手架目录的命令。这样，能很大程度方便使用者就在这个脚手架目录上不断开发，完成所需的业务功能。</p><!-- [[[read_end]]] --><p>我们要设计的命令是一个一级命令<code>./hade new</code> 。一般来说，新建命令创建一个脚手架，要做的事情就是：</p><ul>
-<li>确定目标目录，如果没有就创建目录</li>
-<li>创建业务模块目录</li>
-<li>初始化go module 模块，补充模块名称、框架版本号</li>
-<li>在业务模块目录中创建对应的文件代码</li>
-</ul><p>我们跟着这个思路走。先梳理一下在这个命令中，要传入的参数有哪些？</p><p>首先是目录，在控制台目录之下要创建一个子目录，这个<strong>子目录的名称，是需要用户传递进入的</strong>。不过，这个参数记得做一下验证，如果子目录已经存在了，给用户一个提示，是直接删除原先的子目录？还是停止操作？如果用户需要删除原先的子目录，我们就直接删除。</p><p>其次是<strong>需要用户传入新应用的模块名称</strong>，也就是go.mod中的module后面的名称，一般会设置为应用的项目地址，比如github.com/jianfengye/testdemo。关于模块名称，我们要详细做一下解说。</p><h3>业务、框架模块地址</h3><p>一直到这一节课的GitHub地址，不知道你有没有疑惑，别的框架，比如Gin、Echo，都是把框架代码放在GitHub上，比如github/gin-gonic/gin，而业务代码是单独存放的。但我们这个项目github.com/gohade/coredemo，却是把业务代码和框架代码都放在一个项目中？</p><p>其实是这样，这个项目github.com/gohade/coredemo，是我为geekbang这个课程单独设置的项目，将hade框架的每个实现步骤，重新在这个项目做了一次还原。而 github.com/gohade/hade 才是我们最终的项目地址。所以不管在 coredemo 这个项目还是 hade这个项目，go.mod 中的module 都是叫做 github.com/gohade/hade。</p><p><strong>但是即使是最终的github.com/gohade/hade项目，我们的业务代码app目录和框架目录 framework目录也是在一个项目里的</strong>，按道理说在这个hade项目中，应该只有framework目录的内容即可啊？<br>
+<p>你好，我是轩脉刃。</p><p>上一节课我们增加了自动化创建服务工具、命令行工具，以及中间件迁移工具。你会发现，这些工具实现起来并不复杂，但是在实际工作中却非常有用。今天我们继续思考还能做点什么。</p><p>我们的框架是定义了业务的目录结构的，每次创建一个新的应用，都需要将AppService中定义的目录结构创建好，如果这个行为能自动化，实现<strong>一个命令就能创建一个定义好所有目录结构，甚至有demo示例的新应用</strong>呢？是不是有点心动，这就是我们今天要实现的工具了，听起来功能有点庞大，所以我们还是慢慢来，先设计再实现。</p><h2>初始化脚手架设计</h2><p>这个功能倒不是什么新想法，有用过Vue的同学就知道，Vue官网有介绍一个 <code>vue create</code> <a href="https://cli.vuejs.org/zh/guide/creating-a-project.html">命令</a>，可以从零开始创建一个包含基本Vue结构的目录，这个目录可以直接编译运行。</p><p>在初始化一个Vue项目的时候，大多数刚接触Vue的同学对框架的若干文件还不熟悉，很容易建立错误vue的目录结构，而这个工具能帮Vue新手们有效规避这种错误。</p><p>同理，我们的框架也有基本的hade结构的目录，初学者在创建hade应用的时候，也大概率容易建立错误目录。所以参考这一点，让自己的框架也有这么一个命令，能直接创建一个新的包含hade框架业务脚手架目录的命令。这样，能很大程度方便使用者就在这个脚手架目录上不断开发，完成所需的业务功能。</p><!-- [[[read_end]]] --><p>我们要设计的命令是一个一级命令<code>./hade new</code> 。一般来说，新建命令创建一个脚手架，要做的事情就是：</p>
+确定目标目录，如果没有就创建目录
+创建业务模块目录
+初始化go module 模块，补充模块名称、框架版本号
+在业务模块目录中创建对应的文件代码
+<p>我们跟着这个思路走。先梳理一下在这个命令中，要传入的参数有哪些？</p><p>首先是目录，在控制台目录之下要创建一个子目录，这个<strong>子目录的名称，是需要用户传递进入的</strong>。不过，这个参数记得做一下验证，如果子目录已经存在了，给用户一个提示，是直接删除原先的子目录？还是停止操作？如果用户需要删除原先的子目录，我们就直接删除。</p><p>其次是<strong>需要用户传入新应用的模块名称</strong>，也就是go.mod中的module后面的名称，一般会设置为应用的项目地址，比如github.com/jianfengye/testdemo。关于模块名称，我们要详细做一下解说。</p><h3>业务、框架模块地址</h3><p>一直到这一节课的GitHub地址，不知道你有没有疑惑，别的框架，比如Gin、Echo，都是把框架代码放在GitHub上，比如github/gin-gonic/gin，而业务代码是单独存放的。但我们这个项目github.com/gohade/coredemo，却是把业务代码和框架代码都放在一个项目中？</p><p>其实是这样，这个项目github.com/gohade/coredemo，是我为geekbang这个课程单独设置的项目，将hade框架的每个实现步骤，重新在这个项目做了一次还原。而 github.com/gohade/hade 才是我们最终的项目地址。所以不管在 coredemo 这个项目还是 hade这个项目，go.mod 中的module 都是叫做 github.com/gohade/hade。</p><p><strong>但是即使是最终的github.com/gohade/hade项目，我们的业务代码app目录和框架目录 framework目录也是在一个项目里的</strong>，按道理说在这个hade项目中，应该只有framework目录的内容即可啊？<br>
 <img src="https://static001.geekbang.org/resource/image/15/54/15d2de9d05e7f68dc072708945beaa54.png?wh=400x562" alt=""></p><p>这里我是这么设计的，将framework目录和其他的业务目录都同时放在github.com/gohade/hade项目中，这样这个项目也同时就是我们hade框架的一个示例项目。只是这个项目带着framework目录而已。</p><p>后续如果要创建一个新的业务项目，比如github.com/jianfengye/testdemo。我们<strong>不是做加法把业务文件夹一点点复制过来，而是做依赖这个github.com/gohade/hade项目做减法</strong>，把不必要的文件夹（比如框架文件夹）删掉。</p><p>即我们只需要直接拷贝这个github.com/gohade/hade 项目，并且将其中的framework目录删除，保留业务目录，同时把go.mod中的原先的“github.com/gohade/hade”模块名修改为github.com/jianfengye/testdemo这个模块名，用到hade框架的部分直接引用“github.com/gohade/hade/framework” 即可。</p><p>这就是说，如果你要创建的项目的模块名为github.com/jianfengye/testdemo，go.mod应该如下：</p><pre><code class="language-go">// 这里是你的模块地址
 module github.com/jianfengye/testdemo
 
@@ -56,18 +56,18 @@ func main() {
    // 运行root命令
    console.RunCommand(container)
 }
-</code></pre><p>说到这里相信你应该理解了，最终我们这个框架只维护 github.com/gohade/hade 这么一个项目，<strong>这个项目中的framework目录，存放的是框架所有的代码，而framework之外的目录和文件都是示例代码</strong>。</p><p>所以，回到今天的主题，让 <code>./hade new</code> 命令创建一个脚手架，要做的事情现在就变成了：</p><ul>
-<li>下载github.com/gohade/hade项目到目标文件夹</li>
-<li>删除framework目录</li>
-<li>修改go.mod中的模块名称</li>
-<li>修改go.mod中的require信息，增加require github.com/gohade/hade</li>
-<li>修改所有文件使用业务目录的地方，将原本使用“github.com/gohade/hade/app”  的所有引用改成 “[模块名称]/app”</li>
-</ul><p>也就是说第二个输入，我们需要用户确切输入一个模块名称。</p><h3>框架的版本号信息</h3><p>除了新建时必须的子目录的名称和新建模块的名称，第三个需要用户输入的是hade的版本号。</p><p>我们的hade框架是会不断变化的，和Golang语言一样，使用形如v1.2.3这样的版本号进行迭代，v代表版本的英文缩写，1代表的是大版本，只有非常大变更的时候我们才会更新这个版本；2代表的是小版本，有接口变更或者类库变更之类的时候我们会迭代这个版本；3代表的是补丁版本，如果发现有需要补丁修复的地方，就会使用这个版本。</p><p>而每个hade框架版本对应的脚手架，也有可能有一定变化的。因为在脚手架中，我们会把框架的使用示例等放在应用代码中。</p><p>hade框架的每个版本发布时，都会打对应的tag，每个tag我们都会在GitHub上发布一个release版本与之对应，比如截止到10/7日，已经发布了v0.0.1和v0.0.2两个tag和release版本，你可以直接通过<a href="https://github.com/gohade/hade/releases">GitHub地址</a>来进行查看。<br>
-<img src="https://static001.geekbang.org/resource/image/ba/a4/ba9e3152dbc9469327a820d1cac205a4.png?wh=1323x331" alt=""><img src="https://static001.geekbang.org/resource/image/a7/dc/a77a6affec75c2051df984fcff89fbdc.png?wh=1284x886" alt=""></p><p>所以回到 <code>./hade new</code> 命令，第三个需要用户输入的就是这个版本号，如果用户需要创建一个v0.0.1版本的hade脚手架，则需要输入v0.0.1，如果用户没有输入，我们默认使用最新的版本。</p><p>好了，简单总结一下，用户目前输入的三个信息：</p><ul>
-<li>目录名，最终是“当前执行目录+目录名”</li>
-<li>模块名，最终创建应用的module</li>
-<li>版本号，对应的hade的release版本号</li>
-</ul><p>用户输入相关的代码如下，在我们的 framework/command/new.go中：</p><pre><code class="language-go">     var name string
+</code></pre><p>说到这里相信你应该理解了，最终我们这个框架只维护 github.com/gohade/hade 这么一个项目，<strong>这个项目中的framework目录，存放的是框架所有的代码，而framework之外的目录和文件都是示例代码</strong>。</p><p>所以，回到今天的主题，让 <code>./hade new</code> 命令创建一个脚手架，要做的事情现在就变成了：</p>
+下载github.com/gohade/hade项目到目标文件夹
+删除framework目录
+修改go.mod中的模块名称
+修改go.mod中的require信息，增加require github.com/gohade/hade
+修改所有文件使用业务目录的地方，将原本使用“github.com/gohade/hade/app”  的所有引用改成 “[模块名称]/app”
+<p>也就是说第二个输入，我们需要用户确切输入一个模块名称。</p><h3>框架的版本号信息</h3><p>除了新建时必须的子目录的名称和新建模块的名称，第三个需要用户输入的是hade的版本号。</p><p>我们的hade框架是会不断变化的，和Golang语言一样，使用形如v1.2.3这样的版本号进行迭代，v代表版本的英文缩写，1代表的是大版本，只有非常大变更的时候我们才会更新这个版本；2代表的是小版本，有接口变更或者类库变更之类的时候我们会迭代这个版本；3代表的是补丁版本，如果发现有需要补丁修复的地方，就会使用这个版本。</p><p>而每个hade框架版本对应的脚手架，也有可能有一定变化的。因为在脚手架中，我们会把框架的使用示例等放在应用代码中。</p><p>hade框架的每个版本发布时，都会打对应的tag，每个tag我们都会在GitHub上发布一个release版本与之对应，比如截止到10/7日，已经发布了v0.0.1和v0.0.2两个tag和release版本，你可以直接通过<a href="https://github.com/gohade/hade/releases">GitHub地址</a>来进行查看。<br>
+<img src="https://static001.geekbang.org/resource/image/ba/a4/ba9e3152dbc9469327a820d1cac205a4.png?wh=1323x331" alt=""><img src="https://static001.geekbang.org/resource/image/a7/dc/a77a6affec75c2051df984fcff89fbdc.png?wh=1284x886" alt=""></p><p>所以回到 <code>./hade new</code> 命令，第三个需要用户输入的就是这个版本号，如果用户需要创建一个v0.0.1版本的hade脚手架，则需要输入v0.0.1，如果用户没有输入，我们默认使用最新的版本。</p><p>好了，简单总结一下，用户目前输入的三个信息：</p>
+目录名，最终是“当前执行目录+目录名”
+模块名，最终创建应用的module
+版本号，对应的hade的release版本号
+<p>用户输入相关的代码如下，在我们的 framework/command/new.go中：</p><pre><code class="language-go">     var name string
       var folder string
       var mod string
       var version string
@@ -138,13 +138,13 @@ func main() {
             version = release.GetTagName()
          }
       }
-</code></pre><h2>初始化脚手架具体实现</h2><p>有了这三个信息，我们将之前讨论的 hade new 命令的步骤再详细展开讨论：</p><ul>
-<li>下载github.com/gohade/hade项目到目标文件夹</li>
-<li>删除framework目录</li>
-<li>修改go.mod中的模块名称</li>
-<li>修改go.mod中的require信息，增加require github.com/gohade/hade</li>
-<li>修改所有文件使用业务目录的地方，将原本使用“github.com/gohade/hade/app”  的所有引用改成 “[模块名称]/app”</li>
-</ul><p>第一步下载稍微复杂一点，我们重点说，剩下四步就是简单的按部就班了。</p><h3>项目下载</h3><p>因为有版本号更新的可能，其中的第一步“复制github.com/gohade/hade项目到目标文件夹” ，我们就要变化为“下载github.com/gohade/hade 的某个release版本到目标文件夹”。</p><p>这个能怎么做呢？可以想到GitHub有提供对外的开放平台接口 api.github.com，你可以看它的<a href="https://docs.github.com/cn/rest/reference/repos">官方文档地址</a>。</p><p>我们可以通过开放平台接口，对公共的GitHub仓库进行信息查询。比如要查看某个GitHub仓库的release分支，可以通过调用“<a href="https://docs.github.com/cn/rest/reference/repos#list-releases">/repos/{owner}/{repo}/releases</a>”，而获取某个GitHub仓库的最新release分支，可以通过调用“<a href="https://docs.github.com/cn/rest/reference/repos#get-the-latest-release">/repos/{owner}/{repo}/releases/latest</a>”。</p><p>使用GitHub的开放平台接口，是可以直接调用，但是这个方法有个明显的问题，我们还要手动封装这个接口调用。</p><p>其实更简单的方式是，使用Google给我们提供好的Golang语言的SDK，<a href="https://github.com/google/go-github">go-github</a>。这个库本质就是封装了GitHub的调用接口。比如获取仓库github.com/gohade/hade的release分支：</p><pre><code class="language-go">client := github.NewClient(nil)
+</code></pre><h2>初始化脚手架具体实现</h2><p>有了这三个信息，我们将之前讨论的 hade new 命令的步骤再详细展开讨论：</p>
+下载github.com/gohade/hade项目到目标文件夹
+删除framework目录
+修改go.mod中的模块名称
+修改go.mod中的require信息，增加require github.com/gohade/hade
+修改所有文件使用业务目录的地方，将原本使用“github.com/gohade/hade/app”  的所有引用改成 “[模块名称]/app”
+<p>第一步下载稍微复杂一点，我们重点说，剩下四步就是简单的按部就班了。</p><h3>项目下载</h3><p>因为有版本号更新的可能，其中的第一步“复制github.com/gohade/hade项目到目标文件夹” ，我们就要变化为“下载github.com/gohade/hade 的某个release版本到目标文件夹”。</p><p>这个能怎么做呢？可以想到GitHub有提供对外的开放平台接口 api.github.com，你可以看它的<a href="https://docs.github.com/cn/rest/reference/repos">官方文档地址</a>。</p><p>我们可以通过开放平台接口，对公共的GitHub仓库进行信息查询。比如要查看某个GitHub仓库的release分支，可以通过调用“<a href="https://docs.github.com/cn/rest/reference/repos#list-releases">/repos/{owner}/{repo}/releases</a>”，而获取某个GitHub仓库的最新release分支，可以通过调用“<a href="https://docs.github.com/cn/rest/reference/repos#get-the-latest-release">/repos/{owner}/{repo}/releases/latest</a>”。</p><p>使用GitHub的开放平台接口，是可以直接调用，但是这个方法有个明显的问题，我们还要手动封装这个接口调用。</p><p>其实更简单的方式是，使用Google给我们提供好的Golang语言的SDK，<a href="https://github.com/google/go-github">go-github</a>。这个库本质就是封装了GitHub的调用接口。比如获取仓库github.com/gohade/hade的release分支：</p><pre><code class="language-go">client := github.NewClient(nil)
 releases, _, err = client.Repositories.GetReleases(context.Background(), "gohade", "hade")
 </code></pre><p>而获取它最新release分支也很简单：</p><pre><code class="language-go">client := github.NewClient(nil)
 release, _, err = client.Repositories.GetLatestRelease(context.Background(), "gohade", "hade")
@@ -433,7 +433,7 @@ func Unzip(src string, dest string) ([]string, error) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ce/6d/0c15c18a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -448,8 +448,8 @@ func Unzip(src string, dest string) ([]string, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/23/50/1f5154fe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -464,8 +464,8 @@ func Unzip(src string, dest string) ([]string, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/cb/07/482b7155.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -480,8 +480,8 @@ func Unzip(src string, dest string) ([]string, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/6b/23/ddad5282.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -496,8 +496,8 @@ func Unzip(src string, dest string) ([]string, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -512,5 +512,4 @@ func Unzip(src string, dest string) ([]string, error) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -368,15 +368,15 @@ No events.
 <img src="https://static001.geekbang.org/resource/image/e8/d9/e8b2586e4e14eb54adf8ff95c5c18cd9.png" alt="" /><br />
 从图中我们可以看到，在这个体系中：
 
-<li>
+
 PVC描述的，是Pod想要使用的持久化存储的属性，比如存储的大小、读写权限等。
-</li>
-<li>
+
+
 PV描述的，则是一个具体的Volume的属性，比如Volume的类型、挂载目录、远程存储服务器地址等。
-</li>
-<li>
+
+
 而StorageClass的作用，则是充当PV的模板。并且，只有同属于一个StorageClass的PV和PVC，才可以绑定在一起。
-</li>
+
 
 当然，StorageClass的另一个重要作用，是指定PV的Provisioner（存储插件）。这时候，如果你的存储插件支持Dynamic Provisioning的话，Kubernetes就可以自动为你创建PV了。
 

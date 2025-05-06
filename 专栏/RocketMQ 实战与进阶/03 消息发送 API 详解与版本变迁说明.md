@@ -25,195 +25,195 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;搭建学习环境准备篇.md">01 搭建学习环境准备篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;RocketMQ&#32;核心概念扫盲篇.md">02 RocketMQ 核心概念扫盲篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="03&#32;消息发送&#32;API&#32;详解与版本变迁说明.md">03 消息发送 API 详解与版本变迁说明.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;结合实际应用场景谈消息发送.md">04 结合实际应用场景谈消息发送.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;消息发送核心参数与工作原理详解.md">05 消息发送核心参数与工作原理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;消息发送常见错误与解决方案.md">06 消息发送常见错误与解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;事务消息使用及方案选型思考.md">07 事务消息使用及方案选型思考.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;消息消费&#32;API&#32;与版本变迁说明.md">08 消息消费 API 与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;DefaultMQPushConsumer&#32;核心参数与工作原理.md">09 DefaultMQPushConsumer 核心参数与工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;DefaultMQPushConsumer&#32;使用示例与注意事项.md">10 DefaultMQPushConsumer 使用示例与注意事项.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;DefaultLitePullConsumer&#32;核心参数与实战.md">11 DefaultLitePullConsumer 核心参数与实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;结合实际场景再聊&#32;DefaultLitePullConsumer&#32;的使用.md">12 结合实际场景再聊 DefaultLitePullConsumer 的使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;结合实际场景顺序消费、消息过滤实战.md">13 结合实际场景顺序消费、消息过滤实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;消息消费积压问题排查实战.md">14 消息消费积压问题排查实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;RocketMQ&#32;常用命令实战.md">15 RocketMQ 常用命令实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;RocketMQ&#32;集群性能摸高.md">16 RocketMQ 集群性能摸高.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;RocketMQ&#32;集群性能调优.md">17 RocketMQ 集群性能调优.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;RocketMQ&#32;集群平滑运维.md">18 RocketMQ 集群平滑运维.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;RocketMQ&#32;集群监控（一）.md">19 RocketMQ 集群监控（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;RocketMQ&#32;集群监控（二）.md">20 RocketMQ 集群监控（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;RocketMQ&#32;集群告警.md">21 RocketMQ 集群告警.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;RocketMQ&#32;集群踩坑记.md">22 RocketMQ 集群踩坑记.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;消息轨迹、ACL&#32;与多副本搭建.md">23 消息轨迹、ACL 与多副本搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;RocketMQ-Console&#32;常用页面指标获取逻辑.md">24 RocketMQ-Console 常用页面指标获取逻辑.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;RocketMQ&#32;Nameserver&#32;背后的设计理念.md">25 RocketMQ Nameserver 背后的设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Java&#32;并发编程实战.md">26 Java 并发编程实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（一）.md">27 从 RocketMQ 学基于文件的编程模式（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（二）.md">28 从 RocketMQ 学基于文件的编程模式（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;从&#32;RocketMQ&#32;学&#32;Netty&#32;网络编程技巧.md">29 从 RocketMQ 学 Netty 网络编程技巧.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;RocketMQ&#32;学习方法之我见.md">30 RocketMQ 学习方法之我见.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -289,20 +289,20 @@
 
 </code></pre>
 <p>创建 Topic，其参数含义如下：</p>
-<ul>
-<li>String key：根据 key 查找 Broker，即新主题创建在哪些 Broker 上</li>
-<li>String newTopic：主题名称</li>
-<li>int queueNum：主题队列个数</li>
-<li>int topicSysFlag：主题的系统参数</li>
-</ul>
+
+String key：根据 key 查找 Broker，即新主题创建在哪些 Broker 上
+String newTopic：主题名称
+int queueNum：主题队列个数
+int topicSysFlag：主题的系统参数
+
 <pre><code>long searchOffset(MessageQueue mq, long timestamp)
 
 </code></pre>
 <p>根据队列与时间戳，从消息消费队列中查找消息，返回消息的物理偏移量（在 commitlog 文件中的偏移量）。参数列表含义如下：</p>
-<ul>
-<li>MessageQueue mq：消息消费队列</li>
-<li>long timestamp：时间戳</li>
-</ul>
+
+MessageQueue mq：消息消费队列
+long timestamp：时间戳
+
 <pre><code>long maxOffset(final MessageQueue mq)
 
 </code></pre>
@@ -327,13 +327,13 @@
 
 </code></pre>
 <p>批量查询消息，其参数列表如下：</p>
-<ul>
-<li>String topic：主题名称</li>
-<li>String key：消息索引 Key</li>
-<li>int maxNum：本次查询最大返回消息条数</li>
-<li>long begin：开始时间戳</li>
-<li>long end：结束时间戳</li>
-</ul>
+
+String topic：主题名称
+String key：消息索引 Key
+int maxNum：本次查询最大返回消息条数
+long begin：开始时间戳
+long end：结束时间戳
+
 <p><strong>MQProducer</strong></p>
 <p>消息发送者接口。核心接口说明如下：</p>
 <pre><code>void start()
@@ -352,19 +352,19 @@
 
 </code></pre>
 <p>同步发送，参数列表说明如下：</p>
-<ul>
-<li>Message msg：待发送的消息对象</li>
-<li>long timeout：超时时间，默认为 3s</li>
-</ul>
+
+Message msg：待发送的消息对象
+long timeout：超时时间，默认为 3s
+
 <pre><code>void send(Message msg, SendCallback sendCallback, long timeout)
 
 </code></pre>
 <p>异步消息发送，参数列表说明如下：</p>
-<ul>
-<li>Message msg：待发送的消息</li>
-<li>SendCallback sendCallback：异步发送回调接口</li>
-<li>long timeout：发送超时时间，默认为 3s</li>
-</ul>
+
+Message msg：待发送的消息
+SendCallback sendCallback：异步发送回调接口
+long timeout：发送超时时间，默认为 3s
+
 <pre><code>void sendOneway(Message msg)
 
 </code></pre>
@@ -399,12 +399,12 @@
 <p>RocketMQ 在 4.6.0 版本中引入了 request-response 请求模型，就消息发送者发送到 Broker，需要等消费者处理完才返回，该 request 的重载方法与 send 方法一样，在此不再重复介绍。</p>
 <p><strong>ClientConfig</strong></p>
 <p>客户端配置相关。这里先简单介绍几个核心参数，后续在实践部分还会重点介绍。</p>
-<ul>
-<li>String namesrvAddr：NameServer 地址</li>
-<li>String clientIP：客户断的 IP 地址</li>
-<li>String instanceName：客户端的实例名称</li>
-<li>String namespace：客户端所属的命名空</li>
-</ul>
+
+String namesrvAddr：NameServer 地址
+String clientIP：客户断的 IP 地址
+String instanceName：客户端的实例名称
+String namespace：客户端所属的命名空
+
 <p><strong>DefaultMQProducer</strong></p>
 <p>消息发送者默认实现类。</p>
 <p><strong>TransactionMQProducer</strong></p>
@@ -472,10 +472,10 @@
 <p>笔者一家之言：这个的使用场景还是偏少，而且不知大家是否与笔者有同样的疑问，一个 Topic 有多个消费组订阅，那是要等所有的订阅者都处理完还是主要其中一个消费组处理完成，如果所有消费者不在线又怎么办？按照笔者的经验，消息中间件的引入就是解耦消息发送者与消息消费者，如果是这种模式，与普通的服务调用相比又有什么优势呢？</p>
 <h4><strong>消息轨迹与 ACL</strong></h4>
 <p>RocketMQ 在 4.4.0 开始引入了消息轨迹与 ACL。</p>
-<ul>
-<li><strong>消息轨迹</strong>：支持跟踪消息发送、消息消费的全过程，即能跟踪消息的发送 IP、存储服务器，什么时候被哪个消费者消费。</li>
-<li><strong>ACL</strong>：访问权限控制，即可以 Topic 消息发送、订阅进行授权，只有授权用户才能发送消息到指定 Topic。</li>
-</ul>
+
+<strong>消息轨迹</strong>：支持跟踪消息发送、消息消费的全过程，即能跟踪消息的发送 IP、存储服务器，什么时候被哪个消费者消费。
+<strong>ACL</strong>：访问权限控制，即可以 Topic 消息发送、订阅进行授权，只有授权用户才能发送消息到指定 Topic。
+
 <p>相关的 API 变更如下：</p>
 <p><img src="assets/20200726212706465.png" alt="9" /></p>
 <p>而 ACL 是借助 RPCHook 机制，故 API 并未发生变化。</p>

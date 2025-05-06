@@ -16,32 +16,32 @@ spec:
 &nbsp; &nbsp; &nbsp; limits:
 &nbsp; &nbsp; &nbsp; &nbsp; cpu: 20m
 &nbsp; &nbsp; &nbsp; &nbsp; memory: 200Mi
-</code></pre><p>这个YAML文件定义了一个Nginx Pod，我们需要重点学习的是 <code>containers.resources</code>，它下面有两个字段：</p><ul>
-<li>“<strong>requests</strong>”，意思是容器要申请的资源，也就是说要求Kubernetes在创建Pod的时候必须分配这里列出的资源，否则容器就无法运行。</li>
-<li>“<strong>limits</strong>”，意思是容器使用资源的上限，不能超过设定值，否则就有可能被强制停止运行。</li>
-</ul><p>在请求 <code>cpu</code> 和 <code>memory</code> 这两种资源的时候，你需要特别注意它们的表示方式。</p><p>内存的写法和磁盘容量一样，使用 <code>Ki</code>、<code>Mi</code>、<code>Gi</code> 来表示 <code>KB</code>、<code>MB</code>、<code>GB</code>，比如 <code>512Ki</code>、<code>100Mi</code>、<code>0.5Gi</code> 等。</p><p>而CPU因为在计算机中数量有限，非常宝贵，所以Kubernetes允许容器精细分割CPU，即可以1个、2个地完整使用CPU，也可以用小数0.1、0.2的方式来部分使用CPU。这其实是效仿了UNIX“时间片”的用法，意思是进程最多可以占用多少CPU时间。</p><p>不过CPU时间也不能无限分割，<strong>Kubernetes里CPU的最小使用单位是0.001，为了方便表示用了一个特别的单位 <code>m</code></strong>，也就是“milli”“毫”的意思，比如说500m就相当于0.5。</p><p>现在我们再来看这个YAML，你就应该明白了，它向系统申请的是1%的CPU时间和100MB的内存，运行时的资源上限是2%CPU时间和200MB内存。有了这个申请，Kubernetes就会在集群中查找最符合这个资源要求的节点去运行Pod。</p><p>下面是我在<a href="https://www.freecodecamp.org/news/how-to-leverage-the-power-of-kubernetes-to-optimise-your-hosting-costs-c2e168a232a2/">网上</a>找的一张动图，Kubernetes会根据每个Pod声明的需求，像搭积木或者玩俄罗斯方块一样，把节点尽量“塞满”，充分利用每个节点的资源，让集群的效益最大化。</p><p><img src="https://static001.geekbang.org/resource/image/39/91/397bfabd8234f8d859ca877a58f0d191.gif?wh=800x765" alt="图片"></p><p>你可能会有疑问：如果Pod不写 <code>resources</code> 字段，Kubernetes会如何处理呢？</p><p>这就意味着Pod对运行的资源要求“既没有下限，也没有上限”，Kubernetes不用管CPU和内存是否足够，可以把Pod调度到任意的节点上，而且后续Pod运行时也可以无限制地使用CPU和内存。</p><p>我们课程里是实验环境，这样做是当然是没有问题的，但如果是生产环境就很危险了，Pod可能会因为资源不足而运行缓慢，或者是占用太多资源而影响其他应用，所以我们应当合理评估Pod的资源使用情况，尽量为Pod加上限制。</p><p>看到这里估计你会继续追问：如果预估错误，Pod申请的资源太多，系统无法满足会怎么样呢？</p><p>让我们来试一下吧，先删除Pod的资源限制 <code>resources.limits</code>，把 <code>resources.request.cpu</code> 改成比较极端的“10”，也就是要求10个CPU：</p><pre><code class="language-yaml">  ...
+</code></pre><p>这个YAML文件定义了一个Nginx Pod，我们需要重点学习的是 <code>containers.resources</code>，它下面有两个字段：</p>
+“<strong>requests</strong>”，意思是容器要申请的资源，也就是说要求Kubernetes在创建Pod的时候必须分配这里列出的资源，否则容器就无法运行。
+“<strong>limits</strong>”，意思是容器使用资源的上限，不能超过设定值，否则就有可能被强制停止运行。
+<p>在请求 <code>cpu</code> 和 <code>memory</code> 这两种资源的时候，你需要特别注意它们的表示方式。</p><p>内存的写法和磁盘容量一样，使用 <code>Ki</code>、<code>Mi</code>、<code>Gi</code> 来表示 <code>KB</code>、<code>MB</code>、<code>GB</code>，比如 <code>512Ki</code>、<code>100Mi</code>、<code>0.5Gi</code> 等。</p><p>而CPU因为在计算机中数量有限，非常宝贵，所以Kubernetes允许容器精细分割CPU，即可以1个、2个地完整使用CPU，也可以用小数0.1、0.2的方式来部分使用CPU。这其实是效仿了UNIX“时间片”的用法，意思是进程最多可以占用多少CPU时间。</p><p>不过CPU时间也不能无限分割，<strong>Kubernetes里CPU的最小使用单位是0.001，为了方便表示用了一个特别的单位 <code>m</code></strong>，也就是“milli”“毫”的意思，比如说500m就相当于0.5。</p><p>现在我们再来看这个YAML，你就应该明白了，它向系统申请的是1%的CPU时间和100MB的内存，运行时的资源上限是2%CPU时间和200MB内存。有了这个申请，Kubernetes就会在集群中查找最符合这个资源要求的节点去运行Pod。</p><p>下面是我在<a href="https://www.freecodecamp.org/news/how-to-leverage-the-power-of-kubernetes-to-optimise-your-hosting-costs-c2e168a232a2/">网上</a>找的一张动图，Kubernetes会根据每个Pod声明的需求，像搭积木或者玩俄罗斯方块一样，把节点尽量“塞满”，充分利用每个节点的资源，让集群的效益最大化。</p><p><img src="https://static001.geekbang.org/resource/image/39/91/397bfabd8234f8d859ca877a58f0d191.gif?wh=800x765" alt="图片"></p><p>你可能会有疑问：如果Pod不写 <code>resources</code> 字段，Kubernetes会如何处理呢？</p><p>这就意味着Pod对运行的资源要求“既没有下限，也没有上限”，Kubernetes不用管CPU和内存是否足够，可以把Pod调度到任意的节点上，而且后续Pod运行时也可以无限制地使用CPU和内存。</p><p>我们课程里是实验环境，这样做是当然是没有问题的，但如果是生产环境就很危险了，Pod可能会因为资源不足而运行缓慢，或者是占用太多资源而影响其他应用，所以我们应当合理评估Pod的资源使用情况，尽量为Pod加上限制。</p><p>看到这里估计你会继续追问：如果预估错误，Pod申请的资源太多，系统无法满足会怎么样呢？</p><p>让我们来试一下吧，先删除Pod的资源限制 <code>resources.limits</code>，把 <code>resources.request.cpu</code> 改成比较极端的“10”，也就是要求10个CPU：</p><pre><code class="language-yaml">  ...
   
 &nbsp; &nbsp; resources:
 &nbsp; &nbsp; &nbsp; requests:
 &nbsp; &nbsp; &nbsp; &nbsp; cpu: 10
-</code></pre><p>然后使用 <code>kubectl apply</code> 创建这个Pod，你可能会惊奇地发现，虽然我们的Kubernetes集群里只有3个CPU，但Pod也能创建成功。</p><p>不过我们再用 <code>kubectl get pod</code> 去查看的话，就会发现它处于“Pending”状态，实际上并没有真正被调度运行：</p><p><img src="https://static001.geekbang.org/resource/image/b1/d4/b1154e089533df5cfabc18c7e9c442d4.png?wh=1380x176" alt="图片"></p><p>使用命令 <code>kubectl describe</code> 来查看具体原因，会发现有这么一句提示：</p><p><img src="https://static001.geekbang.org/resource/image/95/02/9577c36e53c723b8e28ddb2d5e77e502.png?wh=1920x156" alt="图片"></p><p>这就很明确地告诉我们Kubernetes调度失败，当前集群里的所有节点都无法运行这个Pod，因为它要求的CPU实在是太多了。</p><h2>什么是容器状态探针</h2><p>现在，我们使用 <code>resources</code> 字段加上资源配额之后，Pod在Kubernetes里的运行就有了初步保障，Kubernetes会监控Pod的资源使用情况，让它既不会“饿死”也不会“撑死”。</p><p>但这只是最初级的运行保障，如果你开发或者运维过实际的后台服务就会知道，一个程序即使正常启动了，它也有可能因为某些原因无法对外提供服务。其中最常见的情况就是运行时发生“死锁”或者“死循环”的故障，这个时候从外部来看进程一切都是正常的，但内部已经是一团糟了。</p><p>所以，我们还希望Kubernetes这个“保姆”能够更细致地监控Pod的状态，除了保证崩溃重启，还必须要能够探查到Pod的内部运行状态，定时给应用做“体检”，让应用时刻保持“健康”，能够满负荷稳定工作。</p><p>那应该用什么手段来检查应用的健康状态呢？</p><p>因为应用程序各式各样，对于外界来说就是一个<strong>黑盒子</strong>，只能看到启动、运行、停止这三个基本状态，此外就没有什么好的办法来知道它内部是否正常了。</p><p>所以，我们必须把应用变成<strong>灰盒子</strong>，让部分内部信息对外可见，这样Kubernetes才能够探查到内部的状态。</p><p>这么说起来，检查的过程倒是有点像现在我们很熟悉的核酸检测，Kubernetes用一根小棉签在应用的“检查口”里提取点数据，就可以从这些信息来判断应用是否“健康”了，这项功能也就被形象地命名为“<strong>探针</strong>”（Probe），也可以叫“探测器”。</p><p>Kubernetes为检查应用状态定义了三种探针，它们分别对应容器不同的状态：</p><ul>
-<li><strong>Startup</strong>，启动探针，用来检查应用是否已经启动成功，适合那些有大量初始化工作要做，启动很慢的应用。</li>
-<li><strong>Liveness</strong>，存活探针，用来检查应用是否正常运行，是否存在死锁、死循环。</li>
-<li><strong>Readiness</strong>，就绪探针，用来检查应用是否可以接收流量，是否能够对外提供服务。</li>
-</ul><p>你需要注意这三种探针是递进的关系：应用程序先启动，加载完配置文件等基本的初始化数据就进入了Startup状态，之后如果没有什么异常就是Liveness存活状态，但可能有一些准备工作没有完成，还不一定能对外提供服务，只有到最后的Readiness状态才是一个容器最健康可用的状态。</p><p>初次接触这三种状态可能有点难理解，我画了一张图，你可以看一下状态与探针的对应关系：</p><p><img src="https://static001.geekbang.org/resource/image/ea/84/eaff5e640171984a4b1b2285982ee184.jpg?wh=1920x1000" alt="图片"></p><p>那Kubernetes具体是如何使用状态和探针来管理容器的呢？</p><p>如果一个Pod里的容器配置了探针，<strong>Kubernetes在启动容器后就会不断地调用探针来检查容器的状态</strong>：</p><ul>
-<li>如果Startup探针失败，Kubernetes会认为容器没有正常启动，就会尝试反复重启，当然其后面的Liveness探针和Readiness探针也不会启动。</li>
-<li>如果Liveness探针失败，Kubernetes就会认为容器发生了异常，也会重启容器。</li>
-<li>如果Readiness探针失败，Kubernetes会认为容器虽然在运行，但内部有错误，不能正常提供服务，就会把容器从Service对象的负载均衡集合中排除，不会给它分配流量。</li>
-</ul><p>知道了Kubernetes对这三种状态的处理方式，我们就可以在开发应用的时候编写适当的检查机制，让Kubernetes用“探针”定时为应用做“体检”了。</p><p>在刚才图的基础上，我又补充了Kubernetes的处理动作，看这张图你就能很好地理解容器探针的工作流程了：</p><p><img src="https://static001.geekbang.org/resource/image/64/d9/64fde55dd2eab68f9968ff34218646d9.jpg?wh=1920x1200" alt="图片"></p><h2>如何使用容器状态探针</h2><p>掌握了资源配额和检查探针的概念，我们进入今天的高潮部分，看看如何在Pod的YAML描述文件里定义探针。</p><p>startupProbe、livenessProbe、readinessProbe这三种探针的配置方式都是一样的，关键字段有这么几个：</p><ul>
-<li><strong>periodSeconds</strong>，执行探测动作的时间间隔，默认是10秒探测一次。</li>
-<li><strong>timeoutSeconds</strong>，探测动作的超时时间，如果超时就认为探测失败，默认是1秒。</li>
-<li><strong>successThreshold</strong>，连续几次探测成功才认为是正常，对于startupProbe和livenessProbe来说它只能是1。</li>
-<li><strong>failureThreshold</strong>，连续探测失败几次才认为是真正发生了异常，默认是3次。</li>
-</ul><p>至于探测方式，Kubernetes支持3种：Shell、TCP Socket、HTTP GET，它们也需要在探针里配置：</p><ul>
-<li><strong>exec</strong>，执行一个Linux命令，比如ps、cat等等，和container的command字段很类似。</li>
-<li><strong>tcpSocket</strong>，使用TCP协议尝试连接容器的指定端口。</li>
-<li><strong>httpGet</strong>，连接端口并发送HTTP GET请求。</li>
-</ul><p>要使用这些探针，我们必须要在开发应用时预留出“检查口”，这样Kubernetes才能调用探针获取信息。这里我还是以Nginx作为示例，用ConfigMap编写一个配置文件：</p><pre><code class="language-yaml">apiVersion: v1
+</code></pre><p>然后使用 <code>kubectl apply</code> 创建这个Pod，你可能会惊奇地发现，虽然我们的Kubernetes集群里只有3个CPU，但Pod也能创建成功。</p><p>不过我们再用 <code>kubectl get pod</code> 去查看的话，就会发现它处于“Pending”状态，实际上并没有真正被调度运行：</p><p><img src="https://static001.geekbang.org/resource/image/b1/d4/b1154e089533df5cfabc18c7e9c442d4.png?wh=1380x176" alt="图片"></p><p>使用命令 <code>kubectl describe</code> 来查看具体原因，会发现有这么一句提示：</p><p><img src="https://static001.geekbang.org/resource/image/95/02/9577c36e53c723b8e28ddb2d5e77e502.png?wh=1920x156" alt="图片"></p><p>这就很明确地告诉我们Kubernetes调度失败，当前集群里的所有节点都无法运行这个Pod，因为它要求的CPU实在是太多了。</p><h2>什么是容器状态探针</h2><p>现在，我们使用 <code>resources</code> 字段加上资源配额之后，Pod在Kubernetes里的运行就有了初步保障，Kubernetes会监控Pod的资源使用情况，让它既不会“饿死”也不会“撑死”。</p><p>但这只是最初级的运行保障，如果你开发或者运维过实际的后台服务就会知道，一个程序即使正常启动了，它也有可能因为某些原因无法对外提供服务。其中最常见的情况就是运行时发生“死锁”或者“死循环”的故障，这个时候从外部来看进程一切都是正常的，但内部已经是一团糟了。</p><p>所以，我们还希望Kubernetes这个“保姆”能够更细致地监控Pod的状态，除了保证崩溃重启，还必须要能够探查到Pod的内部运行状态，定时给应用做“体检”，让应用时刻保持“健康”，能够满负荷稳定工作。</p><p>那应该用什么手段来检查应用的健康状态呢？</p><p>因为应用程序各式各样，对于外界来说就是一个<strong>黑盒子</strong>，只能看到启动、运行、停止这三个基本状态，此外就没有什么好的办法来知道它内部是否正常了。</p><p>所以，我们必须把应用变成<strong>灰盒子</strong>，让部分内部信息对外可见，这样Kubernetes才能够探查到内部的状态。</p><p>这么说起来，检查的过程倒是有点像现在我们很熟悉的核酸检测，Kubernetes用一根小棉签在应用的“检查口”里提取点数据，就可以从这些信息来判断应用是否“健康”了，这项功能也就被形象地命名为“<strong>探针</strong>”（Probe），也可以叫“探测器”。</p><p>Kubernetes为检查应用状态定义了三种探针，它们分别对应容器不同的状态：</p>
+<strong>Startup</strong>，启动探针，用来检查应用是否已经启动成功，适合那些有大量初始化工作要做，启动很慢的应用。
+<strong>Liveness</strong>，存活探针，用来检查应用是否正常运行，是否存在死锁、死循环。
+<strong>Readiness</strong>，就绪探针，用来检查应用是否可以接收流量，是否能够对外提供服务。
+<p>你需要注意这三种探针是递进的关系：应用程序先启动，加载完配置文件等基本的初始化数据就进入了Startup状态，之后如果没有什么异常就是Liveness存活状态，但可能有一些准备工作没有完成，还不一定能对外提供服务，只有到最后的Readiness状态才是一个容器最健康可用的状态。</p><p>初次接触这三种状态可能有点难理解，我画了一张图，你可以看一下状态与探针的对应关系：</p><p><img src="https://static001.geekbang.org/resource/image/ea/84/eaff5e640171984a4b1b2285982ee184.jpg?wh=1920x1000" alt="图片"></p><p>那Kubernetes具体是如何使用状态和探针来管理容器的呢？</p><p>如果一个Pod里的容器配置了探针，<strong>Kubernetes在启动容器后就会不断地调用探针来检查容器的状态</strong>：</p>
+如果Startup探针失败，Kubernetes会认为容器没有正常启动，就会尝试反复重启，当然其后面的Liveness探针和Readiness探针也不会启动。
+如果Liveness探针失败，Kubernetes就会认为容器发生了异常，也会重启容器。
+如果Readiness探针失败，Kubernetes会认为容器虽然在运行，但内部有错误，不能正常提供服务，就会把容器从Service对象的负载均衡集合中排除，不会给它分配流量。
+<p>知道了Kubernetes对这三种状态的处理方式，我们就可以在开发应用的时候编写适当的检查机制，让Kubernetes用“探针”定时为应用做“体检”了。</p><p>在刚才图的基础上，我又补充了Kubernetes的处理动作，看这张图你就能很好地理解容器探针的工作流程了：</p><p><img src="https://static001.geekbang.org/resource/image/64/d9/64fde55dd2eab68f9968ff34218646d9.jpg?wh=1920x1200" alt="图片"></p><h2>如何使用容器状态探针</h2><p>掌握了资源配额和检查探针的概念，我们进入今天的高潮部分，看看如何在Pod的YAML描述文件里定义探针。</p><p>startupProbe、livenessProbe、readinessProbe这三种探针的配置方式都是一样的，关键字段有这么几个：</p>
+<strong>periodSeconds</strong>，执行探测动作的时间间隔，默认是10秒探测一次。
+<strong>timeoutSeconds</strong>，探测动作的超时时间，如果超时就认为探测失败，默认是1秒。
+<strong>successThreshold</strong>，连续几次探测成功才认为是正常，对于startupProbe和livenessProbe来说它只能是1。
+<strong>failureThreshold</strong>，连续探测失败几次才认为是真正发生了异常，默认是3次。
+<p>至于探测方式，Kubernetes支持3种：Shell、TCP Socket、HTTP GET，它们也需要在探针里配置：</p>
+<strong>exec</strong>，执行一个Linux命令，比如ps、cat等等，和container的command字段很类似。
+<strong>tcpSocket</strong>，使用TCP协议尝试连接容器的指定端口。
+<strong>httpGet</strong>，连接端口并发送HTTP GET请求。
+<p>要使用这些探针，我们必须要在开发应用时预留出“检查口”，这样Kubernetes才能调用探针获取信息。这里我还是以Nginx作为示例，用ConfigMap编写一个配置文件：</p><pre><code class="language-yaml">apiVersion: v1
 kind: ConfigMap
 metadata:
 &nbsp; name: ngx-conf
@@ -97,12 +97,12 @@ spec:
       tcpSocket:
         port: 8080                     #错误的端口号
 </code></pre><p>然后我们重新创建Pod对象，观察它的状态。</p><p>当StartupProbe探测失败的时候，Kubernetes就会不停地重启容器，现象就是 <code>RESTARTS</code> 次数不停地增加，而livenessProbe和readinessProbePod没有执行，Pod虽然是Running状态，也永远不会READY：</p><p><img src="https://static001.geekbang.org/resource/image/90/7f/900468e4b86c241a53256584e514b47f.png?wh=1348x182" alt="图片"></p><p>因为failureThreshold的次数默认是三次，所以Kubernetes会连续执行三次livenessProbe TCP Socket探测，每次间隔10秒，30秒之后都失败才重启容器：</p><p><img src="https://static001.geekbang.org/resource/image/c3/e1/c31bf2cf6672c62ebd42f305534dbae1.png?wh=1366x178" alt="图片"></p><p>你也可以自己试着改一下readinessProbe，看看它失败时Pod会是什么样的状态。</p><h2>小结</h2><p>好了，今天我们学习了两种为Pod配置运行保障的方式：Resources和Probe。Resources就是为容器加上资源限制，而Probe就是主动健康检查，让Kubernetes实时地监控应用的运行状态。</p><p>再简单小结一下今天的内容：</p><ol>
-<li>资源配额使用的是cgroup技术，可以限制容器使用的CPU和内存数量，让Pod合理利用系统资源，也能够让Kubernetes更容易调度Pod。</li>
-<li>Kubernetes定义了Startup、Liveness、Readiness三种健康探针，它们分别探测应用的启动、存活和就绪状态。</li>
-<li>探测状态可以使用Shell、TCP Socket、HTTP Get三种方式，还可以调整探测的频率和超时时间等参数。</li>
+资源配额使用的是cgroup技术，可以限制容器使用的CPU和内存数量，让Pod合理利用系统资源，也能够让Kubernetes更容易调度Pod。
+Kubernetes定义了Startup、Liveness、Readiness三种健康探针，它们分别探测应用的启动、存活和就绪状态。
+探测状态可以使用Shell、TCP Socket、HTTP Get三种方式，还可以调整探测的频率和超时时间等参数。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>你能够解释一下Liveness和Readiness这两种探针的区别吗？</li>
-<li>你认为Shell、TCP Socket、HTTP GET这三种探测方式各有什么优缺点？</li>
+你能够解释一下Liveness和Readiness这两种探针的区别吗？
+你认为Shell、TCP Socket、HTTP GET这三种探测方式各有什么优缺点？
 </ol><p>欢迎在下方留言区留言参与讨论，课程快要完结了，感谢你坚持学习了这么久。我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/5e/68/5eef65a1abf0cc4ff70c0e3df7a93168.jpg?wh=1920x2580" alt="图片"></p>
 <style>
     ul {
@@ -213,7 +213,7 @@ spec:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/99/87/98ebb20e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -228,8 +228,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/d9/cf061262.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -244,8 +244,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/0c/e1/f663213e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -260,8 +260,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -276,8 +276,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/45/a9/3d48d6a2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -292,8 +292,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -308,8 +308,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -324,8 +324,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -340,8 +340,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/96/5a/45a56b3a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -356,8 +356,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -372,8 +372,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJZicRP0FZ78kT68wEGeWzPnxrF4s3Ea36XdMA2pj2TAbU3eibVt7KqzS5B7LbWMhRfSc3XEUL3Hrjw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -388,8 +388,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/60/a1/8f003697.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -404,8 +404,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/1b/f9/018197f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -420,8 +420,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -436,8 +436,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/ec/f6/f615ed26.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -452,5 +452,4 @@ spec:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

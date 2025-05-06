@@ -18,12 +18,12 @@ Eric Seidel和Flutter早期的几位开发人员都是来自Chrome团队，他�
 
 正如访谈中所说，Flutter是一个Google内部孵化多年的产品，从它开发之初到现在，一直秉承着两个最重要的设计原则：
 
-<li>
+
 **性能至上**。内置布局和渲染引擎，使用Skia通过GPU做光栅化。选择Dart语言作为开发语言，在发布正式版本时使用AOT编译，不再需要通过解析器解释执行或者JIT。并且支持Tree Shaking无用代码删除，减少发布包的体积。
-</li>
-<li>
+
+
 **效率至上**。在开发阶段支持代码的[Hot Reload](https://juejin.im/post/5bc80ef7f265da0a857aa924)，实现秒级编译更新。重视开发工具链，从开发、调试、测试、性能分析都有完善的工具。内置Runtime实现真正的跨平台，一套代码可以同时生成Android/iOS应用，降低开发成本。
-</li>
+
 
 那为什么要选择Dart语言？“Dart团队办公室离Flutter团队最近”肯定是其中的一个原因，但是Dart也为Flutter追求性能和效率的道路提供了大量的帮助，比如AOT编译、Tree Shaking、Hot Reload、多生代无锁垃圾回收等。正因为这些特性，Flutter在筛选了多种语言后，最终选择了Dart。这里也推荐你阅读[Why Flutter Uses Dart](https://hackernoon.com/why-flutter-uses-dart-dd635a054ebf)这篇文章。
 
@@ -85,18 +85,18 @@ Flutter和游戏引擎一样，也提供了一套自绘界面的UI Toolkit。游
 
 无论是Flutter，还是其他新的技术，在抉择是否跟进的时候，我们需要考虑以下一些因素：
 
-<li>
+
 **收益**。接入新的技术或者框架，给我们带来什么收益，例如稳定性、性能、效率、安全性等方面的提升。
-</li>
-<li>
+
+
 **迁移成本**。如果想得到新技术带来的收益，需要我们付出什么代价，例如新技术的学习成本、原来架构的改造成本等。
-</li>
-<li>
+
+
 **成熟度**。简单来说，就是这个新技术是否靠谱。跟选择开源项目一样，团队规模、能力是否达标、对项目是否重视都是我们需要考虑的因素。
-</li>
-<li>
+
+
 **社区氛围**。主要是看跟进这个技术的人够不够多、文档资料是否丰富、遇到问题能否得到帮助等。
-</li>
+
 
 **1. 对于Flutter，我是怎么看的**
 
@@ -134,21 +134,21 @@ Dart语言从2011年启动以来，一直想以高性能为卖点，试图取代
 
 Flutter作为今年最为火热的技术，里面有非常多的机遇，可以帮我们打造自己的技术品牌（例如撰写文章、参加技术会议、开源你的项目等）。对于Flutter的学习，你可以参考下面的一些资料。
 
-<li>
+
 万物之中，[源码](https://github.com/flutter/flutter)最美
-</li>
-<li>
+
+
 [Flutter官方文档](https://flutter.dev/docs)
-</li>
-<li>
+
+
 [闲鱼的Flutter相关文章](https://www.yuque.com/xytech/flutter)
-</li>
-<li>
+
+
 各大应用的使用总结：[闲鱼App](https://www.yuque.com/xytech/flutter/tc8lha)、[美团外卖](https://tech.meituan.com/2018/08/09/waimai-flutter-practice.html)、[今日头条App](https://mp.weixin.qq.com/s/-vyU1JQzdGLUmLGHRImIvg)、[爱奇艺开播助手](https://mp.weixin.qq.com/s/7GSPvP_hOWCv64esLLc0iw)、[网易新闻客户端](http://mp.weixin.qq.com/s/a0in4DqB8Bay046knkRr1g)、京东[JDFlutter](https://mp.weixin.qq.com/s/UhfgfNEdogm7Busr0apAGQ)、[马蜂窝旅游App](https://mp.weixin.qq.com/s/WBnj_6sOonjR9XUnB-wZPA)
-</li>
-<li>
+
+
 阿里Flutter开发者帮助App：[flutter-go](https://github.com/alibaba/flutter-go)
-</li>
+
 
 欢迎你点击“请朋友读”，把今天的内容分享给好友，邀请他一起学习。我也为认真思考、积极分享的同学准备了丰厚的“学习加油礼包”，期待与你一起切磋进步哦。
 

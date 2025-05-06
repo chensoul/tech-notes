@@ -150,10 +150,10 @@ func TestGetGoVersion(t *testing.T) {
 	}
 }
 </code></pre><p>这一版本的<code>TestGetGoVersion</code>通过GoMock， Mock了一个<code>Spider</code>接口，而不用去实现一个<code>Spider</code>接口。这就大大降低了单元测试用例编写的复杂度。通过Mock，很多不能测试的函数也变得可测试了。</p><p>通过上面的测试用例，我们可以看到，GoMock 和<a href="https://time.geekbang.org/column/article/408529">上一讲</a>介绍的testing单元测试框架可以紧密地结合起来工作。</p><h3>mockgen工具介绍</h3><p>上面，我介绍了如何使用 GoMock 编写单元测试用例。其中，我们使用到了<code>mockgen</code>工具来生成 Mock代码，<code>mockgen</code>工具提供了很多有用的功能，这里我来详细介绍下。</p><p><code>mockgen</code>工具是 GoMock 提供的，用来Mock一个Go接口。它可以根据给定的接口，来自动生成Mock代码。这里，有两种模式可以生成Mock代码，分别是源码模式和反射模式。</p><ol>
-<li>源码模式</li>
+源码模式
 </ol><p>如果有接口文件，则可以通过以下命令来生成Mock代码：</p><pre><code class="language-bash">$ mockgen -destination spider/mock/mock_spider.go -package spider -source spider/spider.go
 </code></pre><p>上面的命令，Mock了<code>spider/spider.go</code>文件中定义的<code>Spider</code>接口，并将Mock代码保存在<code>spider/mock/mock_spider.go</code>文件中，文件的包名为<code>spider</code>。</p><p>mockgen工具的参数说明见下表：</p><p><img src="https://static001.geekbang.org/resource/image/e7/9c/e72102362e2ae3225e868f125654689c.jpg?wh=1920x1210" alt="图片"></p><ol start="2">
-<li>反射模式</li>
+反射模式
 </ol><p>此外，mockgen工具还支持通过使用反射程序来生成 Mock 代码。它通过传递两个非标志参数，即导入路径和逗号分隔的接口列表来启用，其他参数和源码模式共用，例如：</p><pre><code class="language-bash">$ mockgen -destination spider/mock/mock_spider.go -package spider github.com/marmotedu/gopractise-demo/gomock/spider Spider
 </code></pre><h3>通过注释使用mockgen</h3><p>如果有多个文件，并且分散在不同的位置，那么我们要生成Mock文件的时候，需要对每个文件执行多次mockgen命令（这里假设包名不相同）。这种操作还是比较繁琐的，mockgen还提供了一种通过注释生成Mock文件的方式，此时需要借助<code>go generate</code>工具。</p><p>在接口文件的代码中，添加以下注释（具体代码见<a href="https://github.com/marmotedu/gopractise-demo/blob/master/gomock/spider/spider.go#L3">spider.go</a>文件）：</p><pre><code class="language-go">//go:generate mockgen -destination mock_spider.go -package spider github.com/cz-it/blog/blog/Go/testing/gomock/example/spider Spider
 </code></pre><p>这时候，我们只需要在<code>gomock</code>目录下，执行以下命令，就可以自动生成Mock代码：</p><pre><code class="language-bash">$ go generate ./...
@@ -162,12 +162,12 @@ func TestGetGoVersion(t *testing.T) {
 </code></pre><p><strong>然后，</strong>就可以调用Mock的对象了：</p><pre><code class="language-go">mockSpider := spider.NewMockSpider(ctrl)
 </code></pre><p>这里的<code>spider</code>是mockgen命令里面传递的包名，后面是<code>NewMockXxxx</code>格式的对象创建函数，<code>Xxx</code>是接口名。这里，我们需要传递控制器对象进去，返回一个Mock实例。</p><p><strong>接着，</strong>有了Mock实例，我们就可以调用其断言方法<code>EXPECT()</code>了。</p><p>gomock采用了链式调用法，通过<code>.</code>连接函数调用，可以像链条一样连接下去。例如：</p><pre><code class="language-go">mockSpider.EXPECT().GetBody().Return("go1.8.3")
 </code></pre><p>Mock一个接口的方法，我们需要Mock该方法的入参和返回值。我们可以通过参数匹配来Mock入参，通过Mock实例的 <code>Return</code> 方法来Mock返回值。下面，我们来分别看下如何指定入参和返回值。</p><p>先来看如何指定入参。如果函数有参数，我们可以使用参数匹配来指代函数的参数，例如：</p><pre><code class="language-go">mockSpider.EXPECT().GetBody(gomock.Any(), gomock.Eq("admin")).Return("go1.8.3")
-</code></pre><p>gomock支持以下参数匹配：</p><ul>
-<li>gomock.Any()，可以用来表示任意的入参。</li>
-<li>gomock.Eq(value)，用来表示与 value 等价的值。</li>
-<li>gomock.Not(value)，用来表示非 value 以外的值。</li>
-<li>gomock.Nil()，用来表示 None 值。</li>
-</ul><p>接下来，我们看如何指定返回值。</p><p><code>EXPECT()</code>得到Mock的实例，然后调用Mock实例的方法，该方法返回第一个<code>Call</code>对象，然后可以对其进行条件约束，比如使用Mock实例的 <code>Return</code> 方法约束其返回值。<code>Call</code>对象还提供了以下方法来约束Mock实例：</p><pre><code class="language-go">func (c *Call) After(preReq *Call) *Call // After声明调用在preReq完成后执行
+</code></pre><p>gomock支持以下参数匹配：</p>
+gomock.Any()，可以用来表示任意的入参。
+gomock.Eq(value)，用来表示与 value 等价的值。
+gomock.Not(value)，用来表示非 value 以外的值。
+gomock.Nil()，用来表示 None 值。
+<p>接下来，我们看如何指定返回值。</p><p><code>EXPECT()</code>得到Mock的实例，然后调用Mock实例的方法，该方法返回第一个<code>Call</code>对象，然后可以对其进行条件约束，比如使用Mock实例的 <code>Return</code> 方法约束其返回值。<code>Call</code>对象还提供了以下方法来约束Mock实例：</p><pre><code class="language-go">func (c *Call) After(preReq *Call) *Call // After声明调用在preReq完成后执行
 func (c *Call) AnyTimes() *Call // 允许调用次数为 0 次或更多次
 func (c *Call) Do(f interface{}) *Call // 声明在匹配时要运行的操作
 func (c *Call) MaxTimes(n int) *Call // 设置最大的调用次数为 n 次
@@ -176,17 +176,17 @@ func (c *Call) Return(rets ...interface{}) *Call //  // 声明模拟函数调用
 func (c *Call) SetArg(n int, value interface{}) *Call // 声明使用指针设置第 n 个参数的值
 func (c *Call) Times(n int) *Call // 设置调用次数为 n 次
 </code></pre><p>上面列出了多个 <code>Call</code> 对象提供的约束方法，接下来我会介绍3个常用的约束方法：指定返回值、指定执行次数和指定执行顺序。</p><ol>
-<li>指定返回值</li>
+指定返回值
 </ol><p>我们可以提供调用<code>Call</code>的<code>Return</code>函数，来指定接口的返回值，例如：</p><pre><code class="language-go">mockSpider.EXPECT().GetBody().Return("go1.8.3")
 </code></pre><ol start="2">
-<li>指定执行次数</li>
+指定执行次数
 </ol><p>有时候，我们需要指定函数执行多少次，例如：对于接受网络请求的函数，计算其执行了多少次。我们可以通过<code>Call</code>的<code>Times</code>函数来指定执行次数：</p><pre><code class="language-go">mockSpider.EXPECT().Recv().Return(nil).Times(3)
-</code></pre><p>上述代码，执行了三次Recv函数，这里gomock还支持其他的执行次数限制：</p><ul>
-<li>AnyTimes()，表示执行0到多次。</li>
-<li>MaxTimes(n int)，表示如果没有设置，最多执行n次。</li>
-<li>MinTimes(n int)，表示如果没有设置，最少执行n次。</li>
-</ul><ol start="3">
-<li>指定执行顺序</li>
+</code></pre><p>上述代码，执行了三次Recv函数，这里gomock还支持其他的执行次数限制：</p>
+AnyTimes()，表示执行0到多次。
+MaxTimes(n int)，表示如果没有设置，最多执行n次。
+MinTimes(n int)，表示如果没有设置，最少执行n次。
+<ol start="3">
+指定执行顺序
 </ol><p>有时候，我们还要指定执行顺序，比如要先执行 Init 操作，然后才能执行Recv操作：</p><pre><code class="language-go">initCall := mockSpider.EXPECT().Init()
 mockSpider.EXPECT().Recv().After(initCall)
 </code></pre><p>最后，我们可以使用<code>go test</code>来测试使用了Mock代码的单元测试代码：</p><pre><code class="language-bash">$ go test -v
@@ -231,7 +231,7 @@ go.test.cover: go.test
     awk -v target=$(COVERAGE) -f $(ROOT_DIR)/scripts/coverage.awk
 </code></pre><p>上述目标依赖<code>go.test</code>，也就是说执行单元测试覆盖率目标之前，会先进行单元测试，然后使用单元测试产生的覆盖率数据<code>coverage.out</code>计算出总的单元测试覆盖率，这里是通过<a href="https://github.com/marmotedu/iam/blob/v1.0.8/scripts/coverage.awk">coverage.awk</a>脚本来计算的。</p><p>如果单元测试覆盖率不达标，Makefile会报错并退出。可以通过Makefile的<a href="https://github.com/marmotedu/iam/blob/master/scripts/make-rules/common.mk#L39-L41">COVERAGE</a>变量来设置单元测试覆盖率阈值。</p><p>COVERAGE的默认值为60，我们也可以在命令行手动指定，例如：</p><pre><code class="language-bash">$ make cover COVERAGE=80
 </code></pre><p>为了确保项目的单元测试覆盖率达标，需要设置单元测试覆盖率质量红线。一般来说，这些红线很难靠开发者的自觉性去保障，所以好的方法是将质量红线加入到CICD流程中。</p><p>所以，在<code>Makefile</code>文件中，我将<code>cover</code>放在<code>all</code>目标的依赖中，并且位于build之前，也就是<code>all: gen add-copyright format lint cover build</code>。这样每次当我们执行make时，会自动进行代码测试，并计算单元测试覆盖率，如果覆盖率不达标，则停止构建；如果达标，继续进入下一步的构建流程。</p><h3>IAM项目测试案例分享</h3><p>接下来，我会给你展示一些IAM项目的测试案例，因为这些测试案例的实现方法，我在<a href="https://time.geekbang.org/column/article/408529">36讲</a> 和这一讲的前半部分已有详细介绍，所以这里，我只列出具体的实现代码，不会再介绍这些代码的实现方法。</p><ol>
-<li>单元测试案例</li>
+单元测试案例
 </ol><p>我们可以手动编写单元测试代码，也可以使用gotests工具生成单元测试代码。</p><p>先来看手动编写测试代码的案例。这里单元测试代码见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/pkg/log/log_test.go#L52-L62">Test_Option</a>，代码如下：</p><pre><code class="language-go">func Test_Option(t *testing.T) {
     fs := pflag.NewFlagSet("test", pflag.ExitOnError)
     opt := log.NewOptions()
@@ -244,7 +244,7 @@ go.test.cover: go.test
     assert.Equal(t, "debug", opt.Level)
 }
 </code></pre><p>上述代码中，使用了<code>github.com/stretchr/testify/assert</code>包来对比结果。</p><p>再来看使用gotests工具生成单元测试代码的案例（Table-Driven 的测试模式）。出于效率上的考虑，IAM项目的单元测试用例，基本都是使用gotests工具生成测试用例模板代码，并基于这些模板代码填充测试Case的。代码见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/internal/apiserver/service/v1/service_test.go">service_test.go</a>文件。</p><ol start="2">
-<li>性能测试案例</li>
+性能测试案例
 </ol><p>IAM项目的性能测试用例，见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/internal/apiserver/service/v1/user_test.go#L27-L41">BenchmarkListUser</a>测试函数。代码如下：</p><pre><code class="language-go">func BenchmarkListUser(b *testing.B) {
 	opts := metav1.ListOptions{
 		Offset: pointer.ToInt64(0),
@@ -260,7 +260,7 @@ go.test.cover: go.test
 	}
 }
 </code></pre><ol start="3">
-<li>示例测试案例</li>
+示例测试案例
 </ol><p>IAM项目的示例测试用例见<a href="https://github.com/marmotedu/errors/blob/v1.0.2/example_test.go">example_test.go</a>文件。<code>example_test.go</code>中的一个示例测试代码如下：</p><pre><code class="language-go">func ExampleNew() {
 	err := New("whoops")
 	fmt.Println(err)
@@ -268,16 +268,16 @@ go.test.cover: go.test
 	// Output: whoops
 }
 </code></pre><ol start="4">
-<li>TestMain测试案例</li>
+TestMain测试案例
 </ol><p>IAM项目的TestMain测试案例，见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/internal/apiserver/service/v1/user_test.go">user_test.go</a>文件中的<code>TestMain</code>函数：</p><pre><code class="language-go">func TestMain(m *testing.M) {
     _, _ = fake.GetFakeFactoryOr()
     os.Exit(m.Run())
 }
 </code></pre><p><code>TestMain</code>函数初始化了fake Factory，然后调用<code>m.Run</code>执行测试用例。</p><ol start="5">
-<li>Mock测试案例</li>
+Mock测试案例
 </ol><p>Mock代码见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/internal/apiserver/service/v1/mock_service.go">internal/apiserver/service/v1/mock_service.go</a>，使用Mock的测试用例见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/internal/apiserver/controller/v1/user/create_test.go">internal/apiserver/controller/v1/user/create_test.go</a>文件。因为代码比较多，这里建议你打开链接，查看测试用例的具体实现。</p><p>我们可以在IAM项目的根目录下执行以下命令，来自动生成所有的Mock文件：</p><pre><code class="language-bash">$ go generate ./...
 </code></pre><ol start="6">
-<li>Fake测试案例</li>
+Fake测试案例
 </ol><p>fake store代码实现位于<a href="https://github.com/marmotedu/iam/tree/v1.0.8/internal/apiserver/store/fake">internal/apiserver/store/fake</a>目录下。fake store的使用方式，见<a href="https://github.com/marmotedu/iam/blob/v1.0.8/internal/apiserver/service/v1/user_test.go">user_test.go</a>文件：</p><pre><code class="language-go">func TestMain(m *testing.M) {
     _, _ = fake.GetFakeFactoryOr()
     os.Exit(m.Run())
@@ -312,16 +312,16 @@ func BenchmarkListUser(b *testing.B) {
 
     return fakeFactory, nil
 }
-</code></pre><p><code>GetFakeFactoryOr</code>函数，创建了一些fake users、secrets、policies，并保存在了<code>fakeFactory</code>变量中，供后面的测试用例使用，例如BenchmarkListUser、Test_newUsers等。</p><h2>其他测试工具/包</h2><p>最后，我再来分享下Go项目测试中常用的工具/包，因为内容较多，我就不详细介绍了，如果感兴趣你可以点进链接自行学习。我将这些测试工具/包分为了两类，分别是测试框架和Mock工具。</p><h3>测试框架</h3><ul>
-<li><a href="https://github.com/stretchr/testify">Testify框架</a>：Testify是Go test的预判工具，它能让你的测试代码变得更优雅和高效，测试结果也变得更详细。</li>
-<li><a href="https://github.com/smartystreets/goconvey">GoConvey框架</a>：GoConvey是一款针对Golang的测试框架，可以管理和运行测试用例，同时提供了丰富的断言函数，并支持很多 Web 界面特性。</li>
-</ul><h3>Mock工具</h3><p>这一讲里，我介绍了Go官方提供的Mock框架GoMock，不过还有一些其他的优秀Mock工具可供我们使用。这些Mock工具分别用在不同的Mock场景中，我在 <a href="https://time.geekbang.org/column/article/384648">10讲</a>中已经介绍过。不过，为了使我们这一讲的测试知识体系更加完整，这里我还是再提一次，你可以复习一遍。</p><ul>
-<li><a href="https://github.com/DATA-DOG/go-sqlmock">sqlmock</a>：可以用来模拟数据库连接。数据库是项目中比较常见的依赖，在遇到数据库依赖时都可以用它。</li>
-<li><a href="https://github.com/jarcoal/httpmock">httpmock</a>：可以用来Mock HTTP请求。</li>
-<li><a href="https://github.com/bouk/monkey">bouk/monkey</a>：猴子补丁，能够通过替换函数指针的方式来修改任意函数的实现。如果golang/mock、sqlmock和httpmock这几种方法都不能满足我们的需求，我们可以尝试用猴子补丁的方式来Mock依赖。可以这么说，猴子补丁提供了单元测试 Mock 依赖的最终解决方案。</li>
-</ul><h2>总结</h2><p>这一讲，我介绍了除单元测试和性能测试之外的另一些测试方法。</p><p>除了示例测试和TestMain函数，我还详细介绍了Mock测试，也就是如何使用GoMock来测试一些在单元测试环境下不好实现的接口。绝大部分情况下，可以使用GoMock来Mock接口，但是对于一些业务逻辑比较复杂的接口，我们可以通过Fake一个接口实现，来对代码进行测试，这也称为Fake测试。</p><p>此外，我还介绍了何时编写和执行测试用例。我们可以根据需要，选择在编写代码前、编写代码中、编写代码后编写测试用例。</p><p>为了保证单元测试覆盖率，我们还应该为整个项目设置单元测试覆盖率质量红线，并将该质量红线加入到CICD流程中。我们可以通过 <code>go test -coverprofile=coverage.out</code> 命令来生成测试覆盖率数据，通过<code>go tool cover -func=coverage.out</code> 命令来分析覆盖率文件。</p><p>IAM项目中使用了大量的测试方法和技巧来测试代码，为了加深你对测试知识的理解，我也列举了一些测试案例，供你参考、学习和验证。具体的测试案例，你可以返回前面查看下。</p><p>除此之外，我们还可以使用其他一些测试框架，例如Testify框架和GoConvey框架。在Go代码测试中，我们最常使用的是Go官方提供的Mock框架GoMock，但仍然有其他优秀的Mock工具，可供我们在不同场景下使用，例如sqlmock、httpmock、bouk/monkey等。</p><h2>课后习题</h2><ol>
-<li>请使用 <a href="https://github.com/DATA-DOG/go-sqlmock">sqlmock</a> 来Mock一个GORM数据库实例，并完成GORM的CURD单元测试用例编写。</li>
-<li>思考下，在Go项目开发中，还有哪些优秀的测试框架、测试工具、Mock工具以及测试技巧？欢迎你在留言区分享。</li>
+</code></pre><p><code>GetFakeFactoryOr</code>函数，创建了一些fake users、secrets、policies，并保存在了<code>fakeFactory</code>变量中，供后面的测试用例使用，例如BenchmarkListUser、Test_newUsers等。</p><h2>其他测试工具/包</h2><p>最后，我再来分享下Go项目测试中常用的工具/包，因为内容较多，我就不详细介绍了，如果感兴趣你可以点进链接自行学习。我将这些测试工具/包分为了两类，分别是测试框架和Mock工具。</p><h3>测试框架</h3>
+<a href="https://github.com/stretchr/testify">Testify框架</a>：Testify是Go test的预判工具，它能让你的测试代码变得更优雅和高效，测试结果也变得更详细。
+<a href="https://github.com/smartystreets/goconvey">GoConvey框架</a>：GoConvey是一款针对Golang的测试框架，可以管理和运行测试用例，同时提供了丰富的断言函数，并支持很多 Web 界面特性。
+<h3>Mock工具</h3><p>这一讲里，我介绍了Go官方提供的Mock框架GoMock，不过还有一些其他的优秀Mock工具可供我们使用。这些Mock工具分别用在不同的Mock场景中，我在 <a href="https://time.geekbang.org/column/article/384648">10讲</a>中已经介绍过。不过，为了使我们这一讲的测试知识体系更加完整，这里我还是再提一次，你可以复习一遍。</p>
+<a href="https://github.com/DATA-DOG/go-sqlmock">sqlmock</a>：可以用来模拟数据库连接。数据库是项目中比较常见的依赖，在遇到数据库依赖时都可以用它。
+<a href="https://github.com/jarcoal/httpmock">httpmock</a>：可以用来Mock HTTP请求。
+<a href="https://github.com/bouk/monkey">bouk/monkey</a>：猴子补丁，能够通过替换函数指针的方式来修改任意函数的实现。如果golang/mock、sqlmock和httpmock这几种方法都不能满足我们的需求，我们可以尝试用猴子补丁的方式来Mock依赖。可以这么说，猴子补丁提供了单元测试 Mock 依赖的最终解决方案。
+<h2>总结</h2><p>这一讲，我介绍了除单元测试和性能测试之外的另一些测试方法。</p><p>除了示例测试和TestMain函数，我还详细介绍了Mock测试，也就是如何使用GoMock来测试一些在单元测试环境下不好实现的接口。绝大部分情况下，可以使用GoMock来Mock接口，但是对于一些业务逻辑比较复杂的接口，我们可以通过Fake一个接口实现，来对代码进行测试，这也称为Fake测试。</p><p>此外，我还介绍了何时编写和执行测试用例。我们可以根据需要，选择在编写代码前、编写代码中、编写代码后编写测试用例。</p><p>为了保证单元测试覆盖率，我们还应该为整个项目设置单元测试覆盖率质量红线，并将该质量红线加入到CICD流程中。我们可以通过 <code>go test -coverprofile=coverage.out</code> 命令来生成测试覆盖率数据，通过<code>go tool cover -func=coverage.out</code> 命令来分析覆盖率文件。</p><p>IAM项目中使用了大量的测试方法和技巧来测试代码，为了加深你对测试知识的理解，我也列举了一些测试案例，供你参考、学习和验证。具体的测试案例，你可以返回前面查看下。</p><p>除此之外，我们还可以使用其他一些测试框架，例如Testify框架和GoConvey框架。在Go代码测试中，我们最常使用的是Go官方提供的Mock框架GoMock，但仍然有其他优秀的Mock工具，可供我们在不同场景下使用，例如sqlmock、httpmock、bouk/monkey等。</p><h2>课后习题</h2><ol>
+请使用 <a href="https://github.com/DATA-DOG/go-sqlmock">sqlmock</a> 来Mock一个GORM数据库实例，并完成GORM的CURD单元测试用例编写。
+思考下，在Go项目开发中，还有哪些优秀的测试框架、测试工具、Mock工具以及测试技巧？欢迎你在留言区分享。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -432,7 +432,7 @@ func BenchmarkListUser(b *testing.B) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/fc/55/e03bb6db.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -447,8 +447,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/47/bd/5c34df95.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -463,8 +463,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/d4/1b/82a32d66.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -479,8 +479,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/2e/7e/ebc28e10.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -495,8 +495,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/2e/7e/ebc28e10.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -511,8 +511,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/26/34/891dd45b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -527,8 +527,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/68/d4/c9b5d3f9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -543,8 +543,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -559,8 +559,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/53/a8/abc96f70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -575,8 +575,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/b2/91/714c0f07.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -591,8 +591,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -607,8 +607,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/60/4f/db0e62b3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -623,8 +623,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/de/97/cda3f551.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -639,8 +639,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/83/17/df99b53d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -655,8 +655,8 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -671,5 +671,4 @@ func BenchmarkListUser(b *testing.B) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

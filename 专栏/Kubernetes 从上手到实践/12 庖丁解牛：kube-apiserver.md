@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -489,8 +489,8 @@ master $ curl http://127.0.0.1:8001/api/v1/namespaces
 </code></pre>
 <p>在这里写了一些默认开启的配置。事实上，在早之前，<code>PersistentVolumeClaimResize</code> 默认是不开启的，并且开启了 <code>PersistentVolumeLabel</code>，对于移除 <code>Persistentvolumelabel</code> 感兴趣的朋友可以参考下 <a href="https://github.com/kubernetes/kubernetes/issues/52617">Remove the PersistentVolumeLabel Admission Controller</a> 。</p>
 <p>这里对几个比较常见的插件做下说明：</p>
-<ul>
-<li>
+
+
 <p>NamespaceLifecycle：它可以保证正在终止的 <code>Namespace</code> 不允许创建对象，不允许请求不存在的 <code>Namespace</code> 以及保证默认的 <code>default</code>, <code>kube-system</code> 之类的命名空间不被删除。核心的代码是：</p>
 <pre><code>if a.GetOperation() == admission.Delete &amp;&amp; a.GetKind().GroupKind() == v1.SchemeGroupVersion.WithKind(&quot;Namespace&quot;).GroupKind() &amp;&amp; l.immortalNamespaces.Has(a.GetName()) {
 	return errors.NewForbidden(a.GetResource().GroupResource(), a.GetName(), fmt.Errorf(&quot;this namespace may not be deleted&quot;))
@@ -504,32 +504,32 @@ Error from server (Forbidden): namespaces &quot;kube-public&quot; is forbidden: 
 master $ kubectl delete ns default
 Error from server (Forbidden): namespaces &quot;default&quot; is forbidden: this namespace may not be deleted
 </code></pre>
-</li>
-<li>
+
+
 <p>LimitRanger：为 <code>Pod</code> 设置默认请求资源的限制。</p>
-</li>
-<li>
+
+
 <p>ServiceAccount：可按照预设规则创建 <code>Serviceaccount</code> 。比如都有统一的前缀：<code>system:serviceaccount:</code>。</p>
-</li>
-<li>
+
+
 <p>DefaultStorageClass：为 <code>PVC</code> 设置默认 <code>StorageClass</code>。</p>
-</li>
-<li>
+
+
 <p>DefaultTolerationSeconds：设置 <code>Pod</code> 的默认 forgiveness toleration 为 5 分钟。这个可能常会看到。</p>
-</li>
-<li>
+
+
 <p>MutatingAdmissionWebhook 和 ValidatingAdmissionWebhook：这两个都是通过 Webhook 验证或者修改请求，唯一的区别是一个是顺序进行，一个是并行进行的。</p>
-</li>
-<li>
+
+
 <p>ResourceQuota：限制 <code>Pod</code> 请求配额。</p>
-</li>
-<li>
+
+
 <p>AlwaysPullImages：总是拉取镜像。</p>
-</li>
-<li>
+
+
 <p>AlwaysAdmit：总是接受所有请求。</p>
-</li>
-</ul>
+
+
 <h3>处理请求</h3>
 <p>前面已经说到，一个请求依次会经过认证，授权，准入控制等环节，当这些环节都已经通过后，该请求便到了 <code>kube-apiserver</code> 的实际处理逻辑中了。</p>
 <p>其实和普通的 Web server 类似，<code>kube-apiserver</code> 提供了 <code>restful</code> 的接口，增删改查等基本功能都基本类似。这里先暂时不再深入。</p>

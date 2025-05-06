@@ -81,11 +81,11 @@ vendor
 ├── golang.org/
 │&nbsp;&nbsp; └── x/
 └── modules.txt
-</code></pre><p>我们看到，go mod vendor命令在vendor目录下，创建了一份这个项目的依赖包的副本，并且通过vendor/modules.txt记录了vendor下的module以及版本。</p><p>如果我们要基于vendor构建，而不是基于本地缓存的Go Module构建，我们需要在go build后面加上-mod=vendor参数。</p><p>在Go 1.14及以后版本中，如果Go项目的顶层目录下存在vendor目录，那么go build默认也会优先基于vendor构建，除非你给go build传入-mod=mod的参数。</p><h2>小结</h2><p>好了，到这里，我们就完成了维护Go Module的全部常见场景的学习了，现在我们一起来回顾一下吧。</p><p>在通过go mod init为当前Go项目创建一个新的module后，随着项目的演进，我们在日常开发过程中，会遇到多种常见的维护Go Module的场景。</p><p>其中最常见的就是为项目添加一个依赖包，我们可以通过go get命令手工获取该依赖包的特定版本，更好的方法是通过go mod tidy命令让Go命令自动去分析新依赖并决定使用新依赖的哪个版本。</p><p>另外，还有几个场景需要你记住：</p><ul>
-<li>通过go get我们可以升级或降级某依赖的版本，如果升级或降级前后的版本不兼容，这里千万注意别忘了变化包导入路径中的版本号，这是Go语义导入版本机制的要求；</li>
-<li>通过go mod tidy，我们可以自动分析Go源码的依赖变更，包括依赖的新增、版本变更以及删除，并更新go.mod中的依赖信息。</li>
-<li>通过go mod vendor，我们依旧可以支持vendor机制，并且可以对vendor目录下缓存的依赖包进行自动管理。</li>
-</ul><p>在了解了如何应对Go Modules维护的日常工作场景后，你是不是有一种再也不担心Go源码构建问题的感觉了呢？</p><h2>思考题</h2><p>如果你是一个公共Go包的作者，在发布你的Go包时，有哪些需要注意的地方？</p><p>感谢你和我一起学习，也欢迎你把这节课分享给更多对Go构建模式感兴趣的朋友。我是Tony Bai，我们下节课见。</p>
+</code></pre><p>我们看到，go mod vendor命令在vendor目录下，创建了一份这个项目的依赖包的副本，并且通过vendor/modules.txt记录了vendor下的module以及版本。</p><p>如果我们要基于vendor构建，而不是基于本地缓存的Go Module构建，我们需要在go build后面加上-mod=vendor参数。</p><p>在Go 1.14及以后版本中，如果Go项目的顶层目录下存在vendor目录，那么go build默认也会优先基于vendor构建，除非你给go build传入-mod=mod的参数。</p><h2>小结</h2><p>好了，到这里，我们就完成了维护Go Module的全部常见场景的学习了，现在我们一起来回顾一下吧。</p><p>在通过go mod init为当前Go项目创建一个新的module后，随着项目的演进，我们在日常开发过程中，会遇到多种常见的维护Go Module的场景。</p><p>其中最常见的就是为项目添加一个依赖包，我们可以通过go get命令手工获取该依赖包的特定版本，更好的方法是通过go mod tidy命令让Go命令自动去分析新依赖并决定使用新依赖的哪个版本。</p><p>另外，还有几个场景需要你记住：</p>
+通过go get我们可以升级或降级某依赖的版本，如果升级或降级前后的版本不兼容，这里千万注意别忘了变化包导入路径中的版本号，这是Go语义导入版本机制的要求；
+通过go mod tidy，我们可以自动分析Go源码的依赖变更，包括依赖的新增、版本变更以及删除，并更新go.mod中的依赖信息。
+通过go mod vendor，我们依旧可以支持vendor机制，并且可以对vendor目录下缓存的依赖包进行自动管理。
+<p>在了解了如何应对Go Modules维护的日常工作场景后，你是不是有一种再也不担心Go源码构建问题的感觉了呢？</p><h2>思考题</h2><p>如果你是一个公共Go包的作者，在发布你的Go包时，有哪些需要注意的地方？</p><p>感谢你和我一起学习，也欢迎你把这节课分享给更多对Go构建模式感兴趣的朋友。我是Tony Bai，我们下节课见。</p>
 <style>
     ul {
       list-style: none;
@@ -195,7 +195,7 @@ vendor
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -210,8 +210,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/8d/ed/bb32e906.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -226,8 +226,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/2d/1e/4a93ebb5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -242,8 +242,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/53/a8/abc96f70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -258,8 +258,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/16/5c/c0322969.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -274,8 +274,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/f4/0a/616e3532.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -290,8 +290,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/7b/bd/ccb37425.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -306,8 +306,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -322,8 +322,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/c8/4a/3a322856.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -338,8 +338,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/13/2f/24420ab6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -354,8 +354,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/57/1e/8ed4a7cf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -370,8 +370,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -386,8 +386,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/f7/5c/b476d429.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -402,8 +402,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/bb/e0/c7cd5170.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -418,8 +418,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -434,8 +434,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/2a/36/c5d1a120.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -450,8 +450,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/d8/10/5173922c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -466,8 +466,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/15/8e/8fc00a53.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -482,8 +482,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/72/65/68bd8177.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -498,8 +498,8 @@ vendor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/3a/8d/f5e7a20d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -514,5 +514,4 @@ vendor
   </div>
 </div>
 </div>
-</li>
-</ul>
+

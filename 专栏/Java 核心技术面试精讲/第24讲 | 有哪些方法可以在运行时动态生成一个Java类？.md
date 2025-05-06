@@ -26,15 +26,15 @@
 
 明白了基本思路后，我还是围绕类加载机制进行展开，面试过程中面试官很可能从技术原理或实践的角度考察：
 
-<li>
+
 字节码和类加载到底是怎么无缝进行转换的？发生在整个类加载过程的哪一步？
-</li>
-<li>
+
+
 如何利用字节码操纵技术，实现基本的动态代理逻辑？
-</li>
-<li>
+
+
 除了动态代理，字节码操纵技术还有那些应用场景？
-</li>
+
 
 ## 知识扩展
 
@@ -115,15 +115,15 @@ private void codeLocalLoadStore(int lvar, int opcode, int opcode_0,
 
 对于一个普通的Java动态代理，其实现过程可以简化成为：
 
-<li>
+
 提供一个基础的接口，作为被调用类型（com.mycorp.HelloImpl）和代理类之间的统一入口，如com.mycorp.Hello。
-</li>
-<li>
+
+
 实现[InvocationHandler](https://docs.oracle.com/javase/9/docs/api/java/lang/reflect/InvocationHandler.html)，对代理对象方法的调用，会被分派到其invoke方法来真正实现动作。
-</li>
-<li>
+
+
 通过Proxy类，调用其newProxyInstance方法，生成一个实现了相应基础接口的代理类实例，可以看下面的方法签名。
-</li>
+
 
 ```
 public static Object newProxyInstance(ClassLoader loader,
@@ -181,21 +181,21 @@ cw.toByteArray();
 
 这个技术似乎离我们日常开发遥远，但其实已经深入到各个方面，也许很多你现在正在使用的框架、工具就应用该技术，下面是我能想到的几个常见领域。
 
-<li>
+
 各种Mock框架
-</li>
-<li>
+
+
 ORM框架
-</li>
-<li>
+
+
 IOC容器
-</li>
-<li>
+
+
 部分Profiler工具，或者运行时诊断工具等
-</li>
-<li>
+
+
 生成形式化代码的工具
-</li>
+
 
 甚至可以认为，字节码操纵技术是工具和基础框架必不可少的部分，大大减少了开发者的负担。
 

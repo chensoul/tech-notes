@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -220,11 +220,11 @@
 </blockquote>
 <h3>CPU 配置</h3>
 <p>一般说来，CPU 繁忙的原因有以下几个：</p>
-<ul>
-<li>线程中有无限空循环、无阻塞、正则匹配或者单纯的计算；</li>
-<li>发生了频繁的 GC；</li>
-<li>多线程的上下文切换；</li>
-</ul>
+
+线程中有无限空循环、无阻塞、正则匹配或者单纯的计算；
+发生了频繁的 GC；
+多线程的上下文切换；
+
 <p>大多数 Elasticsearch 部署往往对 CPU 要求不高。因此，相对其它资源，具体配置多少个（CPU）不是那么关键。你应该选择具有多个内核的现代处理器，常见的集群使用 2 到 8 个核的机器。如果你要在更快的 CPUs 和更多的核数之间选择，选择更多的核数更好。多个内核提供的额外并发远胜过稍微快一点点的时钟频率。</p>
 <h3>内存配置</h3>
 <p>如果有一种资源是最先被耗尽的，它可能是内存。排序和聚合都很耗内存，所以有足够的堆空间来应付它们是很重要的。即使堆空间是比较小的时候，也能为操作系统文件缓存提供额外的内存。因为 Lucene 使用的许多数据结构是基于磁盘的格式，Elasticsearch 利用操作系统缓存能产生很大效果。</p>
@@ -233,11 +233,11 @@
 <h4>内存分配</h4>
 <p>当机器内存小于 64G 时，遵循通用的原则，50% 给 ES，50% 留给 lucene。</p>
 <p>当机器内存大于 64G 时，遵循以下原则：</p>
-<ul>
-<li>如果主要的使用场景是全文检索，那么建议给 ES Heap 分配 4~32G 的内存即可；其它内存留给操作系统，供 lucene 使用（segments cache），以提供更快的查询性能。</li>
-<li>如果主要的使用场景是聚合或排序，并且大多数是 numerics，dates，geo_points 以及 not_analyzed 的字符类型，建议分配给 ES Heap 分配 4~32G 的内存即可，其它内存留给操作系统，供 lucene 使用，提供快速的基于文档的聚类、排序性能。</li>
-<li>如果使用场景是聚合或排序，并且都是基于 analyzed 字符数据，这时需要更多的 heap size，建议机器上运行多 ES 实例，每个实例保持不超过 50% 的 ES heap 设置（但不超过 32 G，堆内存设置 32 G 以下时，JVM 使用对象指标压缩技巧节省空间），50% 以上留给 lucene。</li>
-</ul>
+
+如果主要的使用场景是全文检索，那么建议给 ES Heap 分配 4~32G 的内存即可；其它内存留给操作系统，供 lucene 使用（segments cache），以提供更快的查询性能。
+如果主要的使用场景是聚合或排序，并且大多数是 numerics，dates，geo_points 以及 not_analyzed 的字符类型，建议分配给 ES Heap 分配 4~32G 的内存即可，其它内存留给操作系统，供 lucene 使用，提供快速的基于文档的聚类、排序性能。
+如果使用场景是聚合或排序，并且都是基于 analyzed 字符数据，这时需要更多的 heap size，建议机器上运行多 ES 实例，每个实例保持不超过 50% 的 ES heap 设置（但不超过 32 G，堆内存设置 32 G 以下时，JVM 使用对象指标压缩技巧节省空间），50% 以上留给 lucene。
+
 <h4>禁止 swap</h4>
 <p>禁止 swap，一旦允许内存与磁盘的交换，会引起致命的性能问题。可以通过在 elasticsearch.yml 中 bootstrap.memory_lock: true，以保持 JVM 锁定内存，保证 ES 的性能。</p>
 <h4>GC 设置</h4>
@@ -259,9 +259,9 @@
 <p><strong>在经济压力能承受的范围下，尽量使用固态硬盘（SSD）</strong>。固态硬盘相比于任何旋转介质（机械硬盘，磁带等），无论随机写还是顺序写，都会对 IO 有较大的提升。</p>
 <blockquote>
 <ol>
-<li>如果你正在使用 SSDs，确保你的系统 I/O 调度程序是配置正确的。当你向硬盘写数据，I/O 调度程序决定何时把数据实际发送到硬盘。大多数默认 *nix 发行版下的调度程序都叫做 cfq（完全公平队列）。</li>
-<li>调度程序分配时间片到每个进程。并且优化这些到硬盘的众多队列的传递。但它是为旋转介质优化的：机械硬盘的固有特性意味着它写入数据到基于物理布局的硬盘会更高效。</li>
-<li>这对 SSD 来说是低效的，尽管这里没有涉及到机械硬盘。但是，deadline 或者 noop 应该被使用。deadline 调度程序基于写入等待时间进行优化，noop 只是一个简单的 FIFO 队列。</li>
+如果你正在使用 SSDs，确保你的系统 I/O 调度程序是配置正确的。当你向硬盘写数据，I/O 调度程序决定何时把数据实际发送到硬盘。大多数默认 *nix 发行版下的调度程序都叫做 cfq（完全公平队列）。
+调度程序分配时间片到每个进程。并且优化这些到硬盘的众多队列的传递。但它是为旋转介质优化的：机械硬盘的固有特性意味着它写入数据到基于物理布局的硬盘会更高效。
+这对 SSD 来说是低效的，尽管这里没有涉及到机械硬盘。但是，deadline 或者 noop 应该被使用。deadline 调度程序基于写入等待时间进行优化，noop 只是一个简单的 FIFO 队列。
 </ol>
 </blockquote>
 <p><strong>这个简单的更改可以带来显著的影响。仅仅是使用正确的调度程序，我们看到了 500 倍的写入能力提升</strong>。</p>
@@ -318,19 +318,19 @@ indices.memory.min_index_buffer_size: 48mb
 <p>routing 默认值是文档的 id，也可以采用自定义值，比如用户 ID。</p>
 <h4>不带 routing 查询</h4>
 <p>在查询的时候因为不知道要查询的数据具体在哪个分片上，所以整个过程分为2个步骤：</p>
-<ul>
-<li>分发：请求到达协调节点后，协调节点将查询请求分发到每个分片上。</li>
-<li>聚合：协调节点搜集到每个分片上查询结果，再将查询的结果进行排序，之后给用户返回结果。</li>
-</ul>
+
+分发：请求到达协调节点后，协调节点将查询请求分发到每个分片上。
+聚合：协调节点搜集到每个分片上查询结果，再将查询的结果进行排序，之后给用户返回结果。
+
 <h4>带 routing 查询</h4>
 <p>查询的时候，可以直接根据 routing 信息定位到某个分配查询，不需要查询所有的分配，经过协调节点排序。</p>
 <p>向上面自定义的用户查询，如果 routing 设置为 userid 的话，就可以直接查询出数据来，效率提升很多。</p>
 <h3>Filter VS Query</h3>
 <p>尽可能使用过滤器上下文（Filter）替代查询上下文（Query）</p>
-<ul>
-<li>Query：此文档与此查询子句的匹配程度如何？</li>
-<li>Filter：此文档和查询子句匹配吗？</li>
-</ul>
+
+Query：此文档与此查询子句的匹配程度如何？
+Filter：此文档和查询子句匹配吗？
+
 <p>Elasticsearch 针对 Filter 查询只需要回答「是」或者「否」，不需要像 Query 查询一样计算相关性分数，同时Filter结果可以缓存。</p>
 <h3>深度翻页</h3>
 <p>在使用 Elasticsearch 过程中，应尽量避免大翻页的出现。</p>
@@ -340,23 +340,23 @@ indices.memory.min_index_buffer_size: 48mb
 <h3>脚本（script）合理使用</h3>
 <p>我们知道脚本使用主要有 3 种形式，内联动态编译方式、_script 索引库中存储和文件脚本存储的形式；一般脚本的使用场景是粗排，尽量用第二种方式先将脚本存储在 _script 索引库中，起到提前编译，然后通过引用脚本 id，并结合 params 参数使用，即可以达到模型（逻辑）和数据进行了分离，同时又便于脚本模块的扩展与维护。</p>
 <h3>Cache的设置及使用</h3>
-<ul>
-<li><code>QueryCache</code>: ES查询的时候，使用filter查询会使用query cache, 如果业务场景中的过滤查询比较多，建议将querycache设置大一些，以提高查询速度。</li>
-</ul>
+
+<code>QueryCache</code>: ES查询的时候，使用filter查询会使用query cache, 如果业务场景中的过滤查询比较多，建议将querycache设置大一些，以提高查询速度。
+
 <p>indices.queries.cache.size： 10%（默认），可设置成百分比，也可设置成具体值，如256mb。</p>
 <p>当然也可以禁用查询缓存（默认是开启）， 通过index.queries.cache.enabled：false设置。</p>
-<ul>
-<li><code>FieldDataCache</code>: 在聚类或排序时，field data cache会使用频繁，因此，设置字段数据缓存的大小，在聚类或排序场景较多的情形下很有必要，可通过indices.fielddata.cache.size：30% 或具体值10GB来设置。但是如果场景或数据变更比较频繁，设置cache并不是好的做法，因为缓存加载的开销也是特别大的。</li>
-<li><code>ShardRequestCache</code>: 查询请求发起后，每个分片会将结果返回给协调节点(Coordinating Node), 由协调节点将结果整合。          如果有需求，可以设置开启;  通过设置index.requests.cache.enable: true来开启。          不过，shard request cache只缓存hits.total, aggregations, suggestions类型的数据，并不会缓存hits的内容。也可以通过设置indices.requests.cache.size: 1%（默认）来控制缓存空间大小。</li>
-</ul>
+
+<code>FieldDataCache</code>: 在聚类或排序时，field data cache会使用频繁，因此，设置字段数据缓存的大小，在聚类或排序场景较多的情形下很有必要，可通过indices.fielddata.cache.size：30% 或具体值10GB来设置。但是如果场景或数据变更比较频繁，设置cache并不是好的做法，因为缓存加载的开销也是特别大的。
+<code>ShardRequestCache</code>: 查询请求发起后，每个分片会将结果返回给协调节点(Coordinating Node), 由协调节点将结果整合。          如果有需求，可以设置开启;  通过设置index.requests.cache.enable: true来开启。          不过，shard request cache只缓存hits.total, aggregations, suggestions类型的数据，并不会缓存hits的内容。也可以通过设置indices.requests.cache.size: 1%（默认）来控制缓存空间大小。
+
 <h3>更多查询优化经验</h3>
-<ul>
-<li>query_string 或 multi_match的查询字段越多， 查询越慢。可以在mapping阶段，利用copy_to属性将多字段的值索引到一个新字段，multi_match时，用新的字段查询。</li>
-<li>日期字段的查询， 尤其是用now 的查询实际上是不存在缓存的，因此， 可以从业务的角度来考虑是否一定要用now, 毕竟利用query cache 是能够大大提高查询效率的。</li>
-<li>查询结果集的大小不能随意设置成大得离谱的值， 如query.setSize不能设置成 Integer.MAX_VALUE， 因为ES内部需要建立一个数据结构来放指定大小的结果集数据。</li>
-<li>避免层级过深的聚合查询， 层级过深的aggregation , 会导致内存、CPU消耗，建议在服务层通过程序来组装业务，也可以通过pipeline的方式来优化。</li>
-<li>复用预索引数据方式来提高AGG性能：</li>
-</ul>
+
+query_string 或 multi_match的查询字段越多， 查询越慢。可以在mapping阶段，利用copy_to属性将多字段的值索引到一个新字段，multi_match时，用新的字段查询。
+日期字段的查询， 尤其是用now 的查询实际上是不存在缓存的，因此， 可以从业务的角度来考虑是否一定要用now, 毕竟利用query cache 是能够大大提高查询效率的。
+查询结果集的大小不能随意设置成大得离谱的值， 如query.setSize不能设置成 Integer.MAX_VALUE， 因为ES内部需要建立一个数据结构来放指定大小的结果集数据。
+避免层级过深的聚合查询， 层级过深的aggregation , 会导致内存、CPU消耗，建议在服务层通过程序来组装业务，也可以通过pipeline的方式来优化。
+复用预索引数据方式来提高AGG性能：
+
 <p>如通过 terms aggregations 替代 range aggregations， 如要根据年龄来分组，分组目标是: 少年（14岁以下） 青年（14-28） 中年（29-50） 老年（51以上）， 可以在索引的时候设置一个age_group字段，预先将数据进行分类。从而不用按age来做range aggregations, 通过age_group字段就可以了。</p>
 <h3>通过开启慢查询配置定位慢查询</h3>
 <p>不论是数据库还是搜索引擎，对于问题的排查，开启慢查询日志是十分必要的，ES 开启慢查询的方式有多种，但是最常用的是调用模板 API 进行全局设置：</p>
@@ -484,11 +484,11 @@ index.mapping.depth.limit: 20
 <p>当索引不再被频繁查询时，可通过 index.routing.allocation.require.box_type:warm，将索引标记为 warm，从而保证索引不写入 hot 节点，以便将 SSD 磁盘资源用在刀刃上。一旦设置这个属性，ES 会自动将索引合并到 warm 节点。</p>
 <p><strong>协调（coordinating）节点</strong></p>
 <p>协调节点用于做分布式里的协调，将各分片或节点返回的数据整合后返回。该节点不会被选作主节点，也不会存储任何索引数据。该服务器主要用于查询负载均衡。在查询的时候，通常会涉及到从多个 node 服务器上查询数据，并将请求分发到多个指定的 node 服务器，并对各个 node 服务器返回的结果进行一个汇总处理，最终返回给客户端。在 ES 集群中，所有的节点都有可能是协调节点，但是，可以通过设置 node.master、node.data、node.ingest 都为 false 来设置专门的协调节点。需要较好的 CPU 和较高的内存。</p>
-<ul>
-<li>node.master:false和node.data:true，该node服务器只作为一个数据节点，只用于存储索引数据，使该node服务器功能单一，只用于数据存储和数据查询，降低其资源消耗率。</li>
-<li>node.master:true和node.data:false，该node服务器只作为一个主节点，但不存储任何索引数据，该node服务器将使用自身空闲的资源，来协调各种创建索引请求或者查询请求，并将这些请求合理分发到相关的node服务器上。</li>
-<li>node.master:false和node.data:false，该node服务器即不会被选作主节点，也不会存储任何索引数据。该服务器主要用于查询负载均衡。在查询的时候，通常会涉及到从多个node服务器上查询数据，并将请求分发到多个指定的node服务器，并对各个node服务器返回的结果进行一个汇总处理，最终返回给客户端。</li>
-</ul>
+
+node.master:false和node.data:true，该node服务器只作为一个数据节点，只用于存储索引数据，使该node服务器功能单一，只用于数据存储和数据查询，降低其资源消耗率。
+node.master:true和node.data:false，该node服务器只作为一个主节点，但不存储任何索引数据，该node服务器将使用自身空闲的资源，来协调各种创建索引请求或者查询请求，并将这些请求合理分发到相关的node服务器上。
+node.master:false和node.data:false，该node服务器即不会被选作主节点，也不会存储任何索引数据。该服务器主要用于查询负载均衡。在查询的时候，通常会涉及到从多个node服务器上查询数据，并将请求分发到多个指定的node服务器，并对各个node服务器返回的结果进行一个汇总处理，最终返回给客户端。
+
 <h3>关闭 data 节点服务器中的 http 功能</h3>
 <p>针对 Elasticsearch 集群中的所有数据节点，不用开启 http 服务。将其中的配置参数这样设置，http.enabled:false，同时也不要安装 head, bigdesk, marvel 等监控插件，这样保证 data 节点服务器只需处理创建/更新/删除/查询索引数据等操作。</p>
 <p>http 功能可以在非数据节点服务器上开启，上述相关的监控插件也安装到这些服务器上，用于监控 Elasticsearch 集群状态等数据信息。这样做一来出于数据安全考虑，二来出于服务性能考虑。</p>

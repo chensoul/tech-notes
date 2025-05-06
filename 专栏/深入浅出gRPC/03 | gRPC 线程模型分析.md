@@ -245,8 +245,8 @@ gRPC服务调度线程主要职责如下：
 
 - 请求消息的反序列化，主要包括：HTTP/2 Header的反序列化，以及将PB(Body)反序列化为请求对象；
 - 服务接口的调用，method.invoke(非反射机制)；
-<li>将响应消息封装成WriteQueue.QueuedCommand，写入到Netty Channel中，同时，对响应Header和Body对象做序列化<br />
-服务端调度的核心是SerializingExecutor，它同时实现了JDK的Executor和Runnable接口，既是一个线程池，同时也是一个Task。</li>
+将响应消息封装成WriteQueue.QueuedCommand，写入到Netty Channel中，同时，对响应Header和Body对象做序列化<br />
+服务端调度的核心是SerializingExecutor，它同时实现了JDK的Executor和Runnable接口，既是一个线程池，同时也是一个Task。
 
 SerializingExecutor聚合了JDK的Executor，由Executor负责Runnable的执行，代码示例如下（SerializingExecutor类）：
 

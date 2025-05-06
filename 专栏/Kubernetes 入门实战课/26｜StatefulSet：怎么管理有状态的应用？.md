@@ -87,13 +87,13 @@ spec:
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/94/b7/94a96b1b8a000dcd852d2ea11yy8ddb7.png?wh=1562x530" alt="图片"></p><p>这里我设置了两个值，分别是 <code>a=111</code> 和 <code>b=222</code>。</p><p>现在我们模拟意外事故，删除这个Pod：</p><pre><code class="language-plain">kubectl delete pod redis-pv-sts-0
 </code></pre><p>由于StatefulSet和Deployment一样会监控Pod的实例，发现Pod数量少了就会很快创建出新的Pod，并且名字、网络标识也都会和之前的Pod一模一样：</p><p><img src="https://static001.geekbang.org/resource/image/52/23/52e2f02a1d80d8bba2a42c8258cda923.png?wh=1300x236" alt="图片"></p><p>那Redis里存储的数据怎么样了呢？是不是真的用到了持久化存储，也完全恢复了呢？</p><p>你可以再用Redis客户端登录去检查一下：</p><pre><code class="language-plain">kubectl exec -it redis-pv-sts-0 -- redis-cli
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/c7/08/c78ca845ee20459dd2d8bayy3db71808.png?wh=1544x530" alt="图片"></p><p>因为我们把NFS网络存储挂载到了Pod的 <code>/data</code> 目录，Redis就会定期把数据落盘保存，所以新创建的Pod再次挂载目录的时候会从备份文件里恢复数据，内存里的数据就恢复原状了。</p><h2>小结</h2><p>好了，今天我们学习了专门部署“有状态应用”的API对象StatefulSet，它与Deployment非常相似，区别是由它管理的Pod会有固定的名字、启动顺序和网络标识，这些特性对于在集群里实施有主从、主备等关系的应用非常重要。</p><p>我再简单小结一下今天的内容：</p><ol>
-<li>StatefulSet的YAML描述和Deployment几乎完全相同，只是多了一个关键字段 <code>serviceName</code>。</li>
-<li>要为StatefulSet里的Pod生成稳定的域名，需要定义Service对象，它的名字必须和StatefulSet里的 <code>serviceName</code> 一致。</li>
-<li>访问StatefulSet应该使用每个Pod的单独域名，形式是“Pod名.服务名”，不应该使用Service的负载均衡功能。</li>
-<li>在StatefulSet里可以用字段“volumeClaimTemplates”直接定义PVC，让Pod实现数据持久化存储。</li>
+StatefulSet的YAML描述和Deployment几乎完全相同，只是多了一个关键字段 <code>serviceName</code>。
+要为StatefulSet里的Pod生成稳定的域名，需要定义Service对象，它的名字必须和StatefulSet里的 <code>serviceName</code> 一致。
+访问StatefulSet应该使用每个Pod的单独域名，形式是“Pod名.服务名”，不应该使用Service的负载均衡功能。
+在StatefulSet里可以用字段“volumeClaimTemplates”直接定义PVC，让Pod实现数据持久化存储。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>有了StatefulSet提供的固定名字和启动顺序，应用还需要怎么做才能实现主从等依赖关系呢？</li>
-<li>是否可以不使用“volumeClaimTemplates”内嵌定义PVC呢？会有什么样的后果呢？</li>
+有了StatefulSet提供的固定名字和启动顺序，应用还需要怎么做才能实现主从等依赖关系呢？
+是否可以不使用“volumeClaimTemplates”内嵌定义PVC呢？会有什么样的后果呢？
 </ol><p>欢迎在留言区参与讨论，分享你的想法。我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/88/e5/884a5c91b82cb515c856ce2ece6a91e5.jpg?wh=1920x1544" alt="图片"></p>
 <style>
     ul {
@@ -204,7 +204,7 @@ spec:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2c/7e/f1efd18b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -219,8 +219,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -235,8 +235,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2c/7e/f1efd18b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -251,8 +251,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/cd/db/7467ad23.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -267,8 +267,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/99/87/98ebb20e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -283,8 +283,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/37/3b/495e2ce6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -299,8 +299,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/65/da/29fe3dde.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -315,8 +315,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/9e/e5/9e732ec1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -331,8 +331,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/45/c3/775fe460.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -347,8 +347,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/45/44/8df79d3c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -363,8 +363,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/ec/29/895dbe3f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -379,8 +379,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -395,8 +395,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/28/ca/47333d8b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -411,8 +411,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/c7/89/16437396.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -427,8 +427,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/45/a9/3d48d6a2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -443,8 +443,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/b9/6f/b40d1acf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -459,8 +459,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/30/5b/4f4b0a40.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -475,8 +475,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -491,8 +491,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/23/81/3865297c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -507,8 +507,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -523,5 +523,4 @@ spec:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

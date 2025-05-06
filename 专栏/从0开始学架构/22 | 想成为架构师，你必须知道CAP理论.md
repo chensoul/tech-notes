@@ -54,10 +54,10 @@ In a distributed system (a collection of interconnected nodes that share data.),
 
 对比两个版本的定义，有几个很关键的差异点：
 
-<li>第二版定义了什么才是CAP理论探讨的分布式系统，强调了两点：interconnected和share data，为何要强调这两点呢？ 因为**分布式系统并不一定会互联和共享数据**。最简单的例如Memcache的集群，相互之间就没有连接和共享数据，因此Memcache集群这类分布式系统就不符合CAP理论探讨的对象；而MySQL集群就是互联和进行数据复制的，因此是CAP理论探讨的对象。
-</li>
-<li>第二版强调了write/read pair，这点其实是和上一个差异点一脉相承的。也就是说，**CAP关注的是对数据的读写操作，而不是分布式系统的所有功能**。例如，ZooKeeper的选举机制就不是CAP探讨的对象。
-</li>
+第二版定义了什么才是CAP理论探讨的分布式系统，强调了两点：interconnected和share data，为何要强调这两点呢？ 因为**分布式系统并不一定会互联和共享数据**。最简单的例如Memcache的集群，相互之间就没有连接和共享数据，因此Memcache集群这类分布式系统就不符合CAP理论探讨的对象；而MySQL集群就是互联和进行数据复制的，因此是CAP理论探讨的对象。
+
+第二版强调了write/read pair，这点其实是和上一个差异点一脉相承的。也就是说，**CAP关注的是对数据的读写操作，而不是分布式系统的所有功能**。例如，ZooKeeper的选举机制就不是CAP探讨的对象。
+
 
 相比来说，第二版的定义更加精确。
 

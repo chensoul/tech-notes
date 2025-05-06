@@ -74,8 +74,8 @@ JavaScript正是依靠语句的 Completion Record类型，方才可以在语句�
 
 在JavaScript中，我们把不带控制能力的语句称为普通语句。普通语句有下面几种。
 
-<li>声明类语句
-<ul>
+声明类语句
+
 - var声明
 - const声明
 - let声明

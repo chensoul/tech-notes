@@ -38,27 +38,27 @@ StatefulSet可以说是Kubernetes项目中最为复杂的编排对象，希望�
 
 顾名思义，DaemonSet的主要作用，是让你在Kubernetes集群里，运行一个Daemon Pod。 所以，这个Pod有如下三个特征：
 
-<li>
+
 这个Pod运行在Kubernetes集群里的每一个节点（Node）上；
-</li>
-<li>
+
+
 每个节点上只有一个这样的Pod实例；
-</li>
-<li>
+
+
 当有新的节点加入Kubernetes集群后，该Pod会自动地在新节点上被创建出来；而当旧节点被删除后，它上面的Pod也相应地会被回收掉。
-</li>
+
 
 这个机制听起来很简单，但Daemon Pod的意义确实是非常重要的。我随便给你列举几个例子：
 
-<li>
+
 各种网络插件的Agent组件，都必须运行在每一个节点上，用来处理这个节点上的容器网络；
-</li>
-<li>
+
+
 各种存储插件的Agent组件，也必须运行在每一个节点上，用来在这个节点上挂载远程存储目录，操作容器的Volume目录；
-</li>
-<li>
+
+
 各种监控组件和日志组件，也必须运行在每一个节点上，负责这个节点上的监控信息和日志搜集。
-</li>
+
 
 更重要的是，跟其他编排对象不一样，DaemonSet开始运行的时机，很多时候比整个Kubernetes集群出现的时机都要早。
 
@@ -132,15 +132,15 @@ DaemonSet Controller，首先从Etcd里获取所有的Node列表，然后遍历�
 
 而检查的结果，可能有这么三种情况：
 
-<li>
+
 没有这种Pod，那么就意味着要在这个Node上创建这样一个Pod；
-</li>
-<li>
+
+
 有这种Pod，但是数量大于1，那就说明要把多余的Pod从这个Node上删除掉；
-</li>
-<li>
+
+
 正好只有一个这种Pod，那说明这个节点是正常的。
-</li>
+
 
 其中，删除节点（Node）上多余的Pod非常简单，直接调用Kubernetes API就可以了。
 
@@ -180,12 +180,12 @@ spec:
 
 而在这里，我定义的nodeAffinity的含义是：
 
-<li>
+
 requiredDuringSchedulingIgnoredDuringExecution：它的意思是说，这个nodeAffinity必须在每次调度的时候予以考虑。同时，这也意味着你可以设置在某些情况下不考虑这个nodeAffinity；
-</li>
-<li>
+
+
 这个Pod，将来只允许运行在“`metadata.name`”是“node-geektime”的节点上。
-</li>
+
 
 在这里，你应该注意到nodeAffinity的定义，可以支持更加丰富的语法，比如operator: In（即：部分匹配；如果你定义operator: Equal，就是完全匹配），这也正是nodeAffinity会取代nodeSelector的原因之一。
 

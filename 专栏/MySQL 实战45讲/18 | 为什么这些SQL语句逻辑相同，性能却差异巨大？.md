@@ -87,23 +87,23 @@ mysql&gt; select * from tradelog where tradeid=110717;
 
 那么，现在这里就有两个问题：
 
-<li>
+
 数据类型转换的规则是什么？
-</li>
-<li>
+
+
 为什么有数据类型转换，就需要走全索引扫描？
-</li>
+
 
 先来看第一个问题，你可能会说，数据库里面类型这么多，这种数据类型转换规则更多，我记不住，应该怎么办呢？
 
 这里有一个简单的方法，看 select “10” &gt; 9的结果：
 
-<li>
+
 如果规则是“将字符串转成数字”，那么就是做数字比较，结果应该是1；
-</li>
-<li>
+
+
 如果规则是“将数字转成字符串”，那么就是做字符串比较，结果应该是0。
-</li>
+
 
 验证结果如图3所示。
 
@@ -181,12 +181,12 @@ mysql&gt; select d.* from tradelog l, trade_detail d where d.tradeid=l.tradeid a
 
 我们一起来看下这个结果：
 
-<li>
+
 第一行显示优化器会先在交易记录表tradelog上查到id=2的行，这个步骤用上了主键索引，rows=1表示只扫描一行；
-</li>
-<li>
+
+
 第二行key=NULL，表示没有用上交易详情表trade_detail上的tradeid索引，进行了全表扫描。
-</li>
+
 
 在这个执行计划里，是从tradelog表中取tradeid字段，再去trade_detail表里查询匹配字段。因此，我们把tradelog称为驱动表，把trade_detail称为被驱动表，把tradeid称为关联字段。
 

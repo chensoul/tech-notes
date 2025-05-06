@@ -4,22 +4,22 @@
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/86/99/868380a89077c45c6ac1918794632399.png?wh=1862x504" alt="图片"></p><p>注意命令行里要用 <code>-n kube-system</code> 参数，表示检查“kube-system”名字空间里的Pod，至于名字空间是什么，我们后面会讲到。</p><h3>Node里的组件有哪些</h3><p>Master里的apiserver、scheduler等组件需要获取节点的各种信息才能够作出管理决策，那这些信息该怎么来呢？</p><p>这就需要Node里的3个组件了，分别是<strong>kubelet</strong>、<strong>kube-proxy</strong>、<strong>container-runtime</strong>。</p><p>kubelet是Node的代理，负责管理Node相关的绝大部分操作，Node上只有它能够与apiserver通信，实现状态报告、命令下发、启停容器等功能，相当于是Node上的一个“小管家”。</p><p>kube-proxy的作用有点特别，它是Node的网络代理，只负责管理容器的网络通信，简单来说就是为Pod转发TCP/UDP数据包，相当于是专职的“小邮差”。</p><p>第三个组件container-runtime我们就比较熟悉了，它是容器和镜像的实际使用者，在kubelet的指挥下创建容器，管理Pod的生命周期，是真正干活的“苦力”。</p><p><img src="https://static001.geekbang.org/resource/image/87/35/87bab507ce8381325e85570f3bc1d935.jpg?wh=1278x704" alt="图片"></p><p>我们一定要注意，因为Kubernetes的定位是容器编排平台，所以它没有限定container-runtime必须是Docker，完全可以替换成任何符合标准的其他容器运行时，例如containerd、CRI-O等等，只不过在这里我们使用的是Docker。</p><p>这3个组件中只有kube-proxy被容器化了，而kubelet因为必须要管理整个节点，容器化会限制它的能力，所以它必须在container-runtime之外运行。</p><p>使用 <code>minikube ssh</code> 命令登录到节点后，可以用 <code>docker ps</code> 看到kube-proxy：</p><pre><code class="language-plain">minikube ssh
 docker ps |grep kube-proxy
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/1f/a4/1f08490fd66c91b4f5d2172d2d93eba4.png?wh=1920x141" alt="图片"></p><p>而kubelet用 <code>docker ps</code> 是找不到的，需要用操作系统的 <code>ps</code> 命令：</p><pre><code class="language-plain">ps -ef|grep kubelet
-</code></pre><p><img src="https://static001.geekbang.org/resource/image/ay/28/ayy7246d222fa723f5f4a1f8edc0eb28.png?wh=1920x95" alt="图片"></p><p>现在，我们再把Node里的组件和Master里的组件放在一起来看，就能够明白Kubernetes的大致工作流程了：</p><ul>
-<li>每个Node上的kubelet会定期向apiserver上报节点状态，apiserver再存到etcd里。</li>
-<li>每个Node上的kube-proxy实现了TCP/UDP反向代理，让容器对外提供稳定的服务。</li>
-<li>scheduler通过apiserver得到当前的节点状态，调度Pod，然后apiserver下发命令给某个Node的kubelet，kubelet调用container-runtime启动容器。</li>
-<li>controller-manager也通过apiserver得到实时的节点状态，监控可能的异常情况，再使用相应的手段去调节恢复。</li>
-</ul><p><img src="https://static001.geekbang.org/resource/image/34/b7/344e0c6dc2141b12f99e61252110f6b7.png?wh=1278x704" alt="图片"></p><p>其实，这和我们在Kubernetes出现之前的操作流程也差不了多少，但Kubernetes的高明之处就在于把这些都抽象化规范化了。</p><p>于是，这些组件就好像是无数个不知疲倦的运维工程师，把原先繁琐低效的人力工作搬进了高效的计算机里，就能够随时发现集群里的变化和异常，再互相协作，维护集群的健康状态。</p><h3>插件（Addons）有哪些</h3><p>只要服务器节点上运行了apiserver、scheduler、kubelet、kube-proxy、container-runtime等组件，就可以说是一个功能齐全的Kubernetes集群了。</p><p>不过就像Linux一样，操作系统提供的基础功能虽然“可用”，但想达到“好用”的程度，还是要再安装一些附加功能，这在Kubernetes里就是插件（Addon）。</p><p>由于Kubernetes本身的设计非常灵活，所以就有大量的插件用来扩展、增强它对应用和集群的管理能力。</p><p>minikube也支持很多的插件，使用命令 <code>minikube addons list</code> 就可以查看插件列表：</p><pre><code class="language-plain">minikube addons list
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/ay/28/ayy7246d222fa723f5f4a1f8edc0eb28.png?wh=1920x95" alt="图片"></p><p>现在，我们再把Node里的组件和Master里的组件放在一起来看，就能够明白Kubernetes的大致工作流程了：</p>
+每个Node上的kubelet会定期向apiserver上报节点状态，apiserver再存到etcd里。
+每个Node上的kube-proxy实现了TCP/UDP反向代理，让容器对外提供稳定的服务。
+scheduler通过apiserver得到当前的节点状态，调度Pod，然后apiserver下发命令给某个Node的kubelet，kubelet调用container-runtime启动容器。
+controller-manager也通过apiserver得到实时的节点状态，监控可能的异常情况，再使用相应的手段去调节恢复。
+<p><img src="https://static001.geekbang.org/resource/image/34/b7/344e0c6dc2141b12f99e61252110f6b7.png?wh=1278x704" alt="图片"></p><p>其实，这和我们在Kubernetes出现之前的操作流程也差不了多少，但Kubernetes的高明之处就在于把这些都抽象化规范化了。</p><p>于是，这些组件就好像是无数个不知疲倦的运维工程师，把原先繁琐低效的人力工作搬进了高效的计算机里，就能够随时发现集群里的变化和异常，再互相协作，维护集群的健康状态。</p><h3>插件（Addons）有哪些</h3><p>只要服务器节点上运行了apiserver、scheduler、kubelet、kube-proxy、container-runtime等组件，就可以说是一个功能齐全的Kubernetes集群了。</p><p>不过就像Linux一样，操作系统提供的基础功能虽然“可用”，但想达到“好用”的程度，还是要再安装一些附加功能，这在Kubernetes里就是插件（Addon）。</p><p>由于Kubernetes本身的设计非常灵活，所以就有大量的插件用来扩展、增强它对应用和集群的管理能力。</p><p>minikube也支持很多的插件，使用命令 <code>minikube addons list</code> 就可以查看插件列表：</p><pre><code class="language-plain">minikube addons list
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/db/2f/dbd588f0cca1ffb93a702a6d4c8f4c2f.png?wh=1920x987" alt="图片"></p><p>插件中我个人认为比较重要的有两个：<strong>DNS</strong>和<strong>Dashboard</strong>。</p><p>DNS你应该比较熟悉吧，它在Kubernetes集群里实现了域名解析服务，能够让我们以域名而不是IP地址的方式来互相通信，是服务发现和负载均衡的基础。由于它对微服务、服务网格等架构至关重要，所以基本上是Kubernetes的必备插件。</p><p>Dashboard就是仪表盘，为Kubernetes提供了一个图形化的操作界面，非常直观友好，虽然大多数Kubernetes工作都是使用命令行kubectl，但有的时候在Dashboard上查看信息也是挺方便的。</p><p>你只要在minikube环境里执行一条简单的命令，就可以自动用浏览器打开Dashboard页面，而且还支持中文：</p><pre><code class="language-plain">minikube dashboard
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/60/e6/6077ff98a11705448f875ee00a1d8de6.png?wh=1920x957" alt="图片"></p><h2>小结</h2><p>好了，今天我们一起来研究了Kubernetes的内部架构和工作机制，可以看到它的功能非常完善，实现了大部分常见的运维管理工作，而且是全自动化的，能够节约大量的人力成本。</p><p>由于Kubernetes的抽象程度比较高，有很多陌生的新术语，不太好理解，所以我画了一张思维导图，你可以对照着再加深理解。</p><p><img src="https://static001.geekbang.org/resource/image/65/e1/65d38ac50b4f2f1fd4b6700d5b8e7be1.jpg?wh=1920x1096" alt="图片"></p><p>最后小结一下今天的要点：</p><ol>
-<li>Kubernetes能够在集群级别管理应用和服务器，可以认为是一种集群操作系统。它使用“控制面/数据面”的基本架构，Master节点实现管理控制功能，Worker节点运行具体业务。</li>
-<li>Kubernetes由很多模块组成，可分为核心的组件和选配的插件两类。</li>
-<li>Master里有4个组件，分别是apiserver、etcd、scheduler、controller-manager。</li>
-<li>Node里有3个组件，分别是kubelet、kube-proxy、container-runtime。</li>
-<li>通常必备的插件有DNS和Dashboard。</li>
+Kubernetes能够在集群级别管理应用和服务器，可以认为是一种集群操作系统。它使用“控制面/数据面”的基本架构，Master节点实现管理控制功能，Worker节点运行具体业务。
+Kubernetes由很多模块组成，可分为核心的组件和选配的插件两类。
+Master里有4个组件，分别是apiserver、etcd、scheduler、controller-manager。
+Node里有3个组件，分别是kubelet、kube-proxy、container-runtime。
+通常必备的插件有DNS和Dashboard。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>你觉得Kubernetes算得上是一种操作系统吗？和真正的操作系统相比有什么差异？</li>
-<li>说说你理解的Kubernetes组件的作用，你觉得哪几个最重要？</li>
+你觉得Kubernetes算得上是一种操作系统吗？和真正的操作系统相比有什么差异？
+说说你理解的Kubernetes组件的作用，你觉得哪几个最重要？
 </ol><p>欢迎积极留言或者提问，和其他同学一起参与讨论，我们下节课见。</p><p><img src="https://static001.geekbang.org/resource/image/63/e5/6390bdf6a447f77726866d95df1eafe5.jpg?wh=1920x2580" alt=""></p>
 <style>
     ul {
@@ -130,7 +130,7 @@ docker ps |grep kube-proxy
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -145,8 +145,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -161,8 +161,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/82/ec/99b480e8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -177,8 +177,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -193,8 +193,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/99/87/98ebb20e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -209,8 +209,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -225,8 +225,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/44/d8/708a0932.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -241,8 +241,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/55/51/c7bffc64.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -257,8 +257,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/51/8b/e3b827b7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -273,8 +273,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -289,8 +289,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/2xoGmvlQ9qfSibVpPJyyaEriavuWzXnuECrJITmGGHnGVuTibUuBho43Uib3Y5qgORHeSTxnOOSicxs0FV3HGvTpF0A/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -305,8 +305,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/f7/b1/982ea185.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -321,8 +321,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/WrANpwBMr6DsGAE207QVs0YgfthMXy3MuEKJxR8icYibpGDCI1YX4DcpDq1EsTvlP8ffK1ibJDvmkX9LUU4yE8X0w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -337,8 +337,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7e/25/3932dafd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -353,8 +353,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/cd/db/7467ad23.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -369,8 +369,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/f0/e9/1ff0a3d5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -385,8 +385,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/b5/46/2ac4b984.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -401,8 +401,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -417,8 +417,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -433,8 +433,8 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/63/1b/83ac7733.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -449,5 +449,4 @@ docker ps |grep kube-proxy
   </div>
 </div>
 </div>
-</li>
-</ul>
+

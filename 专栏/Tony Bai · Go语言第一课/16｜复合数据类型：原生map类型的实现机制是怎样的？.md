@@ -161,11 +161,11 @@ v, ok := m["key"]  → v, ok := runtime.mapaccess2(maptype, m, "key")
 
 // 删除某键
 delete(m, "key")   → runtime.mapdelete(maptype, m, “key”)
-</code></pre><p>这是map类型在Go运行时层实现的示意图：</p><p><img src="https://static001.geekbang.org/resource/image/c9/1f/c9b2d05ffcb3yyd3b7da06763ee46a1f.jpg?wh=1980x1080" alt=""></p><p>我们可以看到，和切片的运行时表示图相比，map的实现示意图显然要复杂得多。接下来，我们结合这张图来简要描述一下map在运行时层的实现原理。我们重点讲解一下一个map变量在初始状态、进行键值对操作后，以及在并发场景下的Go运行时层的实现原理。</p><h3>初始状态</h3><p>从图中我们可以看到，与语法层面 map 类型变量（m）一一对应的是*runtime.hmap 的实例，即runtime.hmap类型的指针，也就是我们前面在讲解 map 类型变量传递开销时提到的 <strong>map 类型的描述符</strong>。hmap 类型是 map 类型的头部结构（header），它存储了后续 map 类型操作所需的所有信息，包括：</p><p><img src="https://static001.geekbang.org/resource/image/2f/04/2f5ff72fbdb17cf0cb0b8da102c3e604.jpg?wh=1920x1047" alt="图片"></p><p>真正用来存储键值对数据的是桶，也就是bucket，每个bucket中存储的是Hash值低bit位数值相同的元素，默认的元素个数为 BUCKETSIZE（值为 8，Go 1.17版本中在$GOROOT/src/cmd/compile/internal/reflectdata/reflect.go中定义，与 runtime/map.go 中常量 bucketCnt 保持一致）。</p><p>当某个bucket（比如buckets[0])的8个空槽slot）都填满了，且map尚未达到扩容的条件的情况下，运行时会建立overflow bucket，并将这个overflow bucket挂在上面bucket（如buckets[0]）末尾的overflow指针上，这样两个buckets形成了一个链表结构，直到下一次map扩容之前，这个结构都会一直存在。</p><p>从图中我们可以看到，每个bucket由三部分组成，从上到下分别是tophash区域、key存储区域和value存储区域。</p><ul>
-<li><strong>tophash区域</strong></li>
-</ul><p>当我们向map插入一条数据，或者是从map按key查询数据的时候，运行时都会使用哈希函数对key做哈希运算，并获得一个哈希值（hashcode）。这个hashcode非常关键，运行时会把hashcode“一分为二”来看待，其中低位区的值用于选定bucket，高位区的值用于在某个bucket中确定key的位置。我把这一过程整理成了下面这张示意图，你理解起来可以更直观：</p><p><img src="https://static001.geekbang.org/resource/image/ef/08/ef729c06cd8fa19f29f89df212c7ea08.jpg?wh=1920x1047" alt="图片"></p><p>因此，每个bucket的tophash区域其实是用来快速定位key位置的，这样就避免了逐个key进行比较这种代价较大的操作。尤其是当key是size较大的字符串类型时，好处就更突出了。这是一种以空间换时间的思路。</p><ul>
-<li><strong>key存储区域</strong></li>
-</ul><p>接着，我们看tophash区域下面是一块连续的内存区域，存储的是这个bucket承载的所有key数据。运行时在分配bucket的时候需要知道key的Size。那么运行时是如何知道key的size的呢？</p><p>当我们声明一个map类型变量，比如var m map[string]int时，Go运行时就会为这个变量对应的特定map类型，生成一个runtime.maptype实例。如果这个实例已经存在，就会直接复用。maptype实例的结构是这样的：</p><pre><code class="language-plain">type maptype struct {
+</code></pre><p>这是map类型在Go运行时层实现的示意图：</p><p><img src="https://static001.geekbang.org/resource/image/c9/1f/c9b2d05ffcb3yyd3b7da06763ee46a1f.jpg?wh=1980x1080" alt=""></p><p>我们可以看到，和切片的运行时表示图相比，map的实现示意图显然要复杂得多。接下来，我们结合这张图来简要描述一下map在运行时层的实现原理。我们重点讲解一下一个map变量在初始状态、进行键值对操作后，以及在并发场景下的Go运行时层的实现原理。</p><h3>初始状态</h3><p>从图中我们可以看到，与语法层面 map 类型变量（m）一一对应的是*runtime.hmap 的实例，即runtime.hmap类型的指针，也就是我们前面在讲解 map 类型变量传递开销时提到的 <strong>map 类型的描述符</strong>。hmap 类型是 map 类型的头部结构（header），它存储了后续 map 类型操作所需的所有信息，包括：</p><p><img src="https://static001.geekbang.org/resource/image/2f/04/2f5ff72fbdb17cf0cb0b8da102c3e604.jpg?wh=1920x1047" alt="图片"></p><p>真正用来存储键值对数据的是桶，也就是bucket，每个bucket中存储的是Hash值低bit位数值相同的元素，默认的元素个数为 BUCKETSIZE（值为 8，Go 1.17版本中在$GOROOT/src/cmd/compile/internal/reflectdata/reflect.go中定义，与 runtime/map.go 中常量 bucketCnt 保持一致）。</p><p>当某个bucket（比如buckets[0])的8个空槽slot）都填满了，且map尚未达到扩容的条件的情况下，运行时会建立overflow bucket，并将这个overflow bucket挂在上面bucket（如buckets[0]）末尾的overflow指针上，这样两个buckets形成了一个链表结构，直到下一次map扩容之前，这个结构都会一直存在。</p><p>从图中我们可以看到，每个bucket由三部分组成，从上到下分别是tophash区域、key存储区域和value存储区域。</p>
+<strong>tophash区域</strong>
+<p>当我们向map插入一条数据，或者是从map按key查询数据的时候，运行时都会使用哈希函数对key做哈希运算，并获得一个哈希值（hashcode）。这个hashcode非常关键，运行时会把hashcode“一分为二”来看待，其中低位区的值用于选定bucket，高位区的值用于在某个bucket中确定key的位置。我把这一过程整理成了下面这张示意图，你理解起来可以更直观：</p><p><img src="https://static001.geekbang.org/resource/image/ef/08/ef729c06cd8fa19f29f89df212c7ea08.jpg?wh=1920x1047" alt="图片"></p><p>因此，每个bucket的tophash区域其实是用来快速定位key位置的，这样就避免了逐个key进行比较这种代价较大的操作。尤其是当key是size较大的字符串类型时，好处就更突出了。这是一种以空间换时间的思路。</p>
+<strong>key存储区域</strong>
+<p>接着，我们看tophash区域下面是一块连续的内存区域，存储的是这个bucket承载的所有key数据。运行时在分配bucket的时候需要知道key的Size。那么运行时是如何知道key的size的呢？</p><p>当我们声明一个map类型变量，比如var m map[string]int时，Go运行时就会为这个变量对应的特定map类型，生成一个runtime.maptype实例。如果这个实例已经存在，就会直接复用。maptype实例的结构是这样的：</p><pre><code class="language-plain">type maptype struct {
     typ        _type
     key        *_type
     elem       *_type
@@ -175,9 +175,9 @@ delete(m, "key")   → runtime.mapdelete(maptype, m, “key”)
     bucketsize uint16 // size of bucket
     flags      uint32
 } 
-</code></pre><p>我们可以看到，这个实例包含了我们需要的map类型中的所有"元信息"。我们前面提到过，编译器会把语法层面的map操作重写成运行时对应的函数调用，这些运行时函数都有一个共同的特点，那就是第一个参数都是maptype指针类型的参数。</p><p><strong>Go运行时就是利用maptype参数中的信息确定key的类型和大小的。</strong>map所用的hash函数也存放在maptype.key.alg.hash(key, hmap.hash0)中。同时maptype的存在也让Go中所有map类型都共享一套运行时map操作函数，而不是像C++那样为每种map类型创建一套map操作函数，这样就节省了对最终二进制文件空间的占用。</p><ul>
-<li><strong>value存储区域</strong></li>
-</ul><p>我们再接着看key存储区域下方的另外一块连续的内存区域，这个区域存储的是key对应的value。和key一样，这个区域的创建也是得到了maptype中信息的帮助。Go运行时采用了把key和value分开存储的方式，而不是采用一个kv接着一个kv的kv紧邻方式存储，这带来的其实是算法上的复杂性，但却减少了因内存对齐带来的内存浪费。</p><p>我们以map[int8]int64为例，看看下面的存储空间利用率对比图：</p><p><img src="https://static001.geekbang.org/resource/image/5b/5a/5bce9aaebc78bdea7d2999606891325a.jpg?wh=1920x1047" alt="图片"></p><p>你会看到，当前Go运行时使用的方案内存利用效率很高，而kv紧邻存储的方案在map[int8]int64这样的例子中内存浪费十分严重，它的内存利用率是72/128=56.25%，有近一半的空间都浪费掉了。</p><p>另外，还有一点我要跟你强调一下，如果key或value的数据长度大于一定数值，那么运行时不会在bucket中直接存储数据，而是会存储key或value数据的指针。目前Go运行时定义的最大key和value的长度是这样的：</p><pre><code class="language-plain">// $GOROOT/src/runtime/map.go
+</code></pre><p>我们可以看到，这个实例包含了我们需要的map类型中的所有"元信息"。我们前面提到过，编译器会把语法层面的map操作重写成运行时对应的函数调用，这些运行时函数都有一个共同的特点，那就是第一个参数都是maptype指针类型的参数。</p><p><strong>Go运行时就是利用maptype参数中的信息确定key的类型和大小的。</strong>map所用的hash函数也存放在maptype.key.alg.hash(key, hmap.hash0)中。同时maptype的存在也让Go中所有map类型都共享一套运行时map操作函数，而不是像C++那样为每种map类型创建一套map操作函数，这样就节省了对最终二进制文件空间的占用。</p>
+<strong>value存储区域</strong>
+<p>我们再接着看key存储区域下方的另外一块连续的内存区域，这个区域存储的是key对应的value。和key一样，这个区域的创建也是得到了maptype中信息的帮助。Go运行时采用了把key和value分开存储的方式，而不是采用一个kv接着一个kv的kv紧邻方式存储，这带来的其实是算法上的复杂性，但却减少了因内存对齐带来的内存浪费。</p><p>我们以map[int8]int64为例，看看下面的存储空间利用率对比图：</p><p><img src="https://static001.geekbang.org/resource/image/5b/5a/5bce9aaebc78bdea7d2999606891325a.jpg?wh=1920x1047" alt="图片"></p><p>你会看到，当前Go运行时使用的方案内存利用效率很高，而kv紧邻存储的方案在map[int8]int64这样的例子中内存浪费十分严重，它的内存利用率是72/128=56.25%，有近一半的空间都浪费掉了。</p><p>另外，还有一点我要跟你强调一下，如果key或value的数据长度大于一定数值，那么运行时不会在bucket中直接存储数据，而是会存储key或value数据的指针。目前Go运行时定义的最大key和value的长度是这样的：</p><pre><code class="language-plain">// $GOROOT/src/runtime/map.go
 const (
     maxKeySize  = 128
     maxElemSize = 128
@@ -242,11 +242,11 @@ func main() {
 </code></pre><p>运行这个示例程序，我们会得到下面的执行错误结果：</p><pre><code class="language-plain">fatal error: concurrent map iteration and map write
 </code></pre><p>不过，如果我们仅仅是进行并发读，map是没有问题的。而且，Go 1.9版本中引入了支持并发写安全的sync.Map类型，可以在并发读写的场景下替换掉map。如果你有这方面的需求，可以查看一下<a href="https://pkg.go.dev/sync#Map">sync.Map的手册</a>。</p><p>另外，你要注意，考虑到map可以自动扩容，map中数据元素的value位置可能在这一过程中发生变化，所以<strong>Go不允许获取map中value的地址，这个约束是在编译期间就生效的</strong>。下面这段代码就展示了Go编译器识别出获取map中value地址的语句后，给出的编译错误：</p><pre><code class="language-plain">p := &amp;m[key]  // cannot take the address of m[key]
 fmt.Println(p)
-</code></pre><h2>小结</h2><p>好了，今天的课讲到这里就结束了。这一节课，我们讲解了Go语言的另一类十分常用的复合数据类型：map。</p><p>在Go语言中，map类型是一个无序的键值对的集合。它有两种类型元素，一类是键（key），另一类是值（value）。在一个map中，键是唯一的，在集合中不能有两个相同的键。Go也是通过这两种元素类型来表示一个map类型，你要记得这个通用的map类型表示：“map[key_type]value_type”。</p><p>map类型对key元素的类型是有约束的，它要求key元素的类型必须支持"==“和”!="两个比较操作符。value元素的类型可以是任意的。</p><p>不过，map类型变量声明后必须对它进行初始化后才能操作。map类型支持插入新键值对、查找和数据读取、删除键值对、遍历map中的键值数据等操作，Go为开发者提供了十分简单的操作接口。这里要你重点记住的是，我们在查找和数据读取时一定要使用“comma ok”惯用法。此外，map变量在函数与方法间传递的开销很小，并且在函数内部通过map描述符对map的修改会对函数外部可见。</p><p>另外，map的内部实现要比切片复杂得多，它是由Go编译器与运行时联合实现的。Go编译器在编译阶段会将语法层面的map操作，重写为运行时对应的函数调用。Go运行时则采用了高效的算法实现了map类型的各类操作，这里我建议你要结合Go项目源码来理解map的具体实现。</p><p>和切片一样，map是Go语言提供的重要数据类型，也是Gopher日常Go编码是最常使用的类型之一。我们在日常使用map的场合要把握住下面几个要点，不要走弯路：</p><ul>
-<li>不要依赖map的元素遍历顺序；</li>
-<li>map不是线程安全的，不支持并发读写；</li>
-<li>不要尝试获取map中元素（value）的地址。</li>
-</ul><h2>思考题</h2><p>通过上面的学习，我们知道对map类型进行遍历所得到的键的次序是随机的，那么我想请你思考并实现一个方法，让我们能对map的进行稳定次序遍历？期待在留言区看到你的想法。</p><p>欢迎你把这节课分享给更多对Go语言map类型感兴趣的朋友。我是Tony Bai，我们下节课见。</p>
+</code></pre><h2>小结</h2><p>好了，今天的课讲到这里就结束了。这一节课，我们讲解了Go语言的另一类十分常用的复合数据类型：map。</p><p>在Go语言中，map类型是一个无序的键值对的集合。它有两种类型元素，一类是键（key），另一类是值（value）。在一个map中，键是唯一的，在集合中不能有两个相同的键。Go也是通过这两种元素类型来表示一个map类型，你要记得这个通用的map类型表示：“map[key_type]value_type”。</p><p>map类型对key元素的类型是有约束的，它要求key元素的类型必须支持"==“和”!="两个比较操作符。value元素的类型可以是任意的。</p><p>不过，map类型变量声明后必须对它进行初始化后才能操作。map类型支持插入新键值对、查找和数据读取、删除键值对、遍历map中的键值数据等操作，Go为开发者提供了十分简单的操作接口。这里要你重点记住的是，我们在查找和数据读取时一定要使用“comma ok”惯用法。此外，map变量在函数与方法间传递的开销很小，并且在函数内部通过map描述符对map的修改会对函数外部可见。</p><p>另外，map的内部实现要比切片复杂得多，它是由Go编译器与运行时联合实现的。Go编译器在编译阶段会将语法层面的map操作，重写为运行时对应的函数调用。Go运行时则采用了高效的算法实现了map类型的各类操作，这里我建议你要结合Go项目源码来理解map的具体实现。</p><p>和切片一样，map是Go语言提供的重要数据类型，也是Gopher日常Go编码是最常使用的类型之一。我们在日常使用map的场合要把握住下面几个要点，不要走弯路：</p>
+不要依赖map的元素遍历顺序；
+map不是线程安全的，不支持并发读写；
+不要尝试获取map中元素（value）的地址。
+<h2>思考题</h2><p>通过上面的学习，我们知道对map类型进行遍历所得到的键的次序是随机的，那么我想请你思考并实现一个方法，让我们能对map的进行稳定次序遍历？期待在留言区看到你的想法。</p><p>欢迎你把这节课分享给更多对Go语言map类型感兴趣的朋友。我是Tony Bai，我们下节课见。</p>
 <style>
     ul {
       list-style: none;
@@ -356,7 +356,7 @@ fmt.Println(p)
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -371,8 +371,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/lfMbV8RibrhFxjILg4550cZiaay64mTh5Zibon64TiaicC8jDMEK7VaXOkllHSpS582Jl1SUHm6Jib2AticVlHibiaBvUOA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -387,8 +387,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLBFkSq1oiaEMRjtyyv4ZpCI0OuaSsqs04ODm0OkZF6QhsAh3SvqhxibS2n7PLAVZE3QRSn5Hic0DyXg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -403,8 +403,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/83/c9/5d03981a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -419,8 +419,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/26/38/ef063dc2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -435,8 +435,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -451,8 +451,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -467,8 +467,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/ce/d7/5315f6ce.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -483,8 +483,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLBFkSq1oiaEMRjtyyv4ZpCI0OuaSsqs04ODm0OkZF6QhsAh3SvqhxibS2n7PLAVZE3QRSn5Hic0DyXg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -499,8 +499,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5c/da/0a8bc27b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -515,8 +515,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/0c/46/dfe32cf4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -531,8 +531,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/26/bc/18314557.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -547,8 +547,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/f2/f5/b82f410d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -563,8 +563,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/98/b1/f89a84d0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -579,8 +579,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/6e/6f/44da923f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -595,8 +595,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -611,8 +611,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/8c/60/58b6c39e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -627,8 +627,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/2e/ca/469f7266.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -643,8 +643,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/9d/cd/c21a01dd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -659,8 +659,8 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -675,5 +675,4 @@ fmt.Println(p)
   </div>
 </div>
 </div>
-</li>
-</ul>
+

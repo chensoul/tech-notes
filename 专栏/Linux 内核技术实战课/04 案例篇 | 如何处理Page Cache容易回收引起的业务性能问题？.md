@@ -168,22 +168,22 @@ Mlocked:         1000000 kB
 
 如上图所示，memory cgroup提供了几个内存水位控制线memory.{min, low, high, max} 。
 
-<li>
+
 <p>**memory.max**<br>
 这是指memory cgroup内的进程最多能够分配的内存，如果不设置的话，就默认不做内存大小的限制。</p>
-</li>
-<li>
+
+
 <p>**memory.high**<br>
 如果设置了这一项，当memory cgroup内进程的内存使用量超过了该值后就会立即被回收掉，所以这一项的目的是为了尽快的回收掉不活跃的Page Cache。</p>
-</li>
-<li>
+
+
 <p>**memory.low**<br>
 这一项是用来保护重要数据的，当memory cgroup内进程的内存使用量低于了该值后，在内存紧张触发回收后就会先去回收不属于该memory cgroup的Page Cache，等到其他的Page Cache都被回收掉后再来回收这些Page Cache。</p>
-</li>
-<li>
+
+
 <p>**memory.min**<br>
 这一项同样是用来保护重要数据的，只不过与memoy.low有所不同的是，当memory cgroup内进程的内存使用量低于该值后，即使其他不在该memory cgroup内的Page Cache都被回收完了也不会去回收这些Page Cache，可以理解为这是用来保护最高优先级的数据的。</p>
-</li>
+
 
 那么，**如果你想要保护你的Page Cache不被回收，你就可以考虑将你的业务进程放在一个memory cgroup中，然后设置memory.{min,low} 来进行保护；与之相反，如果你想要尽快释放你的Page Cache，那你可以考虑设置memory.high来及时的释放掉不活跃的Page Cache。**
 

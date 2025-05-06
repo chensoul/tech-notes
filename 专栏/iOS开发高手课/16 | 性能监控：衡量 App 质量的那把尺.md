@@ -20,12 +20,12 @@ Instruments的功能非常强大，比如说Energy Log就是用来监控耗电�
 
 除了对各种性能问题进行监控外，**最新版本的Instruments 10还有以下两大优势**：
 
-<li>
+
 Instruments基于os_signpost 架构，可以支持所有平台。
-</li>
-<li>
+
+
 Instruments由于标准界面（Standard UI）和分析核心（Analysis Core）技术，使得我们可以非常方便地进行自定义性能监测工具的开发。当你想要给Instruments内置的工具换个交互界面，或者新创建一个工具的时候，都可以通过自定义工具这个功能来实现。
-</li>
+
 
 其实，Instruments的这些优势也不是与生俱来的，都是伴随着移动开发技术的发展而演进来的。就比如说自定义工具的功能吧，这是因为App的规模越来越大，往往还涉及到多个团队合作开发、集成多个公司SDK的情况，所以我们就需要以黑盒的方式来进行性能监控。这样的需求，也就迫使苹果公司要不断地增强Instruments的功能。
 
@@ -33,15 +33,15 @@ Instruments由于标准界面（Standard UI）和分析核心（Analysis Core）
 
 **开发一款自定义Instruments工具**，主要包括以下这几个步骤：
 
-<li>
+
 在Xcode中，点击File &gt; New &gt; Project；
-</li>
-<li>
+
+
 在弹出的Project模板选择界面，将其设置为macOS；
-</li>
-<li>
+
+
 选择 Instruments Package，点击后即可开始自定义工具的开发了。如下图所示。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/e5/be/e51d838fda0c79ff0a48566ec87305be.png" alt="">
 
@@ -53,15 +53,15 @@ Instruments由于标准界面（Standard UI）和分析核心（Analysis Core）
 
 Analysis Core收集和处理数据的过程，可以大致分为以下这三步：
 
-<li>
+
 处理我们配置好的各种数据表，并申请存储空间 store；
-</li>
-<li>
+
+
 store去找数据提供者，如果不能直接找到，就会通过 Modeler 接收其他store 的输入信号进行合成；
-</li>
-<li>
+
+
 store 获得数据源后，会进行 Binding Solution 工作来优化数据处理过程。
-</li>
+
 
 这里需要强调的是，在我们通过store找到的这些数据提供者中，对开发者来说最重要的就是 os_signpost。os_signpost 的主要作用，是让你可以在程序中通过编写代码来获取数据。你可以在工程中的任何地方通过 os_signpost API ，将需要的数据提供给 Analysis Core。
 
@@ -111,12 +111,12 @@ os_signpost(.end, log: parsingLog, name:&quot;Parsing&quot;, &quot;Parsing finis
 
 对于线上性能监控，我们需要先明白两个原则：
 
-<li>
+
 监控代码不要侵入到业务代码中；
-</li>
-<li>
+
+
 采用性能消耗最小的监控方案。
-</li>
+
 
 线上性能监控，主要集中在CPU使用率、FPS的帧率和内存这三个方面。接下来，我们就分别从这三个方面展开讨论吧。
 

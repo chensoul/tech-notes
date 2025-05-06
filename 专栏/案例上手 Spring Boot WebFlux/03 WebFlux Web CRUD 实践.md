@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -180,12 +180,12 @@
 
 </code></pre>
 <p>如目录结构，我们需要编写的内容按顺序有：</p>
-<ul>
-<li>对象</li>
-<li>数据访问层类 Repository</li>
-<li>处理器类 Handler</li>
-<li>控制器类 Controller</li>
-</ul>
+
+对象
+数据访问层类 Repository
+处理器类 Handler
+控制器类 Controller
+
 <h3>对象</h3>
 <p>新建包 org.spring.springboot.domain，作为编写城市实体对象类。新建城市（City）对象 City，代码如下：</p>
 <pre><code>/**
@@ -346,23 +346,23 @@ public class CityHandler {
 
 </code></pre>
 <p>从返回值可以看出，Mono 和 Flux 适用于两个场景，即：</p>
-<ul>
-<li>Mono：实现发布者，并返回 0 或 1 个元素，即单对象。</li>
-<li>Flux：实现发布者，并返回 N 个元素，即 List 列表对象。</li>
-</ul>
+
+Mono：实现发布者，并返回 0 或 1 个元素，即单对象。
+Flux：实现发布者，并返回 N 个元素，即 List 列表对象。
+
 <p>有人会问，这为啥不直接返回对象，比如返回 City/Long/List。原因是，直接使用 Flux 和 Mono 是非阻塞写法，相当于回调方式。利用函数式可以减少了回调，因此会看不到相关接口。这恰恰是 WebFlux 的好处：集合了非阻塞 + 异步。</p>
 <h3>Mono</h3>
 <p>Mono 是什么？ 官方描述如下：A Reactive Streams Publisher with basic rx operators that completes successfully by emitting an element, or with an error.</p>
 <p>Mono 是响应流 Publisher 具有基础 rx 操作符，可以成功发布元素或者错误，如图所示：</p>
 <p><img src="assets/9e9fc4aec1e96acb7cdc942aad0967e21523363.png" alt="file" /></p>
 <p>Mono 常用的方法有：</p>
-<ul>
-<li>Mono.create()：使用 MonoSink 来创建 Mono。</li>
-<li>Mono.justOrEmpty()：从一个 Optional 对象或 null 对象中创建 Mono。</li>
-<li>Mono.error()：创建一个只包含错误消息的 Mono。</li>
-<li>Mono.never()：创建一个不包含任何消息通知的 Mono。</li>
-<li>Mono.delay()：在指定的延迟时间之后，创建一个 Mono，产生数字 0 作为唯一值。</li>
-</ul>
+
+Mono.create()：使用 MonoSink 来创建 Mono。
+Mono.justOrEmpty()：从一个 Optional 对象或 null 对象中创建 Mono。
+Mono.error()：创建一个只包含错误消息的 Mono。
+Mono.never()：创建一个不包含任何消息通知的 Mono。
+Mono.delay()：在指定的延迟时间之后，创建一个 Mono，产生数字 0 作为唯一值。
+
 <h3>Flux</h3>
 <p>Flux 是什么？官方描述如下：A Reactive Streams Publisher with rx operators that emits 0 to N elements, and then completes (successfully or with an error).</p>
 <p>Flux 是响应流 Publisher 具有基础 rx 操作符，可以成功发布 0 到 N 个元素或者错误。Flux 其实是 Mono 的一个补充，如图所示：</p>
@@ -416,22 +416,22 @@ public class CityWebFluxController {
 <p>这里按照 REST 风格实现接口，那具体什么是 REST?</p>
 <p>REST 是属于 Web 自身的一种架构风格，是在 HTTP 1.1 规范下实现的。Representational State Transfer 全称翻译为表现层状态转化。Resource：资源。比如 newsfeed；Representational：表现形式，比如用 JSON、富文本等；State Transfer：状态变化。通过 HTTP 动作实现。</p>
 <p>理解 REST，要明白五个关键要素：</p>
-<ul>
-<li>资源（Resource）</li>
-<li>资源的表述（Representation）</li>
-<li>状态转移（State Transfer）</li>
-<li>统一接口（Uniform Interface）</li>
-<li>超文本驱动（Hypertext Driven）</li>
-</ul>
+
+资源（Resource）
+资源的表述（Representation）
+状态转移（State Transfer）
+统一接口（Uniform Interface）
+超文本驱动（Hypertext Driven）
+
 <p>6 个主要特性：</p>
-<ul>
-<li>面向资源（Resource Oriented）</li>
-<li>可寻址（Addressability）</li>
-<li>连通性（Connectedness）</li>
-<li>无状态（Statelessness）</li>
-<li>统一接口（Uniform Interface）</li>
-<li>超文本驱动（Hypertext Driven）</li>
-</ul>
+
+面向资源（Resource Oriented）
+可寻址（Addressability）
+连通性（Connectedness）
+无状态（Statelessness）
+统一接口（Uniform Interface）
+超文本驱动（Hypertext Driven）
+
 <p>具体这里就不一一展开，<a href="http://www.infoq.com/cn/articles/understanding-restful-style">详见这里</a>。</p>
 <p>请求入参、Filters、重定向、Conversion、formatting 等知识会和以前 MVC 的知识一样，<a href="https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html">详情见文档</a>。</p>
 <h3>运行工程</h3>

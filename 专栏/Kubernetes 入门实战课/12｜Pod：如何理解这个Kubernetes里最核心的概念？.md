@@ -8,13 +8,13 @@ metadata:
 &nbsp; &nbsp; env: demo
 &nbsp; &nbsp; region: north
 &nbsp; &nbsp; tier: back
-</code></pre><p>“metadata”一般写上 <code>name</code> 和 <code>labels</code> 就足够了，而“spec”字段由于需要管理、维护Pod这个Kubernetes的基本调度单元，里面有非常多的关键信息，今天我介绍最重要的“<strong>containers</strong>”，其他的hostname、restartPolicy等字段你可以课后自己查阅文档学习。</p><p>“containers”是一个数组，里面的每一个元素又是一个container对象，也就是容器。</p><p>和Pod一样，container对象也必须要有一个 <code>name</code> 表示名字，然后当然还要有一个 <code>image</code> 字段来说明它使用的镜像，这两个字段是必须要有的，否则Kubernetes会报告数据验证错误。</p><p>container对象的其他字段基本上都可以和“入门篇”学过的Docker、容器技术对应，理解起来难度不大，我就随便列举几个：</p><ul>
-<li><strong>ports</strong>：列出容器对外暴露的端口，和Docker的 <code>-p</code> 参数有点像。</li>
-<li><strong>imagePullPolicy</strong>：指定镜像的拉取策略，可以是Always/Never/IfNotPresent，一般默认是IfNotPresent，也就是说只有本地不存在才会远程拉取镜像，可以减少网络消耗。</li>
-<li><strong>env</strong>：定义Pod的环境变量，和Dockerfile里的 <code>ENV</code> 指令有点类似，但它是运行时指定的，更加灵活可配置。</li>
-<li><strong>command</strong>：定义容器启动时要执行的命令，相当于Dockerfile里的 <code>ENTRYPOINT</code> 指令。</li>
-<li><strong>args</strong>：它是command运行时的参数，相当于Dockerfile里的 <code>CMD</code> 指令，这两个命令和Docker的含义不同，要特别注意。</li>
-</ul><p>现在我们就来编写“busy-pod”的spec部分，添加 <code>env</code>、<code>command</code>、<code>args</code> 等字段：</p><pre><code class="language-yaml">spec:
+</code></pre><p>“metadata”一般写上 <code>name</code> 和 <code>labels</code> 就足够了，而“spec”字段由于需要管理、维护Pod这个Kubernetes的基本调度单元，里面有非常多的关键信息，今天我介绍最重要的“<strong>containers</strong>”，其他的hostname、restartPolicy等字段你可以课后自己查阅文档学习。</p><p>“containers”是一个数组，里面的每一个元素又是一个container对象，也就是容器。</p><p>和Pod一样，container对象也必须要有一个 <code>name</code> 表示名字，然后当然还要有一个 <code>image</code> 字段来说明它使用的镜像，这两个字段是必须要有的，否则Kubernetes会报告数据验证错误。</p><p>container对象的其他字段基本上都可以和“入门篇”学过的Docker、容器技术对应，理解起来难度不大，我就随便列举几个：</p>
+<strong>ports</strong>：列出容器对外暴露的端口，和Docker的 <code>-p</code> 参数有点像。
+<strong>imagePullPolicy</strong>：指定镜像的拉取策略，可以是Always/Never/IfNotPresent，一般默认是IfNotPresent，也就是说只有本地不存在才会远程拉取镜像，可以减少网络消耗。
+<strong>env</strong>：定义Pod的环境变量，和Dockerfile里的 <code>ENV</code> 指令有点类似，但它是运行时指定的，更加灵活可配置。
+<strong>command</strong>：定义容器启动时要执行的命令，相当于Dockerfile里的 <code>ENTRYPOINT</code> 指令。
+<strong>args</strong>：它是command运行时的参数，相当于Dockerfile里的 <code>CMD</code> 指令，这两个命令和Docker的含义不同，要特别注意。
+<p>现在我们就来编写“busy-pod”的spec部分，添加 <code>env</code>、<code>command</code>、<code>args</code> 等字段：</p><pre><code class="language-yaml">spec:
 &nbsp; containers:
 &nbsp; - image: busybox:latest
 &nbsp; &nbsp; name: busy
@@ -39,13 +39,13 @@ kubectl delete -f busy-pod.yml
 kubectl cp a.txt ngx-pod:/tmp
 </code></pre><p>不过 <code>kubectl exec</code> 的命令格式与Docker有一点小差异，需要在Pod后面加上 <code>--</code>，把kubectl的命令与Shell命令分隔开，你在用的时候需要小心一些：</p><pre><code class="language-plain">kubectl exec -it ngx-pod -- sh
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/34/6b/343756ee45533a056fdca97f9fe2dd6b.png?wh=1920x402" alt="图片"></p><h2>小结</h2><p>好了，今天我们一起学习了Kubernetes里最核心最基本的概念Pod，知道了应该如何使用YAML来定制Pod，还有如何使用kubectl命令来创建、删除、查看、调试Pod。</p><p>Pod屏蔽了容器的一些底层细节，同时又具有足够的控制管理能力，比起容器的“细粒度”、虚拟机的“粗粒度”，Pod可以说是“中粒度”，灵活又轻便，非常适合在云计算领域作为应用调度的基本单元，因而成为了Kubernetes世界里构建一切业务的“原子”。</p><p>今天的知识要点我简单列在了下面：</p><ol>
-<li>现实中经常会有多个进程密切协作才能完成任务的应用，而仅使用容器很难描述这种关系，所以就出现了Pod，它“打包”一个或多个容器，保证里面的进程能够被整体调度。</li>
-<li>Pod是Kubernetes管理应用的最小单位，其他的所有概念都是从Pod衍生出来的。</li>
-<li>Pod也应该使用YAML“声明式”描述，关键字段是“spec.containers”，列出名字、镜像、端口等要素，定义内部的容器运行状态。</li>
-<li>操作Pod的命令很多与Docker类似，如 <code>kubectl run</code>、<code>kubectl cp</code>、<code>kubectl exec</code> 等，但有的命令有些小差异，使用的时候需要注意。</li>
+现实中经常会有多个进程密切协作才能完成任务的应用，而仅使用容器很难描述这种关系，所以就出现了Pod，它“打包”一个或多个容器，保证里面的进程能够被整体调度。
+Pod是Kubernetes管理应用的最小单位，其他的所有概念都是从Pod衍生出来的。
+Pod也应该使用YAML“声明式”描述，关键字段是“spec.containers”，列出名字、镜像、端口等要素，定义内部的容器运行状态。
+操作Pod的命令很多与Docker类似，如 <code>kubectl run</code>、<code>kubectl cp</code>、<code>kubectl exec</code> 等，但有的命令有些小差异，使用的时候需要注意。
 </ol><p>虽然Pod是Kubernetes的核心概念，非常重要，但事实上在Kubernetes里通常并不会直接创建Pod，因为它只是对容器做了简单的包装，比较脆弱，离复杂的业务需求还有些距离，需要Job、CronJob、Deployment等其他对象增添更多的功能才能投入生产使用。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>如果没有Pod，直接使用容器来管理应用会有什么样的麻烦？</li>
-<li>你觉得Pod和容器之间有什么区别和联系？</li>
+如果没有Pod，直接使用容器来管理应用会有什么样的麻烦？
+你觉得Pod和容器之间有什么区别和联系？
 </ol><p>欢迎留言参与讨论，如果有收获也欢迎你分享给朋友一起学习。我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/f5/9b/f5f2bfcdc2ce5a94ae5113262351e89b.jpg?wh=1920x2868" alt="图片"></p>
 <style>
     ul {
@@ -156,7 +156,7 @@ kubectl cp a.txt ngx-pod:/tmp
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -171,8 +171,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/b5/46/2ac4b984.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -187,8 +187,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/cd/dc/75ca619d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -203,8 +203,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -219,8 +219,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/f7/b1/982ea185.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -235,8 +235,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/22/7a/a9/279c0c39.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -251,8 +251,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/e4/15/31fc864e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -267,8 +267,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/71/48/44df7f4e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -283,8 +283,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2c/7e/f1efd18b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -299,8 +299,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/mvvjzu4D1gJl8c9lnMMTatOou2EUsWCe4XiclyUOwk2rUawwqd6KKV8z9bSRMnD3ibQPUCIZUQOAkKAaKX0Ncaibw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -315,8 +315,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q3auHgzwzM5viafIuiciaZxwUwhuibXfyeW74wHhJDq13JYibcvktLTznAVgNibCMSArDIEkjSbDmNC1JObUpIwMJibhg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -331,8 +331,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -347,8 +347,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/30/c1/2dde6700.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -363,8 +363,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -379,8 +379,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/WrANpwBMr6DsGAE207QVs0YgfthMXy3MuEKJxR8icYibpGDCI1YX4DcpDq1EsTvlP8ffK1ibJDvmkX9LUU4yE8X0w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -395,8 +395,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/2xoGmvlQ9qfSibVpPJyyaEriavuWzXnuECrJITmGGHnGVuTibUuBho43Uib3Y5qgORHeSTxnOOSicxs0FV3HGvTpF0A/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -411,8 +411,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/2xoGmvlQ9qfSibVpPJyyaEriavuWzXnuECrJITmGGHnGVuTibUuBho43Uib3Y5qgORHeSTxnOOSicxs0FV3HGvTpF0A/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -427,8 +427,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/30/c1/2dde6700.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -443,8 +443,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/65/dc/d0c58ce5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -459,8 +459,8 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/97/a9/e3b097f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -475,5 +475,4 @@ kubectl cp a.txt ngx-pod:/tmp
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -25,195 +25,195 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;搭建学习环境准备篇.md">01 搭建学习环境准备篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;RocketMQ&#32;核心概念扫盲篇.md">02 RocketMQ 核心概念扫盲篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;消息发送&#32;API&#32;详解与版本变迁说明.md">03 消息发送 API 详解与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;结合实际应用场景谈消息发送.md">04 结合实际应用场景谈消息发送.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;消息发送核心参数与工作原理详解.md">05 消息发送核心参数与工作原理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;消息发送常见错误与解决方案.md">06 消息发送常见错误与解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;事务消息使用及方案选型思考.md">07 事务消息使用及方案选型思考.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;消息消费&#32;API&#32;与版本变迁说明.md">08 消息消费 API 与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;DefaultMQPushConsumer&#32;核心参数与工作原理.md">09 DefaultMQPushConsumer 核心参数与工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;DefaultMQPushConsumer&#32;使用示例与注意事项.md">10 DefaultMQPushConsumer 使用示例与注意事项.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;DefaultLitePullConsumer&#32;核心参数与实战.md">11 DefaultLitePullConsumer 核心参数与实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;结合实际场景再聊&#32;DefaultLitePullConsumer&#32;的使用.md">12 结合实际场景再聊 DefaultLitePullConsumer 的使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;结合实际场景顺序消费、消息过滤实战.md">13 结合实际场景顺序消费、消息过滤实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;消息消费积压问题排查实战.md">14 消息消费积压问题排查实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;RocketMQ&#32;常用命令实战.md">15 RocketMQ 常用命令实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;RocketMQ&#32;集群性能摸高.md">16 RocketMQ 集群性能摸高.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;RocketMQ&#32;集群性能调优.md">17 RocketMQ 集群性能调优.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;RocketMQ&#32;集群平滑运维.md">18 RocketMQ 集群平滑运维.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;RocketMQ&#32;集群监控（一）.md">19 RocketMQ 集群监控（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;RocketMQ&#32;集群监控（二）.md">20 RocketMQ 集群监控（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;RocketMQ&#32;集群告警.md">21 RocketMQ 集群告警.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;RocketMQ&#32;集群踩坑记.md">22 RocketMQ 集群踩坑记.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="23&#32;消息轨迹、ACL&#32;与多副本搭建.md">23 消息轨迹、ACL 与多副本搭建.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;RocketMQ-Console&#32;常用页面指标获取逻辑.md">24 RocketMQ-Console 常用页面指标获取逻辑.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;RocketMQ&#32;Nameserver&#32;背后的设计理念.md">25 RocketMQ Nameserver 背后的设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Java&#32;并发编程实战.md">26 Java 并发编程实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（一）.md">27 从 RocketMQ 学基于文件的编程模式（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（二）.md">28 从 RocketMQ 学基于文件的编程模式（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;从&#32;RocketMQ&#32;学&#32;Netty&#32;网络编程技巧.md">29 从 RocketMQ 学 Netty 网络编程技巧.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;RocketMQ&#32;学习方法之我见.md">30 RocketMQ 学习方法之我见.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -526,12 +526,12 @@
 </tbody>
 </table>
 <h4><strong>消息轨迹结语</strong></h4>
-<ul>
-<li>在生产环境中使用消息轨迹，可以将 MQ 集群的一台 Broker 用于收集消息轨迹，避免轨迹消息对集群性能造成影响。</li>
-<li>开源版本的消息轨迹中缺少消费的 IP 信息，即：我们不能查询到消息被哪个机器消费掉了。</li>
-<li>开源版本中的消息轨迹组织格式用 char 字符拼接，解析使用数组，扩展性和兼容性不太友好。</li>
-<li>基于此两位作者负责的 RocketMQ 集群中均未开启轨迹功能。</li>
-</ul>
+
+在生产环境中使用消息轨迹，可以将 MQ 集群的一台 Broker 用于收集消息轨迹，避免轨迹消息对集群性能造成影响。
+开源版本的消息轨迹中缺少消费的 IP 信息，即：我们不能查询到消息被哪个机器消费掉了。
+开源版本中的消息轨迹组织格式用 char 字符拼接，解析使用数组，扩展性和兼容性不太友好。
+基于此两位作者负责的 RocketMQ 集群中均未开启轨迹功能。
+
 <h3>ACL</h3>
 <h4><strong>ACL 含义</strong></h4>
 <p>访问控制表（Access Control List，ACL）描述用户或角色对资源的访问控制权限，RocketMQ 中的 ACL 见下表说明。</p>
@@ -1109,20 +1109,20 @@ accounts:
 <p>注册的钩子程序通过 NettyServerHandler 实现，在 Broker 当前的 channel 接收到客户端消息时执行校验逻辑，入口为 NettyServerHandler#channelRead0() 以及 processRequestCommand#doBeforeRpcHooks。规则校验的入口位于 PlainAccessValidator#validate 方法，下面是校验简图。</p>
 <p><img src="assets/20200921231728157.png" alt="img" /></p>
 <h4><strong>ACL 结语</strong></h4>
-<ul>
-<li>评估是否需要 ACL 通常大部分场景是不需要的，如果对数据敏感可以通过对内容加密实现。</li>
-<li>如果几千个资源（主题和消费组）都配置了 ACL 那么配置文件是庞大的。</li>
-<li>如果要用建议局部使用，比如：资金往来的主题、消费组等。</li>
-<li>基于此两位作者负责的 RocketMQ 集群均未开启 ACL 功能。</li>
-</ul>
+
+评估是否需要 ACL 通常大部分场景是不需要的，如果对数据敏感可以通过对内容加密实现。
+如果几千个资源（主题和消费组）都配置了 ACL 那么配置文件是庞大的。
+如果要用建议局部使用，比如：资金往来的主题、消费组等。
+基于此两位作者负责的 RocketMQ 集群均未开启 ACL 功能。
+
 <h3>多副本搭建</h3>
 <h4><strong>多副本意义</strong></h4>
 <p>RocketMQ 开源版本在 4.5.0 版本开始支持多副本（DLedger），在以前的版本中只支持主从模式。</p>
 <p>主从模式存在的问题：</p>
-<ul>
-<li>如果主节点挂掉了不能动态切换到从节点，这一组 Broker 节点不能提供写入服务；</li>
-<li>设置主从异步复制模式时，如果主节点意外挂掉，数据可能没有全部复制到从节点，存在数据丢失风险。</li>
-</ul>
+
+如果主节点挂掉了不能动态切换到从节点，这一组 Broker 节点不能提供写入服务；
+设置主从异步复制模式时，如果主节点意外挂掉，数据可能没有全部复制到从节点，存在数据丢失风险。
+
 <p>多副本使用 Raft 协议在节点意外掉线后能够完成自动选主，提高集群的高可用和保证数据的一致性。</p>
 <h4><strong>多副本搭建</strong></h4>
 <p>由于 DLedger 基于 Raft 协议开发的功能，需要过半数选举，最少 3 个节点组成一个 Raft 组。</p>
@@ -1234,20 +1234,20 @@ RaftCluster       RaftNode00              1     x.x.x.x:30911     V4_7_0        
 </table>
 <h4><strong>参考资料</strong></h4>
 <p>Raft 的学习资料见下面链接，供学习使用。DLedger 的源码解读，见《RocketMQ 技术内幕》第二版。</p>
-<ul>
-<li><a href="https://github.com/brandonwang001/raft_translation/blob/master/raft_translation.pdf">Raft 论文译文</a></li>
-<li><a href="https://ramcloud.atlassian.net/wiki/download/attachments/6586375/raft.pdf">Raft 论文原文</a></li>
-<li><a href="http://thesecretlivesofdata.com/raft/">Raft 动画</a></li>
-<li><a href="https://raft.github.io/">Raft 可视化操作</a></li>
-</ul>
+
+<a href="https://github.com/brandonwang001/raft_translation/blob/master/raft_translation.pdf">Raft 论文译文</a>
+<a href="https://ramcloud.atlassian.net/wiki/download/attachments/6586375/raft.pdf">Raft 论文原文</a>
+<a href="http://thesecretlivesofdata.com/raft/">Raft 动画</a>
+<a href="https://raft.github.io/">Raft 可视化操作</a>
+
 <h4><strong>多副本结语</strong></h4>
 <p>使用多副本时，请做好压测，压测的 TPS 是否满足业务的需求，作者曾做过多副本压测与主从异步的 TPS 有相当大的差距。</p>
 <p>在 TPS 满足的情况下，建议使用多副本架构，尤其是支付类可以优先使用。</p>
 <p>如果线上已经存在了主从默认的架构如何升级到 DLedger 模式呢？</p>
 <ol>
-<li>可以参考前面平滑扩所容的方式，将多副本组成的 Raft 组加入到原集群中</li>
-<li>关闭原主从架构节点的写入权限</li>
-<li>在过了日志存储时间后，将主从架构节点下线</li>
+可以参考前面平滑扩所容的方式，将多副本组成的 Raft 组加入到原集群中
+关闭原主从架构节点的写入权限
+在过了日志存储时间后，将主从架构节点下线
 </ol>
 </div>
                     </div>

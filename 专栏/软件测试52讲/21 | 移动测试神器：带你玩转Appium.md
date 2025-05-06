@@ -15,13 +15,13 @@
 
 在开始设计测试用例前，我们首先需要明确要开发的这两个自动化测试用例的具体测试需求。
 
-<li>
+
 <p>Native App的测试用例，被测App我选用了Appium官方的示例App，被测App的源代码可以通过“[https://github.com/appium/ios-test-app”](https://github.com/appium/ios-test-app%E2%80%9D) 下载，然后在Xcode中编译打包成TestApp.app。<br />
 具体的测试需求是输入两个数字，然后点击“Compute Sum”验证两个数字相加后的结果是否正确。</p>
-</li>
-<li>
+
+
 Web App的测试用例，具体需求是在iPhone上打开Safari浏览器，访问Appium的官方主页“[http://appium.io](http://appium.io)”，然后验证主页的标题是否是“Appium: Mobile App Automation Made Awesome”。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/39/26/391e5c3efac446b7cfc76fc1620cb626.png" alt="" />
 
@@ -38,27 +38,27 @@ Web App的测试用例，具体需求是在iPhone上打开Safari浏览器，访�
 
 在iOS模拟器中，手动执行测试用例的具体操作步骤如下：
 
-<li>
+
 启动Xcode，导入ios-test-app下的TestApp.xcodeproj项目。
-</li>
-<li>
+
+
 在Xcode中，打开“Preferences”中的“Components”，完成iOS 10.0 Simulator的下载。
-</li>
-<li>
+
+
 在Xcode的“General”页面，将TestApp的“Deployment Target”设置为10.0，并且将“Devices”设置为“iPhone”，如图2所示。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/fa/83/faad103928afd3011e0c273ce3e22683.png" alt="" />
 
-<li>
+
 在Xcode中编译运行TestApp，之后系统会自动启动iPhone模拟器，自动完成TestApp的安装，并在iPhone模拟器中自动启动TestApp。
-</li>
-<li>
+
+
 在TestApp中手动执行自定义的加法测试用例。
-</li>
-<li>
+
+
 退出TestApp，然后打开Safari浏览器，在Safari中执行访问Appium官方主页的测试用例。
-</li>
+
 
 至此，你已经搭建好了iOS开发环境，并且成功编译打包了TestApp。接下来，我们再一起来搭建Appium测试环境，并尝试在Appium中开发上述的两个测试用例。
 
@@ -86,9 +86,9 @@ Web App的测试用例，具体需求是在iPhone上打开Safari浏览器，访�
 
 <img src="https://static001.geekbang.org/resource/image/5a/b9/5a4a49e29f98057e75a7f18dedaac5b9.png" alt="" />
 
-<li>在Session配置界面完成必要参数的配置。这里你需要根据选用的移动设备操作系统、模拟器/真机等具体情况来完成参数配置工作。需要配置的参数主要包括：platformName、platformVersion、DeviceName、automationName和app。<br />
+在Session配置界面完成必要参数的配置。这里你需要根据选用的移动设备操作系统、模拟器/真机等具体情况来完成参数配置工作。需要配置的参数主要包括：platformName、platformVersion、DeviceName、automationName和app。<br />
 其中，automationName，指自动化测试框架的名称，这里采用了XCUITest；app指被测Native App的安装包路径，这里使用之前Xcode打包生成的TestApp.app，这样启动模拟器时，就会自动把TestApp.app安装到模拟器中。<br />
-其他参数的配置非常简单，我就不再一一展开了。</li>
+其他参数的配置非常简单，我就不再一一展开了。
 
 <img src="https://static001.geekbang.org/resource/image/b4/79/b4fbfef46aa425e1c2b1c51c6811b179.png" alt="" />
 
@@ -124,15 +124,15 @@ Web App的测试用例，具体需求是在iPhone上打开Safari浏览器，访�
 
 <img src="https://static001.geekbang.org/resource/image/32/2e/32022f6b0166fea7498cbbdc0af9a22e.png" alt="" />
 
-<li>代码第21行的@BeforeTest，第38行的@AfterTest，以及第44行的@Test，都是利用了TestNG的annotation对函数进行标注。<br />
+代码第21行的@BeforeTest，第38行的@AfterTest，以及第44行的@Test，都是利用了TestNG的annotation对函数进行标注。<br />
 标有@Test的函数是真正的测试主体，所有测试相关的步骤都放在这个函数中；<br />
 标有@ BeforeTest的函数会在@Test函数之前执行测试的相关准备工作，图中的代码用这个函数完成了DesiredCapabilities的设置，并用该Capabilities构造了iosdriver；<br />
-标有@ AfterTest的函数在@Test函数执行结束后执行，主要用于环境的清理和收尾，图示的代码用这个函数完成了iosdriver的退出操作。</li>
+标有@ AfterTest的函数在@Test函数执行结束后执行，主要用于环境的清理和收尾，图示的代码用这个函数完成了iosdriver的退出操作。
 - 代码的第24-33行构造了DesiredCapabilities对象，并对APPIUM_VERSION、PLATFORM_VERSION、PLATFORM_NAME、AUTOMATION_NAME、DEVICE_NAME和APP等参数进行了设置。其中APP的值是被测Native App安装包的绝对路径。
-<li>代码的第46-58行是测试用例的主体部分，主要分为三部分：<br />
+代码的第46-58行是测试用例的主体部分，主要分为三部分：<br />
 第47-50行通过iosdriver的findElementByAccessibilityId方法定义了页面上的四个元素，分别是输入参数框A、输入参数框B、计算按钮和加法结果显示框。代码中具体的AccessibilityId可以通过Inspector获取。<br />
 第53-55行通过自定义元素的操作执行加法运算。<br />
-第58行通过断言方法assertEquals验证加法运算的结果。</li>
+第58行通过断言方法assertEquals验证加法运算的结果。
 
 **第三步，为了运行这个TestNG的测试用例，我们需要再添加一个testng.xml文件，** 具体内容如图11所示。
 

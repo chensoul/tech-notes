@@ -1,29 +1,29 @@
 <audio title="24 _ Web 服务：Web 服务核心功能有哪些，如何实现？" src="https://static001.geekbang.org/resource/audio/e4/69/e4aaa191c0fc7174a8257ff4c4db5569.mp3" controls="controls"></audio> 
-<p>你好，我是孔令飞。从今天开始，我们进入实战第三站：服务开发。在这个部分，我会讲解 IAM项目各个服务的构建方式，帮助你掌握Go 开发阶段的各个技能点。</p><p>在Go项目开发中，绝大部分情况下，我们是在写能提供某种功能的后端服务，这些功能以RPC API 接口或者RESTful API接口的形式对外提供，能提供这两种API接口的服务也统称为Web服务。今天这一讲，我就通过介绍RESTful API风格的Web服务，来给你介绍下如何实现Web服务的核心功能。</p><p>那今天我们就来看下，Web服务的核心功能有哪些，以及如何开发这些功能。</p><h2>Web服务的核心功能</h2><p>Web服务有很多功能，为了便于你理解，我将这些功能分成了基础功能和高级功能两大类，并总结在了下面这张图中：</p><p><img src="https://static001.geekbang.org/resource/image/1a/2e/1a6d38450cdd0e115e505ab30113602e.jpg?wh=2248x1835" alt=""></p><p>下面，我就按图中的顺序，来串讲下这些功能。</p><p>要实现一个Web服务，首先我们要选择通信协议和通信格式。在Go项目开发中，有HTTP+JSON 和 gRPC+Protobuf两种组合可选。因为iam-apiserver主要提供的是REST风格的API接口，所以选择的是HTTP+JSON组合。</p><p><strong>Web服务最核心的功能是路由匹配。</strong>路由匹配其实就是根据<code>(HTTP方法, 请求路径)</code>匹配到处理这个请求的函数，最终由该函数处理这次请求，并返回结果，过程如下图所示：</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/1f/9d/1f5yydeffb32732e7d0e23a0a9cd369d.jpg?wh=2248x975" alt=""></p><p>一次HTTP请求经过路由匹配，最终将请求交由<code>Delete(c *gin.Context)</code>函数来处理。变量<code>c</code>中存放了这次请求的参数，在Delete函数中，我们可以进行参数解析、参数校验、逻辑处理，最终返回结果。</p><p>对于大型系统，可能会有很多个API接口，API接口随着需求的更新迭代，可能会有多个版本，为了便于管理，我们需要<strong>对路由进行分组</strong>。</p><p>有时候，我们需要在一个服务进程中，同时开启HTTP服务的80端口和HTTPS的443端口，这样我们就可以做到：对内的服务，访问80端口，简化服务访问复杂度；对外的服务，访问更为安全的HTTPS服务。显然，我们没必要为相同功能启动多个服务进程，所以这时候就需要Web服务能够支持<strong>一进程多服务</strong>的功能。</p><p>我们开发Web服务最核心的诉求是：输入一些参数，校验通过后，进行业务逻辑处理，然后返回结果。所以Web服务还应该能够进行<strong>参数解析</strong>、<strong>参数校验</strong>、<strong>逻辑处理</strong>、<strong>返回结果</strong>。这些都是Web服务的业务处理功能。</p><p>上面这些是Web服务的基本功能，此外，我们还需要支持一些高级功能。</p><p>在进行HTTP请求时，经常需要针对每一次请求都设置一些通用的操作，比如添加Header、添加RequestID、统计请求次数等，这就要求我们的Web服务能够支持<strong>中间件</strong>特性。</p><p>为了保证系统安全，对于每一个请求，我们都需要进行<strong>认证</strong>。Web服务中，通常有两种认证方式，一种是基于用户名和密码，一种是基于Token。认证通过之后，就可以继续处理请求了。</p><p>为了方便定位和跟踪某一次请求，需要支持<strong>RequestID</strong>，定位和跟踪RequestID主要是为了排障。</p><p>最后，当前的软件架构中，很多采用了前后端分离的架构。在前后端分离的架构中，前端访问地址和后端访问地址往往是不同的，浏览器为了安全，会针对这种情况设置跨域请求，所以Web服务需要能够处理浏览器的<strong>跨域</strong>请求。</p><p>到这里，我就把Web服务的基础功能和高级功能串讲了一遍。当然，上面只介绍了Web服务的核心功能，还有很多其他的功能，你可以通过学习<a href="https://github.com/gin-gonic/gin">Gin的官方文档</a>来了解。</p><p>你可以看到，Web服务有很多核心功能，这些功能我们可以基于net/http包自己封装。但在实际的项目开发中， 我们更多会选择使用基于net/http包进行封装的优秀开源Web框架。本实战项目选择了Gin框架。</p><p>接下来，我们主要看下Gin框架是如何实现以上核心功能的，这些功能我们在实际的开发中可以直接拿来使用。</p><h2>为什么选择Gin框架？</h2><p>优秀的Web框架有很多，我们为什么要选择Gin呢？在回答这个问题之前，我们先来看下选择Web框架时的关注点。</p><p>在选择Web框架时，我们可以关注如下几点：</p><ul>
-<li>路由功能；</li>
-<li>是否具备middleware/filter能力；</li>
-<li>HTTP 参数（path、query、form、header、body）解析和返回；</li>
-<li>性能和稳定性；</li>
-<li>使用复杂度；</li>
-<li>社区活跃度。</li>
-</ul><p>按 GitHub Star 数来排名，当前比较火的 Go Web 框架有 Gin、Beego、Echo、Revel 、Martini。经过调研，我从中选择了Gin框架，原因是Gin具有如下特性：</p><ul>
-<li>轻量级，代码质量高，性能比较高；</li>
-<li>项目目前很活跃，并有很多可用的 Middleware；</li>
-<li>作为一个 Web 框架，功能齐全，使用起来简单。</li>
-</ul><p>那接下来，我就先详细介绍下Gin框架。</p><p><a href="https://github.com/gin-gonic/gin">Gin</a>是用Go语言编写的Web框架，功能完善，使用简单，性能很高。Gin核心的路由功能是通过一个定制版的<a href="https://github.com/julienschmidt/httprouter">HttpRouter</a>来实现的，具有很高的路由性能。</p><p>Gin有很多功能，这里我给你列出了它的一些核心功能：</p><ul>
-<li>支持HTTP方法：GET、POST、PUT、PATCH、DELETE、OPTIONS。</li>
-<li>支持不同位置的HTTP参数：路径参数（path）、查询字符串参数（query）、表单参数（form）、HTTP头参数（header）、消息体参数（body）。</li>
-<li>支持HTTP路由和路由分组。</li>
-<li>支持middleware和自定义middleware。</li>
-<li>支持自定义Log。</li>
-<li>支持binding和validation，支持自定义validator。可以bind如下参数：query、path、body、header、form。</li>
-<li>支持重定向。</li>
-<li>支持basic auth middleware。</li>
-<li>支持自定义HTTP配置。</li>
-<li>支持优雅关闭。</li>
-<li>支持HTTP2。</li>
-<li>支持设置和获取cookie。</li>
-</ul><h2>Gin是如何支持Web服务基础功能的？</h2><p>接下来，我们先通过一个具体的例子，看下Gin是如何支持Web服务基础功能的，后面再详细介绍这些功能的用法。</p><p>我们创建一个webfeature目录，用来存放示例代码。因为要演示HTTPS的用法，所以需要创建证书文件。具体可以分为两步。</p><p>第一步，执行以下命令创建证书：</p><pre><code>cat &lt;&lt; 'EOF' &gt; ca.pem
+<p>你好，我是孔令飞。从今天开始，我们进入实战第三站：服务开发。在这个部分，我会讲解 IAM项目各个服务的构建方式，帮助你掌握Go 开发阶段的各个技能点。</p><p>在Go项目开发中，绝大部分情况下，我们是在写能提供某种功能的后端服务，这些功能以RPC API 接口或者RESTful API接口的形式对外提供，能提供这两种API接口的服务也统称为Web服务。今天这一讲，我就通过介绍RESTful API风格的Web服务，来给你介绍下如何实现Web服务的核心功能。</p><p>那今天我们就来看下，Web服务的核心功能有哪些，以及如何开发这些功能。</p><h2>Web服务的核心功能</h2><p>Web服务有很多功能，为了便于你理解，我将这些功能分成了基础功能和高级功能两大类，并总结在了下面这张图中：</p><p><img src="https://static001.geekbang.org/resource/image/1a/2e/1a6d38450cdd0e115e505ab30113602e.jpg?wh=2248x1835" alt=""></p><p>下面，我就按图中的顺序，来串讲下这些功能。</p><p>要实现一个Web服务，首先我们要选择通信协议和通信格式。在Go项目开发中，有HTTP+JSON 和 gRPC+Protobuf两种组合可选。因为iam-apiserver主要提供的是REST风格的API接口，所以选择的是HTTP+JSON组合。</p><p><strong>Web服务最核心的功能是路由匹配。</strong>路由匹配其实就是根据<code>(HTTP方法, 请求路径)</code>匹配到处理这个请求的函数，最终由该函数处理这次请求，并返回结果，过程如下图所示：</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/1f/9d/1f5yydeffb32732e7d0e23a0a9cd369d.jpg?wh=2248x975" alt=""></p><p>一次HTTP请求经过路由匹配，最终将请求交由<code>Delete(c *gin.Context)</code>函数来处理。变量<code>c</code>中存放了这次请求的参数，在Delete函数中，我们可以进行参数解析、参数校验、逻辑处理，最终返回结果。</p><p>对于大型系统，可能会有很多个API接口，API接口随着需求的更新迭代，可能会有多个版本，为了便于管理，我们需要<strong>对路由进行分组</strong>。</p><p>有时候，我们需要在一个服务进程中，同时开启HTTP服务的80端口和HTTPS的443端口，这样我们就可以做到：对内的服务，访问80端口，简化服务访问复杂度；对外的服务，访问更为安全的HTTPS服务。显然，我们没必要为相同功能启动多个服务进程，所以这时候就需要Web服务能够支持<strong>一进程多服务</strong>的功能。</p><p>我们开发Web服务最核心的诉求是：输入一些参数，校验通过后，进行业务逻辑处理，然后返回结果。所以Web服务还应该能够进行<strong>参数解析</strong>、<strong>参数校验</strong>、<strong>逻辑处理</strong>、<strong>返回结果</strong>。这些都是Web服务的业务处理功能。</p><p>上面这些是Web服务的基本功能，此外，我们还需要支持一些高级功能。</p><p>在进行HTTP请求时，经常需要针对每一次请求都设置一些通用的操作，比如添加Header、添加RequestID、统计请求次数等，这就要求我们的Web服务能够支持<strong>中间件</strong>特性。</p><p>为了保证系统安全，对于每一个请求，我们都需要进行<strong>认证</strong>。Web服务中，通常有两种认证方式，一种是基于用户名和密码，一种是基于Token。认证通过之后，就可以继续处理请求了。</p><p>为了方便定位和跟踪某一次请求，需要支持<strong>RequestID</strong>，定位和跟踪RequestID主要是为了排障。</p><p>最后，当前的软件架构中，很多采用了前后端分离的架构。在前后端分离的架构中，前端访问地址和后端访问地址往往是不同的，浏览器为了安全，会针对这种情况设置跨域请求，所以Web服务需要能够处理浏览器的<strong>跨域</strong>请求。</p><p>到这里，我就把Web服务的基础功能和高级功能串讲了一遍。当然，上面只介绍了Web服务的核心功能，还有很多其他的功能，你可以通过学习<a href="https://github.com/gin-gonic/gin">Gin的官方文档</a>来了解。</p><p>你可以看到，Web服务有很多核心功能，这些功能我们可以基于net/http包自己封装。但在实际的项目开发中， 我们更多会选择使用基于net/http包进行封装的优秀开源Web框架。本实战项目选择了Gin框架。</p><p>接下来，我们主要看下Gin框架是如何实现以上核心功能的，这些功能我们在实际的开发中可以直接拿来使用。</p><h2>为什么选择Gin框架？</h2><p>优秀的Web框架有很多，我们为什么要选择Gin呢？在回答这个问题之前，我们先来看下选择Web框架时的关注点。</p><p>在选择Web框架时，我们可以关注如下几点：</p>
+路由功能；
+是否具备middleware/filter能力；
+HTTP 参数（path、query、form、header、body）解析和返回；
+性能和稳定性；
+使用复杂度；
+社区活跃度。
+<p>按 GitHub Star 数来排名，当前比较火的 Go Web 框架有 Gin、Beego、Echo、Revel 、Martini。经过调研，我从中选择了Gin框架，原因是Gin具有如下特性：</p>
+轻量级，代码质量高，性能比较高；
+项目目前很活跃，并有很多可用的 Middleware；
+作为一个 Web 框架，功能齐全，使用起来简单。
+<p>那接下来，我就先详细介绍下Gin框架。</p><p><a href="https://github.com/gin-gonic/gin">Gin</a>是用Go语言编写的Web框架，功能完善，使用简单，性能很高。Gin核心的路由功能是通过一个定制版的<a href="https://github.com/julienschmidt/httprouter">HttpRouter</a>来实现的，具有很高的路由性能。</p><p>Gin有很多功能，这里我给你列出了它的一些核心功能：</p>
+支持HTTP方法：GET、POST、PUT、PATCH、DELETE、OPTIONS。
+支持不同位置的HTTP参数：路径参数（path）、查询字符串参数（query）、表单参数（form）、HTTP头参数（header）、消息体参数（body）。
+支持HTTP路由和路由分组。
+支持middleware和自定义middleware。
+支持自定义Log。
+支持binding和validation，支持自定义validator。可以bind如下参数：query、path、body、header、form。
+支持重定向。
+支持basic auth middleware。
+支持自定义HTTP配置。
+支持优雅关闭。
+支持HTTP2。
+支持设置和获取cookie。
+<h2>Gin是如何支持Web服务基础功能的？</h2><p>接下来，我们先通过一个具体的例子，看下Gin是如何支持Web服务基础功能的，后面再详细介绍这些功能的用法。</p><p>我们创建一个webfeature目录，用来存放示例代码。因为要演示HTTPS的用法，所以需要创建证书文件。具体可以分为两步。</p><p>第一步，执行以下命令创建证书：</p><pre><code>cat &lt;&lt; 'EOF' &gt; ca.pem
 -----BEGIN CERTIFICATE-----
 MIICSjCCAbOgAwIBAgIJAJHGGR4dGioHMA0GCSqGSIb3DQEBCwUAMFYxCzAJBgNV
 BAYTAkFVMRMwEQYDVQQIEwpTb21lLVN0YXRlMSEwHwYDVQQKExhJbnRlcm5ldCBX
@@ -303,13 +303,13 @@ if err := eg.Wait(); err != nil {
 	// 4. 返回结果
 	c.JSON(http.StatusOK, product)
 }
-</code></pre><p>那这个时候，你可能会问：HTTP的请求参数可以存在不同的位置，Gin是如何解析的呢？这里，我们先来看下HTTP有哪些参数类型。HTTP具有以下5种参数类型：</p><ul>
-<li>路径参数（path）。例如<code>gin.Default().GET("/user/:name", nil)</code>， name就是路径参数。</li>
-<li>查询字符串参数（query）。例如<code>/welcome?firstname=Lingfei&amp;lastname=Kong</code>，firstname和lastname就是查询字符串参数。</li>
-<li>表单参数（form）。例如<code>curl -X POST -F 'username=colin' -F 'password=colin1234' http://mydomain.com/login</code>，username和password就是表单参数。</li>
-<li>HTTP头参数（header）。例如<code>curl -X POST -H 'Content-Type: application/json' -d '{"username":"colin","password":"colin1234"}' http://mydomain.com/login</code>，Content-Type就是HTTP头参数。</li>
-<li>消息体参数（body）。例如<code>curl -X POST -H 'Content-Type: application/json' -d '{"username":"colin","password":"colin1234"}' http://mydomain.com/login</code>，username和password就是消息体参数。</li>
-</ul><p>Gin提供了一些函数，来分别读取这些HTTP参数，每种类别会提供两种函数，一种函数可以直接读取某个参数的值，另外一种函数会把同类HTTP参数绑定到一个Go结构体中。比如，有如下路径参数：</p><pre><code>gin.Default().GET(&quot;/:name/:id&quot;, nil)
+</code></pre><p>那这个时候，你可能会问：HTTP的请求参数可以存在不同的位置，Gin是如何解析的呢？这里，我们先来看下HTTP有哪些参数类型。HTTP具有以下5种参数类型：</p>
+路径参数（path）。例如<code>gin.Default().GET("/user/:name", nil)</code>， name就是路径参数。
+查询字符串参数（query）。例如<code>/welcome?firstname=Lingfei&amp;lastname=Kong</code>，firstname和lastname就是查询字符串参数。
+表单参数（form）。例如<code>curl -X POST -F 'username=colin' -F 'password=colin1234' http://mydomain.com/login</code>，username和password就是表单参数。
+HTTP头参数（header）。例如<code>curl -X POST -H 'Content-Type: application/json' -d '{"username":"colin","password":"colin1234"}' http://mydomain.com/login</code>，Content-Type就是HTTP头参数。
+消息体参数（body）。例如<code>curl -X POST -H 'Content-Type: application/json' -d '{"username":"colin","password":"colin1234"}' http://mydomain.com/login</code>，username和password就是消息体参数。
+<p>Gin提供了一些函数，来分别读取这些HTTP参数，每种类别会提供两种函数，一种函数可以直接读取某个参数的值，另外一种函数会把同类HTTP参数绑定到一个Go结构体中。比如，有如下路径参数：</p><pre><code>gin.Default().GET(&quot;/:name/:id&quot;, nil)
 </code></pre><p>我们可以直接读取每个参数：</p><pre><code>name := c.Param(&quot;name&quot;)
 action := c.Param(&quot;action&quot;)
 </code></pre><p>也可以将所有的路径参数，绑定到结构体中：</p><pre><code>type Person struct {
@@ -321,36 +321,36 @@ if err := c.ShouldBindUri(&amp;person); err != nil {
     // normal code
     return
 }
-</code></pre><p>Gin在绑定参数时，是通过结构体的tag来判断要绑定哪类参数到结构体中的。这里要注意，不同的HTTP参数有不同的结构体tag。</p><ul>
-<li>路径参数：uri。</li>
-<li>查询字符串参数：form。</li>
-<li>表单参数：form。</li>
-<li>HTTP头参数：header。</li>
-<li>消息体参数：会根据Content-Type，自动选择使用json或者xml，也可以调用ShouldBindJSON或者ShouldBindXML直接指定使用哪个tag。</li>
-</ul><p>针对每种参数类型，Gin都有对应的函数来获取和绑定这些参数。这些函数都是基于如下两个函数进行封装的：</p><ol>
-<li>ShouldBindWith(obj interface{}, b binding.Binding) error</li>
+</code></pre><p>Gin在绑定参数时，是通过结构体的tag来判断要绑定哪类参数到结构体中的。这里要注意，不同的HTTP参数有不同的结构体tag。</p>
+路径参数：uri。
+查询字符串参数：form。
+表单参数：form。
+HTTP头参数：header。
+消息体参数：会根据Content-Type，自动选择使用json或者xml，也可以调用ShouldBindJSON或者ShouldBindXML直接指定使用哪个tag。
+<p>针对每种参数类型，Gin都有对应的函数来获取和绑定这些参数。这些函数都是基于如下两个函数进行封装的：</p><ol>
+ShouldBindWith(obj interface{}, b binding.Binding) error
 </ol><p>非常重要的一个函数，很多ShouldBindXXX函数底层都是调用ShouldBindWith函数来完成参数绑定的。该函数会根据传入的绑定引擎，将参数绑定到传入的结构体指针中，<strong>如果绑定失败，只返回错误内容，但不终止HTTP请求。</strong>ShouldBindWith支持多种绑定引擎，例如 binding.JSON、binding.Query、binding.Uri、binding.Header等，更详细的信息你可以参考 <a href="https://github.com/gin-gonic/gin/blob/v1.7.2/binding/binding.go#L72">binding.go</a>。</p><ol start="2">
-<li>MustBindWith(obj interface{}, b binding.Binding) error</li>
-</ol><p>这是另一个非常重要的函数，很多BindXXX函数底层都是调用MustBindWith函数来完成参数绑定的。该函数会根据传入的绑定引擎，将参数绑定到传入的结构体指针中，<strong>如果绑定失败，返回错误并终止请求，返回HTTP 400错误。</strong>MustBindWith所支持的绑定引擎跟ShouldBindWith函数一样。</p><p>Gin基于ShouldBindWith和MustBindWith这两个函数，又衍生出很多新的Bind函数。这些函数可以满足不同场景下获取HTTP参数的需求。Gin提供的函数可以获取5个类别的HTTP参数。</p><ul>
-<li>路径参数：ShouldBindUri、BindUri；</li>
-<li>查询字符串参数：ShouldBindQuery、BindQuery；</li>
-<li>表单参数：ShouldBind；</li>
-<li>HTTP头参数：ShouldBindHeader、BindHeader；</li>
-<li>消息体参数：ShouldBindJSON、BindJSON等。</li>
-</ul><p>每个类别的Bind函数，详细信息你可以参考<a href="https://github.com/marmotedu/geekbang-go/blob/master/Gin%E6%8F%90%E4%BE%9B%E7%9A%84Bind%E5%87%BD%E6%95%B0.md">Gin提供的Bind函数</a>。</p><p>这里要注意，Gin并没有提供类似ShouldBindForm、BindForm这类函数来绑定表单参数，但我们可以通过ShouldBind来绑定表单参数。当HTTP方法为GET时，ShouldBind只绑定Query类型的参数；当HTTP方法为POST时，会先检查content-type是否是json或者xml，如果不是，则绑定Form类型的参数。</p><p>所以，ShouldBind可以绑定Form类型的参数，但前提是HTTP方法是POST，并且content-type不是application/json、application/xml。</p><p>在Go项目开发中，我建议使用ShouldBindXXX，这样可以确保我们设置的HTTP Chain（Chain可以理解为一个HTTP请求的一系列处理插件）能够继续被执行。</p><h2>Gin是如何支持Web服务高级功能的？</h2><p>上面介绍了Web服务的基础功能，这里我再来介绍下高级功能。Web服务可以具备多个高级功能，但比较核心的高级功能是中间件、认证、RequestID、跨域和优雅关停。</p><h3>中间件</h3><p>Gin支持中间件，HTTP请求在转发到实际的处理函数之前，会被一系列加载的中间件进行处理。在中间件中，可以解析HTTP请求做一些逻辑处理，例如：跨域处理或者生成X-Request-ID并保存在context中，以便追踪某个请求。处理完之后，可以选择中断并返回这次请求，也可以选择将请求继续转交给下一个中间件处理。当所有的中间件都处理完之后，请求才会转给路由函数进行处理。具体流程如下图：</p><p><img src="https://static001.geekbang.org/resource/image/f0/80/f0783cb9ee8cffa969f846ebe8eae880.jpg?wh=2248x1655" alt=""></p><p>通过中间件，可以实现对所有请求都做统一的处理，提高开发效率，并使我们的代码更简洁。但是，因为所有的请求都需要经过中间件的处理，可能会增加请求延时。对于中间件特性，我有如下建议：</p><ul>
-<li>中间件做成可加载的，通过配置文件指定程序启动时加载哪些中间件。</li>
-<li>只将一些通用的、必要的功能做成中间件。</li>
-<li>在编写中间件时，一定要保证中间件的代码质量和性能。</li>
-</ul><p>在Gin中，可以通过gin.Engine的Use方法来加载中间件。中间件可以加载到不同的位置上，而且不同的位置作用范围也不同，例如：</p><pre><code>router := gin.New()
+MustBindWith(obj interface{}, b binding.Binding) error
+</ol><p>这是另一个非常重要的函数，很多BindXXX函数底层都是调用MustBindWith函数来完成参数绑定的。该函数会根据传入的绑定引擎，将参数绑定到传入的结构体指针中，<strong>如果绑定失败，返回错误并终止请求，返回HTTP 400错误。</strong>MustBindWith所支持的绑定引擎跟ShouldBindWith函数一样。</p><p>Gin基于ShouldBindWith和MustBindWith这两个函数，又衍生出很多新的Bind函数。这些函数可以满足不同场景下获取HTTP参数的需求。Gin提供的函数可以获取5个类别的HTTP参数。</p>
+路径参数：ShouldBindUri、BindUri；
+查询字符串参数：ShouldBindQuery、BindQuery；
+表单参数：ShouldBind；
+HTTP头参数：ShouldBindHeader、BindHeader；
+消息体参数：ShouldBindJSON、BindJSON等。
+<p>每个类别的Bind函数，详细信息你可以参考<a href="https://github.com/marmotedu/geekbang-go/blob/master/Gin%E6%8F%90%E4%BE%9B%E7%9A%84Bind%E5%87%BD%E6%95%B0.md">Gin提供的Bind函数</a>。</p><p>这里要注意，Gin并没有提供类似ShouldBindForm、BindForm这类函数来绑定表单参数，但我们可以通过ShouldBind来绑定表单参数。当HTTP方法为GET时，ShouldBind只绑定Query类型的参数；当HTTP方法为POST时，会先检查content-type是否是json或者xml，如果不是，则绑定Form类型的参数。</p><p>所以，ShouldBind可以绑定Form类型的参数，但前提是HTTP方法是POST，并且content-type不是application/json、application/xml。</p><p>在Go项目开发中，我建议使用ShouldBindXXX，这样可以确保我们设置的HTTP Chain（Chain可以理解为一个HTTP请求的一系列处理插件）能够继续被执行。</p><h2>Gin是如何支持Web服务高级功能的？</h2><p>上面介绍了Web服务的基础功能，这里我再来介绍下高级功能。Web服务可以具备多个高级功能，但比较核心的高级功能是中间件、认证、RequestID、跨域和优雅关停。</p><h3>中间件</h3><p>Gin支持中间件，HTTP请求在转发到实际的处理函数之前，会被一系列加载的中间件进行处理。在中间件中，可以解析HTTP请求做一些逻辑处理，例如：跨域处理或者生成X-Request-ID并保存在context中，以便追踪某个请求。处理完之后，可以选择中断并返回这次请求，也可以选择将请求继续转交给下一个中间件处理。当所有的中间件都处理完之后，请求才会转给路由函数进行处理。具体流程如下图：</p><p><img src="https://static001.geekbang.org/resource/image/f0/80/f0783cb9ee8cffa969f846ebe8eae880.jpg?wh=2248x1655" alt=""></p><p>通过中间件，可以实现对所有请求都做统一的处理，提高开发效率，并使我们的代码更简洁。但是，因为所有的请求都需要经过中间件的处理，可能会增加请求延时。对于中间件特性，我有如下建议：</p>
+中间件做成可加载的，通过配置文件指定程序启动时加载哪些中间件。
+只将一些通用的、必要的功能做成中间件。
+在编写中间件时，一定要保证中间件的代码质量和性能。
+<p>在Gin中，可以通过gin.Engine的Use方法来加载中间件。中间件可以加载到不同的位置上，而且不同的位置作用范围也不同，例如：</p><pre><code>router := gin.New()
 router.Use(gin.Logger(), gin.Recovery()) // 中间件作用于所有的HTTP请求
 v1 := router.Group(&quot;/v1&quot;).Use(gin.BasicAuth(gin.Accounts{&quot;foo&quot;: &quot;bar&quot;, &quot;colin&quot;: &quot;colin404&quot;})) // 中间件作用于v1 group
 v1.POST(&quot;/login&quot;, Login).Use(gin.BasicAuth(gin.Accounts{&quot;foo&quot;: &quot;bar&quot;, &quot;colin&quot;: &quot;colin404&quot;})) //中间件只作用于/v1/login API接口
-</code></pre><p>Gin框架本身支持了一些中间件。</p><ul>
-<li><strong>gin.Logger()：</strong>Logger中间件会将日志写到gin.DefaultWriter，gin.DefaultWriter默认为 os.Stdout。</li>
-<li><strong>gin.Recovery()：</strong>Recovery中间件可以从任何panic恢复，并且写入一个500状态码。</li>
-<li><strong>gin.CustomRecovery(handle gin.RecoveryFunc)：</strong>类似Recovery中间件，但是在恢复时还会调用传入的handle方法进行处理。</li>
-<li><strong>gin.BasicAuth()：</strong>HTTP请求基本认证（使用用户名和密码进行认证）。</li>
-</ul><p>另外，Gin还支持自定义中间件。中间件其实是一个函数，函数类型为gin.HandlerFunc，HandlerFunc底层类型为func(*Context)。如下是一个Logger中间件的实现：</p><pre><code>package main
+</code></pre><p>Gin框架本身支持了一些中间件。</p>
+<strong>gin.Logger()：</strong>Logger中间件会将日志写到gin.DefaultWriter，gin.DefaultWriter默认为 os.Stdout。
+<strong>gin.Recovery()：</strong>Recovery中间件可以从任何panic恢复，并且写入一个500状态码。
+<strong>gin.CustomRecovery(handle gin.RecoveryFunc)：</strong>类似Recovery中间件，但是在恢复时还会调用传入的handle方法进行处理。
+<strong>gin.BasicAuth()：</strong>HTTP请求基本认证（使用用户名和密码进行认证）。
+<p>另外，Gin还支持自定义中间件。中间件其实是一个函数，函数类型为gin.HandlerFunc，HandlerFunc底层类型为func(*Context)。如下是一个Logger中间件的实现：</p><pre><code>package main
 
 import (
 	&quot;log&quot;
@@ -484,8 +484,8 @@ func main() {
 	log.Println(&quot;Server exiting&quot;)
 }
 </code></pre><p>上面的示例中，需要把srv.ListenAndServe放在goroutine中执行，这样才不会阻塞到srv.Shutdown函数。因为我们把srv.ListenAndServe放在了goroutine中，所以需要一种可以让整个进程常驻的机制。</p><p>这里，我们借助了有缓冲channel，并且调用signal.Notify函数将该channel绑定到SIGINT、SIGTERM信号上。这样，收到SIGINT、SIGTERM信号后，quilt通道会被写入值，从而结束阻塞状态，程序继续运行，执行srv.Shutdown(ctx)，优雅关停HTTP服务。</p><h2>总结</h2><p>今天我们主要学习了Web服务的核心功能，以及如何开发这些功能。在实际的项目开发中， 我们一般会使用基于net/http包进行封装的优秀开源Web框架。</p><p>当前比较火的Go Web框架有 Gin、Beego、Echo、Revel、Martini。你可以根据需要进行选择。我比较推荐Gin，Gin也是目前比较受欢迎的Web框架。Gin Web框架支持Web服务的很多基础功能，例如 HTTP/HTTPS、JSON格式的数据、路由分组和匹配、一进程多服务等。</p><p>另外，Gin还支持Web服务的一些高级功能，例如 中间件、认证、RequestID、跨域和优雅关停等。</p><h2>课后练习</h2><ol>
-<li>使用 Gin 框架编写一个简单的Web服务，要求该Web服务可以解析参数、校验参数，并进行一些简单的业务逻辑处理，最终返回处理结果。欢迎在留言区分享你的成果，或者遇到的问题。</li>
-<li>思考下，如何给iam-apiserver的/healthz接口添加一个限流中间件，用来限制请求/healthz的频率。</li>
+使用 Gin 框架编写一个简单的Web服务，要求该Web服务可以解析参数、校验参数，并进行一些简单的业务逻辑处理，最终返回处理结果。欢迎在留言区分享你的成果，或者遇到的问题。
+思考下，如何给iam-apiserver的/healthz接口添加一个限流中间件，用来限制请求/healthz的频率。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -596,7 +596,7 @@ func main() {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erRavHNiaicxIIrTK5JjKyCNaSKN2MhnM2X0IuNpcoDoyn0OUOqYgdEb0brT9QgibAKyjBP3R3x0W3Jw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -611,8 +611,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/37/92/961ba560.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -627,8 +627,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q3auHgzwzM5suA7q5mM40ULTY5OlQpoerPRMQD8NcMbKxDHhNmjQNUCngkSJEzRvMVDibAHw2whGZxAFlibzribOA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -643,8 +643,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/25/f5/ed/d23daf19.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -659,8 +659,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/d7/f1/ce10759d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -675,8 +675,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/bb/e0/29dc8a06.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -691,8 +691,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -707,8 +707,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/23/df/367f2c75.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -723,8 +723,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/11/5d/db3c1401.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -739,8 +739,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/2e/74/88c613e0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -755,8 +755,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/bb/e0/c7cd5170.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -771,8 +771,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/58/a5/6b5e1525.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -787,8 +787,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -803,8 +803,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/37/92/961ba560.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -819,8 +819,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/b2/07/7711d239.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -835,5 +835,4 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

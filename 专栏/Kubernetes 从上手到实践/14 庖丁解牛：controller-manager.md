@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -256,9 +256,9 @@
 <h2><code>kube-controller-manager</code> 是什么</h2>
 <p>一句话来讲 <code>kube-controller-manager</code> 是一个嵌入了 K8S 核心控制循环的守护进程。</p>
 <p>这里的重点是</p>
-<ul>
-<li>嵌入：它已经内置了相关逻辑，可独立进行部署。我们在第 5 节下载 K8S 服务端二进制文件解压后，便可以看到 <code>kube-controller-manager</code> 的可执行文件，不过我们使用的是 <code>kubeadm</code> 进行的部署，它会默认使用 <code>k8s.gcr.io/kube-controller-manager</code> 的镜像。我们直接来看下实际情况：</li>
-</ul>
+
+嵌入：它已经内置了相关逻辑，可独立进行部署。我们在第 5 节下载 K8S 服务端二进制文件解压后，便可以看到 <code>kube-controller-manager</code> 的可执行文件，不过我们使用的是 <code>kubeadm</code> 进行的部署，它会默认使用 <code>k8s.gcr.io/kube-controller-manager</code> 的镜像。我们直接来看下实际情况：
+
 <pre><code>master $ kubectl -n kube-system describe pods -l component=kube-controller-manager
 Name:               kube-controller-manager-master
 Namespace:          kube-system
@@ -351,10 +351,10 @@ Events:            &lt;none&gt;
 master
 </code></pre>
 <p>这是使用 <code>kubeadm</code> 搭建的集群中的 <code>kube-controller-manager</code> 的 <code>Pod</code>，首先可以看到它所使用的镜像，其次可以看到它使用的一系列参数，最后它在 <code>10252</code> 端口提供了健康检查的接口。稍后我们再展开。</p>
-<ul>
-<li>控制循环：这里拆解为两部分： <strong>控制</strong> 和 <strong>循环</strong> ，它所控制的是集群的状态；至于循环它当然是会有个循环间隔的，这里有个参数可以进行控制。</li>
-<li>守护进程：这个就不单独展开了。</li>
-</ul>
+
+控制循环：这里拆解为两部分： <strong>控制</strong> 和 <strong>循环</strong> ，它所控制的是集群的状态；至于循环它当然是会有个循环间隔的，这里有个参数可以进行控制。
+守护进程：这个就不单独展开了。
+
 <h2><code>kube-controller-manager</code> 有什么作用</h2>
 <p>前面已经说了它一个很关键的点 “控制”：它通过 <code>kube-apiserver</code> 提供的信息持续的监控集群状态，并尝试将集群调整至预期的状态。由于访问 <code>kube-apiserver</code> 也需要通过认证，授权等过程，所以可以看到上面启动 <code>kube-controller-manager</code> 时提供了一系列的参数。</p>
 <p>比如，当我们创建了一个 <code>Deployment</code>，默认副本数为 1 ，当我们把 <code>Pod</code> 删除后，<code>kube-controller-manager</code> 会按照原先的预期，重新创建一个 <code>Pod</code> 。下面举个例子：</p>

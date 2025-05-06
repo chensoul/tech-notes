@@ -14,10 +14,10 @@
 │&nbsp;&nbsp; └── tests/                         # 定义了一些测试资源
 │&nbsp;&nbsp;     └── test-connection.yaml
 └── values.yaml                        # Chart的默认配置文件
-</code></pre><p>上面的目录中，有两个比较重要的文件：</p><ul>
-<li>Chart.yaml 文件</li>
-<li>templates目录</li>
-</ul><p>下面我来详细介绍下这两个文件。<strong>我们先来看Chart.yaml 文件。</strong></p><p>Chart.yaml用来描述Chart的基本信息，包括名称、版本等，内容如下：</p><pre><code class="language-yaml">apiVersion: Chart API 版本 （必需）
+</code></pre><p>上面的目录中，有两个比较重要的文件：</p>
+Chart.yaml 文件
+templates目录
+<p>下面我来详细介绍下这两个文件。<strong>我们先来看Chart.yaml 文件。</strong></p><p>Chart.yaml用来描述Chart的基本信息，包括名称、版本等，内容如下：</p><pre><code class="language-yaml">apiVersion: Chart API 版本 （必需）
 name: Chart名称 （必需）
 version: 语义化版本（必需）
 kubeVersion: 兼容Kubernetes版本的语义化版本（可选）
@@ -76,11 +76,11 @@ spec:
 
 # 可以在test模版每一行的头部增加4个空格，用于YAML文件的对齐
 {{ include "test" | indent 4}}
-</code></pre><p>最后，这里有三点需要你注意：</p><ul>
-<li>Chart名称必须是小写字母和数字，单词之间可以使用横杠<code>-</code>分隔，Chart名称中不能用大写字母，也不能用下划线，<code>.</code>号也不行。</li>
-<li>尽可能使用<a href="https://semver.org/">SemVer 2</a>来表示版本号。</li>
-<li>YAML 文件应该按照双空格的形式缩进(一定不要使用tab键)。</li>
-</ul><p><strong>第二步，</strong>编辑 <code>iam</code> 目录下的Chart文件。</p><p>我们可以基于<code>helm create</code>生成的模板Chart来构建自己的Chart包。这里我们添加了创建iam-apiserver、iam-authz-server、iam-pump、iamctl服务需要的YAML格式的Kubernetes资源文件模板：</p><pre><code class="language-bash">$ ls -1 iam/templates/*.yaml
+</code></pre><p>最后，这里有三点需要你注意：</p>
+Chart名称必须是小写字母和数字，单词之间可以使用横杠<code>-</code>分隔，Chart名称中不能用大写字母，也不能用下划线，<code>.</code>号也不行。
+尽可能使用<a href="https://semver.org/">SemVer 2</a>来表示版本号。
+YAML 文件应该按照双空格的形式缩进(一定不要使用tab键)。
+<p><strong>第二步，</strong>编辑 <code>iam</code> 目录下的Chart文件。</p><p>我们可以基于<code>helm create</code>生成的模板Chart来构建自己的Chart包。这里我们添加了创建iam-apiserver、iam-authz-server、iam-pump、iamctl服务需要的YAML格式的Kubernetes资源文件模板：</p><pre><code class="language-bash">$ ls -1 iam/templates/*.yaml
 iam/templates/hpa.yaml                                   # Kubernetes HPA模板文件
 iam/templates/iam-apiserver-deployment.yaml              # iam-apiserver服务deployment模板文件
 iam/templates/iam-apiserver-service.yaml                 # iam-apiserver服务service模板文件
@@ -93,20 +93,20 @@ iam/templates/iam-pump-service.yaml                      # iam-pump服务service
 ==&gt; Linting iam
 
 1 chart(s) linted, 0 chart(s) failed
-</code></pre><p><code>0 chart(s) failed</code> 说明当前Iam Chart包是通过校验的。</p><p><strong>第三步，</strong>修改Chart的配置文件，添加自定义配置。</p><p>我们可以编辑<code>deployments/iam/values.yaml</code>文件，定制自己的配置。具体配置你可以参考<a href="https://github.com/marmotedu/iam/blob/v1.1.0/deployments/iam/values.yaml">deployments/iam/values.yaml</a>。</p><p>在修改 <code>values.yaml</code> 文件时，你可以参考下面这些最佳实践。</p><ul>
-<li>变量名称以小写字母开头，单词按驼峰区分，例如<code>chickenNoodleSoup</code>。</li>
-<li>给所有字符串类型的值加上引号。</li>
-<li>为了避免整数转换问题，将整型存储为字符串更好，并用 <code>{{ int $value }}</code> 在模板中将字符串转回整型。</li>
-<li><code>values.yaml</code>中定义的每个属性都应该文档化。文档字符串应该以它要描述的属性开头，并至少给出一句描述。例如：</li>
-</ul><pre><code class="language-yaml"># serverHost is the host name for the webserver
+</code></pre><p><code>0 chart(s) failed</code> 说明当前Iam Chart包是通过校验的。</p><p><strong>第三步，</strong>修改Chart的配置文件，添加自定义配置。</p><p>我们可以编辑<code>deployments/iam/values.yaml</code>文件，定制自己的配置。具体配置你可以参考<a href="https://github.com/marmotedu/iam/blob/v1.1.0/deployments/iam/values.yaml">deployments/iam/values.yaml</a>。</p><p>在修改 <code>values.yaml</code> 文件时，你可以参考下面这些最佳实践。</p>
+变量名称以小写字母开头，单词按驼峰区分，例如<code>chickenNoodleSoup</code>。
+给所有字符串类型的值加上引号。
+为了避免整数转换问题，将整型存储为字符串更好，并用 <code>{{ int $value }}</code> 在模板中将字符串转回整型。
+<code>values.yaml</code>中定义的每个属性都应该文档化。文档字符串应该以它要描述的属性开头，并至少给出一句描述。例如：
+<pre><code class="language-yaml"># serverHost is the host name for the webserver
 serverHost: example
 # serverPort is the HTTP listener port for the webserver
 serverPort: 9191
-</code></pre><p>这里需要注意，所有的Helm内置变量都以大写字母开头，以便与用户定义的value进行区分，例如<code>.Release.Name</code>、<code>.Capabilities.KubeVersion</code>。</p><p>为了安全，values.yaml中只配置Kubernetes资源相关的配置项，例如Deployment副本数、Service端口等。至于iam-apiserver、iam-authz-server、iam-pump、iamctl组件的配置文件，我们创建单独的ConfigMap，并在Deployment中引用。</p><p><strong>第四步，</strong>打包Chart，并上传到Chart仓库中。</p><p>这是一个可选步骤，可以根据你的实际需要来选择。如果想了解具体操作，你可以查看 <a href="https://helm.sh/zh/docs/topics/chart_repository">Helm chart 仓库</a>获取更多信息。</p><p>最后，IAM应用的Chart包见<a href="https://github.com/marmotedu/iam/tree/v1.1.0/deployments/iam">deployments/iam</a>。</p><h2>IAM Chart部署</h2><p>上面，我们制作了IAM应用的Chart包，接下来我们就使用这个Chart包来一键创建IAM应用。IAM Chart部署一共分为10个步骤，你可以跟着我一步步操作下。</p><p><strong>第一步，</strong>配置<code>scripts/install/environment.sh</code>。</p><p><code>scripts/install/environment.sh</code>文件中包含了各类自定义配置，你主要配置下面这些跟数据库相关的就可以，其他配置使用默认值。</p><ul>
-<li>MariaDB配置：environment.sh文件中以<code>MARIADB_</code>开头的变量。</li>
-<li>Redis配置：environment.sh文件中以<code>REDIS_</code>开头的变量。</li>
-<li>MongoDB配置：environment.sh文件中以<code>MONGO_</code>开头的变量。</li>
-</ul><p><strong>第二步，</strong>创建IAM应用的配置文件。</p><pre><code class="language-bash">$ cd ${IAM_ROOT}
+</code></pre><p>这里需要注意，所有的Helm内置变量都以大写字母开头，以便与用户定义的value进行区分，例如<code>.Release.Name</code>、<code>.Capabilities.KubeVersion</code>。</p><p>为了安全，values.yaml中只配置Kubernetes资源相关的配置项，例如Deployment副本数、Service端口等。至于iam-apiserver、iam-authz-server、iam-pump、iamctl组件的配置文件，我们创建单独的ConfigMap，并在Deployment中引用。</p><p><strong>第四步，</strong>打包Chart，并上传到Chart仓库中。</p><p>这是一个可选步骤，可以根据你的实际需要来选择。如果想了解具体操作，你可以查看 <a href="https://helm.sh/zh/docs/topics/chart_repository">Helm chart 仓库</a>获取更多信息。</p><p>最后，IAM应用的Chart包见<a href="https://github.com/marmotedu/iam/tree/v1.1.0/deployments/iam">deployments/iam</a>。</p><h2>IAM Chart部署</h2><p>上面，我们制作了IAM应用的Chart包，接下来我们就使用这个Chart包来一键创建IAM应用。IAM Chart部署一共分为10个步骤，你可以跟着我一步步操作下。</p><p><strong>第一步，</strong>配置<code>scripts/install/environment.sh</code>。</p><p><code>scripts/install/environment.sh</code>文件中包含了各类自定义配置，你主要配置下面这些跟数据库相关的就可以，其他配置使用默认值。</p>
+MariaDB配置：environment.sh文件中以<code>MARIADB_</code>开头的变量。
+Redis配置：environment.sh文件中以<code>REDIS_</code>开头的变量。
+MongoDB配置：environment.sh文件中以<code>MONGO_</code>开头的变量。
+<p><strong>第二步，</strong>创建IAM应用的配置文件。</p><pre><code class="language-bash">$ cd ${IAM_ROOT}
 $ make gen.defaultconfigs # 生成iam-apiserver、iam-authz-server、iam-pump、iamctl组件的默认配置文件
 $ make gen.ca # 生成 CA 证书
 </code></pre><p>上面的命令会将IAM的配置文件存放在目录<code>${IAM_ROOT}/_output/configs/</code>下。</p><p><strong>第三步，</strong>创建 <code>iam</code> 命名空间。</p><p>我们将IAM应用涉及到的各类资源都创建在<code>iam</code>命名空间中。将IAM资源创建在独立的命名空间中，不仅方便维护，还可以有效避免影响其他Kubernetes资源。</p><pre><code class="language-bash">$ kubectl create namespace iam
@@ -137,14 +137,14 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
 </code></pre><p>登陆到<code>iamctl-xxxxxxxxxx-xxxxx</code> Pod中后，你就可以执行运维操作和冒烟测试了。</p><p><strong>先来看运维操作。</strong>iamctl工具以子命令的方式对外提供功能，你可以使用它提供的各类功能，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/69/y2/693f608aa571cbfd6e06c8cfdb242yy2.png?wh=1920x337" alt="图片"></p><p><strong>再来看冒烟测试：</strong></p><pre><code class="language-bash"># cd /opt/iam/scripts/install
 # ./test.sh iam::test::smoke
 </code></pre><p>如果<code>./test.sh iam::test::smoke</code>命令打印的输出中，最后一行为<code>congratulations, smoke test passed!</code>字符串，就说明IAM应用安装成功。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/9d/8c/9dcc557952b3586f7b37b065bf2bd58c.png?wh=1920x314" alt="图片"></p><p><strong>第十步，</strong>销毁EKS集群的资源。</p><pre><code class="language-bash">$ kubectl delete namespace iam
-</code></pre><p>你可以根据需要选择是否删除EKS集群，如果不需要了就可以选择删除。</p><h2>IAM应用多环境部署</h2><p>在实际的项目开发中，我们需要将IAM应用部署到不同的环境中，不同环境的配置文件是不同的，那么IAM项目是如何进行多环境部署的呢？</p><p>IAM项目在<a href="">configs</a>目录下创建了多个Helm values文件（格式为<code>values-{envName}-env.yaml</code>）：</p><ul>
-<li>values-test-env.yaml，测试环境Helm values文件。</li>
-<li>values-pre-env.yaml，预发环境Helm values文件。</li>
-<li>values-prod-env.yaml，生产环境Helm values文件。</li>
-</ul><p>在部署IAM应用时，我们在命令行指定<code>-f</code>参数，例如：</p><pre><code class="language-bash">$ helm -n iam install -f configs/values-test-env.yaml iam deployments/iam # 安装到测试环境。
+</code></pre><p>你可以根据需要选择是否删除EKS集群，如果不需要了就可以选择删除。</p><h2>IAM应用多环境部署</h2><p>在实际的项目开发中，我们需要将IAM应用部署到不同的环境中，不同环境的配置文件是不同的，那么IAM项目是如何进行多环境部署的呢？</p><p>IAM项目在<a href="">configs</a>目录下创建了多个Helm values文件（格式为<code>values-{envName}-env.yaml</code>）：</p>
+values-test-env.yaml，测试环境Helm values文件。
+values-pre-env.yaml，预发环境Helm values文件。
+values-prod-env.yaml，生产环境Helm values文件。
+<p>在部署IAM应用时，我们在命令行指定<code>-f</code>参数，例如：</p><pre><code class="language-bash">$ helm -n iam install -f configs/values-test-env.yaml iam deployments/iam # 安装到测试环境。
 </code></pre><h2>总结</h2><p>这一讲，我们通过 <code>helm create iam</code> 创建了一个模板Chart，并基于这个模板Chart包进行了二次开发，最终创建了IAM应用的Helm Chart包：<a href="https://github.com/marmotedu/iam/tree/v1.1.0/deployments/iam">deployments/iam</a>。</p><p>有了Helm Chart包，我们就可以通过 <code>helm -n iam install iam deployments/iam</code> 命令来一键部署好整个IAM应用。当IAM应用中的所有Pod都处在 <code>Running</code> 状态后，说明IAM应用被成功部署。</p><p>最后，我们可以登录iamctl容器，执行 <code>test.sh iam::test::smoke</code> 命令，来对IAM应用进行冒烟测试。</p><h2>课后练习</h2><ol>
-<li>试着在Helm Chart中加入MariaDB、MongoDB、Redis模板，通过Helm一键部署好整个IAM应用。</li>
-<li>试着通过 <code>helm</code> 命令升级、回滚和删除IAM应用。</li>
+试着在Helm Chart中加入MariaDB、MongoDB、Redis模板，通过Helm一键部署好整个IAM应用。
+试着通过 <code>helm</code> 命令升级、回滚和删除IAM应用。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -255,7 +255,7 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/64/05/6989dce6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -270,8 +270,8 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -286,8 +286,8 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/30/5b/82e3952c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -302,8 +302,8 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -318,8 +318,8 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/05/92/b609f7e3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -334,5 +334,4 @@ iamctl-59fdc4995-xrzhn&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1/1&nbsp;
   </div>
 </div>
 </div>
-</li>
-</ul>
+

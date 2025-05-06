@@ -42,15 +42,15 @@ Pluto在创建主机时，主要有两个来源，一个是内部物理机组成
 
 以阿里云的ECS为例，又分为按量付费、按月付费以及按年付费，可以按照以下方式来进行管理。
 
-<li>
+
 按量付费。按照使用时长，以秒为单位计费，适合突发流量到来临时需要扩容部分机器时使用，所以需要记录每台ECS从调用API创建成功到销毁所使用的时长。
-</li>
-<li>
+
+
 按月付费。这种比较适合短期业务需要使用机器的场景，比如微博曾经在奥运会期间扩容过大量包月付费的机器，以应对奥运会期间带来的流量上涨。需要注意的是，这种机器到了月底会自动销毁，所以如果还有使用需要的话，需要及时续费。
-</li>
-<li>
+
+
 按年付费。这种比较适合需要长期在阿里云上部署的业务，比如有一些新的业务因为业务发展比较快，采用传统自采机器部署的话，由于采购周期比较长不适合业务发展，所以使用公有云更为合适。
-</li>
+
 
 3.配置初始化
 
@@ -62,15 +62,15 @@ Pluto在创建主机时，主要有两个来源，一个是内部物理机组成
 
 DCP中调度层的主要功能是在可用的主机上创建容器。由于微博业务早在2013年就开始进行容器化，基于当时的背景考虑，就选择了Swarm作为容器调度的工具，并根据自己的业务特点在Swarm基础上进行二次封装，定制了自己的调度层Roam，使其具备支持跨IDC、高可用以及可扩展的特性。下面是Roam的架构，其主要工作原理是：
 
-<li>
+
 Swarm Manager和Swarm Client节点都向Consul中注册，并且有一个Active Manager和Standby Manager。任何一个IDC内的Active Manager如果down掉的话，Standby Manager就会注册到Consul中，成为新的Active Manager，以保证高可用性。
-</li>
-<li>
+
+
 当发起容器调度时，Roam根据IDC参数请求Consul，得到该IDC的Swarm Manager信息。
-</li>
-<li>
+
+
 Roam访问该IDC内的Swarm Manager，Swarm Manager再访问Consul获取Swarm Client信息，并根据Roam传递的调度策略从Swarm Client中选择节点创建容器。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/68/bb/68d80a9dac56519d38730c7359e93bbb.png" alt="">
 
@@ -96,12 +96,12 @@ DCP通过模板来管理容器的创建，一个服务如果需要进行扩容�
 
 微博的业务场景主要包含两种服务，一种是HTTP服务，一种是Motan RPC服务，他们分别使用了不同的服务发现方式。
 
-<li>
+
 HTTP服务。考虑到传统的基于Nginx的配置Reload机制实现的服务发现方式，在高并发访问的情况下，会导致吞吐量下降10%左右，如果业务频繁变更的话，就会受到影响。为此，DCP在实际业务中基于Nginx和Consul研发了一种可行的解决方案[nginx-upsync-module](https://github.com/weibocom/nginx-upsync-module)，并且已经开源。
-</li>
-<li>
+
+
 Motan RPC服务。Motan RPC服务在启动时，会向注册中心Config Service注册服务，并且注册中心支持多IDC部署。像下图所描述的那样，正常情况下服务消费者会访问同一个IDC内的服务提供者，并且支持在故障的时候，可以切换到其他IDC。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/95/3b/9519bcc735da020dd24b64ba74a41a3b.png" alt="">
 

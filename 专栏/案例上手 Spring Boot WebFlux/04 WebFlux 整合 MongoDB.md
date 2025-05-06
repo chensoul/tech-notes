@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -209,11 +209,11 @@ db.createUser({ user: 'admin', pwd: 'admin', roles: [ { role: &quot;root&quot;, 
 <p>类似上面讲的工程搭建，新建一个工程编写此案例。工程如图：</p>
 <p><img src="assets/02b199c85e5548663557753d48f4b95c1523803.png" alt="img" /></p>
 <p>目录核心如下：</p>
-<ul>
-<li>pom.xml maven 配置；</li>
-<li>application.properties 配置文件；</li>
-<li>dao 数据访问层，本文要点。</li>
-</ul>
+
+pom.xml maven 配置；
+application.properties 配置文件；
+dao 数据访问层，本文要点。
+
 <h3>新增 POM 依赖与配置</h3>
 <p>在 pom.xml 配置新的依赖：</p>
 <pre><code>    &lt;!-- Spring Boot 响应式 MongoDB 依赖 --&gt;
@@ -235,15 +235,15 @@ spring.data.mongodb.password=admin
 <p>这就一个巨大的问题了，为啥不用我们常用的 MySQL 数据库呢？</p>
 <p>答案是 Spring Data Reactive Repositories 目前支持 Mongo、Cassandra、Redis、Couchbase。不支持 MySQL，那究竟为啥呢？那就说明下 JDBC 和 Spring Data 的关系。</p>
 <p>Spring Data Reactive Repositories 突出点是 Reactive，即非阻塞的。区别如下：</p>
-<ul>
-<li>基于 JDBC 实现的 Spring Data，比如 Spring Data JPA 是阻塞的。原理是基于阻塞 IO 模型 消耗每个调用数据库的线程（Connection）。</li>
-<li>事务只能在一个 java.sql.Connection 使用，即一个事务一个操作。</li>
-</ul>
+
+基于 JDBC 实现的 Spring Data，比如 Spring Data JPA 是阻塞的。原理是基于阻塞 IO 模型 消耗每个调用数据库的线程（Connection）。
+事务只能在一个 java.sql.Connection 使用，即一个事务一个操作。
+
 <p>那如何异步非阻塞封装下 JDBC 的思想也不新鲜，Scala 库 Slick 3 就实现了。简单的实现原理如下：</p>
-<ul>
-<li>一个事务多个操作，那么共享一个 java.sql.Connection，可以使用透明事务管理，利用回调编程模型去传递。</li>
-<li>保持有限的空闲连接。</li>
-</ul>
+
+一个事务多个操作，那么共享一个 java.sql.Connection，可以使用透明事务管理，利用回调编程模型去传递。
+保持有限的空闲连接。
+
 <p>最后，我坚信非阻塞 JDBC 很快就会出现的，这样我们就开心的调用 MySQL 了。</p>
 <h3>对象</h3>
 <p>修改 org.spring.springboot.domain 包里面的城市实体对象类。修改城市（City）对象 City，代码如下：</p>

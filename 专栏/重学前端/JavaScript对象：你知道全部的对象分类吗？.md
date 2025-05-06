@@ -14,12 +14,12 @@
 
 我们可以把对象分成几类。
 
-<li>
+
 宿主对象（host Objects）：由JavaScript宿主环境提供的对象，它们的行为完全由宿主环境决定。
-</li>
-<li>
+
+
 内置对象（Built-in Objects）：由JavaScript语言提供的对象。
-<ul>
+
 - 固有对象（Intrinsic Objects ）：由标准规定，随着JavaScript运行时创建而自动创建的对象实例。
 - 原生对象（Native Objects）：可以由用户通过Array、RegExp等内置构造器或者特殊语法创建的对象。
 - 普通对象（Ordinary Objects）：由{}语法、Object构造器或者class关键字定义类创建的对象，它能够被原型继承。

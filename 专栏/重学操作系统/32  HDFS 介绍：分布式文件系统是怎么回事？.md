@@ -25,321 +25,321 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;开篇词&#32;&#32;为什么大厂面试必考操作系统？.md">00 开篇词  为什么大厂面试必考操作系统？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="00&#32;课前必读&#32;&#32;构建知识体系，可以这样做！.md">00 课前必读  构建知识体系，可以这样做！.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;计算机是什么：“如何把程序写好”这个问题是可计算的吗？.md">01  计算机是什么：“如何把程序写好”这个问题是可计算的吗？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;程序的执行：相比&#32;32&#32;位，64&#32;位的优势是什么？（上）.md">02  程序的执行：相比 32 位，64 位的优势是什么？（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;程序的执行：相比&#32;32&#32;位，64&#32;位的优势是什么？（下）.md">03  程序的执行：相比 32 位，64 位的优势是什么？（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;构造复杂的程序：将一个递归函数转成非递归函数的通用方法.md">04  构造复杂的程序：将一个递归函数转成非递归函数的通用方法.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;存储器分级：L1&#32;Cache&#32;比内存和&#32;SSD&#32;快多少倍？.md">05  存储器分级：L1 Cache 比内存和 SSD 快多少倍？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;(1)&#32;加餐&#32;&#32;练习题详解（一）.md">05 (1) 加餐  练习题详解（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;目录结构和文件管理指令：rm&#32;&#32;-rf&#32;指令的作用是？.md">06  目录结构和文件管理指令：rm  -rf 指令的作用是？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;进程、重定向和管道指令：xargs&#32;指令的作用是？.md">07  进程、重定向和管道指令：xargs 指令的作用是？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;用户和权限管理指令：&#32;请简述&#32;Linux&#32;权限划分的原则？.md">08  用户和权限管理指令： 请简述 Linux 权限划分的原则？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;Linux&#32;中的网络指令：如何查看一个域名有哪些&#32;NS&#32;记录？.md">09  Linux 中的网络指令：如何查看一个域名有哪些 NS 记录？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;软件的安装：&#32;编译安装和包管理器安装有什么优势和劣势？.md">10  软件的安装： 编译安装和包管理器安装有什么优势和劣势？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;高级技巧之日志分析：利用&#32;Linux&#32;指令分析&#32;Web&#32;日志.md">11  高级技巧之日志分析：利用 Linux 指令分析 Web 日志.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;高级技巧之集群部署：利用&#32;Linux&#32;指令同时在多台机器部署程序.md">12  高级技巧之集群部署：利用 Linux 指令同时在多台机器部署程序.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;(1)加餐&#32;&#32;练习题详解（二）.md">12 (1)加餐  练习题详解（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;操作系统内核：Linux&#32;内核和&#32;Windows&#32;内核有什么区别？.md">13  操作系统内核：Linux 内核和 Windows 内核有什么区别？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;用户态和内核态：用户态线程和内核态线程有什么区别？.md">14  用户态和内核态：用户态线程和内核态线程有什么区别？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;中断和中断向量：Javajs&#32;等语言为什么可以捕获到键盘输入？.md">15  中断和中断向量：Javajs 等语言为什么可以捕获到键盘输入？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;WinMacUnixLinux&#32;的区别和联系：为什么&#32;Debian&#32;漏洞排名第一还这么多人用？.md">16  WinMacUnixLinux 的区别和联系：为什么 Debian 漏洞排名第一还这么多人用？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;(1)加餐&#32;&#32;练习题详解（三）.md">16 (1)加餐  练习题详解（三）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;进程和线程：进程的开销比线程大在了哪里？.md">17  进程和线程：进程的开销比线程大在了哪里？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;锁、信号量和分布式锁：如何控制同一时间只有&#32;2&#32;个线程运行？.md">18  锁、信号量和分布式锁：如何控制同一时间只有 2 个线程运行？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;乐观锁、区块链：除了上锁还有哪些并发控制方法？.md">19  乐观锁、区块链：除了上锁还有哪些并发控制方法？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;线程的调度：线程调度都有哪些方法？.md">20  线程的调度：线程调度都有哪些方法？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;哲学家就餐问题：什么情况下会触发饥饿和死锁？.md">21  哲学家就餐问题：什么情况下会触发饥饿和死锁？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;进程间通信：&#32;进程间通信都有哪些方法？.md">22  进程间通信： 进程间通信都有哪些方法？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;分析服务的特性：我的服务应该开多少个进程、多少个线程？.md">23  分析服务的特性：我的服务应该开多少个进程、多少个线程？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;(1)加餐&#32;&#32;练习题详解（四）.md">23 (1)加餐  练习题详解（四）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;虚拟内存&#32;：一个程序最多能使用多少内存？.md">24  虚拟内存 ：一个程序最多能使用多少内存？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;内存管理单元：&#32;什么情况下使用大内存分页？.md">25  内存管理单元： 什么情况下使用大内存分页？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;&#32;缓存置换算法：&#32;LRU&#32;用什么数据结构实现更合理？.md">26  缓存置换算法： LRU 用什么数据结构实现更合理？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;&#32;内存回收上篇：如何解决内存的循环引用问题？.md">27  内存回收上篇：如何解决内存的循环引用问题？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;&#32;内存回收下篇：三色标记-清除算法是怎么回事？.md">28  内存回收下篇：三色标记-清除算法是怎么回事？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;(1)加餐&#32;&#32;练习题详解（五）.md">28 (1)加餐  练习题详解（五）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;&#32;Linux&#32;下的各个目录有什么作用？.md">29  Linux 下的各个目录有什么作用？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;&#32;文件系统的底层实现：FAT、NTFS&#32;和&#32;Ext3&#32;有什么区别？.md">30  文件系统的底层实现：FAT、NTFS 和 Ext3 有什么区别？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E9%87%8D%E5%AD%A6%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F-%E5%AE%8C/31%20%20%E6%95%B0%E6%8D%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%9E%E4%BE%8B%EF%BC%9AMySQL%20%E4%B8%AD%20B%20%E6%A0%91%E5%92%8C%20B+%20%E6%A0%91%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%EF%BC%9F.md">31  数据库文件系统实例：MySQL 中 B 树和 B+ 树有什么区别？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="32&#32;&#32;HDFS&#32;介绍：分布式文件系统是怎么回事？.md">32  HDFS 介绍：分布式文件系统是怎么回事？.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;(1)加餐&#32;&#32;练习题详解（六）.md">32 (1)加餐  练习题详解（六）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;&#32;互联网协议群（TCPIP）：多路复用是怎么回事？.md">33  互联网协议群（TCPIP）：多路复用是怎么回事？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="34&#32;&#32;UDP&#32;协议：UDP&#32;和&#32;TCP&#32;相比快在哪里？.md">34  UDP 协议：UDP 和 TCP 相比快在哪里？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="35&#32;&#32;Linux&#32;的&#32;IO&#32;模式：selectpollepoll&#32;有什么区别？.md">35  Linux 的 IO 模式：selectpollepoll 有什么区别？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="36&#32;&#32;公私钥体系和网络安全：什么是中间人攻击？.md">36  公私钥体系和网络安全：什么是中间人攻击？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="36&#32;(1)加餐&#32;&#32;练习题详解（七）.md">36 (1)加餐  练习题详解（七）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="37&#32;&#32;虚拟化技术介绍：VMware&#32;和&#32;Docker&#32;的区别？.md">37  虚拟化技术介绍：VMware 和 Docker 的区别？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="38&#32;&#32;容器编排技术：如何利用&#32;K8s&#32;和&#32;Docker&#32;Swarm&#32;管理微服务？.md">38  容器编排技术：如何利用 K8s 和 Docker Swarm 管理微服务？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="39&#32;&#32;Linux&#32;架构优秀在哪里.md">39  Linux 架构优秀在哪里.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="40&#32;&#32;商业操作系统：电商操作系统是不是一个噱头？.md">40  商业操作系统：电商操作系统是不是一个噱头？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="40&#32;(1)加餐&#32;&#32;练习题详解（八）.md">40 (1)加餐  练习题详解（八）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="41&#32;结束语&#32;&#32;论程序员的发展——信仰、选择和博弈.md">41 结束语  论程序员的发展——信仰、选择和博弈.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -396,10 +396,10 @@
                         <div><h1>32  HDFS 介绍：分布式文件系统是怎么回事？</h1>
 <p>前面我们学习了单机文件系统、数据库索引的设计，这一讲我们讨论大数据环境下的数据管理——分布式文件系统和分布式数据库。分布式文件系统通过计算机网络连接大量物理节点，将不同机器、不同磁盘、不同逻辑分区的数据组织在一起，提供海量的数据存储（一般是 Petabytes 级别，1PB = 1024TB）。分布式数据库则在分布式文件系统基础上，提供应对具体场景的海量数据解决方案。</p>
 <p>说起大数据，就不得不提历史上在存储领域影响深远的两篇 Paper。</p>
-<ul>
-<li>Google File System</li>
-<li>BigTable：A Distributed Storage System for Structured Data</li>
-</ul>
+
+Google File System
+BigTable：A Distributed Storage System for Structured Data
+
 <p>Google File System 是一个分布式文件系统，构成了今天大数据生态的底层存储，也是我们本讲主角 HDFS 的原型。HDFS（Hadoop Distributed File System）是 Google File System 的一个重要实现。</p>
 <p>后者 BigTable 是一个分布式数据库。BigTable 本身是 Google 内部的项目，建立在 Google File System 之上，为 Google 的搜索引擎提供数据支撑。它是 2005 年公布的第一个版本，而且通过 Paper 公布了实现，在那个大数据还处于萌芽阶段的时代，BigTable 成为了启明星，今天我们常用的 HBase 还沿用着 BigTable 的设计。</p>
 <p>因为两个重量级的 Paper 都是 Google 的产物，所以这一讲，我会结合搜索引擎的设计，带你走进分布式存储和数据库的世界。</p>
@@ -446,17 +446,17 @@
 <p><img src="assets/CgqCHl_vGPiABpLOAAKq3EbZ3XQ571.png" alt="Lark20210101-204008.png" /></p>
 <p>下图中，客户端想要读取<code>/foo/bar</code>中某个 Chunk 中某段内容（Byterange）的数据，会分成 4 个步骤：</p>
 <ol>
-<li>客户端向 Master 发送请求，将想访问的文B件名、Chunk 的序号（可以通过 Chunk 大小和内容位置计算）；</li>
-<li>Master 响应请求，返回 Chunk 的地址和 Chunk 的句柄（ID）；</li>
-<li>客户端向 Chunk 所在的地址（一台 ChunkServer）发送请求，并将句柄（ID）和内容范围（Byterange）作为参数；</li>
-<li>ChunkServer 将数据返回给客户端。</li>
+客户端向 Master 发送请求，将想访问的文B件名、Chunk 的序号（可以通过 Chunk 大小和内容位置计算）；
+Master 响应请求，返回 Chunk 的地址和 Chunk 的句柄（ID）；
+客户端向 Chunk 所在的地址（一台 ChunkServer）发送请求，并将句柄（ID）和内容范围（Byterange）作为参数；
+ChunkServer 将数据返回给客户端。
 </ol>
 <p><img src="assets/Ciqc1F_vGQGAFWGDAAKs3c4PcVw331.png" alt="Lark20210101-204011.png" /></p>
 <p>在上面这个模型中，有 3 个实体。</p>
 <ol>
-<li>客户端（Client）或者应用（Application），它们是数据的实际使用方，比如说 BigTable 数据库是 GFS 的 Client。</li>
-<li>Master 节点，它存储了所有的文件信息、Chunk 信息，权限信息等。</li>
-<li>ChunkServer 节点，它存储了实际的 Chunk 数据。</li>
+客户端（Client）或者应用（Application），它们是数据的实际使用方，比如说 BigTable 数据库是 GFS 的 Client。
+Master 节点，它存储了所有的文件信息、Chunk 信息，权限信息等。
+ChunkServer 节点，它存储了实际的 Chunk 数据。
 </ol>
 <p>Master 只有一台，ChunkServer 可以有很多台。上图中的 namespace 其实就是文件全名（含路径）的集合。Chunk 的 namespace 存储的是含文件全名 + ChunkLocation + ChunkID 的组合。文件的命名空间、Chunk 的命名空间，再加上文件和 Chunk 的对应关系，因为需要频繁使用，可以把它们全部都放到 Master 节点的内存中，并且利用 B 树等在内存中创建索引结构。ChunkServer 会和 Master 保持频繁的联系，将自己的变更告知 Master。这样就构成了一个完整的过程。</p>
 <h4>读和写</h4>
@@ -464,13 +464,13 @@
 <p>写入某个 Chunk 的时候，因为所有存储了这个 Chunk 的服务器都需要更新，所以需要将数据推送给所有的 ChunkServer。这里 GFS 设计中使用了一个非常巧妙的方案，先由客户端将数据推送给所有 ChunkServer 并缓存，而不马上更新。直到所有 ChunkServer 都收到数据后，再集中更新。这样的做法减少了数据不一致的时间。</p>
 <p>下图是具体的更新步骤：</p>
 <ol>
-<li>客户端要和服务器签订租约，得到一个租期（Lease）。其实就是 Chunk 和 Chunk 所有复制品的修改权限。如果一个客户端拿到租期，在租期内，其他客户端能不能修改这个 Chunk。</li>
-<li>Master 告诉客户端该 Chunk 所有的节点位置。包括 1 台主节点（Primary）和普通节点（Secondary）。当然主节点和普通节点，都是 ChunkServer。主 ChunkServer 的作用是协助更新所有从 ChunkServer 的数据。</li>
-<li>这一步是设计得最巧妙的地方。客户端接下来将要写入的数据同时推送给所有关联的 ChunkServer。这些 ChunkServer 不会更新数据，而是把数据先缓存起来。</li>
-<li>图中的所有 ChunkServer 都收到了数据，并且给客户端回复后，客户端向主 ChunkServer 请求写入。</li>
-<li>主 ChunkServer 通知其他节点写入数据。因为数据已经推送过来了，所以这一步很快完成。</li>
-<li>写入完数据的节点，所有节点给主 ChunkServer 回复。</li>
-<li>主 ChunkServer 通知客户端成功。</li>
+客户端要和服务器签订租约，得到一个租期（Lease）。其实就是 Chunk 和 Chunk 所有复制品的修改权限。如果一个客户端拿到租期，在租期内，其他客户端能不能修改这个 Chunk。
+Master 告诉客户端该 Chunk 所有的节点位置。包括 1 台主节点（Primary）和普通节点（Secondary）。当然主节点和普通节点，都是 ChunkServer。主 ChunkServer 的作用是协助更新所有从 ChunkServer 的数据。
+这一步是设计得最巧妙的地方。客户端接下来将要写入的数据同时推送给所有关联的 ChunkServer。这些 ChunkServer 不会更新数据，而是把数据先缓存起来。
+图中的所有 ChunkServer 都收到了数据，并且给客户端回复后，客户端向主 ChunkServer 请求写入。
+主 ChunkServer 通知其他节点写入数据。因为数据已经推送过来了，所以这一步很快完成。
+写入完数据的节点，所有节点给主 ChunkServer 回复。
+主 ChunkServer 通知客户端成功。
 </ol>
 <p><img src="assets/CgpVE1_vNRyABrfXAAC_9WDSitU641.png" alt="图片1.png" /></p>
 <p>以上，就是 GFS 的写入过程。这里有个规律，实现强一致性（所有时刻、所有客户端读取到的数据是一致的）就需要停下所有节点的工作牺牲可用性；或者牺牲分区容错性，减少节点。GFS 和 HDFS 的设计，牺牲的是一致性本身，允许数据在一定时间范围内是不一致的，从而提高吞吐量。</p>
@@ -478,10 +478,10 @@
 <p>在 HDFS 设计中，Master 节点也被称为 NameNode，用于存储命名空间数据。ChunkServer 也被称为 DataNode，用来存储文件数据。在 HDFS 的设计中，还有一个特殊的节点叫作辅助节点（Secondary Node）。辅助节点本身更像一个客户端，它不断和 NameNode 交流，并把 NameNode 最近的变更写成日志，存放到 DataNode 中。类似日志文件系统，每过一段时间，在 HDFS 中这些日志会形成一个还原点文件，这个机制和上一讲我们提到的日志文件系统类似。如果 Master 节点发生了故障，就可以通过这些还原点进行还原。</p>
 <h4>其他</h4>
 <p>在分布式文件系统和分布式数据库的设计中，还有很多有趣的知识，比如缓存的设计、空间的回收。如果你感兴趣，你可以进一步阅读我开篇给出的两篇论文。</p>
-<ul>
-<li>Google File System</li>
-<li>BigTable：A Distributed Storage System for Structured Data</li>
-</ul>
+
+Google File System
+BigTable：A Distributed Storage System for Structured Data
+
 <h3>总结</h3>
 <p>现在，我们已经可以把所有的场景都串联起来。Google 需要的是一个分布式数据库，存储的数据是包括内容、外链、Logo、标题等在内的网页的全部版本和描述信息。为了描述这些信息，一台机器磁盘不够大，吞吐量也不够大。因此 Google 需要将数据分布存储，将这个大表（BigTable）拆分成很多小片（Tablet）。当然，这并不是直接面向用户的架构。给几十亿用户提供高效查询，还需要分布式计算，计算出给用户使用的内容索引。</p>
 <p>Google 团队发现将数据分布出去是一个通用需求。不仅仅是 BigTable 数据库需要，很多其他数据库也可以在这个基础上构造。按照软件设计的原则，每个工具应该尽可能的专注和简单， Google 的架构师意识到需要一个底层的文件系统，就是 Google File System。这样，BigTable 使用 Tablet 的时候，只需要当成文件在使用，具体的分布式读写，就交给了 GFS。</p>

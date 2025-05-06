@@ -1,7 +1,7 @@
 <audio title="13｜组件监控：MySQL的关键指标及采集方法有哪些？" src="https://static001.geekbang.org/resource/audio/79/fe/79331fbcf4a3fb3e6c1ece32be7deafe.mp3" controls="controls"></audio> 
 <p>你好，我是秦晓辉。</p><p>按照<a href="https://time.geekbang.org/column/article/624099">第 9 讲</a>介绍的监控分类方法，从这一讲开始，我们进入数据库中间件监控实战环节。这些组件里最常用的非MySQL莫属，这一讲我们就来介绍一下如何监控MySQL。学完今天的内容之后，你就知道MySQL中哪些指标比较关键以及如何采集这些指标了。这些指标能够帮助我们提早发现问题，提升数据库的可用性。</p><p><img src="https://static001.geekbang.org/resource/image/1c/61/1c26d8db1e861c007a1a362db13ace61.png?wh=1744x1128" alt="图片"></p><h2>整体思路</h2><p>在正式学习之前，我们要先理清两个问题：监控哪类指标？如何采集数据？这两个问题是不是还挺熟悉的，我们<a href="https://time.geekbang.org/column/article/624263">第 10 讲</a>系统地介绍过监控方法论，这些方法论应该如何落地呢？这一讲，我们就可以在MySQL中应用起来。MySQL是个服务，所以我们可以借用Google四个黄金指标的思路来解决问题。下面我们一起梳理一下。</p><p><img src="https://static001.geekbang.org/resource/image/fb/44/fb5a50e976687376703a0b44c3166344.jpg?wh=2134x878" alt=""></p><h3>延迟</h3><p>应用程序会向MySQL发起SELECT、UPDATE等操作，处理这些请求花费了多久，是非常关键的，甚至我们还想知道具体是哪个SQL最慢，这样就可以有针对性地调优。我们应该如何采集这些延迟数据呢？典型的方法有三种。</p><ol>
-<li><strong>在客户端埋点</strong>。即上层业务程序在请求MySQL的时候，记录一下每个SQL的请求耗时，把这些数据统一推给监控系统，监控系统就可以计算出平均延迟、95分位、99分位的延迟数据了。不过因为要埋点，对业务代码有一定侵入性。</li>
-<li><strong>Slow queries</strong>。MySQL提供了慢查询数量的统计指标，通过下面这段命令就可以拿到。</li>
+<strong>在客户端埋点</strong>。即上层业务程序在请求MySQL的时候，记录一下每个SQL的请求耗时，把这些数据统一推给监控系统，监控系统就可以计算出平均延迟、95分位、99分位的延迟数据了。不过因为要埋点，对业务代码有一定侵入性。
+<strong>Slow queries</strong>。MySQL提供了慢查询数量的统计指标，通过下面这段命令就可以拿到。
 </ol><!-- [[[read_end]]] --><pre><code class="language-json">show global status like 'Slow_queries';
 +---------------+-------+
 | Variable_name | Value |
@@ -17,7 +17,7 @@
 +-----------------+-----------+
 1 row in set (0.001 sec)
 </code></pre><ol start="3">
-<li><strong>通过 performance schema 和 sys schema 拿到统计数据</strong>。比如 performance schema 的 events_statements_summary_by_digest 表，这个表捕获了很多关键信息，比如延迟、错误量、查询量。我们看下面的例子，SQL执行了2次，平均执行时间是325毫秒，表里的时间度量指标都是以皮秒为单位。</li>
+<strong>通过 performance schema 和 sys schema 拿到统计数据</strong>。比如 performance schema 的 events_statements_summary_by_digest 表，这个表捕获了很多关键信息，比如延迟、错误量、查询量。我们看下面的例子，SQL执行了2次，平均执行时间是325毫秒，表里的时间度量指标都是以皮秒为单位。
 </ol><pre><code class="language-json">*************************** 1. row ***************************
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; SCHEMA_NAME: employees
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;DIGEST: 0c6318da9de53353a3a1bacea70b4fce
@@ -58,8 +58,8 @@
 +-------------------------+-----------+
 12 rows in set (0.001 sec)
 </code></pre><p>例子中的这些指标都是 Counter 类型，单调递增，另外 Com_ 是 Command 的前缀，即各类命令的执行次数。<strong>整体吞吐量主要是看 Questions 指标</strong>，但Questions 很容易和它上面的Queries混淆。从例子里我们可以明显看出 Questions 的数量比 Queries 少。Questions 表示客户端发给 MySQL 的语句数量，而Queries还会包含在存储过程中执行的语句，以及 PREPARE 这种准备语句，所以监控整体吞吐一般是看 Questions。</p><p>流量方面的指标，一般我们会统计写数量（Com_insert + Com_update + Com_delete）、读数量（Com_select）、语句总量（Questions）。</p><h3>错误</h3><p>错误量这类指标有多个应用场景，比如客户端连接 MySQL 失败了，或者语句发给 MySQL，执行的时候失败了，都需要有失败计数。典型的采集手段有两种。</p><ol>
-<li><strong>在客户端采集、埋点</strong>，不管是 MySQL 的问题还是网络的问题，亦或者中间负载均衡的问题或DNS解析的问题，只要连接失败了，都可以发现。缺点刚刚我们也介绍了，就是会有代码侵入性。</li>
-<li><strong>从 MySQL 中采集相关错误</strong>，比如连接错误可以通过 Aborted_connects 和 Connection_errors_max_connections 拿到。</li>
+<strong>在客户端采集、埋点</strong>，不管是 MySQL 的问题还是网络的问题，亦或者中间负载均衡的问题或DNS解析的问题，只要连接失败了，都可以发现。缺点刚刚我们也介绍了，就是会有代码侵入性。
+<strong>从 MySQL 中采集相关错误</strong>，比如连接错误可以通过 Aborted_connects 和 Connection_errors_max_connections 拿到。
 </ol><pre><code class="language-json">show global status where Variable_name regexp 'Connection_errors_max_connections|Aborted_connects';
 +-----------------------------------+--------+
 | Variable_name&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;| Value&nbsp; |
@@ -140,14 +140,14 @@ timeout = "3s"
 request = '''
 select 'n9e' as service, count(*) as total from n9e_v5.users
 '''
-</code></pre><p>这就是自定义SQL的配置，想要查询哪个数据库实例，就在对应的 [[instances]] 下面增加 [[instances.queries]] 。我们看下这几个配置参数的解释。</p><ul>
-<li>mesurement 指标类别，会作为 metric name 的前缀。</li>
-<li>metric_fields 查询返回的结果，可能有多列是数值，指定哪些列作为指标上报。</li>
-<li>label_fields 查询返回的结果，可能有多列是字符串，指定哪些列作为标签上报。</li>
-<li>field_to_append 指定某一列的内容作为 metric name 的后缀。</li>
-<li>timeout 语句执行超时时间。</li>
-<li>request 查询语句，连续三个单引号，和Python的三个单引号语义类似，里边的内容就不用转义了。</li>
-</ul><p>MySQL 相关的监控实践，包括性能监控和业务监控，核心就是上面我们说的这些内容，下面我们做一个总结。</p><h2>小结</h2><p>我们应用之前学过的 Google 四个黄金指标的方法论，来指导MySQL 监控数据的采集，从延迟、流量、错误、饱和度四个方面分别讲解了具体的指标是什么以及如何获取这些指标。</p><p>采集器部署方面，我分享了两种典型的部署方案，实际上除了这两种，还有一种，就是容器环境下 Sidecar 模式。因为生产环境里 MySQL 一般很少放到容器里跑，所以这里没有提。另外，由于 MySQL 存储了很多业务数据，是业务指标的重要来源，通过自定义 SQL可以获取很多业务指标，推荐你试用一下这种监控方式。</p><p>老规矩，我把这一讲的内容整理成了一张脑图，方便你理解和记忆。</p><p><img src="https://static001.geekbang.org/resource/image/99/27/992e7988a1e10e9395bd771cf1314327.jpg?wh=2141x2222" alt=""></p><h2>互动时刻</h2><p><a href="https://github.com/flashcatcloud/categraf/blob/main/inputs/mysql/dashboard-by-ident.json">MySQL的监控大盘</a>，我们已经给出了，一些关键指标也点出来了，那告警规则应该怎么配置呢？常见的告警 PromQL 有哪些？欢迎你留言分享，也欢迎你把今天的内容分享给你身边的朋友，邀他一起学习。我们下一讲再见！</p>
+</code></pre><p>这就是自定义SQL的配置，想要查询哪个数据库实例，就在对应的 [[instances]] 下面增加 [[instances.queries]] 。我们看下这几个配置参数的解释。</p>
+mesurement 指标类别，会作为 metric name 的前缀。
+metric_fields 查询返回的结果，可能有多列是数值，指定哪些列作为指标上报。
+label_fields 查询返回的结果，可能有多列是字符串，指定哪些列作为标签上报。
+field_to_append 指定某一列的内容作为 metric name 的后缀。
+timeout 语句执行超时时间。
+request 查询语句，连续三个单引号，和Python的三个单引号语义类似，里边的内容就不用转义了。
+<p>MySQL 相关的监控实践，包括性能监控和业务监控，核心就是上面我们说的这些内容，下面我们做一个总结。</p><h2>小结</h2><p>我们应用之前学过的 Google 四个黄金指标的方法论，来指导MySQL 监控数据的采集，从延迟、流量、错误、饱和度四个方面分别讲解了具体的指标是什么以及如何获取这些指标。</p><p>采集器部署方面，我分享了两种典型的部署方案，实际上除了这两种，还有一种，就是容器环境下 Sidecar 模式。因为生产环境里 MySQL 一般很少放到容器里跑，所以这里没有提。另外，由于 MySQL 存储了很多业务数据，是业务指标的重要来源，通过自定义 SQL可以获取很多业务指标，推荐你试用一下这种监控方式。</p><p>老规矩，我把这一讲的内容整理成了一张脑图，方便你理解和记忆。</p><p><img src="https://static001.geekbang.org/resource/image/99/27/992e7988a1e10e9395bd771cf1314327.jpg?wh=2141x2222" alt=""></p><h2>互动时刻</h2><p><a href="https://github.com/flashcatcloud/categraf/blob/main/inputs/mysql/dashboard-by-ident.json">MySQL的监控大盘</a>，我们已经给出了，一些关键指标也点出来了，那告警规则应该怎么配置呢？常见的告警 PromQL 有哪些？欢迎你留言分享，也欢迎你把今天的内容分享给你身边的朋友，邀他一起学习。我们下一讲再见！</p>
 <style>
     ul {
       list-style: none;
@@ -257,7 +257,7 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -272,8 +272,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/f2/73/1c7bceae.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -288,8 +288,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/46/13/48ca967c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -304,8 +304,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/36/83/9c/bb76204a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -320,8 +320,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f1/84/7d21bd9e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -336,8 +336,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/c4/92/338b5609.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -352,8 +352,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/a1/d8/42252c48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -368,8 +368,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/07/8a/4bef6202.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -384,8 +384,8 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/54/21/0bac2254.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -400,5 +400,4 @@ select 'n9e' as service, count(*) as total from n9e_v5.users
   </div>
 </div>
 </div>
-</li>
-</ul>
+

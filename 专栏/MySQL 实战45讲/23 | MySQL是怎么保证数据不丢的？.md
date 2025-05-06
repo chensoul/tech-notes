@@ -25,15 +25,15 @@
 
 write 和fsync的时机，是由参数sync_binlog控制的：
 
-<li>
+
 sync_binlog=0的时候，表示每次提交事务都只write，不fsync；
-</li>
-<li>
+
+
 sync_binlog=1的时候，表示每次提交事务都会执行fsync；
-</li>
-<li>
+
+
 sync_binlog=N(N&gt;1)的时候，表示每次提交事务都write，但累积N个事务后才fsync。
-</li>
+
 
 因此，在出现IO瓶颈的场景里，将sync_binlog设置成一个比较大的值，可以提升性能。在实际的业务场景中，考虑到丢失日志量的可控性，一般不建议将这个参数设成0，比较常见的是将其设置为100~1000中的某个数值。
 
@@ -61,29 +61,29 @@ sync_binlog=N(N&gt;1)的时候，表示每次提交事务都write，但累积N�
 
 这三种状态分别是：
 
-<li>
+
 存在redo log buffer中，物理上是在MySQL进程内存中，就是图中的红色部分；
-</li>
-<li>
+
+
 写到磁盘(write)，但是没有持久化（fsync)，物理上是在文件系统的page cache里面，也就是图中的黄色部分；
-</li>
-<li>
+
+
 持久化到磁盘，对应的是hard disk，也就是图中的绿色部分。
-</li>
+
 
 日志写到redo log buffer是很快的，wirte到page cache也差不多，但是持久化到磁盘的速度就慢多了。
 
 为了控制redo log的写入策略，InnoDB提供了innodb_flush_log_at_trx_commit参数，它有三种可能取值：
 
-<li>
+
 设置为0的时候，表示每次事务提交时都只是把redo log留在redo log buffer中;
-</li>
-<li>
+
+
 设置为1的时候，表示每次事务提交时都将redo log直接持久化到磁盘；
-</li>
-<li>
+
+
 设置为2的时候，表示每次事务提交时都只是把redo log写到page cache。
-</li>
+
 
 InnoDB有一个后台线程，每隔1秒，就会把redo log buffer中的日志，调用write写到文件系统的page cache，然后调用fsync持久化到磁盘。
 
@@ -91,12 +91,12 @@ InnoDB有一个后台线程，每隔1秒，就会把redo log buffer中的日志�
 
 实际上，除了后台线程每秒一次的轮询操作外，还有两种场景会让一个没有提交的事务的redo log写入到磁盘中。
 
-<li>
+
 **一种是，redo log buffer占用的空间即将达到 innodb_log_buffer_size一半的时候，后台线程会主动写盘。**注意，由于这个事务并没有提交，所以这个写盘动作只是write，而没有调用fsync，也就是只留在了文件系统的page cache。
-</li>
-<li>
+
+
 **另一种是，并行的事务提交的时候，顺带将这个事务的redo log buffer持久化到磁盘。**假设一个事务A执行到一半，已经写了一些redo log到buffer中，这时候有另外一个线程的事务B提交，如果innodb_flush_log_at_trx_commit设置的是1，那么按照这个参数的逻辑，事务B要把redo log buffer里的日志全部持久化到磁盘。这时候，就会带上事务A在redo log buffer里的日志一起持久化到磁盘。
-</li>
+
 
 这里需要说明的是，我们介绍两阶段提交的时候说过，时序上redo log先prepare， 再写binlog，最后再把redo log commit。
 
@@ -120,18 +120,18 @@ LSN也会写到InnoDB的数据页中，来确保数据页不会被多次执行�
 
 从图中可以看到，
 
-<li>
+
 trx1是第一个到达的，会被选为这组的 leader；
-</li>
-<li>
+
+
 等trx1要开始写盘的时候，这个组里面已经有了三个事务，这时候LSN也变成了160；
-</li>
-<li>
+
+
 trx1去写盘的时候，带的就是LSN=160，因此等trx1返回时，所有LSN小于等于160的redo log，都已经被持久化到磁盘；
-</li>
-<li>
+
+
 这时候trx2和trx3就可以直接返回了。
-</li>
+
 
 所以，一次组提交里面，组员越多，节约磁盘IOPS的效果越好。但如果只有单线程压测，那就只能老老实实地一个事务对应一次持久化操作了。
 
@@ -143,12 +143,12 @@ trx1去写盘的时候，带的就是LSN=160，因此等trx1返回时，所有LS
 
 图中，我把“写binlog”当成一个动作。但实际上，写binlog是分成两步的：
 
-<li>
+
 先把binlog从binlog cache中写到磁盘上的binlog文件；
-</li>
-<li>
+
+
 调用fsync持久化。
-</li>
+
 
 MySQL为了让组提交的效果更好，把redo log做fsync的时间拖到了步骤1之后。也就是说，上面的图变成了这样：
 
@@ -160,12 +160,12 @@ MySQL为了让组提交的效果更好，把redo log做fsync的时间拖到了�
 
 如果你想提升binlog组提交的效果，可以通过设置 binlog_group_commit_sync_delay 和 binlog_group_commit_sync_no_delay_count来实现。
 
-<li>
+
 binlog_group_commit_sync_delay参数，表示延迟多少微秒后才调用fsync;
-</li>
-<li>
+
+
 binlog_group_commit_sync_no_delay_count参数，表示累积多少次以后才调用fsync。
-</li>
+
 
 这两个条件是或的关系，也就是说只要有一个满足条件就会调用fsync。
 
@@ -175,26 +175,26 @@ binlog_group_commit_sync_no_delay_count参数，表示累积多少次以后才�
 
 现在你就能理解了，WAL机制主要得益于两个方面：
 
-<li>
+
 redo log 和 binlog都是顺序写，磁盘的顺序写比随机写速度要快；
-</li>
-<li>
+
+
 组提交机制，可以大幅度降低磁盘的IOPS消耗。
-</li>
+
 
 分析到这里，我们再来回答这个问题：**如果你的MySQL现在出现了性能瓶颈，而且瓶颈在IO上，可以通过哪些方法来提升性能呢？**
 
 针对这个问题，可以考虑以下三种方法：
 
-<li>
+
 设置 binlog_group_commit_sync_delay 和 binlog_group_commit_sync_no_delay_count参数，减少binlog的写盘次数。这个方法是基于“额外的故意等待”来实现的，因此可能会增加语句的响应时间，但没有丢失数据的风险。
-</li>
-<li>
+
+
 将sync_binlog 设置为大于1的值（比较常见是100~1000）。这样做的风险是，主机掉电时会丢binlog日志。
-</li>
-<li>
+
+
 将innodb_flush_log_at_trx_commit设置为2。这样做的风险是，主机掉电的时候会丢数据。
-</li>
+
 
 我不建议你把innodb_flush_log_at_trx_commit 设置成0。因为把这个参数设置成0，表示redo log只保存在内存中，这样的话MySQL本身异常重启也会丢数据，风险太大。而redo log写到文件系统的page cache的速度也是很快的，所以将这个参数设置成2跟设置成0其实性能差不多，但这样做MySQL异常重启时就不会丢数据了，相比之下风险会更小。
 
@@ -228,15 +228,15 @@ redo log 和 binlog都是顺序写，磁盘的顺序写比随机写速度要快�
 
 实际上数据库的crash-safe保证的是：
 
-<li>
+
 如果客户端收到事务成功的消息，事务就一定持久化了；
-</li>
-<li>
+
+
 如果客户端收到事务失败（比如主键冲突、回滚等）的消息，事务就一定失败了；
-</li>
-<li>
+
+
 如果客户端收到“执行异常”的消息，应用需要重连后通过查询当前状态来继续后续的逻辑。此时数据库只需要保证内部（数据和日志之间，主库和备库之间）一致就可以了。
-</li>
+
 
 最后，又到了课后问题时间。
 
@@ -252,13 +252,13 @@ redo log 和 binlog都是顺序写，磁盘的顺序写比随机写速度要快�
 
 @Long 同学，在留言中提到了几个很好的场景。
 
-<li>
+
 <p>其中第3个问题，“如果一个数据库是被客户端的压力打满导致无法响应的，重启数据库是没用的。”，说明他很好地思考了。<br>
 这个问题是因为重启之后，业务请求还会再发。而且由于是重启，buffer pool被清空，可能会导致语句执行得更慢。</p>
-</li>
-<li>
+
+
 他提到的第4个问题也很典型。有时候一个表上会出现多个单字段索引（而且往往这是因为运维工程师对索引原理不够清晰做的设计），这样就可能出现优化器选择索引合并算法的现象。但实际上，索引合并算法的效率并不好。而通过将其中的一个索引改成联合索引的方法，是一个很好的应对方案。
-</li>
+
 
 还有其他几个同学提到的问题场景，也很好，很值得你一看。
 

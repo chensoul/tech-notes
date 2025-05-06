@@ -25,165 +25,165 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;为什么我们要学习&#32;Kubernetes&#32;技术.md">00 为什么我们要学习 Kubernetes 技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;重新认识&#32;Kubernetes&#32;的核心组件.md">01 重新认识 Kubernetes 的核心组件.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;深入理解&#32;Kubernets&#32;的编排对象.md">02 深入理解 Kubernets 的编排对象.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;DevOps&#32;场景下落地&#32;K8s&#32;的困难分析.md">03 DevOps 场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;微服务应用场景下落地&#32;K8s&#32;的困难分析.md">04 微服务应用场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;解决&#32;K8s&#32;落地难题的方法论提炼.md">05 解决 K8s 落地难题的方法论提炼.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;练习篇：K8s&#32;核心实践知识掌握.md">06 练习篇：K8s 核心实践知识掌握.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;容器引擎&#32;containerd&#32;落地实践.md">07 容器引擎 containerd 落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;K8s&#32;集群安装工具&#32;kubeadm&#32;的落地实践.md">08 K8s 集群安装工具 kubeadm 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;南北向流量组件&#32;IPVS&#32;的落地实践.md">09 南北向流量组件 IPVS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;东西向流量组件&#32;Calico&#32;的落地实践.md">10 东西向流量组件 Calico 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="11&#32;服务发现&#32;DNS&#32;的落地实践.md">11 服务发现 DNS 的落地实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;练习篇：K8s&#32;集群配置测验.md">12 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;理解对方暴露服务的对象&#32;Ingress&#32;和&#32;Service.md">13 理解对方暴露服务的对象 Ingress 和 Service.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;应用网关&#32;OpenResty&#32;对接&#32;K8s&#32;实践.md">14 应用网关 OpenResty 对接 K8s 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Service&#32;层引流技术实践.md">15 Service 层引流技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;Cilium&#32;容器网络的落地实践.md">16 Cilium 容器网络的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;应用流量的优雅无损切换实践.md">17 应用流量的优雅无损切换实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;练习篇：应用流量无损切换技术测验.md">18 练习篇：应用流量无损切换技术测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;使用&#32;Rook&#32;构建生产可用存储环境实践.md">19 使用 Rook 构建生产可用存储环境实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;有状态应用的默认特性落地分析.md">20 有状态应用的默认特性落地分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;案例：分布式&#32;MySQL&#32;集群工具&#32;Vitess&#32;实践分析.md">21 案例：分布式 MySQL 集群工具 Vitess 实践分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;存储对象&#32;PV、PVC、Storage&#32;Classes&#32;的管理落地实践.md">22 存储对象 PV、PVC、Storage Classes 的管理落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;K8s&#32;集群中存储对象灾备的落地实践.md">23 K8s 集群中存储对象灾备的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;练习篇：K8s&#32;集群配置测验.md">24 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -269,21 +269,21 @@ Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
 <p>DNS 支持的服务发现是支持 Service 和 Pod 的。它的规则如下。</p>
 <h4><strong>Services</strong></h4>
 <p>A 记录：</p>
-<ul>
-<li>Service（headless Service 除外）将被分配一个 DNS A 记录，格式为 my-svc.my-namespace.svc.cluster.local。该 DNS 记录解析到 Service 的 ClusterIP。</li>
-<li>Headless Service（没有 ClusterIP）也将被分配一个 DNS A 记录，格式为 my-svc.my-namespace.svc.cluster.local。该 DNS 记录解析到 Service 所选中的一组 Pod 的 IP 地址的集合。调用者应该使用该 IP 地址集合，或者按照轮询（round-robin）的方式从集合中选择一个 IP 地址使用。</li>
-</ul>
+
+Service（headless Service 除外）将被分配一个 DNS A 记录，格式为 my-svc.my-namespace.svc.cluster.local。该 DNS 记录解析到 Service 的 ClusterIP。
+Headless Service（没有 ClusterIP）也将被分配一个 DNS A 记录，格式为 my-svc.my-namespace.svc.cluster.local。该 DNS 记录解析到 Service 所选中的一组 Pod 的 IP 地址的集合。调用者应该使用该 IP 地址集合，或者按照轮询（round-robin）的方式从集合中选择一个 IP 地址使用。
+
 <p>SRV 记录：Service（含 headless Service）的命名端口（有 name 的端口）将被分配一个 SRV 记录，其格式为 _my-port-name._my-port-protocol.my-svc.my-namespace.svc.cluster.local。</p>
-<ul>
-<li>对于一个普通 Service（非 headless Service），该 SRV 记录解析到其端口号和域名 my-svc.my-namespace.svc.cluster.local。</li>
-<li>对于一个 Headless Service，该 SRV 记录解析到多个结果：每一个结果都对应该 Service 的一个后端 Pod，包含其端口号和 Pod 的域名 auto-generated-pod-name.my-svc.my-namespace.svc.cluster.local。</li>
-</ul>
+
+对于一个普通 Service（非 headless Service），该 SRV 记录解析到其端口号和域名 my-svc.my-namespace.svc.cluster.local。
+对于一个 Headless Service，该 SRV 记录解析到多个结果：每一个结果都对应该 Service 的一个后端 Pod，包含其端口号和 Pod 的域名 auto-generated-pod-name.my-svc.my-namespace.svc.cluster.local。
+
 <h4><strong>Pods</strong></h4>
 <p>Kubernetes 在创建 Pod 时，将 Pod 定义中的 metadata.name 的值作为 Pod 实例的 hostname。</p>
-<ul>
-<li>Pod 定义中有一个可选字段 spec.hostname 可用来直接指定 Pod 的 hostname。例如，某 Pod 的 spec.hostname 字段被设置为 my-host，则该 Pod 创建后 hostname 将被设为 my-host。</li>
-<li>Pod 定义中还有一个可选字段 spec.subdomain 可用来指定 Pod 的 subdomain。例如，名称空间 my-namespace 中，某 Pod 的 hostname 为 foo，并且 subdomain 为 bar，则该 Pod 的完整域名（FQDN）为 foo.bar.my-namespace.svc.cluster.local。</li>
-</ul>
+
+Pod 定义中有一个可选字段 spec.hostname 可用来直接指定 Pod 的 hostname。例如，某 Pod 的 spec.hostname 字段被设置为 my-host，则该 Pod 创建后 hostname 将被设为 my-host。
+Pod 定义中还有一个可选字段 spec.subdomain 可用来指定 Pod 的 subdomain。例如，名称空间 my-namespace 中，某 Pod 的 hostname 为 foo，并且 subdomain 为 bar，则该 Pod 的完整域名（FQDN）为 foo.bar.my-namespace.svc.cluster.local。
+
 <p>备注：A 记录不是根据 Pod name 创建的，而是根据 hostname 创建的。如果一个 Pod 没有 hostname 只有 subdomain，则 Kubernetes 将只为其 headless Service 创建一个 A 记录 default-subdomain.my-namespace.svc.cluster-domain.example，该记录指向 Pod 的 IP 地址。</p>
 <h3>DNS 优化</h3>
 <p>社区根据压测数据，对 CoreDNS 需要的内存提供了一个计算公式：</p>
@@ -291,10 +291,10 @@ Address 1: 10.96.0.1 kubernetes.default.svc.cluster.local
 
 </code></pre>
 <p>注解：</p>
-<ul>
-<li>30 MB 留给缓存，默认缓存大小为 1 万条记录。</li>
-<li>5 MB 留给应用查询操作使用，默认压测单例 CoreDNS 支持大约 30K QPS。</li>
-</ul>
+
+30 MB 留给缓存，默认缓存大小为 1 万条记录。
+5 MB 留给应用查询操作使用，默认压测单例 CoreDNS 支持大约 30K QPS。
+
 <p><img src="assets/aaddf7c0-e123-11ea-9254-2dbb61d9b3dd.jpg" alt="kubedns-perf" /></p>
 <h3>集成外部 DNS 服务</h3>
 <p>我们在使用 Kubernetes 的场景中，企业经常已经默认有了自己的 DNS 服务，在部署容器集群的时候，肯定期望和外置的 DNS 服务做一些集成，方便企业内部的使用。</p>
@@ -324,10 +324,10 @@ data:
 <h3>总结</h3>
 <p>CoreDNS 是 Kubernetes 集群中最核心，也是最容易理解的一个组件，它的功能单一，很容易上手。但是名字解析的规则还是需要大家熟悉，避免一些不必要的认知错误。</p>
 <p>参考：</p>
-<ul>
-<li><a href="https://github.com/coredns/deployment/blob/master/kubernetes/Scaling_CoreDNS.md">https://github.com/coredns/deployment/blob/master/kubernetes/Scaling_CoreDNS.md</a></li>
-<li><a href="https://kuboard.cn/learning/k8s-intermediate/service/dns.html">https://kuboard.cn/learning/k8s-intermediate/service/dns.html</a></li>
-</ul>
+
+<a href="https://github.com/coredns/deployment/blob/master/kubernetes/Scaling_CoreDNS.md">https://github.com/coredns/deployment/blob/master/kubernetes/Scaling_CoreDNS.md</a>
+<a href="https://kuboard.cn/learning/k8s-intermediate/service/dns.html">https://kuboard.cn/learning/k8s-intermediate/service/dns.html</a>
+
 </div>
                     </div>
                     <div>

@@ -76,12 +76,12 @@ Jupyter Notebook如何解决这个问题呢？
 
 另外，我还推荐下面这些Jupyter Notebook，作为你实践的第一站。
 
-<li>
+
 第一个是Jupyter官方：[https://mybinder.org/v2/gh/binder-examples/matplotlib-versions/mpl-v2.0/?filepath=matplotlib_versions_demo.ipynb](https://mybinder.org/v2/gh/binder-examples/matplotlib-versions/mpl-v2.0/?filepath=matplotlib_versions_demo.ipynb)
-</li>
-<li>
+
+
 第二个是Google Research提供的Colab环境，尤其适合机器学习的实践应用：[https://colab.research.google.com/notebooks/basic_features_overview.ipynb](https://colab.research.google.com/notebooks/basic_features_overview.ipynb)
-</li>
+
 
 > 
 如果你想在本地或者远程的机器上安装Jupyter Notebook，可以参考下面的两个文档。

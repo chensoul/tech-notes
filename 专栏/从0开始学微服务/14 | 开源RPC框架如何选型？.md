@@ -8,27 +8,27 @@
 
 跟语言平台绑定的开源RPC框架主要有下面几种。
 
-<li>
+
 Dubbo：国内最早开源的RPC框架，由阿里巴巴公司开发并于2011年末对外开源，仅支持Java语言。
-</li>
-<li>
+
+
 Motan：微博内部使用的RPC框架，于2016年对外开源，仅支持Java语言。
-</li>
-<li>
+
+
 Tars：腾讯内部使用的RPC框架，于2017年对外开源，仅支持C++语言。
-</li>
-<li>
+
+
 Spring Cloud：国外Pivotal公司2014年对外开源的RPC框架，仅支持Java语言，最近几年生态发展得比较好，是比较火的RPC框架。
-</li>
+
 
 而跨语言平台的开源RPC框架主要有以下几种。
 
-<li>
+
 gRPC：Google于2015年对外开源的跨语言RPC框架，支持常用的C++、Java、Python、Go、Ruby、PHP、Android Java、Objective-C等多种语言。
-</li>
-<li>
+
+
 Thrift：最初是由Facebook开发的内部系统跨语言的RPC框架，2007年贡献给了Apache基金，成为Apache开源项目之一，支持常用的C++、Java、PHP、Python、Ruby、Erlang等多种语言。
-</li>
+
 
 所以很明显，如果你的业务场景仅仅局限于一种语言的话，可以选择跟语言绑定的RPC框架中的一种；如果涉及多个语言平台之间的相互调用，就应该选择跨语言平台的RPC框架。
 
@@ -51,15 +51,15 @@ Thrift：最初是由Facebook开发的内部系统跨语言的RPC框架，2007�
 
 我们再来看下Dubbo的调用框架是如何实现的。
 
-<li>
+
 通信框架方面，Dubbo默认采用了Netty作为通信框架。
-</li>
-<li>
+
+
 通信协议方面，Dubbo除了支持私有的Dubbo协议外，还支持RMI协议、Hession协议、HTTP协议、Thrift协议等。
-</li>
-<li>
+
+
 序列化格式方面，Dubbo支持多种序列化格式，比如Dubbo、Hession、JSON、Kryo、FST等。
-</li>
+
 
 **2. Motan**
 
@@ -70,21 +70,21 @@ Motan是国内另外一个比较有名的开源的RPC框架，同样也只支持
 
 Motan与Dubbo的架构类似，都需要在Client端（服务消费者）和Server端（服务提供者）引入SDK，其中Motan框架主要包含下面几个功能模块。
 
-<li>
+
 register：用来和注册中心交互，包括注册服务、订阅服务、服务变更通知、服务心跳发送等功能。Server端会在系统初始化时通过register模块注册服务，Client端会在系统初始化时通过register模块订阅到具体提供服务的Server列表，当Server列表发生变更时也由register模块通知Client。
-</li>
-<li>
+
+
 protocol：用来进行RPC服务的描述和RPC服务的配置管理，这一层还可以添加不同功能的filter用来完成统计、并发限制等功能。
-</li>
-<li>
+
+
 serialize：将RPC请求中的参数、结果等对象进行序列化与反序列化，即进行对象与字节流的互相转换，默认使用对Java更友好的Hessian  2进行序列化。
-</li>
-<li>
+
+
 transport：用来进行远程通信，默认使用Netty NIO的TCP长链接方式。
-</li>
-<li>
+
+
 cluster：Client端使用的模块，cluster是一组可用的Server在逻辑上的封装，包含若干可以提供RPC服务的Server，实际请求时会根据不同的高可用与负载均衡策略选择一个可用的Server发起远程调用。
-</li>
+
 
 **3. Tars**
 
@@ -95,21 +95,21 @@ Tars是腾讯根据内部多年使用微服务架构的实践，总结而成的�
 
 Tars的架构交互主要包括以下几个流程：
 
-<li>
+
 服务发布流程：在web系统上传server的发布包到patch，上传成功后，在web上提交发布server请求，由registry服务传达到node，然后node拉取server的发布包到本地，拉起server服务。
-</li>
-<li>
+
+
 管理命令流程：web系统上的可以提交管理server服务命令请求，由registry服务传达到node服务，然后由node向server发送管理命令。
-</li>
-<li>
+
+
 心跳上报流程：server服务运行后，会定期上报心跳到node，node然后把服务心跳信息上报到registry服务，由registry进行统一管理。
-</li>
-<li>
+
+
 信息上报流程：server服务运行后，会定期上报统计信息到stat，打印远程日志到log，定期上报属性信息到prop、上报异常信息到notify、从config拉取服务配置信息。
-</li>
-<li>
+
+
 client访问server流程：client可以通过server的对象名Obj间接访问server，client会从registry上拉取server的路由信息（如IP、Port信息），然后根据具体的业务特性（同步或者异步，TCP或者UDP方式）访问server（当然client也可以通过IP/Port直接访问server）。
-</li>
+
 
 **4. Spring Cloud**
 
@@ -120,18 +120,18 @@ Spring Cloud是为了解决微服务架构中服务治理而提供的一系列�
 
 由此可见，Spring Cloud微服务架构是由多个组件一起组成的，各个组件的交互流程如下。
 
-<li>
+
 请求统一通过API网关Zuul来访问内部服务，先经过Token进行安全认证。
-</li>
-<li>
+
+
 通过安全认证后，网关Zuul从注册中心Eureka获取可用服务节点列表。
-</li>
-<li>
+
+
 从可用服务节点中选取一个可用节点，然后把请求分发到这个节点。
-</li>
-<li>
+
+
 整个请求过程中，Hystrix组件负责处理服务超时熔断，Turbine组件负责监控服务间的调用和熔断相关指标，Sleuth组件负责调用链监控，ELK负责日志分析。
-</li>
+
 
 **5. 对比选型**
 
@@ -154,15 +154,15 @@ Spring Cloud是为了解决微服务架构中服务治理而提供的一系列�
 
 它的主要特性包括三个方面。
 
-<li>
+
 通信协议采用了HTTP/2，因为HTTP/2提供了连接复用、双向流、服务器推送、请求优先级、首部压缩等机制，所以在通信过程中可以节省带宽、降低TCP连接次数、节省CPU，尤其对于移动端应用来说，可以帮助延长电池寿命。
-</li>
-<li>
+
+
 IDL使用了[ProtoBuf](https://developers.google.com/protocol-buffers/docs/overview)，ProtoBuf是由Google开发的一种数据序列化协议，它的压缩和传输效率极高，语法也简单，所以被广泛应用在数据存储和通信协议上。
-</li>
-<li>
+
+
 多语言支持，能够基于多种语言自动生成对应语言的客户端和服务端的代码。
-</li>
+
 
 **2. Thrift**
 
@@ -173,15 +173,15 @@ IDL使用了[ProtoBuf](https://developers.google.com/protocol-buffers/docs/overv
 
 从这张图上可以看出Thrift RPC框架的特性。
 
-<li>
+
 支持多种序列化格式：如Binary、Compact、JSON、Multiplexed等。
-</li>
-<li>
+
+
 支持多种通信方式：如Socket、Framed、File、Memory、zlib等。
-</li>
-<li>
+
+
 服务端支持多种处理方式：如Simple 、Thread Pool、Non-Blocking等。
-</li>
+
 
 **3. 对比选型**
 
@@ -195,15 +195,15 @@ IDL使用了[ProtoBuf](https://developers.google.com/protocol-buffers/docs/overv
 
 以上就是我对几种使用最广泛的开源RPC框架的选型建议，也是基于它们目前现状所作出的判断，从长远来看，支持多语言是RPC框架未来的发展趋势。正是基于此判断，各个RPC框架都提供了Sidecar组件来支持多语言平台之间的RPC调用。
 
-<li>
+
 Dubbo在去年年底又重启了维护，并且宣称要引入Sidecar组件来构建[Dubbo Mesh](https://yq.aliyun.com/articles/604030)提供多语言支持。
-</li>
-<li>
+
+
 Motan也在去年对外开源了其内部的Sidecar组件：[Motan-go](https://github.com/weibocom/motan-go)，目前支持PHP、Java语言之间的相互调用。
-</li>
-<li>
+
+
 Spring Cloud也提供了Sidecar组件[spring-cloud-netflix-sideca](https://github.com/spring-cloud/spring-cloud-netflix/tree/master/spring-cloud-netflix-sidecar)，可以让其他语言也可以使用Spring Cloud的组件。
-</li>
+
 
 所以未来语言不会成为使用上面这几种RPC框架的约束，而gRPC和Thrift虽然支持跨语言的RPC调用，但是因为它们只提供了最基本的RPC框架功能，缺乏一系列配套的服务化组件和服务治理功能的支撑，所以使用它们作为跨语言调用的RPC框架，就需要自己考虑注册中心、熔断、限流、监控、分布式追踪等功能的实现，不过好在大多数功能都有开源实现，可以直接采用。
 

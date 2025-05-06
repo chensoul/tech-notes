@@ -315,7 +315,7 @@ func main() {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/44/b5/7eba5a0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -330,8 +330,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -346,8 +346,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/26/38/ef063dc2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -362,8 +362,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/b9/c8/4c0cc367.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -378,8 +378,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b0/6e/921cb700.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -394,8 +394,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/3a/39/72d81605.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -410,8 +410,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Ge7uhlEVxicQT73YuomDPrVKI8UmhqxKWrhtO5GMNlFjrHWfd3HAjgaSribR4Pzorw8yalYGYqJI4VPvUyPzicSKg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -426,8 +426,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -442,8 +442,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -458,8 +458,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Ge7uhlEVxicQT73YuomDPrVKI8UmhqxKWrhtO5GMNlFjrHWfd3HAjgaSribR4Pzorw8yalYGYqJI4VPvUyPzicSKg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -474,8 +474,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/b0/d3/200e82ff.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -490,8 +490,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -506,5 +506,4 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

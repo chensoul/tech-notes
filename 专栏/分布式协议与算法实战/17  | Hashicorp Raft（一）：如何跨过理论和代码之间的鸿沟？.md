@@ -211,8 +211,8 @@ type Log struct {
 我强调一下，与协议中的定义不同，日志项对应的数据结构中，包含了LogType和Extensions两个额外的字段：
 
 - LogType可用于标识不同用途的日志项，比如，使用LogCommand标识指令对应的日志项，使用LogConfiguration表示成员变更配置对应的日志项。
-<li>Extensions可用于在指定日志项中存储一些额外的信息。**这个字段使用的比较少，在调试等场景中可能会用到，你知道有这么个字段就可以了。**<br>
-说完日志复制对应的数据结构，我们分步骤看一下，在Hashicorp Raft中是如何实现日志复制的。</li>
+Extensions可用于在指定日志项中存储一些额外的信息。**这个字段使用的比较少，在调试等场景中可能会用到，你知道有这么个字段就可以了。**<br>
+说完日志复制对应的数据结构，我们分步骤看一下，在Hashicorp Raft中是如何实现日志复制的。
 
 ### 领导者复制日志
 
@@ -244,18 +244,18 @@ type Log struct {
 
 本节课我主要带你了解了如何从算法原理的角度理解Hashicorp Raft实现，有几个重点我想强调一下：
 
-<li>
+
 跟随者、候选人、领导者3种节点状态都有分别对应的功能函数，当需要查看各节点状态相关的功能实现时（比如，跟随者如何接收和处理日志），都可以将对应的函数作为入口函数，来阅读代码和研究功能实现。
-</li>
-<li>
+
+
 raft.go是Hashicorp Raft的核心代码文件，大部分的核心功能都是在这个文件中实现的，平时可以多研究这个文件中的代码，直到彻底吃透，掌握。
-</li>
-<li>
+
+
 在Hashicorp Raft中，支持两种节点间通讯机制，内存型和TCP协议型，其中，内存型通讯机制，主要用于测试，2种通讯机制的代码实现，分别在文件inmem_transport.go和tcp_transport.go中。
-</li>
-<li>
+
+
 Hashicorp Raft实现，是常用的Golang版Raft算法的实现，被众多流行软件使用，如Consul、InfluxDB、IPFS等，相信你对它并不陌生。其他的实现还有[Go-Raft](https://github.com/goraft/raft)、[LogCabin](https://github.com/logcabin/logcabin)、[Willemt-Raft](https://github.com/willemt/raft)等，不过我建议你在后续开发分布式系统时，优先考虑Hashicorp Raft，因为Hashicorp Raft实现，功能完善、代码简洁高效、流行度高，可用性和稳定性被充分打磨。
-</li>
+
 
 最后，关于如何高效地阅读源码，我还想多说一说。在我看来，高效阅读源码的关键在于抓住重点，要有“底线”，不要芝麻和西瓜一把抓，什么都想要，最终陷入到枝节琐碎的细节中出不来。什么是重点呢？我认为重点是数据结构和关键的代码执行流程，比如在Hashicorp Raft源码中，日志项对应的数据结构、RPC消息对应的数据结构、选举领导者的流程、日志复制的流程等，这些就是重点。
 

@@ -6,15 +6,14 @@
 
 首先，Java最黑科技的玩法就是字节码编程，也就是动态修改或是动态生成Java字节码。Java的字节码相当于汇编，其中的一些细节你可以从下面的这几个教程中学习。
 
-<li>
+
 [Java Zone: Introduction to Java Bytecode](https://dzone.com/articles/introduction-to-java-bytecode) ，这篇文章图文并茂地向你讲述了Java字节码的一些细节，是一篇很不错的入门文章。
-</li>
-<li>
+
+
 [IBM DeveloperWorks: Java bytecode](https://www.ibm.com/developerworks/library/it-haggar_bytecode/index.html) ，虽然这篇文章很老了，但是这篇文章是一篇非常好的讲Java 字节码的文章。
-</li>
-<li>
+
+
 [Java Bytecode and JVMTI Examples](https://github.com/jon-bell/bytecode-examples)，这是一些使用 [JVM Tool Interface](http://docs.oracle.com/javase/7/docs/platform/jvmti/jvmti.html) 操作字节码的比较实用的例子。包括方法调用统计、静态字节码修改、Heap Taggin和Heap Walking。
-</li>
 
 当然，一般来说，我们不使用JVMTI操作字节码，而是用一些更好用的库。这里有三个库可以帮你比较容易地做这个事。
 
@@ -44,12 +43,12 @@
 
 对于内存方面，道格·利（Doug Lea）有两篇文章也是很有价值的。
 
-<li>
+
 [The JSR-133 Cookbook for Compiler Writers](http://gee.cs.oswego.edu/dl/jmm/cookbook.html)，解释了怎样实现Java内存模型，特别是在考虑到多处理器（或多核）系统的情况下，多线程和读写屏障的实现。
-</li>
-<li>
+
+
 [Using JDK 9 Memory Order Modes](http://gee.cs.oswego.edu/dl/html/j9mm.html)，讲了怎样通过VarHandle来使用plain、opaque、release/acquire和volatile四种共享内存的访问模式，并剖析了底层的原理。
-</li>
+
 
 垃圾回收机制也是需要好好学习的，在这里推荐一本书 《[The Garbage Collection Handbook](https://book.douban.com/subject/6809987/)》，在豆瓣上的得分居然是9.9（当然，评价人数不多）。这本书非常全面地介绍了垃圾收集的原理、设计和算法。但是这本书也是相当难啃的。中文翻译《[垃圾回收算法手册](https://book.douban.com/subject/26740958/)》翻译得很一般，有人说翻译得很烂。所以，如果可能，还是读英文版的。如果你对从事垃圾回收相关的工作有兴趣，那么你需要好好看一下这本书。
 
@@ -66,36 +65,4 @@ JVM也是学习Java过程中非常重要的一部分内容。我推荐阅读一�
 随后介绍的是Java的内存模型和垃圾回收机制，尤其给出了如何调优垃圾回收方面的资料。这些内容都很底层，但也都很重要。对于想成为高手的你来说，还是有必要花时间来啃一啃的。
 
 下篇文章是数据库方面的内容，我们将探讨各种类型的数据库，非常有意思。敬请期待。
-
-下面是《程序员练级攻略》系列文章的目录。
-
-- [开篇词](https://time.geekbang.org/column/article/8136)
-<li>入门篇
-<ul>
-- [零基础启蒙](https://time.geekbang.org/column/article/8216)
-- [正式入门](https://time.geekbang.org/column/article/8217)
-
-- [程序员修养](https://time.geekbang.org/column/article/8700)
-
-- [编程语言](https://time.geekbang.org/column/article/8701)
-- [理论学科](https://time.geekbang.org/column/article/8887)
-- [系统知识](https://time.geekbang.org/column/article/8888)
-
-- [软件设计](https://time.geekbang.org/column/article/9369)
-
-- [Linux系统、内存和网络（系统底层知识）](https://time.geekbang.org/column/article/9759)
-- [异步I/O模型和Lock-Free编程（系统底层知识）](https://time.geekbang.org/column/article/9851)
-- [Java底层知识](https://time.geekbang.org/column/article/10216)
-- [数据库](https://time.geekbang.org/column/article/10301)
-- [分布式架构入门（分布式架构）](https://time.geekbang.org/column/article/10603)
-- [分布式架构经典图书和论文（分布式架构）](https://time.geekbang.org/column/article/10604)
-- [分布式架构工程设计(分布式架构)](https://time.geekbang.org/column/article/11232)
-- [微服务](https://time.geekbang.org/column/article/11116)
-- [容器化和自动化运维](https://time.geekbang.org/column/article/11665)
-- [机器学习和人工智能](https://time.geekbang.org/column/article/11669)
-- [前端基础和底层原理（前端方向）](https://time.geekbang.org/column/article/12271)
-- [前端性能优化和框架（前端方向）](https://time.geekbang.org/column/article/12389)
-- [UI/UX设计（前端方向）](https://time.geekbang.org/column/article/12486)
-- [技术资源集散地](https://time.geekbang.org/column/article/12561)
-
 

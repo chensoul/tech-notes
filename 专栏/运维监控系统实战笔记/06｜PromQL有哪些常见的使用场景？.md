@@ -5,11 +5,11 @@
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;.&nbsp;&nbsp;&nbsp;node_load1{host="host11",zone="sh"}
 v
 &lt;-------&nbsp;时间&nbsp;----------&gt;
-</code></pre><p>每一个点称为一个样本（sample），样本由三部分组成。</p><ul>
-<li>指标（metric）：metric name和描述当前样本特征的labelsets。</li>
-<li>时间戳（timestamp）：一个精确到毫秒的时间戳。</li>
-<li>值（value）：表示该时间样本的值。</li>
-</ul><!-- [[[read_end]]] --><p>PromQL就是对这样一批样本数据做查询和计算操作。</p><h2>PromQL典型的应用场景</h2><p>PromQL典型的应用场景就是时序数据的查询和二次计算，这也是PromQL的两个核心价值，其中查询操作靠的就是查询选择器，下面我们就来详细地看一下。</p><h3>查询选择器</h3><p>随便一个公司，时序数据至少都有成千上万条，而每个监控图表的渲染或者每条告警规则的处理，都只是针对有限的几条数据，所以<strong>PromQL第一个需求就是过滤</strong>。假设我有两个需求，一是查询上海所有机器1分钟的负载，二是查询所有以host0为前缀的机器1分钟的负载。PromQL的写法是怎样的呢？你可以看一下。</p><pre><code class="language-yaml"># 通过 = 来做 zone 的匹配过滤
+</code></pre><p>每一个点称为一个样本（sample），样本由三部分组成。</p>
+指标（metric）：metric name和描述当前样本特征的labelsets。
+时间戳（timestamp）：一个精确到毫秒的时间戳。
+值（value）：表示该时间样本的值。
+<!-- [[[read_end]]] --><p>PromQL就是对这样一批样本数据做查询和计算操作。</p><h2>PromQL典型的应用场景</h2><p>PromQL典型的应用场景就是时序数据的查询和二次计算，这也是PromQL的两个核心价值，其中查询操作靠的就是查询选择器，下面我们就来详细地看一下。</p><h3>查询选择器</h3><p>随便一个公司，时序数据至少都有成千上万条，而每个监控图表的渲染或者每条告警规则的处理，都只是针对有限的几条数据，所以<strong>PromQL第一个需求就是过滤</strong>。假设我有两个需求，一是查询上海所有机器1分钟的负载，二是查询所有以host0为前缀的机器1分钟的负载。PromQL的写法是怎样的呢？你可以看一下。</p><pre><code class="language-yaml"># 通过 = 来做 zone 的匹配过滤
 node_load1{zone="sh"}
 # 通过 =~ 来做 host 的正则过滤
 node_load1{host=~"host0.*"}
@@ -205,7 +205,7 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLCrJQ4AZe8VrDkR6IO03V4Tda9WexVT4zZiahBjLSYOnZb1Y49JvD2f70uQwYSMibUMQvib9NmGxEiag/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -220,8 +220,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -236,8 +236,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f1/84/7d21bd9e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -252,8 +252,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/8f/cf/890f82d6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -268,8 +268,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/4e/88/791d0f5e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -284,8 +284,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/4e/88/791d0f5e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -300,8 +300,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/4f/b0/ab179368.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -316,8 +316,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/4f/b0/ab179368.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -332,8 +332,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJkGGBK46EQppJydxheC43vBzLqC0t0bpn08cNWW6XsLoRZsLvsR0zBgXAYcAcWDZyicHXOy4ffHsw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -348,8 +348,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJkGGBK46EQppJydxheC43vBzLqC0t0bpn08cNWW6XsLoRZsLvsR0zBgXAYcAcWDZyicHXOy4ffHsw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -364,8 +364,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/45/b2/701f5ad7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -380,8 +380,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/45/b2/701f5ad7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -396,8 +396,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/c3/d1/bdf895bf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -412,8 +412,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/35/72/b4/7420b047.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -428,8 +428,8 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/8f/cf/890f82d6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -444,5 +444,4 @@ increase(net_bytes_recv{interface="eth0"}[1m])/60.0
   </div>
 </div>
 </div>
-</li>
-</ul>
+

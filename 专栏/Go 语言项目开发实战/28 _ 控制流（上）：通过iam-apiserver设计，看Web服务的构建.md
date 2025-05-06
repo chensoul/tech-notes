@@ -5,29 +5,29 @@
 -v/--verbose                          输出详细的返回信息
 -u/--user                             指定账号、密码
 -b/--cookie                           读取 cookie
-</code></pre><p>此外，如果你想使用带UI界面的工具，这里我推荐你使用 Insomnia 。</p><p>Insomnia是一个跨平台的REST API客户端，与Postman、Apifox是一类工具，用于接口管理、测试。Insomnia功能强大，支持以下功能：</p><ul>
-<li>发送HTTP请求；</li>
-<li>创建工作区或文件夹；</li>
-<li>导入和导出数据；</li>
-<li>导出cURL格式的HTTP请求命令；</li>
-<li>支持编写swagger文档；</li>
-<li>快速切换请求；</li>
-<li>URL编码和解码。</li>
-<li>…</li>
-</ul><p>Insomnia界面如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/63/e0/635aa6f3374af05ec2bff7e193314ae0.png?wh=1920x749" alt="图片"></p><p>当然了，也有很多其他优秀的带UI界面的REST API客户端，例如 Postman、Apifox等，你可以根据需要自行选择。</p><p>接下来，我用对secret资源的CURD操作，来给你演示下<strong>如何使用iam-apiserver的功能</strong>。你需要执行6步操作。</p><ol>
-<li>登录iam-apiserver，获取token。</li>
-<li>创建一个名为secret0的secret。</li>
-<li>获取secret0的详细信息。</li>
-<li>更新secret0的描述。</li>
-<li>获取secret列表。</li>
-<li>删除secret0。</li>
+</code></pre><p>此外，如果你想使用带UI界面的工具，这里我推荐你使用 Insomnia 。</p><p>Insomnia是一个跨平台的REST API客户端，与Postman、Apifox是一类工具，用于接口管理、测试。Insomnia功能强大，支持以下功能：</p>
+发送HTTP请求；
+创建工作区或文件夹；
+导入和导出数据；
+导出cURL格式的HTTP请求命令；
+支持编写swagger文档；
+快速切换请求；
+URL编码和解码。
+…
+<p>Insomnia界面如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/63/e0/635aa6f3374af05ec2bff7e193314ae0.png?wh=1920x749" alt="图片"></p><p>当然了，也有很多其他优秀的带UI界面的REST API客户端，例如 Postman、Apifox等，你可以根据需要自行选择。</p><p>接下来，我用对secret资源的CURD操作，来给你演示下<strong>如何使用iam-apiserver的功能</strong>。你需要执行6步操作。</p><ol>
+登录iam-apiserver，获取token。
+创建一个名为secret0的secret。
+获取secret0的详细信息。
+更新secret0的描述。
+获取secret列表。
+删除secret0。
 </ol><p>具体操作如下：</p><ol>
-<li>登录iam-apiserver，获取token：</li>
+登录iam-apiserver，获取token：
 </ol><pre><code>$ curl -s -XPOST -H&quot;Authorization: Basic `echo -n 'admin:Admin@2021'|base64`&quot; http://127.0.0.1:8080/login | jq -r .token
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
 </code></pre><p>这里，为了便于使用，我们将token设置为环境变量：</p><pre><code>TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJleHAiOjE2MzUwNTk4NDIsImlkZW50aXR5IjoiYWRtaW4iLCJpc3MiOiJpYW0tYXBpc2VydmVyIiwib3JpZ19pYXQiOjE2MjcyODM4NDIsInN1YiI6ImFkbWluIn0.gTS0n-7njLtpCJ7mvSnct2p3TxNTUQaduNXxqqLwGfI
 </code></pre><ol start="2">
-<li>创建一个名为secret0的secret：</li>
+创建一个名为secret0的secret：
 </ol><pre><code>$ curl -v -XPOST -H &quot;Content-Type: application/json&quot; -H&quot;Authorization: Bearer ${TOKEN}&quot; -d'{&quot;metadata&quot;:{&quot;name&quot;:&quot;secret0&quot;},&quot;expires&quot;:0,&quot;description&quot;:&quot;admin secret&quot;}' http://iam.api.marmotedu.com:8080/v1/secrets
 * About to connect() to iam.api.marmotedu.com port 8080 (#0)
 *   Trying 127.0.0.1...
@@ -50,19 +50,19 @@ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJpYW0uYXBpLm1hcm1vdGVkdS5jb20iLCJ
 * Connection #0 to host iam.api.marmotedu.com left intact
 {&quot;metadata&quot;:{&quot;id&quot;:60,&quot;instanceID&quot;:&quot;secret-jedr3e&quot;,&quot;name&quot;:&quot;secret0&quot;,&quot;createdAt&quot;:&quot;2021-07-26T15:20:26.885+08:00&quot;,&quot;updatedAt&quot;:&quot;2021-07-26T15:20:26.907+08:00&quot;},&quot;username&quot;:&quot;admin&quot;,&quot;secretID&quot;:&quot;U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD&quot;,&quot;secretKey&quot;:&quot;fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf&quot;,&quot;expires&quot;:0,&quot;description&quot;:&quot;admin secret&quot;}
 </code></pre><p>可以看到，请求返回头中返回了<code>X-Request-Id</code> Header，<code>X-Request-Id</code>唯一标识这次请求。如果这次请求失败，就可以将<code>X-Request-Id</code>提供给运维或者开发，通过<code>X-Request-Id</code>定位出失败的请求，进行排障。另外<code>X-Request-Id</code>在微服务场景中，也可以透传给其他服务，从而实现请求调用链。</p><ol start="3">
-<li>获取secret0的详细信息：</li>
+获取secret0的详细信息：
 </ol><pre><code>$ curl -XGET -H&quot;Authorization: Bearer ${TOKEN}&quot; http://iam.api.marmotedu.com:8080/v1/secrets/secret0
 {&quot;metadata&quot;:{&quot;id&quot;:60,&quot;instanceID&quot;:&quot;secret-jedr3e&quot;,&quot;name&quot;:&quot;secret0&quot;,&quot;createdAt&quot;:&quot;2021-07-26T15:20:26+08:00&quot;,&quot;updatedAt&quot;:&quot;2021-07-26T15:20:26+08:00&quot;},&quot;username&quot;:&quot;admin&quot;,&quot;secretID&quot;:&quot;U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD&quot;,&quot;secretKey&quot;:&quot;fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf&quot;,&quot;expires&quot;:0,&quot;description&quot;:&quot;admin secret&quot;}
 </code></pre><ol start="4">
-<li>更新secret0的描述：</li>
+更新secret0的描述：
 </ol><pre><code>$ curl -XPUT -H&quot;Authorization: Bearer ${TOKEN}&quot; -d'{&quot;metadata&quot;:{&quot;name&quot;:&quot;secret&quot;},&quot;expires&quot;:0,&quot;description&quot;:&quot;admin secret(modify)&quot;}' http://iam.api.marmotedu.com:8080/v1/secrets/secret0
 {&quot;metadata&quot;:{&quot;id&quot;:60,&quot;instanceID&quot;:&quot;secret-jedr3e&quot;,&quot;name&quot;:&quot;secret0&quot;,&quot;createdAt&quot;:&quot;2021-07-26T15:20:26+08:00&quot;,&quot;updatedAt&quot;:&quot;2021-07-26T15:23:35.878+08:00&quot;},&quot;username&quot;:&quot;admin&quot;,&quot;secretID&quot;:&quot;U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD&quot;,&quot;secretKey&quot;:&quot;fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf&quot;,&quot;expires&quot;:0,&quot;description&quot;:&quot;admin secret(modify)&quot;}
 </code></pre><ol start="5">
-<li>获取secret列表：</li>
+获取secret列表：
 </ol><pre><code>$ curl -XGET -H&quot;Authorization: Bearer ${TOKEN}&quot; http://iam.api.marmotedu.com:8080/v1/secrets
 {&quot;totalCount&quot;:1,&quot;items&quot;:[{&quot;metadata&quot;:{&quot;id&quot;:60,&quot;instanceID&quot;:&quot;secret-jedr3e&quot;,&quot;name&quot;:&quot;secret0&quot;,&quot;createdAt&quot;:&quot;2021-07-26T15:20:26+08:00&quot;,&quot;updatedAt&quot;:&quot;2021-07-26T15:23:35+08:00&quot;},&quot;username&quot;:&quot;admin&quot;,&quot;secretID&quot;:&quot;U6CxKs0YVWyOp5GrluychYIRxDmMDFd1mOOD&quot;,&quot;secretKey&quot;:&quot;fubNIn8jLA55ktuuTpXM8Iw5ogdR2mlf&quot;,&quot;expires&quot;:0,&quot;description&quot;:&quot;admin secret(modify)&quot;}]}
 </code></pre><ol start="6">
-<li>删除secret0：</li>
+删除secret0：
 </ol><pre><code>$ curl -XDELETE -H&quot;Authorization: Bearer ${TOKEN}&quot; http://iam.api.marmotedu.com:8080/v1/secrets/secret0
 null
 </code></pre><p>上面，我给你演示了密钥的使用方法。用户和策略资源类型的使用方法跟密钥类似。详细的使用方法你可以参考 <a href="https://github.com/marmotedu/iam/blob/v1.0.6/scripts/install/test.sh">test.sh</a> 脚本，该脚本是用来测试IAM应用的，里面包含了各个接口的请求方法。</p><p>这里，我还想顺便介绍下<strong>如何测试IAM应用中的各个部分</strong>。确保iam-apiserver、iam-authz-server、iam-pump等服务正常运行后，进入到IAM项目的根目录，执行以下命令：</p><pre><code>$ ./scripts/install/test.sh iam::test::test # 测试整个IAM应用是否正常运行
@@ -79,11 +79,11 @@ $ ./scripts/install/test.sh iam::test::man # 测试man文件是否正确安装
 </code></pre><p>所以，每次发布完iam-apiserver后，你可以执行以下命令来完成iam-apiserver的冒烟测试：</p><pre><code>$ export IAM_APISERVER_HOST=127.0.0.1 # iam-apiserver部署服务器的IP地址
 $ export IAM_APISERVER_INSECURE_BIND_PORT=8080 # iam-apiserver HTTP服务的监听端口
 $ ./scripts/install/test.sh iam::test::apiserver
-</code></pre><h2>iam-apiserver代码实现</h2><p>上面，我介绍了iam-apiserver的功能和使用方法，这里我们再来看下iam-apiserver具体的代码实现。我会从配置处理、启动流程、请求处理流程、代码架构4个方面来讲解。</p><h3>iam-apiserver配置处理</h3><p>iam-apiserver服务的main函数位于<a href="https://github.com/marmotedu/iam/blob/v1.0.4/cmd/iam-apiserver/apiserver.go#L18">apiserver.go</a>文件中，你可以跟读代码，了解iam-apiserver的代码实现。这里，我来介绍下iam-apiserver服务的一些设计思想。</p><p>首先，来看下iam-apiserver中的3种配置：Options配置、应用配置和 HTTP/GRPC服务配置。</p><ul>
-<li><strong>Options配置：</strong>用来构建命令行参数，它的值来自于命令行选项或者配置文件（也可能是二者Merge后的配置）。Options可以用来构建应用框架，Options配置也是应用配置的输入。</li>
-<li><strong>应用</strong><strong>配置：</strong>iam-apiserver组件中需要的一切配置。有很多地方需要配置，例如，启动HTTP/GRPC需要配置监听地址和端口，初始化数据库需要配置数据库地址、用户名、密码等。</li>
-<li><strong>HTTP/GRPC服务配置：</strong>启动HTTP服务或者GRPC服务需要的配置。</li>
-</ul><p>这三种配置的关系如下图：</p><p><img src="https://static001.geekbang.org/resource/image/8c/b5/8ca8d9fa1efaab21e012471874e89cb5.jpg?wh=1346x727" alt=""></p><p>Options配置接管命令行选项，应用配置接管整个应用的配置，HTTP/GRPC服务配置接管跟HTTP/GRPC服务相关的配置。这3种配置独立开来，可以解耦命令行选项、应用和应用内的服务，使得这3个部分可以独立扩展，又不相互影响。</p><p>iam-apiserver根据Options配置来构建命令行参数和应用配置。</p><p>我们通过<code>github.com/marmotedu/iam/pkg/app</code>包的<a href="https://github.com/marmotedu/iam/blob/v1.0.4/pkg/app/app.go#L199">buildCommand</a>方法来构建命令行参数。这里的核心是，通过<a href="https://github.com/marmotedu/iam/blob/v1.0.4/pkg/app/app.go#L157">NewApp</a>函数构建Application实例时，传入的<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/options/options.go#L19">Options</a>实现了<code>Flags() (fss cliflag.NamedFlagSets)</code>方法，通过buildCommand方法中的以下代码，将option的Flag添加到cobra实例的FlagSet中：</p><pre><code>	if a.options != nil {
+</code></pre><h2>iam-apiserver代码实现</h2><p>上面，我介绍了iam-apiserver的功能和使用方法，这里我们再来看下iam-apiserver具体的代码实现。我会从配置处理、启动流程、请求处理流程、代码架构4个方面来讲解。</p><h3>iam-apiserver配置处理</h3><p>iam-apiserver服务的main函数位于<a href="https://github.com/marmotedu/iam/blob/v1.0.4/cmd/iam-apiserver/apiserver.go#L18">apiserver.go</a>文件中，你可以跟读代码，了解iam-apiserver的代码实现。这里，我来介绍下iam-apiserver服务的一些设计思想。</p><p>首先，来看下iam-apiserver中的3种配置：Options配置、应用配置和 HTTP/GRPC服务配置。</p>
+<strong>Options配置：</strong>用来构建命令行参数，它的值来自于命令行选项或者配置文件（也可能是二者Merge后的配置）。Options可以用来构建应用框架，Options配置也是应用配置的输入。
+<strong>应用</strong><strong>配置：</strong>iam-apiserver组件中需要的一切配置。有很多地方需要配置，例如，启动HTTP/GRPC需要配置监听地址和端口，初始化数据库需要配置数据库地址、用户名、密码等。
+<strong>HTTP/GRPC服务配置：</strong>启动HTTP服务或者GRPC服务需要的配置。
+<p>这三种配置的关系如下图：</p><p><img src="https://static001.geekbang.org/resource/image/8c/b5/8ca8d9fa1efaab21e012471874e89cb5.jpg?wh=1346x727" alt=""></p><p>Options配置接管命令行选项，应用配置接管整个应用的配置，HTTP/GRPC服务配置接管跟HTTP/GRPC服务相关的配置。这3种配置独立开来，可以解耦命令行选项、应用和应用内的服务，使得这3个部分可以独立扩展，又不相互影响。</p><p>iam-apiserver根据Options配置来构建命令行参数和应用配置。</p><p>我们通过<code>github.com/marmotedu/iam/pkg/app</code>包的<a href="https://github.com/marmotedu/iam/blob/v1.0.4/pkg/app/app.go#L199">buildCommand</a>方法来构建命令行参数。这里的核心是，通过<a href="https://github.com/marmotedu/iam/blob/v1.0.4/pkg/app/app.go#L157">NewApp</a>函数构建Application实例时，传入的<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/options/options.go#L19">Options</a>实现了<code>Flags() (fss cliflag.NamedFlagSets)</code>方法，通过buildCommand方法中的以下代码，将option的Flag添加到cobra实例的FlagSet中：</p><pre><code>	if a.options != nil {
 			namedFlagSets = a.options.Flags()
 			fs := cmd.Flags()
 			for _, f := range namedFlagSets.FlagSets {
@@ -119,18 +119,18 @@ func (c *ExtraConfig) complete() *completedExtraConfig {
 
     return &amp;completedExtraConfig{c}
 }
-</code></pre><p>上面的代码中，首先调用<code>Complete</code>/<code>complete</code>函数补全配置，再基于补全后的配置，New一个HTTP/GRPC服务实例。</p><p>这里有个设计技巧：<code>complete</code>函数返回的是一个<code>*completedExtraConfig</code>类型的实例，在创建GRPC实例时，是调用<code>completedExtraConfig</code>结构体提供的<code>New</code>方法，这种设计方法可以确保我们创建的GRPC实例一定是基于complete之后的配置（completed）。</p><p>在实际的Go项目开发中，我们需要提供一种机制来处理或补全配置，这在Go项目开发中是一个非常有用的步骤。</p><p><strong>最后，</strong>调用<code>PrepareRun</code>方法，进行HTTP/GRPC服务器启动前的准备。在准备函数中，我们可以做各种初始化操作，例如初始化数据库，安装业务相关的Gin中间件、RESTful API路由等。</p><p>完成HTTP/GRPC服务器启动前的准备之后，调用<code>Run</code>方法启动HTTP/GRPC服务。在<code>Run</code>方法中，分别启动了GRPC和HTTP服务。</p><p>可以看到，整个iam-apiserver的软件框架是比较清晰的。</p><p>服务启动后，就可以处理请求了。所以接下来，我们再来看下iam-apiserver的RESTAPI请求处理流程。</p><h3>iam-apiserver 的REST API请求处理流程</h3><p>iam-apiserver的请求处理流程也是清晰、规范的，具体流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/94/76/9400e9855b10yyac47871a7af87e9776.jpg?wh=5771x1691" alt=""></p><p>结合上面这张图，我们来看下iam-apiserver 的REST API请求处理流程，来帮你更好地理解iam-apiserver是如何处理HTTP请求的。</p><p><strong>首先，</strong>我们通过API调用（<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>）请求iam-apiserver提供的RESTful API接口。</p><p><strong>接着，</strong>Gin Web框架接收到HTTP请求之后，会通过认证中间件完成请求的认证，iam-apiserver提供了Basic认证和Bearer认证两种认证方式。</p><p><strong>认证</strong><strong>通过后，</strong>请求会被我们加载的一系列中间件所处理，例如跨域、RequestID、Dump等中间件。</p><p><strong>最后，</strong>根据<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>进行路由匹配。</p><p>举个例子，假设我们请求的RESTful API是<code>POST + /v1/secrets</code>，Gin Web框架会根据HTTP Method和HTTP Request Path，查找注册的Controllers，最终匹配到<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/controller/v1/secret/create.go">secretController.Create</a>Controller。在Create Controller中，我们会依次执行请求参数解析、请求参数校验、调用业务层的方法创建Secret、处理业务层的返回结果，最后返回最终的HTTP请求结果。</p><h3>iam-apiserver代码架构</h3><p>iam-apiserver代码设计遵循简洁架构设计，一个简洁架构具有以下5个特性：</p><ul>
-<li><strong>独立于框架：</strong>该架构不会依赖于某些功能强大的软件库存在。这可以让你使用这样的框架作为工具，而不是让你的系统陷入到框架的约束中。</li>
-<li><strong>可测试性：</strong>业务规则可以在没有UI、数据库、Web服务或其他外部元素的情况下进行测试，在实际的开发中，我们通过Mock来解耦这些依赖。</li>
-<li><strong>独立于UI ：</strong>在无需改变系统其他部分的情况下，UI可以轻松地改变。例如，在没有改变业务规则的情况下，Web UI可以替换为控制台UI。</li>
-<li><strong>独立于数据库：</strong>你可以用Mongo、Oracle、Etcd或者其他数据库来替换MariaDB，你的业务规则不要绑定到数据库。</li>
-<li><strong>独立于外部媒介：</strong>实际上，你的业务规则可以简单到根本不去了解外部世界。</li>
-</ul><p>所以，基于这些约束，每一层都必须是独立的和可测试的。iam-apiserver代码架构分为4层：模型层（Models）、控制层（Controller）、业务层 （Service）、仓库层（Repository）。从控制层、业务层到仓库层，从左到右层级依次加深。模型层独立于其他层，可供其他层引用。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/f2/f0/f2fffd84dfbc1a6643887db3d5d541f0.jpg?wh=2498x747" alt=""></p><p>层与层之间导入包时，都有严格的导入关系，这可以防止包的循环导入问题。导入关系如下：</p><ul>
-<li>模型层的包可以被仓库层、业务层和控制层导入；</li>
-<li>控制层能够导入业务层和仓库层的包。这里需要注意，如果没有特殊需求，控制层要避免导入仓库层的包，控制层需要完成的业务功能都通过业务层来完成。这样可以使代码逻辑更加清晰、规范。</li>
-<li>业务层能够导入仓库层的包。</li>
-</ul><p>接下来，我们就来详细看下每一层所完成的功能，以及其中的一些注意点。</p><ol>
-<li>模型层（Models）</li>
+</code></pre><p>上面的代码中，首先调用<code>Complete</code>/<code>complete</code>函数补全配置，再基于补全后的配置，New一个HTTP/GRPC服务实例。</p><p>这里有个设计技巧：<code>complete</code>函数返回的是一个<code>*completedExtraConfig</code>类型的实例，在创建GRPC实例时，是调用<code>completedExtraConfig</code>结构体提供的<code>New</code>方法，这种设计方法可以确保我们创建的GRPC实例一定是基于complete之后的配置（completed）。</p><p>在实际的Go项目开发中，我们需要提供一种机制来处理或补全配置，这在Go项目开发中是一个非常有用的步骤。</p><p><strong>最后，</strong>调用<code>PrepareRun</code>方法，进行HTTP/GRPC服务器启动前的准备。在准备函数中，我们可以做各种初始化操作，例如初始化数据库，安装业务相关的Gin中间件、RESTful API路由等。</p><p>完成HTTP/GRPC服务器启动前的准备之后，调用<code>Run</code>方法启动HTTP/GRPC服务。在<code>Run</code>方法中，分别启动了GRPC和HTTP服务。</p><p>可以看到，整个iam-apiserver的软件框架是比较清晰的。</p><p>服务启动后，就可以处理请求了。所以接下来，我们再来看下iam-apiserver的RESTAPI请求处理流程。</p><h3>iam-apiserver 的REST API请求处理流程</h3><p>iam-apiserver的请求处理流程也是清晰、规范的，具体流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/94/76/9400e9855b10yyac47871a7af87e9776.jpg?wh=5771x1691" alt=""></p><p>结合上面这张图，我们来看下iam-apiserver 的REST API请求处理流程，来帮你更好地理解iam-apiserver是如何处理HTTP请求的。</p><p><strong>首先，</strong>我们通过API调用（<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>）请求iam-apiserver提供的RESTful API接口。</p><p><strong>接着，</strong>Gin Web框架接收到HTTP请求之后，会通过认证中间件完成请求的认证，iam-apiserver提供了Basic认证和Bearer认证两种认证方式。</p><p><strong>认证</strong><strong>通过后，</strong>请求会被我们加载的一系列中间件所处理，例如跨域、RequestID、Dump等中间件。</p><p><strong>最后，</strong>根据<code>&lt;HTTP Method&gt; + &lt;HTTP Request Path&gt;</code>进行路由匹配。</p><p>举个例子，假设我们请求的RESTful API是<code>POST + /v1/secrets</code>，Gin Web框架会根据HTTP Method和HTTP Request Path，查找注册的Controllers，最终匹配到<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/controller/v1/secret/create.go">secretController.Create</a>Controller。在Create Controller中，我们会依次执行请求参数解析、请求参数校验、调用业务层的方法创建Secret、处理业务层的返回结果，最后返回最终的HTTP请求结果。</p><h3>iam-apiserver代码架构</h3><p>iam-apiserver代码设计遵循简洁架构设计，一个简洁架构具有以下5个特性：</p>
+<strong>独立于框架：</strong>该架构不会依赖于某些功能强大的软件库存在。这可以让你使用这样的框架作为工具，而不是让你的系统陷入到框架的约束中。
+<strong>可测试性：</strong>业务规则可以在没有UI、数据库、Web服务或其他外部元素的情况下进行测试，在实际的开发中，我们通过Mock来解耦这些依赖。
+<strong>独立于UI ：</strong>在无需改变系统其他部分的情况下，UI可以轻松地改变。例如，在没有改变业务规则的情况下，Web UI可以替换为控制台UI。
+<strong>独立于数据库：</strong>你可以用Mongo、Oracle、Etcd或者其他数据库来替换MariaDB，你的业务规则不要绑定到数据库。
+<strong>独立于外部媒介：</strong>实际上，你的业务规则可以简单到根本不去了解外部世界。
+<p>所以，基于这些约束，每一层都必须是独立的和可测试的。iam-apiserver代码架构分为4层：模型层（Models）、控制层（Controller）、业务层 （Service）、仓库层（Repository）。从控制层、业务层到仓库层，从左到右层级依次加深。模型层独立于其他层，可供其他层引用。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/f2/f0/f2fffd84dfbc1a6643887db3d5d541f0.jpg?wh=2498x747" alt=""></p><p>层与层之间导入包时，都有严格的导入关系，这可以防止包的循环导入问题。导入关系如下：</p>
+模型层的包可以被仓库层、业务层和控制层导入；
+控制层能够导入业务层和仓库层的包。这里需要注意，如果没有特殊需求，控制层要避免导入仓库层的包，控制层需要完成的业务功能都通过业务层来完成。这样可以使代码逻辑更加清晰、规范。
+业务层能够导入仓库层的包。
+<p>接下来，我们就来详细看下每一层所完成的功能，以及其中的一些注意点。</p><ol>
+模型层（Models）
 </ol><p>模型层在有些软件架构中也叫做实体层（Entities），模型会在每一层中使用，在这一层中存储对象的结构和它的方法。IAM项目模型层中的模型存放在<a href="https://github.com/marmotedu/api/tree/master/apiserver/v1">github.com/marmotedu/api/apiserver/v1</a>目录下，定义了<code>User</code>、<code>UserList</code>、<code>Secret</code>、<code>SecretList</code>、<code>Policy</code>、<code>PolicyList</code>、<code>AuthzPolicy</code>模型及其方法。例如：</p><pre><code>type Secret struct {
 	// May add TypeMeta in the future.
 	// metav1.TypeMeta `json:&quot;,inline&quot;`
@@ -146,7 +146,7 @@ func (c *ExtraConfig) complete() *completedExtraConfig {
 	Description string `json:&quot;description&quot; gorm:&quot;column:description&quot; validate:&quot;description&quot;`
 }
 </code></pre><p>之所以将模型层的模型存放在<code>github.com/marmotedu/api</code>项目中，而不是<code>github.com/marmotedu/iam</code>项目中，是为了让这些模型能够被其他项目使用。例如，iam的模型可以被<code>github.com/marmotedu/shippy</code>应用导入。同样，shippy应用的模型也可以被iam项目导入，导入关系如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/13/c9/1307e374f4193ecc3d5b73a987cdd0c9.jpg?wh=3896x1433" alt=""></p><p>上面的依赖关系都是单向的，依赖关系清晰，不存在循环依赖的情况。</p><p>要增加shippy的模型定义，只需要在api目录下创建新的目录即可。例如，shippy应用中有一个vessel服务，其模型所在的包可以为<code>github.com/marmotedu/api/vessel</code>。</p><p>另外，这里的模型既可以作为数据库模型，又可以作为API接口的请求模型（入参、出参）。如果我们能够确保<strong>创建资源时的属性</strong>、<strong>资源保存在数据库中的属性</strong>、<strong>返回资源的属性</strong>三者一致，就可以使用同一个模型。通过使用同一个模型，可以使我们的代码更加简洁、易维护，并能提高开发效率。如果这三个属性有差异，你可以另外新建模型来适配。</p><ol start="2">
-<li>仓库层（Repository)</li>
+仓库层（Repository)
 </ol><p>仓库层用来跟数据库/第三方服务进行CURD交互，作为应用程序的数据引擎进行应用数据的输入和输出。这里需要注意，仓库层仅对数据库/第三方服务执行CRUD操作，不封装任何业务逻辑。</p><p>仓库层也负责选择应用中将要使用什么样的数据库，可以是MySQL、MongoDB、MariaDB、Etcd等。无论使用哪种数据库，都要在这层决定。仓库层依赖于连接数据库或其他第三方服务（如果存在的话）。</p><p>这一层也会起到数据转换的作用：将从数据库/微服务中获取的数据转换为控制层、业务层能识别的数据结构，将控制层、业务层的数据格式转换为数据库或微服务能识别的数据格式。</p><p>iam-apiserver的仓库层位于<a href="https://github.com/marmotedu/iam/tree/v1.0.3/internal/apiserver/store/mysql">internal/apiserver/store/mysql</a>目录下，里面的方法用来跟MariaDB进行交互，完成CURD操作，例如，从数据库中获取密钥：</p><pre><code>func (s *secrets) Get(ctx context.Context, username, name string, opts metav1.GetOptions) (*v1.Secret, error) {
     secret := &amp;v1.Secret{}
     err := s.db.Where(&quot;username = ? and name= ?&quot;, username, name).First(&amp;secret).Error
@@ -161,7 +161,7 @@ func (c *ExtraConfig) complete() *completedExtraConfig {
     return secret, nil
 }
 </code></pre><ol start="3">
-<li>业务层 (Service)</li>
+业务层 (Service)
 </ol><p>业务层主要用来完成业务逻辑处理，我们可以把所有的业务逻辑处理代码放在业务层。业务层会处理来自控制层的请求，并根据需要请求仓库层完成数据的CURD操作。业务层功能如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/61/b6/6103c58d837fd81769977bc3c947ffb6.jpg?wh=1796x1236" alt=""></p><p>iam-apiserver的业务层位于<a href="https://github.com/marmotedu/iam/tree/v1.0.3/internal/apiserver/service">internal/apiserver/service</a>目录下。下面是iam-apiserver业务层中，用来创建密钥的函数：</p><pre><code>func (s *secretService) Create(ctx context.Context, secret *v1.Secret, opts metav1.CreateOptions) error {
     if err := s.store.Secrets().Create(ctx, secret, opts); err != nil {
         return errors.WithCode(code.ErrDatabase, err.Error())
@@ -170,7 +170,7 @@ func (c *ExtraConfig) complete() *completedExtraConfig {
     return nil
 }
 </code></pre><p>可以看到，业务层最终请求仓库层的<code>s.store</code>的<code>Create</code>方法，将密钥信息保存在MariaDB数据库中。</p><ol start="4">
-<li>控制层（Controller）</li>
+控制层（Controller）
 </ol><p>控制层接收HTTP请求，并进行参数解析、参数校验、逻辑分发处理、请求返回这些操作。控制层会将逻辑分发给业务层，业务层处理后返回，返回数据在控制层中被整合再加工，最终返回给请求方。控制层相当于实现了业务路由的功能。具体流程如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/12/08/120137fc2749aa12a013099ec11e1b08.jpg?wh=960x1029" alt=""></p><p>这里我有个建议，不要在控制层写复杂的代码，如果需要，请将这些代码分发到业务层或其他包中。</p><p>iam-apiserver的控制层位于<a href="https://github.com/marmotedu/iam/tree/v1.0.3/internal/apiserver/controller">internal/apiserver/controller</a>目录下。下面是iam-apiserver控制层中创建密钥的代码：</p><pre><code>func (s *SecretHandler) Create(c *gin.Context) {
 	log.L(c).Info(&quot;create secret function called.&quot;)
 
@@ -218,10 +218,10 @@ func (c *ExtraConfig) complete() *completedExtraConfig {
 	core.WriteResponse(c, nil, r)
 }
 </code></pre><p>上面的代码完成了以下操作：</p><ol>
-<li>解析HTTP请求参数。</li>
-<li>进行参数验证，这里可以添加一些业务性质的参数校验，例如：<code>secrets.TotalCount &gt;= maxSecretCount</code>。</li>
-<li>调用业务层<code>s.srv</code>的<code>Create</code>方法，完成密钥的创建。</li>
-<li>返回HTTP请求参数。</li>
+解析HTTP请求参数。
+进行参数验证，这里可以添加一些业务性质的参数校验，例如：<code>secrets.TotalCount &gt;= maxSecretCount</code>。
+调用业务层<code>s.srv</code>的<code>Create</code>方法，完成密钥的创建。
+返回HTTP请求参数。
 </ol><p>上面，我们介绍了iam-apiserver采用的4层结构，接下来我们再看看<strong>每一层之间是如何通信的</strong>。</p><p>除了模型层，控制层、业务层、仓库层之间都是通过接口进行通信的。通过接口通信，一方面可以使相同的功能支持不同的实现（也就是说具有插件化能力），另一方面也使得每一层的代码变得可测试。</p><p>这里，我用创建密钥API请求的例子，来给你讲解下层与层之间是如何进行通信的。</p><p><strong>首先，来看下控制层如何跟业务层进行通信。</strong></p><p>对密钥的请求处理都是通过SecretController提供的方法来处理的，创建密钥调用的是它的<code>Create</code>方法：</p><pre><code>func (s *SecretController) Create(c *gin.Context) {
     ...
 	if err := s.srv.Secrets().Create(c, &amp;r, metav1.CreateOptions{}); err != nil {
@@ -277,9 +277,9 @@ func (u *templateService) Create(ctx context.Context, template *v1.Template, opt
     return nil
 }
 </code></pre><p>可以看到，我们通过以下三步新增了一个业务层对象：</p><ol>
-<li>在<code>Service</code>接口定义中，新增了一个入口：<code>Templates() TemplateSrv</code>。</li>
-<li>在<code>service.go</code>文件中，新增了一个函数：<code>Templates()</code>。</li>
-<li>新建了<code>template.go</code>文件，在<code>template.go</code>中定义了templateService结构体，并为它实现了<code>TemplateSrv</code>接口。</li>
+在<code>Service</code>接口定义中，新增了一个入口：<code>Templates() TemplateSrv</code>。
+在<code>service.go</code>文件中，新增了一个函数：<code>Templates()</code>。
+新建了<code>template.go</code>文件，在<code>template.go</code>中定义了templateService结构体，并为它实现了<code>TemplateSrv</code>接口。
 </ol><p>可以看到，我们新增的Template业务对象的代码几乎都闭环在<code>template.go</code>文件中。对已有的<code>Service</code>工厂接口的创建方法，除了新增一个工厂方法<code>Templates() TemplateSrv</code>外，没有其他任何入侵。这样做可以避免影响已有业务。</p><p>在实际项目开发中，你也有可能会想到下面这种错误的创建方式：</p><pre><code>// 错误方法一
 type Service interface {
     UserSrv
@@ -301,23 +301,23 @@ type Service interface {
     Close() error
 }
 </code></pre><p>业务层与仓库层的通信实现，和控制层与业务层的通信实现类似，所以这里不再详细介绍。</p><p>到这里我们知道了，控制层、业务层和仓库层之间是通过接口来通信的。通过接口通信有一个好处，就是可以让各层变得可测。那接下来，我们就来看下<strong>如何测试各层的代码</strong>。因为<strong>第38讲</strong>和<strong>第39讲</strong>会详细介绍如何测试Go代码，所以这里只介绍下测试思路。</p><ol>
-<li>模型层</li>
+模型层
 </ol><p>因为模型层不依赖其他任何层，我们只需要测试其中定义的结构及其函数和方法即可。</p><ol start="2">
-<li>控制层</li>
+控制层
 </ol><p>控制层依赖于业务层，意味着该层需要业务层来支持测试。你可以通过<a href="https://github.com/golang/mock">golang/mock</a>来mock业务层，测试用例可参考<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/controller/v1/user/create_test.go#L19">TestUserController_Create</a>。</p><ol start="3">
-<li>业务层</li>
-</ol><p>因为该层依赖于仓库层，意味着该层需要仓库层来支持测试。我们有两种方法来模拟仓库层：</p><ul>
-<li>通过<code>golang/mock</code>来mock仓库层。</li>
-<li>自己开发一个fake仓库层。</li>
-</ul><p>使用<code>golang/mock</code>的测试用例，你可以参考<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/service/v1/secret_test.go#L19">Test_secretService_Create</a>。</p><p>fake的仓库层可以参考<a href="https://github.com/marmotedu/iam/tree/v1.0.4/internal/apiserver/store/fake">fake</a>，使用该fake仓库层进行测试的测试用例为<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/service/v1/user_test.go#L76"> Test_userService_List</a>。</p><ol start="4">
-<li>仓库层</li>
+业务层
+</ol><p>因为该层依赖于仓库层，意味着该层需要仓库层来支持测试。我们有两种方法来模拟仓库层：</p>
+通过<code>golang/mock</code>来mock仓库层。
+自己开发一个fake仓库层。
+<p>使用<code>golang/mock</code>的测试用例，你可以参考<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/service/v1/secret_test.go#L19">Test_secretService_Create</a>。</p><p>fake的仓库层可以参考<a href="https://github.com/marmotedu/iam/tree/v1.0.4/internal/apiserver/store/fake">fake</a>，使用该fake仓库层进行测试的测试用例为<a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/apiserver/service/v1/user_test.go#L76"> Test_userService_List</a>。</p><ol start="4">
+仓库层
 </ol><p>仓库层依赖于数据库，如果调用了其他微服务，那还会依赖第三方服务。我们可以通过<a href="https://github.com/DATA-DOG/go-sqlmock">sqlmock</a>来模拟数据库连接，通过<a href="https://github.com/jarcoal/httpmock">httpmock</a>来模拟HTTP请求。</p><h2>总结</h2><p>这一讲，我主要介绍了iam-apiserver的功能和使用方法，以及它的代码实现。iam-apiserver是一个Web服务，提供了REST API来完成用户、密钥、策略三种REST资源的增删改查。我们可以通过cURL、Insomnia等工具，来完成REST API请求。</p><p>iam-apiserver包含了3种配置：Options配置、应用配置、HTTP/GRPC服务配置。这三种配置分别用来构建命令行参数、应用和HTTP/GRPC服务。</p><p>iam-apiserver在启动时，会先构建应用框架，接着会设置应用选项，然后对应用进行初始化，最后创建HTTP/GRPC服务的配置和实例，最终启动HTTP/GRPC服务。</p><p>服务启动之后，就可以接收HTTP请求了。一个HTTP请求会先进行认证，接着会被注册的中间件处理，然后，会根据<code>(HTTP Method, HTTP Request Path)</code>匹配到处理函数。在处理函数中，会解析请求参数、校验参数、调用业务逻辑处理函数，最终返回请求结果。</p><p>iam-apiserver采用了简洁架构，整个应用分为4层：模型层、控制层、业务层和仓库层。模型层存储对象的结构和它的方法；仓库层用来跟数据库/第三方服务进行CURD交互；业务层主要用来完成业务逻辑处理；控制层接收HTTP请求，并进行参数解析、参数校验、逻辑分发处理、请求返回操作。控制层、业务层、仓库层之间通过接口通信，通过接口通信可以使相同的功能支持不同的实现，并使每一层的代码变得可测试。</p><h2>课后练习</h2><ol>
-<li>
+
 <p>iam-apiserver和iam-authz-server都提供了REST API服务，阅读它们的源码，看看iam-apiserver和iam-authz-server是如何共享REST API相关代码的。</p>
-</li>
-<li>
+
+
 <p>思考一下，iam-apiserver的服务构建方式，能够再次抽象成一个模板（Go包）吗？如果能，该如何抽象？</p>
-</li>
+
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -428,7 +428,7 @@ type Service interface {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -443,8 +443,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/14/b9/47377590.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -459,8 +459,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -475,8 +475,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/75/00/618b20da.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -491,8 +491,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/5f/f8/1d16434b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -507,8 +507,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/6b/9a/786b1ed8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -523,8 +523,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/37/92/961ba560.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -539,8 +539,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/47/e0/1ff26e99.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -555,8 +555,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/5a/d0/7e58f993.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -571,8 +571,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/67/3a/0dd9ea02.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -587,8 +587,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -603,8 +603,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -619,8 +619,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -635,8 +635,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -651,8 +651,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -667,8 +667,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/82/ec/99b480e8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -683,8 +683,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/34/09/898d084e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -699,8 +699,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/7b/c5/35f92dad.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -715,8 +715,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/63/72/a85661ee.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -731,8 +731,8 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f7/76/16c52796.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -747,5 +747,4 @@ type Service interface {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

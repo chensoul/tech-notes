@@ -25,177 +25,177 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;溯本求源，吃透&#32;Docker！.md">00 溯本求源，吃透 Docker！.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Docker&#32;安装：入门案例带你了解容器技术原理.md">01  Docker 安装：入门案例带你了解容器技术原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;核心概念：镜像、容器、仓库，彻底掌握&#32;Docker&#32;架构核心设计理念.md">02  核心概念：镜像、容器、仓库，彻底掌握 Docker 架构核心设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;镜像使用：Docker&#32;环境下如何配置你的镜像？.md">03  镜像使用：Docker 环境下如何配置你的镜像？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="04&#32;&#32;容器操作：得心应手掌握&#32;Docker&#32;容器基本操作.md">04  容器操作：得心应手掌握 Docker 容器基本操作.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;仓库访问：怎样搭建属于你的私有仓库？.md">05  仓库访问：怎样搭建属于你的私有仓库？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;最佳实践：如何在生产中编写最优&#32;Dockerfile？.md">06  最佳实践：如何在生产中编写最优 Dockerfile？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;Docker&#32;安全：基于内核的弱隔离系统如何保障安全性？.md">07  Docker 安全：基于内核的弱隔离系统如何保障安全性？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;容器监控：容器监控原理及&#32;cAdvisor&#32;的安装与使用.md">08  容器监控：容器监控原理及 cAdvisor 的安装与使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;资源隔离：为什么构建容器需要&#32;Namespace&#32;？.md">09  资源隔离：为什么构建容器需要 Namespace ？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;资源限制：如何通过&#32;Cgroups&#32;机制实现资源限制？.md">10  资源限制：如何通过 Cgroups 机制实现资源限制？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;组件组成：剖析&#32;Docker&#32;组件作用及其底层工作原理.md">11  组件组成：剖析 Docker 组件作用及其底层工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;网络模型：剖析&#32;Docker&#32;网络实现及&#32;Libnetwork&#32;底层原理.md">12  网络模型：剖析 Docker 网络实现及 Libnetwork 底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;数据存储：剖析&#32;Docker&#32;卷与持久化数据存储的底层原理.md">13  数据存储：剖析 Docker 卷与持久化数据存储的底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;文件存储驱动：AUFS&#32;文件系统原理及生产环境的最佳配置.md">14  文件存储驱动：AUFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;文件存储驱动：Devicemapper&#32;文件系统原理及生产环境的最佳配置.md">15  文件存储驱动：Devicemapper 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;文件存储驱动：OverlayFS&#32;文件系统原理及生产环境的最佳配置.md">16  文件存储驱动：OverlayFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（上）.md">17  原理实践：自己动手使用 Golang 开发 Docker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（下）.md">18  原理实践：自己动手使用 Golang 开发 Docker（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;如何使用&#32;Docker&#32;Compose&#32;解决开发环境的依赖？.md">19  如何使用 Docker Compose 解决开发环境的依赖？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;如何在生产环境中使用&#32;Docker&#32;Swarm&#32;调度容器？.md">20  如何在生产环境中使用 Docker Swarm 调度容器？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;如何使&#32;Docker&#32;和&#32;Kubernetes&#32;结合发挥容器的最大价值？.md">21  如何使 Docker 和 Kubernetes 结合发挥容器的最大价值？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;多阶级构建：Docker&#32;下如何实现镜像多阶级构建？.md">22  多阶级构建：Docker 下如何实现镜像多阶级构建？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;DevOps：容器化后如何通过&#32;DevOps&#32;提高协作效能？.md">23  DevOps：容器化后如何通过 DevOps 提高协作效能？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;CICD：容器化后如何实现持续集成与交付？（上）.md">24  CICD：容器化后如何实现持续集成与交付？（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;CICD：容器化后如何实现持续集成与交付？（下）.md">25  CICD：容器化后如何实现持续集成与交付？（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;结束语&#32;&#32;展望未来：Docker&#32;的称霸之路.md">26 结束语  展望未来：Docker 的称霸之路.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -259,11 +259,11 @@
 <h3>容器的生命周期</h3>
 <p>容器的生命周期是容器可能处于的状态，容器的生命周期分为 5 种。</p>
 <ol>
-<li>created：初建状态</li>
-<li>running：运行状态</li>
-<li>stopped：停止状态</li>
-<li>paused： 暂停状态</li>
-<li>deleted：删除状态</li>
+created：初建状态
+running：运行状态
+stopped：停止状态
+paused： 暂停状态
+deleted：删除状态
 </ol>
 <p>各生命周期之前的转换关系如图所示：</p>
 <p><img src="assets/CgqCHl9YmniARFcOAADHTlGkncs129.png" alt="image" /></p>
@@ -293,20 +293,20 @@ d6f3d364fad3        busybox             &quot;sh&quot;                16 seconds
 <p>这时候我们可以看到容器已经处于启动状态了。
 容器启动有两种方式：</p>
 <ol>
-<li>使用<code>docker start</code>命令基于已经创建好的容器直接启动 。</li>
-<li>使用<code>docker run</code>命令直接基于镜像新建一个容器并启动，相当于先执行<code>docker create</code>命令从镜像创建容器，然后再执行<code>docker start</code>命令启动容器。</li>
+使用<code>docker start</code>命令基于已经创建好的容器直接启动 。
+使用<code>docker run</code>命令直接基于镜像新建一个容器并启动，相当于先执行<code>docker create</code>命令从镜像创建容器，然后再执行<code>docker start</code>命令启动容器。
 </ol>
 <p>使用<code>docker run</code>的命令如下:</p>
 <pre><code>$ docker run -it --name=busybox busybox
 </code></pre>
 <p>当使用<code>docker run</code>创建并启动容器时，Docker 后台执行的流程为：</p>
-<ul>
-<li>Docker 会检查本地是否存在 busybox 镜像，如果镜像不存在则从 Docker Hub 拉取 busybox 镜像；</li>
-<li>使用 busybox 镜像创建并启动一个容器；</li>
-<li>分配文件系统，并且在镜像只读层外创建一个读写层；</li>
-<li>从 Docker IP 池中分配一个 IP 给容器；</li>
-<li>执行用户的启动命令运行镜像。</li>
-</ul>
+
+Docker 会检查本地是否存在 busybox 镜像，如果镜像不存在则从 Docker Hub 拉取 busybox 镜像；
+使用 busybox 镜像创建并启动一个容器；
+分配文件系统，并且在镜像只读层外创建一个读写层；
+从 Docker IP 池中分配一个 IP 给容器；
+执行用户的启动命令运行镜像。
+
 <p>上述命令中， -t 参数的作用是分配一个伪终端，-i 参数则可以终端的 STDIN 打开，同时使用 -it 参数可以让我们进入交互模式。 在交互模式下，用户可以通过所创建的终端来输入命令，例如：</p>
 <pre><code>$ ps aux
 PID   USER     TIME  COMMAND
@@ -340,9 +340,9 @@ CONTAINER ID        IMAGE               COMMAND             CREATED             
 </code></pre>
 <h4>（3）进入容器</h4>
 <p>处于运行状态的容器可以通过<code>docker attach</code>、<code>docker exec</code>、<code>nsenter</code>等多种方式进入容器。</p>
-<ul>
-<li><strong>使用</strong><code>docker attach</code>命令<strong>进入容器</strong></li>
-</ul>
+
+<strong>使用</strong><code>docker attach</code>命令<strong>进入容器</strong>
+
 <p>使用 docker attach ，进入我们上一步创建好的容器，如下所示。</p>
 <pre><code>$ docker attach busybox
 / # ps aux
@@ -353,9 +353,9 @@ PID   USER     TIME  COMMAND
 </code></pre>
 <p>注意：当我们同时使用<code>docker attach</code>命令同时在多个终端运行时，所有的终端窗口将同步显示相同内容，当某个命令行窗口的命令阻塞时，其他命令行窗口同样也无法操作。
 由于<code>docker attach</code>命令不够灵活，因此我们一般不会使用<code>docker attach</code>进入容器。下面我介绍一个更加灵活的进入容器的方式<code>docker exec</code></p>
-<ul>
-<li><strong>使用 docker exec 命令进入容器</strong></li>
-</ul>
+
+<strong>使用 docker exec 命令进入容器</strong>
+
 <p>Docker 从 1.3 版本开始，提供了一个更加方便地进入容器的命令<code>docker exec</code>，我们可以通过<code>docker exec -it CONTAINER</code>的方式进入到一个已经运行中的容器，如下所示。</p>
 <pre><code>$ docker exec -it busybox sh
 / # ps aux
@@ -374,9 +374,9 @@ PID   USER     TIME  COMMAND
 <pre><code>docker rm -f busybox
 </code></pre>
 <h4>（5）导出导入容器</h4>
-<ul>
-<li><strong>导出容器</strong></li>
-</ul>
+
+<strong>导出容器</strong>
+
 <p>我们可以使用<code>docker export CONTAINER</code>命令导出一个容器到文件，不管此时该容器是否处于运行中的状态。导出容器前我们先进入容器，创建一个文件，过程如下。</p>
 <p>首先进入容器创建文件</p>
 <pre><code>docker exec -it busybox sh
@@ -386,9 +386,9 @@ cd /tmp &amp;&amp; touch test
 <pre><code>docker export busybox &gt; busybox.tar
 </code></pre>
 <p>执行以上命令后会在当前文件夹下生成 busybox.tar 文件，我们可以将该文件拷贝到其他机器上，通过导入命令实现容器的迁移。</p>
-<ul>
-<li><strong>导入容器</strong></li>
-</ul>
+
+<strong>导入容器</strong>
+
 <p>通过<code>docker export</code>命令导出的文件，可以使用<code>docker import</code>命令导入，执行完<code>docker import</code>后会变为本地镜像，最后再使用<code>docker run</code>命令启动该镜像，这样我们就实现了容器的迁移。</p>
 <p>导入容器的命令格式为 docker import [OPTIONS] file|URL [REPOSITORY[:TAG]]。接下来我们一步步将上一步导出的镜像文件导入到其他机器的 Docker 中并启动它。</p>
 <p>首先，使用<code>docker import</code>命令导入上一步导出的容器</p>

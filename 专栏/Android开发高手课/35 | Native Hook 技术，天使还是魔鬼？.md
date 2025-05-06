@@ -28,12 +28,12 @@ ELF（Executableand Linking Format）是可执行和链接格式，它是一个�
 
 网上介绍ELF格式的文章非常多，你可以参考[《ELF文件格式解析》](https://felixzhang00.github.io/2016/12/24/2016-12-24-ELF%E6%96%87%E4%BB%B6%E8%A3%85%E8%BD%BD%E9%93%BE%E6%8E%A5%E8%BF%87%E7%A8%8B%E5%8F%8Ahook%E5%8E%9F%E7%90%86/)。顾名思义，对于GOT/PLT Hook来说，我们主要关心“.plt”和“.got”这两个节区：
 
-<li>
+
 **.plt**。该节保存过程链接表（Procedure Linkage Table）。
-</li>
-<li>
+
+
 **.got**。该节保存着全局的偏移量表。
-</li>
+
 
 我们也可以使用`readelf -S`来查看ELF文件的具体信息。
 
@@ -52,49 +52,49 @@ readelf -d &lt;library&gt; | grep NEEDED
 
 下面我们大概了解一下系统是如何加载的ELF文件的。
 
-<li>
+
 读ELF的程序头部表，把所有PT_LOAD的节区mmap到内存中。
-</li>
-<li>
+
+
 从“.dynamic”中读取各信息项，计算并保存所有节区的虚拟地址，然后执行重定位操作。
-</li>
-<li>
+
+
 最后ELF加载成功，引用计数加一。
-</li>
+
 
 但是这里有一个关键点，在ELF文件格式中我们只有函数的绝对地址。如果想在系统中运行，这里需要经过**重定位**。这其实是一个比较复杂的问题，因为不同机器的CPU架构、加载顺序不同，导致我们只能在运行时计算出这个值。不过还好动态加载器（/system/bin/linker）会帮助我们解决这个问题。
 
 如果你理解了动态链接的过程，我们再回头来思考一下“.got”和“.plt”它们的具体含义。
 
-<li>
+
 **The Global Offset Table (GOT)**。简单来说就是在数据段的地址表，假定我们有一些代码段的指令引用一些地址变量，编译器会引用GOT表来替代直接引用绝对地址，因为绝对地址在编译期是无法知道的，只有重定位后才会得到 ，GOT自己本身将会包含函数引用的绝对地址。
-</li>
-<li>
+
+
 **The Procedure Linkage Table (PLT)**。PLT不同于GOT，它位于代码段，动态库的每一个外部函数都会在PLT中有一条记录，每一条PLT记录都是一小段可执行代码。 一般来说，外部代码都是在调用PLT表里的记录，然后PLT的相应记录会负责调用实际的函数。我们一般把这种设定叫作“[蹦床](http://en.wikipedia.org/wiki/Trampoline_%28computing%29)”（Trampoline）。
-</li>
+
 
 PLT和GOT记录是一一对应的，并且GOT表第一次解析后会包含调用函数的实际地址。既然这样，那PLT的意义究竟是什么呢？PLT从某种意义上赋予我们一种懒加载的能力。当动态库首次被加载时，所有的函数地址并没有被解析。下面让我们结合图来具体分析一下首次函数调用，请注意图中黑色箭头为跳转，紫色为指针。
 
 <img src="https://static001.geekbang.org/resource/image/b8/33/b86ff32360acd5151050fd30e1762233.png" alt="">
 
-<li>
+
 我们在代码中调用func，编译器会把这个转化为func@plt，并在PLT表插入一条记录。
-</li>
-<li>
+
+
 PLT表中第一条（或者说第0条）PLT[0]是一条特殊记录，它是用来帮助我们解析地址的。通常在类Linux系统，这个的实现会位于动态加载器，就是专栏前面文章提到的/system/bin/linker。
-</li>
-<li>
+
+
 其余的PLT记录都均包含以下信息：
-<ul>
-<li>
+
+
 跳转GOT表的指令（jmp *GOT[n]）。
-</li>
-<li>
+
+
 为上面提到的第0条解析地址函数准备参数。
-</li>
-<li>
+
+
 调用PLT[0]，这里resovler的实际地址是存储在GOT[2] 。
-</li>
+
 
 在解析前GOT[n]会直接指向jmp *GOT[n]的下一条指令。在解析完成后，我们就得到了func的实际地址，动态加载器会将这个地址填入GOT[n]，然后调用func。
 
@@ -118,24 +118,24 @@ PLT表中第一条（或者说第0条）PLT[0]是一条特殊记录，它是用�
 
 GOT/PLT Hook看似简单，但是实现起来也是有一些坑的，需要考虑兼容性的情况。一般来说，推荐使用业界的成熟方案。
 
-<li>
+
 微信Matrix开源库的[ELF Hook](https://github.com/Tencent/matrix/tree/master/matrix/matrix-android/matrix-android-commons/src/main/cpp/elf_hook)，它使用的是GOT Hook，主要使用它来做性能监控。
-</li>
-<li>
+
+
 爱奇艺开源的的[xHook](https://github.com/iqiyi/xHook)，它使用的也是GOT Hook。
-</li>
-<li>
+
+
 Facebook的[PLT Hook](https://github.com/facebookincubator/profilo/tree/master/deps/plthooks)。
-</li>
+
 
 如果不想深入它内部的原理，我们只需要直接使用这些开源的优秀方案就可以了。因为这种Hook方式非常成熟稳定，除了Hook线程的创建，我们还有很多其他的使用范例。
 
-<li>
+
 “I/O优化”中使用[matrix-io-canary](https://github.com/Tencent/matrix/tree/master/matrix/matrix-android/matrix-io-canary) Hook文件的操作。
-</li>
-<li>
+
+
 “网络优化”中使用Hook了Socket的相关操作，具体你可以参考[Chapter17](https://github.com/AndroidAdvanceWithGeektime/Chapter17)。
-</li>
+
 
 这种Hook方法也不是万能的，因为它只能替换导入函数的方式。有时候我们不一定可以找到这样的外部调用函数。如果想Hook函数的内部调用，这个时候就需要用到我们的Trap Hook或者Inline Hook了。
 
@@ -165,21 +165,21 @@ The ptrace() system call provides a means by which one process (the “tracer”
 
 <img src="https://static001.geekbang.org/resource/image/07/cc/0746c1505e06c80345cbeb30b7c6c6cc.png" alt="">
 
-<li>
+
 注册信号接收句柄（signal handler），不同的体系结构可能会选取不同的信号，我们这里用SIGTRAP。
-</li>
-<li>
+
+
 在我们需要Hook得部分插入Trap指令。
-</li>
-<li>
+
+
 系统调用Trap指令，进入内核模式，调用我们已经在开始注册好的信号接收句柄（signal handler）。
-</li>
-<li>
+
+
 执行我们信号接收句柄（signal handler），这里需要注意，所有在信号接收句柄（signal handler）执行的代码需要保证[async-signal-safe](http://man7.org/linux/man-pages/man7/signal-safety.7.html)。这里我们可以简单的只把信号接收句柄当作蹦床，使用logjmp跳出这个需要async-signal-safe（正如我在“崩溃分析”所说的，部分函数在signal回调中使用并不安全）的环境，然后再执行我们Hook的代码。
-</li>
-<li>
+
+
 在执行完Hook的函数后，我们需要恢复现场。这里如果我们想继续调用原来的函数A，那直接回写函数A的原始指令并恢复寄存器状态。
-</li>
+
 
 **Trap Hook实践**
 
@@ -205,15 +205,15 @@ Trap Hook兼容性非常好，它也可以在生产环境中大规模使用。�
 
 下面我先来简单说明一下Android常见的CPU架构和指令集：
 
-<li>
+
 **x86和MIPS架构**。这两个架构已经基本没有多少用户了，我们可以直接忽视。一般来说我们只关心主流的ARM体系架构就可以了。
-</li>
-<li>
+
+
 **ARMv5和ARMv7架构**。它的指令集分为4字节对齐的定长的ARM指令集和2字节对齐的变长Thumb/Thumb-2指令集。Thumb-2指令集虽为2字节对齐，但指令集本身有16位也有32位。其中ARMv5使用的是16位的Thumb16，在ARMv7使用的是32位的Thumb32。**不过目前ARMv5也基本没有多少用户了，我们也可以放弃Thumb16指令集的适配**。
-</li>
-<li>
+
+
 **ARMv8架构**。64位的ARMv8架构可以兼容运行32位，所以它在ARM32和Thumb32指令集的基础上，增加了ARM64指令集。关于它们具体差异，你可以查看[ARM的官方文档](http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0801b/IBAIEGDJ.html)。
-</li>
+
 
 ARM64目前我还没有适配，不过Google Play要求所有应用在2019年8月1日之前需要支持64位，所以今年上半年也要折腾一下。但它们的原理基本类似，下面我以最主流的ARMv7架构为例，为你庖丁解牛Inline Hook。
 
@@ -255,12 +255,12 @@ HOOKED_ADDR+8
 
 业界也有一些不错的参考方案：
 
-<li>
+
 [Cydia Substrate](http://www.cydiasubstrate.com/)。在[Chapter3](https://github.com/AndroidAdvanceWithGeektime/Chapter03)中，我们就使用它来Hook系统的内存分配函数。
-</li>
-<li>
+
+
 [adbi](https://github.com/crmulliner/adbi)。支付宝在[GC抑制](https://juejin.im/post/5be1077d518825171140dbfa)中使用的Hook框架，不过已经好几年没有更新了。
-</li>
+
 
 ## 各个流派的优缺点比较
 
@@ -288,30 +288,30 @@ HOOKED_ADDR+8
 
 Native Hook技术的确非常复杂，即使我们不懂得它的内部原理，我们也应该学会使用成熟的开源框架去实现一些功能。当然对于想进一步深入研究的同学，推荐你学习下面这些资料。
 
-<li>
+
 [链接程序和库指南](https://docs.oracle.com/cd/E37934_01/pdf/E36754.pdf)
-</li>
-<li>
+
+
 [程序员的自我修养：链接、装载与库](https://item.jd.com/10067200.html)
-</li>
-<li>
+
+
 [链接器和加载器 Linkers and Loaders](https://item.jd.com/42971729145.html)
-</li>
-<li>
+
+
 [Linux二进制分析 Learning Linux Binary Analysis](https://item.jd.com/12240585.html)
-</li>
+
 
 如果你对调试器的研究也非常有兴趣，强烈推荐[Eli Bendersky](https://eli.thegreenplace.net/)写的博客，里面有一系列非常优秀的底层知识文章。其中一些关于debugger的，感兴趣的同学可以去阅读，并亲手实现一个简单的调试器。
 
-<li>
+
 [how-debuggers-work-part-1](https://eli.thegreenplace.net/2011/01/23/how-debuggers-work-part-1)
-</li>
-<li>
+
+
 [how-debuggers-work-part-2-breakpoints](https://eli.thegreenplace.net/2011/01/27/how-debuggers-work-part-2-breakpoints)
-</li>
-<li>
+
+
 [how-debuggers-work-part-3-debugging-information](https://eli.thegreenplace.net/2011/02/07/how-debuggers-work-part-3-debugging-information)
-</li>
+
 
 欢迎你点击“请朋友读”，把今天的内容分享给好友，邀请他一起学习。最后别忘了在评论区提交今天的作业，我也为认真完成作业的同学准备了丰厚的“学习加油礼包”，期待与你一起切磋进步哦。
 

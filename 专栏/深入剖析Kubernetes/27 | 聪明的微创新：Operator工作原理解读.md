@@ -32,15 +32,15 @@ $ example/rbac/create_role.sh
 
 更具体地说，上述脚本为Etcd Operator定义了如下所示的权限：
 
-<li>
+
 对Pod、Service、PVC、Deployment、Secret等API对象，有所有权限；
-</li>
-<li>
+
+
 对CRD对象，有所有权限；
-</li>
-<li>
+
+
 对属于etcd.database.coreos.com这个API Group的CR（Custom Resource）对象，有所有权限。
-</li>
+
 
 而Etcd Operator本身，其实就是一个Deployment，它的YAML文件如下所示：
 
@@ -439,18 +439,18 @@ func (c *Controller) run() {
 
 以addOneMember方法为例，它执行的流程如下所示：
 
-<li>
+
 生成一个新节点的Pod的名字，比如：example-etcd-cluster-v6v6s6stxd；
-</li>
-<li>
+
+
 调用Etcd Client，执行前面提到过的etcdctl member add example-etcd-cluster-v6v6s6stxd命令；
-</li>
-<li>
+
+
 使用这个Pod名字，和已经存在的所有节点列表，组合成一个新的initial-cluster字段的值；
-</li>
-<li>
+
+
 使用这个initial-cluster的值，生成这个Pod里Etcd容器的启动命令。如下所示：
-</li>
+
 
 ```
 /usr/local/bin/etcd

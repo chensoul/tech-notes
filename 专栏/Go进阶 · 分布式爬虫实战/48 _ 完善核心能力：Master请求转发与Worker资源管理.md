@@ -433,7 +433,7 @@ func (s *Schedule) Schedule() {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEIqvYMQ1yscgB6xS4nDkoOuP6KiaCiaichQA1OiaQ9rFmNtT9icgrZxeH1WRn5HfiaibDguj8e0lBpo65ricA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -448,8 +448,8 @@ func (s *Schedule) Schedule() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -464,5 +464,4 @@ func (s *Schedule) Schedule() {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

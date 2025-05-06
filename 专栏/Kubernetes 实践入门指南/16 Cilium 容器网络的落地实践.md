@@ -25,165 +25,165 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;为什么我们要学习&#32;Kubernetes&#32;技术.md">00 为什么我们要学习 Kubernetes 技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;重新认识&#32;Kubernetes&#32;的核心组件.md">01 重新认识 Kubernetes 的核心组件.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;深入理解&#32;Kubernets&#32;的编排对象.md">02 深入理解 Kubernets 的编排对象.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;DevOps&#32;场景下落地&#32;K8s&#32;的困难分析.md">03 DevOps 场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;微服务应用场景下落地&#32;K8s&#32;的困难分析.md">04 微服务应用场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;解决&#32;K8s&#32;落地难题的方法论提炼.md">05 解决 K8s 落地难题的方法论提炼.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;练习篇：K8s&#32;核心实践知识掌握.md">06 练习篇：K8s 核心实践知识掌握.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;容器引擎&#32;containerd&#32;落地实践.md">07 容器引擎 containerd 落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;K8s&#32;集群安装工具&#32;kubeadm&#32;的落地实践.md">08 K8s 集群安装工具 kubeadm 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;南北向流量组件&#32;IPVS&#32;的落地实践.md">09 南北向流量组件 IPVS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;东西向流量组件&#32;Calico&#32;的落地实践.md">10 东西向流量组件 Calico 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;服务发现&#32;DNS&#32;的落地实践.md">11 服务发现 DNS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;练习篇：K8s&#32;集群配置测验.md">12 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;理解对方暴露服务的对象&#32;Ingress&#32;和&#32;Service.md">13 理解对方暴露服务的对象 Ingress 和 Service.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;应用网关&#32;OpenResty&#32;对接&#32;K8s&#32;实践.md">14 应用网关 OpenResty 对接 K8s 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Service&#32;层引流技术实践.md">15 Service 层引流技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="16&#32;Cilium&#32;容器网络的落地实践.md">16 Cilium 容器网络的落地实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;应用流量的优雅无损切换实践.md">17 应用流量的优雅无损切换实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;练习篇：应用流量无损切换技术测验.md">18 练习篇：应用流量无损切换技术测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;使用&#32;Rook&#32;构建生产可用存储环境实践.md">19 使用 Rook 构建生产可用存储环境实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;有状态应用的默认特性落地分析.md">20 有状态应用的默认特性落地分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;案例：分布式&#32;MySQL&#32;集群工具&#32;Vitess&#32;实践分析.md">21 案例：分布式 MySQL 集群工具 Vitess 实践分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;存储对象&#32;PV、PVC、Storage&#32;Classes&#32;的管理落地实践.md">22 存储对象 PV、PVC、Storage Classes 的管理落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;K8s&#32;集群中存储对象灾备的落地实践.md">23 K8s 集群中存储对象灾备的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;练习篇：K8s&#32;集群配置测验.md">24 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -247,35 +247,35 @@
 <h3>Cilium CNI 实现</h3>
 <p>Cilium Agent、Cilium CLI Client 和 CNI Plugin 运行在集群中的每一个节点上（以守护进程的形式部署）。Cilium CNI 插件执行所有与网络管道有关的任务，如创建链接设备（veth 对），为容器分配 IP，配置 IP 地址，路由表，sysctl 参数等。Cilium Agent 编译 BPF 程序，并使内核在网络栈的关键点上运行这些程序。</p>
 <p>Cilium 提供两种联网模式：</p>
-<ul>
-<li>叠加网络（）Overlay）模式：Cilium 默认的网络模式。集群中的所有节点为一个网状的隧道，使用基于 udp 的封装协议。VXLAN（默认）或 Geneve （通用网络虚拟化封装）。在这种模式下，Cilium 可以自动形成一个覆盖网络，无需用户使用 kube-controller-manager 中的 <code>--allocate-node-cidrs</code> 选项进行任何配置。</li>
-<li>直接/本地路由模式：在这个配置中，Cilium 会把所有不针对另一个本地端点的数据包交给 linux 内核的路由子系统。这个设置需要一个额外的路由守护程序，如 Bird、Quagga、BGPD、Zebra 等，通过节点的 IP 向所有其他节点公布非本地节点分配的前缀。与 VxLAN 叠加相比，BGP 方案具有更好的性能，更重要的是，它使容器 IP 可路由化，无需任何额外的网状配置。</li>
-</ul>
+
+叠加网络（）Overlay）模式：Cilium 默认的网络模式。集群中的所有节点为一个网状的隧道，使用基于 udp 的封装协议。VXLAN（默认）或 Geneve （通用网络虚拟化封装）。在这种模式下，Cilium 可以自动形成一个覆盖网络，无需用户使用 kube-controller-manager 中的 <code>--allocate-node-cidrs</code> 选项进行任何配置。
+直接/本地路由模式：在这个配置中，Cilium 会把所有不针对另一个本地端点的数据包交给 linux 内核的路由子系统。这个设置需要一个额外的路由守护程序，如 Bird、Quagga、BGPD、Zebra 等，通过节点的 IP 向所有其他节点公布非本地节点分配的前缀。与 VxLAN 叠加相比，BGP 方案具有更好的性能，更重要的是，它使容器 IP 可路由化，无需任何额外的网状配置。
+
 <p>Cilium 在主机网络空间上创建了三个虚拟接口：cilium<em>host、cilium</em>net 和 cilium<em>vxlan。Cilium Agent 在启动时创建一个名为“cilium</em>host -&gt; cilium<em>net”的 veth 对，并将 CIDR 的第一个 IP 地址设置为 cilium</em>host，然后作为 CIDR 的网关。CNI 插件会生成 BPF 规则，编译后注入内核，以解决 veth 对之间的连通问题。数据链路参考如下：</p>
 <p><img src="assets/30eb18f0-0c9b-11eb-bf86-c1f111c841d1.jpg" alt="14-2-cilium-cni-kube-impl" /></p>
 <h3>落地安装实践</h3>
 <p>因为 Cilium 对内核要求很高，本来我以为需要采用 Ubuntu 才可以安装，后来查阅文档发现，只要是 CentOS 7.x 之后就可以支持。安装步骤如下。</p>
 <ol>
-<li>先挂载 bpf 模块：</li>
+先挂载 bpf 模块：
 </ol>
 <pre><code>sudo mount bpffs -t bpf /sys/fs/bpf
 
 </code></pre>
 <ol start="2">
-<li>修改 /etc/fstab 文件，在最后面加入如下配置：</li>
+修改 /etc/fstab 文件，在最后面加入如下配置：
 </ol>
 <pre><code>bpffs                  /sys/fs/bpf             bpf     defaults 0 0
 
 </code></pre>
 <ol start="3">
-<li>安装一套干净的 Kubernetes 系统，这里我采用 K3s 快速搭建：</li>
+安装一套干净的 Kubernetes 系统，这里我采用 K3s 快速搭建：
 </ol>
 <pre><code>export MASTER_IP=$(ip a |grep global | grep -v '10.0.2.15' | awk '{print $2}' | cut -f1 -d '/')
 curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC=&quot;--flannel-backend=none --no-flannel --node-ip=${MASTER_IP} --node-external-ip=${MASTER_IP} --bind-address=${MASTER_IP} --no-deploy servicelb --no-deploy traefik&quot; sh -
 
 </code></pre>
 <ol start="4">
-<li>在这之后，当你运行以下命令，你应该看到 local-path，metrics-server 和 coredns pods 处于 Pending 状态。这是正常的。</li>
+在这之后，当你运行以下命令，你应该看到 local-path，metrics-server 和 coredns pods 处于 Pending 状态。这是正常的。
 </ol>
 <pre><code>[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ae8f5f5eedafeffecb7f7f4fdb7eefff7ea">[email&#160;protected]</a> ~]# kubectl get po -n kube-system
 NAME                                     READY   STATUS    RESTARTS   AGE
@@ -285,7 +285,7 @@ metrics-server-7566d596c8-8bhrq          0/1     Pending   0          3m2s
 
 </code></pre>
 <ol start="5">
-<li>安装 helm3：</li>
+安装 helm3：
 </ol>
 <pre><code>sudo wget — no-check-certificate https://get.helm.sh/helm-v3.2.4-linux-amd64.tar.gz
 sudo tar -zxvf helm-v3.2.4-linux-amd64.tar.gz
@@ -293,7 +293,7 @@ sudo mv linux-amd64/helm /usr/local/bin/helm
 
 </code></pre>
 <ol start="6">
-<li>安装 Cilium 套件：</li>
+安装 Cilium 套件：
 </ol>
 <pre><code># sudo helm repo add cilium https://helm.cilium.io/
 
@@ -323,7 +323,7 @@ For any further help, visit https://docs.cilium.io/en/v1.8/gettinghelp
 
 </code></pre>
 <ol start="7">
-<li>去掉 IPAM 特性：</li>
+去掉 IPAM 特性：
 </ol>
 <pre><code>kubectl edit configmap cilium-config -n kube-system
 
@@ -335,7 +335,7 @@ For any further help, visit https://docs.cilium.io/en/v1.8/gettinghelp
 </code></pre>
 <p>稍等片刻，就可以看到 Cilium 相关的容器都启动起来了。Cilium 容器网络配置成功。</p>
 <ol start="8">
-<li>修改 Hubble UI 控制台服务为 NodePort 模式：</li>
+修改 Hubble UI 控制台服务为 NodePort 模式：
 </ol>
 <pre><code>sudo kubectl edit svc hubble-ui -n kube-system
 

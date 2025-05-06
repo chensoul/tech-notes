@@ -190,21 +190,21 @@ spec:
 
 Pod生命周期的变化，主要体现在Pod API对象的**Status部分**，这是它除了Metadata和Spec之外的第三个重要字段。其中，pod.status.phase，就是Pod的当前状态，它有如下几种可能的情况：
 
-<li>
+
 Pending。这个状态意味着，Pod的YAML文件已经提交给了Kubernetes，API对象已经被创建并保存在Etcd当中。但是，这个Pod里有些容器因为某种原因而不能被顺利创建。比如，调度不成功。
-</li>
-<li>
+
+
 Running。这个状态下，Pod已经调度成功，跟一个具体的节点绑定。它包含的容器都已经创建成功，并且至少有一个正在运行中。
-</li>
-<li>
+
+
 Succeeded。这个状态意味着，Pod里的所有容器都正常运行完毕，并且已经退出了。这种情况在运行一次性任务时最为常见。
-</li>
-<li>
+
+
 Failed。这个状态下，Pod里至少有一个容器以不正常的状态（非0的返回码）退出。这个状态的出现，意味着你得想办法Debug这个容器的应用，比如查看Pod的Events和日志。
-</li>
-<li>
+
+
 Unknown。这是一个异常状态，意味着Pod的状态不能持续地被kubelet汇报给kube-apiserver，这很有可能是主从节点（Master和Kubelet）间的通信出现了问题。
-</li>
+
 
 更进一步地，Pod对象的Status字段，还可以再细分出一组Conditions。这些细分状态的值包括：PodScheduled、Ready、Initialized，以及Unschedulable。它们主要用于描述造成当前Status的具体原因是什么。
 

@@ -161,12 +161,12 @@ spec:
 
 在Job对象中，负责并行控制的参数有两个：
 
-<li>
+
 spec.parallelism，它定义的是一个Job在任意时间最多可以启动多少个Pod同时运行；
-</li>
-<li>
+
+
 spec.completions，它定义的是Job至少要完成的Pod数目，即Job的最小完成数。
-</li>
+
 
 这两个参数听起来有点儿抽象，所以我准备了一个例子来帮助你理解。
 
@@ -322,12 +322,12 @@ spec:
 
 所以，在控制这种Job时，我们只要注意如下两个方面即可：
 
-<li>
+
 创建Job时，替换掉$ITEM这样的变量；
-</li>
-<li>
+
+
 所有来自于同一个模板的Job，都有一个jobgroup: jobexample标签，也就是说这一组Job使用这样一个相同的标识。
-</li>
+
 
 而做到第一点非常简单。比如，你可以通过这样一句shell把$ITEM替换掉：
 
@@ -523,15 +523,15 @@ hello     */1 * * * *   False     0         Thu, 6 Sep 2018 14:34:00 -070
 
 需要注意的是，由于定时任务的特殊性，很可能某个Job还没有执行完，另外一个新Job就产生了。这时候，你可以通过spec.concurrencyPolicy字段来定义具体的处理策略。比如：
 
-<li>
+
 concurrencyPolicy=Allow，这也是默认情况，这意味着这些Job可以同时存在；
-</li>
-<li>
+
+
 concurrencyPolicy=Forbid，这意味着不会创建新的Pod，该创建周期被跳过；
-</li>
-<li>
+
+
 concurrencyPolicy=Replace，这意味着新产生的Job会替换旧的、没有执行完的Job。
-</li>
+
 
 而如果某一次Job创建失败，这次创建就会被标记为“miss”。当在指定的时间窗口内，miss的数目达到100时，那么CronJob会停止再创建这个Job。
 

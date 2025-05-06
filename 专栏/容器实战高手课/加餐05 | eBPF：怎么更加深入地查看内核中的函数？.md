@@ -43,15 +43,15 @@ eBPF，它的全称是“Extended Berkeley Packet Filter”。从名字看，你
 <img src="https://static001.geekbang.org/resource/image/1f/8d/1f1af6f7ab8d4a3a2f58cbcd9e9c2e8d.png" alt=""><br>
 当BPF增强为eBPF之后， 它的应用范围自然也变广了。从单纯的网络包抓取，扩展到了下面的几个领域：
 
-<li>
+
 网络领域，内核态网络包的快速处理和转发，你可以看一下[XDP](https://www.iovisor.org/technology/xdp)（eXpress Data Path）。
-</li>
-<li>
+
+
 安全领域，通过[LSM](https://www.kernel.org/doc/html/v4.15/admin-guide/LSM/index.html)（Linux Security Module）的hook点，eBPF可以对Linux内核做安全监控和访问控制，你可以参考[KRSI](https://lwn.net/Articles/808048/)（Kernel Runtime Security Instrumentation）的文档。
-</li>
-<li>
+
+
 内核追踪/调试，eBPF能通过tracepoints、kprobes、 perf-events等hook点来追踪和调试内核，这也是我们在调试生产环境中，解决容器相关问题时使用的方法。
-</li>
+
 
 ## eBPF的编程模型
 
@@ -280,12 +280,12 @@ int main(int argc, char **argv) {
 
 这部分的代码其实也很简单，主要就是做了两件事：
 
-<li>
+
 通过执行load_bpf_file()函数，加载内核态代码生成的eBPF bytecode，也就是编译后得到的文件“src/bpf_program.o”。
-</li>
-<li>
+
+
 等待30秒钟后，从BPF Maps读取key/value对里的值。这里的值就是前面内核态的函数bpf_prog()，在kill()系统调用的tracepoint上执行这个函数以后，写入到BPF Maps里的值。
-</li>
+
 
 至于读取BPF Maps的部分，就不需要太多的解释了，这里我们主要看一下load_bpf_file()这个函数，load_bpf_file()是Linux内核代码samples/bpf/bpf_load.c 里封装的一个函数。
 

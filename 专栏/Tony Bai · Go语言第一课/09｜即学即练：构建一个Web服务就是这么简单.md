@@ -394,7 +394,7 @@ $./bookstore
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -409,8 +409,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/92/af/ad02ae4b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -425,8 +425,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/8b/7c/fe7b1bf7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -441,8 +441,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/59/21/d2efde18.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -457,8 +457,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/fe/f8/3e8de9b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -473,8 +473,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/49/4e/8798cd01.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -489,8 +489,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/26/bc/18314557.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -505,8 +505,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/53/a8/abc96f70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -521,8 +521,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -537,8 +537,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/6d/cf/ec335526.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -553,8 +553,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/52/66/3e4d4846.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -569,8 +569,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/e9/dc/cc05ebc7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -585,8 +585,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/b5/e6/c67f12bd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -601,8 +601,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/61/3f/2ce014e7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -617,8 +617,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/22/86/3fe860c9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -633,8 +633,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/e9/7b/4e0ede2a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -649,8 +649,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/ce/d7/5315f6ce.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -665,8 +665,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/e9/dc/cc05ebc7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -681,8 +681,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/42/3f/cb0d8a8d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -697,8 +697,8 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/1f/14/57cb7926.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -713,5 +713,4 @@ $./bookstore
   </div>
 </div>
 </div>
-</li>
-</ul>
+

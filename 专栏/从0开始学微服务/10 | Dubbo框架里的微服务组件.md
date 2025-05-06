@@ -100,18 +100,18 @@ registry://multicast://224.5.6.7:1234/com.alibaba.dubbo.registry.RegistryService
 
 专栏前面我讲过在服务调用的过程中，通常把服务消费者叫作客户端，服务提供者叫作服务端，发起一次服务调用需要解决四个问题：
 
-<li>
+
 客户端和服务端如何建立网络连接？
-</li>
-<li>
+
+
 服务端如何处理请求？
-</li>
-<li>
+
+
 数据传输采用什么协议？
-</li>
-<li>
+
+
 数据该如何序列化和反序列化？
-</li>
+
 
 其中前两个问题客户端和服务端如何建立连接和服务端如何处理请求是通信框架要解决的问题，Dubbo支持多种通信框架，比如Netty  4，需要在服务端和客户端的XML配置中添加下面的配置项。
 
@@ -160,18 +160,18 @@ registry://multicast://224.5.6.7:1234/com.alibaba.dubbo.registry.RegistryService
 
 图中的Invoker是对服务提供者节点的抽象，Invoker封装了服务提供者的地址以及接口信息。
 
-<li>
+
 节点管理：Directory负责从注册中心获取服务节点列表，并封装成多个Invoker，可以把它看成“List&lt;Invoker&gt;” ，它的值可能是动态变化的，比如注册中心推送变更时需要更新。
-</li>
-<li>
+
+
 负载均衡：LoadBalance负责从多个Invoker中选出某一个用于发起调用，选择时可以采用多种负载均衡算法，比如Random、RoundRobin、LeastActive等。
-</li>
-<li>
+
+
 服务路由：Router负责从多个Invoker中按路由规则选出子集，比如读写分离、机房隔离等。
-</li>
-<li>
+
+
 服务容错：Cluster将Directory中的多个Invoker伪装成一个Invoker，对上层透明，伪装过程包含了容错逻辑，比如采用Failover策略的话，调用失败后，会选择另一个Invoker，重试请求。
-</li>
+
 
 ## 一次服务调用的流程
 
@@ -182,53 +182,53 @@ registry://multicast://224.5.6.7:1234/com.alibaba.dubbo.registry.RegistryService
 
 首先我来解释微服务架构中各个组件分别对应到上面这张图中是如何实现。
 
-<li>
+
 服务发布与引用：对应实现是图里的Proxy服务代理层，Proxy根据客户端和服务端的接口描述，生成接口对应的客户端和服务端的Stub，使得客户端调用服务端就像本地调用一样。
-</li>
-<li>
+
+
 服务注册与发现：对应实现是图里的Registry注册中心层，Registry根据客户端和服务端的接口描述，解析成服务的URL格式，然后调用注册中心的API，完成服务的注册和发现。
-</li>
-<li>
+
+
 服务调用：对应实现是Protocol远程调用层，Protocol把客户端的本地请求转换成RPC请求。然后通过Transporter层来实现通信，Codec层来实现协议封装，Serialization层来实现数据序列化和反序列化。
-</li>
-<li>
+
+
 服务监控：对应实现层是Filter调用链层，通过在Filter调用链层中加入MonitorFilter，实现对每一次调用的拦截，在调用前后进行埋点数据采集，上传给监控系统。
-</li>
-<li>
+
+
 服务治理：对应实现层是Cluster层，负责服务节点管理、负载均衡、服务路由以及服务容错。
-</li>
+
 
 再来看下微服务架构各个组件是如何串联起来组成一个完整的微服务框架的，以Dubbo框架下一次服务调用的过程为例，先来看下客户端发起调用的过程。
 
-<li>
+
 首先根据接口定义，通过Proxy层封装好的透明化接口代理，发起调用。
-</li>
-<li>
+
+
 然后在通过Registry层封装好的服务发现功能，获取所有可用的服务提供者节点列表。
-</li>
-<li>
+
+
 再根据Cluster层的负载均衡算法从可用的服务节点列表中选取一个节点发起服务调用，如果调用失败，根据Cluster层提供的服务容错手段进行处理。
-</li>
-<li>
+
+
 同时通过Filter层拦截调用，实现客户端的监控统计。
-</li>
-<li>
+
+
 最后在Protocol层，封装成Dubbo RPC请求，发给服务端节点。
-</li>
+
 
 这样的话，客户端的请求就从一个本地调用转化成一个远程RPC调用，经过服务调用框架的处理，通过网络传输到达服务端。其中服务调用框架包括通信协议框架Transporter、通信协议Codec、序列化Serialization三层处理。
 
 服务端从网络中接收到请求后的处理过程是这样的：
 
-<li>
+
 首先在Protocol层，把网络上的请求解析成Dubbo RPC请求。
-</li>
-<li>
+
+
 然后通过Filter拦截调用，实现服务端的监控统计。
-</li>
-<li>
+
+
 最后通过Proxy层的处理，把Dubbo RPC请求转化为接口的具体实现，执行调用。
-</li>
+
 
 ## 总结
 

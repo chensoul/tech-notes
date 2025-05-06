@@ -21,12 +21,12 @@
 <img src="https://static001.geekbang.org/resource/image/f7/16/f7e86505c09239b80ad05aecfb032e16.png" alt=""><br>
 具体地说，**我们可以把 CRI 分为两组：**
 
-<li>
+
 第一组，是 RuntimeService。它提供的接口，主要是跟容器相关的操作。比如，创建和启动容器、删除容器、执行 exec 命令等等。
-</li>
-<li>
+
+
 而第二组，则是 ImageService。它提供的接口，主要是容器镜像相关的操作，比如拉取镜像、删除镜像等等。
-</li>
+
 
 关于容器镜像的操作比较简单，所以我们就暂且略过。接下来，我主要为你讲解一下RuntimeService部分。
 

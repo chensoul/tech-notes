@@ -1,40 +1,40 @@
 <audio title="51 _ 基于 GitHub Actions 的 CI 实战" src="https://static001.geekbang.org/resource/audio/72/be/7234dbb53dae77ff314b56abc42bf5be.mp3" controls="controls"></audio> 
-<p>你好，我是孔令飞。这是本专栏正文的最后一讲了，恭喜你坚持到了最后！</p><p>在Go项目开发中，我们要频繁地执行静态代码检查、测试、编译、构建等操作。如果每一步我们都手动执行，效率低不说，还容易出错。所以，我们通常借助CI系统来自动化执行这些操作。</p><p>当前业界有很多优秀的CI系统可供选择，例如 <a href="https://circleci.com/">CircleCI</a>、<a href="https://travis-ci.org/">TravisCI</a>、<a href="https://github.com/jenkinsci/jenkins">Jenkins</a>、<a href="https://coding.net/">CODING</a>、<a href="https://github.com/features/actions">GitHub Actions</a> 等。这些系统在设计上大同小异，为了减少你的学习成本，我选择了相对来说容易实践的GitHub Actions，来给你展示如何通过CI来让工作自动化。</p><p>这一讲，我会先介绍下GitHub Actions及其用法，再向你展示一个CI示例，最后给你演示下IAM是如何构建CI任务的。</p><h2>GitHub Actions的基本用法</h2><p>GitHub Actions是GitHub为托管在github.com站点的项目提供的持续集成服务，于2018年10月推出。</p><p>GitHub Actions具有以下功能特性：</p><ul>
-<li>提供原子的actions配置和组合actions的workflow配置两种能力。</li>
-<li>全局配置基于<a href="https://help.github.com/en/articles/migrating-github-actions-from-hcl-syntax-to-yaml-syntax">YAML配置</a>，兼容主流CI/CD工具配置。</li>
-<li>Actions/Workflows基于<a href="https://help.github.com/en/articles/events-that-trigger-workflows">事件触发</a>，包括Event restrictions、Webhook events、Scheduled events、External events。</li>
-<li>提供可供运行的托管容器服务，包括Docker、VM，可运行Linux、macOS、Windows主流系统。</li>
-<li>提供主流语言的支持，包括Node.js、Python、Java、Ruby、PHP、Go、Rust、.NET。</li>
-<li>提供实时日志流程，方便调试。</li>
-<li>提供<a href="https://help.github.com/en/articles/about-github-actions#discovering-actions-in-the-github-community">平台内置的Actions</a>与第三方提供的Actions，开箱即用。</li>
-</ul><!-- [[[read_end]]] --><h3>GitHub Actions的基本概念</h3><p>在构建持续集成任务时，我们会在任务中心完成各种操作，比如克隆代码、编译代码、运行单元测试、构建和发布镜像等。GitHub把这些操作称为Actions。</p><p>Actions在很多项目中是可以共享的，GitHub允许开发者将这些可共享的Actions上传到<a href="https://github.com/marketplace?type=actions">GitHub的官方Actions市场</a>，开发者在Actions市场中可以搜索到他人提交的 Actions。另外，还有一个 <a href="https://github.com/sdras/awesome-actions">awesome actions</a> 的仓库，里面也有不少的Action可供开发者使用。如果你需要某个 Action，不必自己写复杂的脚本，直接引用他人写好的 Action 即可。整个持续集成过程，就变成了一个 Actions 的组合。</p><p>Action其实是一个独立的脚本，可以将Action存放在GitHub代码仓库中，通过<code>&lt;userName&gt;/&lt;repoName&gt;</code>的语法引用 Action。例如，<code>actions/checkout@v2</code>表示<code>https://github.com/actions/checkout</code>这个仓库，tag是v2。<code>actions/checkout@v2</code>也代表一个 Action，作用是安装 Go编译环境。GitHub 官方的 Actions 都放在 <a href="https://github.com/actions">github.com/actions</a> 里面。</p><p>GitHub Actions 有一些自己的术语，下面我来介绍下。</p><ul>
-<li>workflow（工作流程）：一个  <code>.yml</code>  文件对应一个 workflow，也就是一次持续集成。一个 GitHub 仓库可以包含多个 workflow，只要是在  <code>.github/workflow</code>  目录下的  <code>.yml</code>  文件都会被 GitHub 执行。</li>
-<li>job（任务）：一个 workflow 由一个或多个 job 构成，每个 job 代表一个持续集成任务。</li>
-<li>step（步骤）：每个 job 由多个 step 构成，一步步完成。</li>
-<li>action（动作）：每个 step 可以依次执行一个或多个命令（action）。</li>
-<li>on：一个 workflow 的触发条件，决定了当前的 workflow 在什么时候被执行。</li>
-</ul><h3>workflow文件介绍</h3><p>GitHub Actions 配置文件存放在代码仓库的<code>.github/workflows</code>目录下，文件后缀为<code>.yml</code>，支持创建多个文件，文件名可以任意取，比如<code>iam.yml</code>。GitHub 只要发现<code>.github/workflows</code>目录里面有<code>.yml</code>文件，就会自动运行该文件，如果运行过程中存在问题，会以邮件的形式通知到你。</p><p>workflow 文件的配置字段非常多，如果你想详细了解，可以查看<a href="https://docs.github.com/cn/actions/reference/workflow-syntax-for-github-actions">官方文档</a>。这里，我来介绍一些基本的配置字段。</p><ol>
-<li><code>name</code></li>
+<p>你好，我是孔令飞。这是本专栏正文的最后一讲了，恭喜你坚持到了最后！</p><p>在Go项目开发中，我们要频繁地执行静态代码检查、测试、编译、构建等操作。如果每一步我们都手动执行，效率低不说，还容易出错。所以，我们通常借助CI系统来自动化执行这些操作。</p><p>当前业界有很多优秀的CI系统可供选择，例如 <a href="https://circleci.com/">CircleCI</a>、<a href="https://travis-ci.org/">TravisCI</a>、<a href="https://github.com/jenkinsci/jenkins">Jenkins</a>、<a href="https://coding.net/">CODING</a>、<a href="https://github.com/features/actions">GitHub Actions</a> 等。这些系统在设计上大同小异，为了减少你的学习成本，我选择了相对来说容易实践的GitHub Actions，来给你展示如何通过CI来让工作自动化。</p><p>这一讲，我会先介绍下GitHub Actions及其用法，再向你展示一个CI示例，最后给你演示下IAM是如何构建CI任务的。</p><h2>GitHub Actions的基本用法</h2><p>GitHub Actions是GitHub为托管在github.com站点的项目提供的持续集成服务，于2018年10月推出。</p><p>GitHub Actions具有以下功能特性：</p>
+提供原子的actions配置和组合actions的workflow配置两种能力。
+全局配置基于<a href="https://help.github.com/en/articles/migrating-github-actions-from-hcl-syntax-to-yaml-syntax">YAML配置</a>，兼容主流CI/CD工具配置。
+Actions/Workflows基于<a href="https://help.github.com/en/articles/events-that-trigger-workflows">事件触发</a>，包括Event restrictions、Webhook events、Scheduled events、External events。
+提供可供运行的托管容器服务，包括Docker、VM，可运行Linux、macOS、Windows主流系统。
+提供主流语言的支持，包括Node.js、Python、Java、Ruby、PHP、Go、Rust、.NET。
+提供实时日志流程，方便调试。
+提供<a href="https://help.github.com/en/articles/about-github-actions#discovering-actions-in-the-github-community">平台内置的Actions</a>与第三方提供的Actions，开箱即用。
+<!-- [[[read_end]]] --><h3>GitHub Actions的基本概念</h3><p>在构建持续集成任务时，我们会在任务中心完成各种操作，比如克隆代码、编译代码、运行单元测试、构建和发布镜像等。GitHub把这些操作称为Actions。</p><p>Actions在很多项目中是可以共享的，GitHub允许开发者将这些可共享的Actions上传到<a href="https://github.com/marketplace?type=actions">GitHub的官方Actions市场</a>，开发者在Actions市场中可以搜索到他人提交的 Actions。另外，还有一个 <a href="https://github.com/sdras/awesome-actions">awesome actions</a> 的仓库，里面也有不少的Action可供开发者使用。如果你需要某个 Action，不必自己写复杂的脚本，直接引用他人写好的 Action 即可。整个持续集成过程，就变成了一个 Actions 的组合。</p><p>Action其实是一个独立的脚本，可以将Action存放在GitHub代码仓库中，通过<code>&lt;userName&gt;/&lt;repoName&gt;</code>的语法引用 Action。例如，<code>actions/checkout@v2</code>表示<code>https://github.com/actions/checkout</code>这个仓库，tag是v2。<code>actions/checkout@v2</code>也代表一个 Action，作用是安装 Go编译环境。GitHub 官方的 Actions 都放在 <a href="https://github.com/actions">github.com/actions</a> 里面。</p><p>GitHub Actions 有一些自己的术语，下面我来介绍下。</p>
+workflow（工作流程）：一个  <code>.yml</code>  文件对应一个 workflow，也就是一次持续集成。一个 GitHub 仓库可以包含多个 workflow，只要是在  <code>.github/workflow</code>  目录下的  <code>.yml</code>  文件都会被 GitHub 执行。
+job（任务）：一个 workflow 由一个或多个 job 构成，每个 job 代表一个持续集成任务。
+step（步骤）：每个 job 由多个 step 构成，一步步完成。
+action（动作）：每个 step 可以依次执行一个或多个命令（action）。
+on：一个 workflow 的触发条件，决定了当前的 workflow 在什么时候被执行。
+<h3>workflow文件介绍</h3><p>GitHub Actions 配置文件存放在代码仓库的<code>.github/workflows</code>目录下，文件后缀为<code>.yml</code>，支持创建多个文件，文件名可以任意取，比如<code>iam.yml</code>。GitHub 只要发现<code>.github/workflows</code>目录里面有<code>.yml</code>文件，就会自动运行该文件，如果运行过程中存在问题，会以邮件的形式通知到你。</p><p>workflow 文件的配置字段非常多，如果你想详细了解，可以查看<a href="https://docs.github.com/cn/actions/reference/workflow-syntax-for-github-actions">官方文档</a>。这里，我来介绍一些基本的配置字段。</p><ol>
+<code>name</code>
 </ol><p><code>name</code>字段是 workflow 的名称。如果省略该字段，默认为当前 workflow 的文件名。</p><pre><code class="language-yaml">name: GitHub Actions Demo
 </code></pre><ol start="2">
-<li><code>on</code></li>
+<code>on</code>
 </ol><p><code>on</code>字段指定触发 workflow 的条件，通常是某些事件。</p><pre><code class="language-yaml">on: push
 </code></pre><p>上面的配置意思是，<code>push</code>事件触发 workflow。<code>on</code>字段也可以是事件的数组，例如:</p><pre><code class="language-yaml">on: [push, pull_request]
 </code></pre><p>上面的配置意思是，<code>push</code>事件或<code>pull_request</code>事件都可以触发 workflow。</p><p>想了解完整的事件列表，你可以查看<a href="https://docs.github.com/en/actions/reference/events-that-trigger-workflows">官方文档</a>。除了代码库事件，GitHub Actions 也支持外部事件触发，或者定时运行。</p><ol start="3">
-<li><code>on.&lt;push|pull_request&gt;.&lt;tags|branches&gt;</code></li>
+<code>on.&lt;push|pull_request&gt;.&lt;tags|branches&gt;</code>
 </ol><p>指定触发事件时，我们可以限定分支或标签。</p><pre><code class="language-yaml">on:
   push:
     branches:
       - master
 </code></pre><p>上面的配置指定，只有<code>master</code>分支发生<code>push</code>事件时，才会触发 workflow。</p><ol start="4">
-<li><code>jobs.&lt;job_id&gt;.name</code></li>
+<code>jobs.&lt;job_id&gt;.name</code>
 </ol><p>workflow 文件的主体是<code>jobs</code>字段，表示要执行的一项或多项任务。</p><p><code>jobs</code>字段里面，需要写出每一项任务的<code>job_id</code>，具体名称自定义。<code>job_id</code>里面的<code>name</code>字段是任务的说明。</p><pre><code class="language-yaml">jobs:
   my_first_job:
     name: My first job
   my_second_job:
     name: My second job
 </code></pre><p>上面的代码中，<code>jobs</code>字段包含两项任务，<code>job_id</code>分别是<code>my_first_job</code>和<code>my_second_job</code>。</p><ol start="5">
-<li><code>jobs.&lt;job_id&gt;.needs</code></li>
+<code>jobs.&lt;job_id&gt;.needs</code>
 </ol><p><code>needs</code>字段指定当前任务的依赖关系，即运行顺序。</p><pre><code class="language-yaml">jobs:
   job1:
   job2:
@@ -42,19 +42,19 @@
   job3:
     needs: [job1, job2]
 </code></pre><p>上面的代码中，<code>job1</code>必须先于<code>job2</code>完成，而<code>job3</code>等待<code>job1</code>和<code>job2</code>完成后才能运行。因此，这个 workflow 的运行顺序为：<code>job1</code>、<code>job2</code>、<code>job3</code>。</p><ol start="6">
-<li><code>jobs.&lt;job_id&gt;.runs-on</code></li>
-</ol><p><code>runs-on</code>字段指定运行所需要的虚拟机环境，它是必填字段。目前可用的虚拟机如下：</p><ul>
-<li>ubuntu-latest、ubuntu-18.04或ubuntu-16.04。</li>
-<li>windows-latest、windows-2019或windows-2016。</li>
-<li>macOS-latest或macOS-10.14。</li>
-</ul><p>下面的配置指定虚拟机环境为<code>ubuntu-18.04</code>。</p><pre><code class="language-yaml">runs-on: ubuntu-18.04
+<code>jobs.&lt;job_id&gt;.runs-on</code>
+</ol><p><code>runs-on</code>字段指定运行所需要的虚拟机环境，它是必填字段。目前可用的虚拟机如下：</p>
+ubuntu-latest、ubuntu-18.04或ubuntu-16.04。
+windows-latest、windows-2019或windows-2016。
+macOS-latest或macOS-10.14。
+<p>下面的配置指定虚拟机环境为<code>ubuntu-18.04</code>。</p><pre><code class="language-yaml">runs-on: ubuntu-18.04
 </code></pre><ol start="7">
-<li><code>jobs.&lt;job_id&gt;.steps</code></li>
-</ol><p><code>steps</code>字段指定每个 Job 的运行步骤，可以包含一个或多个步骤。每个步骤都可以指定下面三个字段。</p><ul>
-<li><code>jobs.&lt;job_id&gt;.steps.name</code>：步骤名称。</li>
-<li><code>jobs.&lt;job_id&gt;.steps.run</code>：该步骤运行的命令或者 action。</li>
-<li><code>jobs.&lt;job_id&gt;.steps.env</code>：该步骤所需的环境变量。</li>
-</ul><p>下面是一个完整的 workflow 文件的范例：</p><pre><code class="language-yaml">name: Greeting from Mona
+<code>jobs.&lt;job_id&gt;.steps</code>
+</ol><p><code>steps</code>字段指定每个 Job 的运行步骤，可以包含一个或多个步骤。每个步骤都可以指定下面三个字段。</p>
+<code>jobs.&lt;job_id&gt;.steps.name</code>：步骤名称。
+<code>jobs.&lt;job_id&gt;.steps.run</code>：该步骤运行的命令或者 action。
+<code>jobs.&lt;job_id&gt;.steps.env</code>：该步骤所需的环境变量。
+<p>下面是一个完整的 workflow 文件的范例：</p><pre><code class="language-yaml">name: Greeting from Mona
 on: push
 
 jobs:
@@ -70,9 +70,9 @@ jobs:
       run: |
         echo $MY_VAR $FIRST_NAME $LAST_NAME.
 </code></pre><p>上面的代码中，<code>steps</code>字段只包括一个步骤。该步骤先注入三个环境变量，然后执行一条 Bash 命令。</p><ol start="8">
-<li><code>uses</code></li>
+<code>uses</code>
 </ol><p><code>uses</code> 可以引用别人已经创建的 actions，就是上面说的 actions 市场中的 actions。引用格式为<code>userName/repoName@verison</code>，例如<code>uses: actions/setup-go@v1</code>。</p><ol start="9">
-<li><code>with</code></li>
+<code>with</code>
 </ol><p><code>with</code> 指定actions的输入参数。每个输入参数都是一个键/值对。输入参数被设置为环境变量，该变量的前缀为 <code>INPUT_</code>，并转换为大写。</p><p>这里举个例子：我们定义 <code>hello_world</code> 操作所定义的三个输入参数（<code>first_name</code>、<code>middle_name</code> 和 <code>last_name</code>），这些输入变量将被 <code>hello-world</code> 操作作为 <code>INPUT_FIRST_NAME</code>、<code>INPUT_MIDDLE_NAME</code> 和 <code>INPUT_LAST_NAME</code> 环境变量使用。</p><pre><code class="language-yaml">jobs:
   my_first_job:
     steps:
@@ -83,13 +83,13 @@ jobs:
           middle_name: Go
           last_name: Kong
 </code></pre><ol start="10">
-<li><code>run</code></li>
+<code>run</code>
 </ol><p><code>run</code>指定执行的命令。可以有多个命令，例如：</p><pre><code class="language-yaml">- name: Build
       run: |
       go mod tidy
       go build -v -o helloci .
 </code></pre><ol start="11">
-<li><code>id</code></li>
+<code>id</code>
 </ol><p><code>id</code>是step的唯一标识。</p><h2>GitHub Actions的进阶用法</h2><p>上面，我介绍了GitHub Actions的一些基本知识，这里我再介绍下GitHub Actions的进阶用法。</p><h3>为工作流加一个Badge</h3><p>在action的面板中，点击<code>Create status badge</code>就可以复制Badge的Markdown内容到README.md中。</p><p>之后，我们就可以直接在README.md中看到当前的构建结果：</p><p><img src="https://static001.geekbang.org/resource/image/45/af/453a97b0776281873dee5671c53347af.png?wh=1280x765" alt="图片"></p><h3>使用构建矩阵</h3><p>如果我们想在多个系统或者多个语言版本上测试构建，就需要设置构建矩阵。例如，我们想在多个操作系统、多个Go版本下跑测试，可以使用如下workflow配置：</p><pre><code class="language-yaml">name: Go Test
 
 on: [push, pull_request]
@@ -188,21 +188,21 @@ jobs:
           dockerfile: Dockerfile # 指定 Dockerfile 的位置
           tag_names: true # 是否将 release 的 tag 作为 docker image 的 tag
 </code></pre><p>上面的workflow文件定义了当GitHub仓库有<code>push</code>、<code>pull_request</code>事件发生时，会触发GitHub Actions工作流程，流程中定义了一个任务（Job）<code>helloci-build</code>，Job中包含了多个步骤（Step），每个步骤又包含一些动作（Action）。</p><p>上面的workflow配置会按顺序执行下面的6个步骤。</p><ol>
-<li>准备一个Go编译环境。</li>
-<li>从<a href="https://github.com/marmotedu/helloci">marmotedu/helloci</a>下载源码。</li>
-<li>添加或删除缺失的依赖包。</li>
-<li>编译Go源码。</li>
-<li>上传构建产物。</li>
-<li>构建镜像，并将镜像push到<code>ccr.ccs.tencentyun.com/marmotedu/helloci:beta</code>。</li>
+准备一个Go编译环境。
+从<a href="https://github.com/marmotedu/helloci">marmotedu/helloci</a>下载源码。
+添加或删除缺失的依赖包。
+编译Go源码。
+上传构建产物。
+构建镜像，并将镜像push到<code>ccr.ccs.tencentyun.com/marmotedu/helloci:beta</code>。
 </ol><p><strong>第五步，</strong>在push代码之前，我们需要先创建<code>DOCKER_USERNAME</code>和<code>DOCKER_PASSWORD</code> secret。</p><p>其中，<code>DOCKER_USERNAME</code>保存腾讯云镜像服务（CCR）的用户名，<code>DOCKER_PASSWORD</code>保存CCR的密码。我们将这两个secret保存在<code>helloci</code> Environments中，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/c0/d3/c00b11a1709838c1a205ace7976768d3.png?wh=1920x1046" alt="图片"></p><p><strong>第六步，</strong>将项目push到GitHub，触发workflow工作流：</p><pre><code class="language-bash">$ git add .
 $ git push origin master
 </code></pre><p>打开我们的仓库 Actions 标签页，可以发现GitHub Actions workflow正在执行：</p><p><img src="https://static001.geekbang.org/resource/image/1a/8a/1afb7860d68635c5e3eaba4ff8da208a.png?wh=1920x691" alt="图片"></p><p>等workflow执行完，点击 <strong>Go Test</strong> 进入构建详情页面，在详情页面能够看到我们的构建历史：</p><p><img src="https://static001.geekbang.org/resource/image/a4/95/a4b83a122379db4f2fe9538afdfb5a95.png?wh=1920x701" alt="图片"></p><p>然后，选择其中一个构建记录，查看其运行详情（具体可参考<a href="https://github.com/marmotedu/helloci/actions/runs/1144156183">chore: update step name Go Test #10</a>）：</p><p><img src="https://static001.geekbang.org/resource/image/48/4f/481f64aabccf30ed61d0a7c85ab30d4f.png?wh=1920x1084" alt="图片"></p><p>你可以看到，<code>Go Test</code>工作流程执行了6个Job，每个Job执行了下面这些自定义Step：</p><ol>
-<li>Set up Go 1.16。</li>
-<li>Check out code into the Go module directory。</li>
-<li>Tidy。</li>
-<li>Build。</li>
-<li>Collect main.go file。</li>
-<li>Publish to Registry。</li>
+Set up Go 1.16。
+Check out code into the Go module directory。
+Tidy。
+Build。
+Collect main.go file。
+Publish to Registry。
 </ol><p>其他步骤是GitHub Actions自己添加的步骤：<code>Setup Job</code>、<code>Post Check out code into the Go module directory</code>、<code>Complete job</code>。点击每一个步骤，你都能看到它们的详细输出。</p><h2>IAM GitHub Actions实战</h2><p>接下来，我们再来看下IAM项目的GitHub Actions实战。</p><p>假设IAM项目根目录为 <code>${IAM_ROOT}</code>，它的workflow配置文件为：</p><pre><code class="language-bash">$ cat ${IAM_ROOT}/.github/workflows/iamci.yaml
 name: IamCI
 
@@ -276,20 +276,20 @@ jobs:
         run: |
           make push
 </code></pre><p>上面的workflow依次执行了以下步骤：</p><ol>
-<li>设置Go编译环境。</li>
-<li>下载IAM项目源码。</li>
-<li>添加/删除不需要的Go包。</li>
-<li>生成所有的代码文件。</li>
-<li>对IAM源码进行静态代码检查。</li>
-<li>运行单元测试用例，并计算单元测试覆盖率是否达标。</li>
-<li>编译代码。</li>
-<li>收集构建产物<code>_output/coverage.out</code>。</li>
-<li>配置Docker构建环境。</li>
-<li>登陆DockerHub。</li>
-<li>构建Docker镜像，并push到DockerHub。</li>
+设置Go编译环境。
+下载IAM项目源码。
+添加/删除不需要的Go包。
+生成所有的代码文件。
+对IAM源码进行静态代码检查。
+运行单元测试用例，并计算单元测试覆盖率是否达标。
+编译代码。
+收集构建产物<code>_output/coverage.out</code>。
+配置Docker构建环境。
+登陆DockerHub。
+构建Docker镜像，并push到DockerHub。
 </ol><p>IamCI workflow运行历史如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/2b/b0/2b542f9101be0c3a83576fb99bf882b0.png?wh=1920x844" alt="图片"></p><p>IamCI workflow的其中一次工作流程运行结果如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/e9/6a/e9ebf13fdb6e4f41a1b00406e646ec6a.png?wh=1920x887" alt="图片"></p><h2>总结</h2><p>在Go项目开发中，我们需要通过CI任务来将需要频繁操作的任务自动化，这不仅可以提高开发效率，还能减少手动操作带来的失误。这一讲，我选择了最易实践的GitHub Actions，来给你演示如何构建CI任务。</p><p>GitHub Actions支持通过push事件来触发CI流程。一个CI流程其实就是一个workflow，workflow中包含多个任务，这些任务是可以并行执行的。一个任务又包含多个步骤，每一步又由多个动作组成。动作（Action）其实是一个命令/脚本，用来完成我们指定的任务，如编译等。</p><p>因为GitHub Actions内容比较多，这一讲只介绍了一些核心的知识，更详细的GitHub Actions教程，你可以参考 <a href="https://docs.github.com/cn/actions">官方中文文档</a>。</p><h2>课后练习</h2><ol>
-<li>使用CODING实现IAM的CI任务，并思考下：GitHub Actions和CODING在CI任务构建上，有没有本质的差异？</li>
-<li>这一讲，我们借助GitHub Actions实现了CI，请你结合前面所学的知识，实现IAM的CD功能。欢迎提交Pull Request。</li>
+使用CODING实现IAM的CI任务，并思考下：GitHub Actions和CODING在CI任务构建上，有没有本质的差异？
+这一讲，我们借助GitHub Actions实现了CI，请你结合前面所学的知识，实现IAM的CD功能。欢迎提交Pull Request。
 </ol><p>这是我们这门课的最后一次练习题了，欢迎把你的思考和想法分享在留言区，也欢迎把课程分享给你的同事、朋友，我们一起交流，一起进步。</p>
 <style>
     ul {
@@ -400,7 +400,7 @@ jobs:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/52/40/e57a736e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -415,8 +415,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/ff/5f/2a16164d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -431,8 +431,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/83/17/df99b53d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -447,8 +447,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -463,8 +463,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/d7/f1/ce10759d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -479,8 +479,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/35/7c/b9/80d91f82.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -495,8 +495,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/4d/26/44095eba.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -511,8 +511,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2d/7b/b3/7c6665e6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -527,8 +527,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/82/22/518026cf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -543,8 +543,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKELX1Rd1vmLRWibHib8P95NA87F4zcj8GrHKYQL2RcLDVnxNy1ia2geTWgW6L2pWn2kazrPNZMRVrIg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -559,8 +559,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/c9/60/2f7eb4b5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -575,8 +575,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -591,8 +591,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/96/88/454e401c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -607,8 +607,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/ac/9d/1f697753.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -623,8 +623,8 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/67/3a/0dd9ea02.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -639,5 +639,4 @@ jobs:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

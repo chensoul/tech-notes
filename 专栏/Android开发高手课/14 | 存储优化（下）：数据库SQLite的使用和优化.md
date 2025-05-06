@@ -50,15 +50,15 @@ SQLiteDatabaseLockedException归根到底是因为并发导致，而SQLite的并
 
 SQLite默认是支持多进程并发操作的，它通过文件锁来控制多进程的并发。SQLite锁的粒度并没有非常细，它针对的是整个DB文件，内部有5个状态，具体你可以参考下面的文章。
 
-<li>
+
 官方文档：[SQLite locking](https://www.sqlite.org/lockingv3.html)
-</li>
-<li>
+
+
 SQLite源码分析：[SQLite锁机制简介](http://huili.github.io/lockandimplement/machining.html)
-</li>
-<li>
+
+
 [SQLite封锁机制](https://www.cnblogs.com/cchust/p/4761814.html)
-</li>
+
 
 简单来说，多进程可以同时获取SHARED锁来读取数据，但是只有一个进程可以获取EXCLUSIVE锁来写数据库。对于iOS来说可能没有多进程访问数据库的场景，可以把locking_mode的默认值改为EXCLUSIVE。
 
@@ -129,15 +129,15 @@ PRAGMA schema.journal_mode = WAL
 
 关于SQLite索引的原理网上有很多文章，在这里我推荐一些参考资料给你：
 
-<li>
+
 [SQLite索引的原理](https://www.cnblogs.com/huahuahu/p/sqlite-suo-yin-de-yuan-li-ji-ying-yong.html)
-</li>
-<li>
+
+
 官方文档：[Query Planning](https://www.sqlite.org/queryplanner.html#searching)
-</li>
-<li>
+
+
 [MySQL索引背后的数据结构及算法原理](http://blog.codinglabs.org/articles/theory-of-mysql-index.html)
-</li>
+
 
 这里的关键在于如何正确的建立索引，很多时候我们以为已经建立了索引，但事实上并没有真正生效。例如使用了BETWEEN、LIKE、OR这些操作符、使用表达式或者case when等。更详细的规则可参考官方文档[The SQLite Query Optimizer Overview](http://www.sqlite.org/optoverview.html)，下面是一个通过优化转换达到使用索引目的的例子。
 
@@ -151,15 +151,15 @@ SELECT * FROM mytable WHERE myfield &gt;= 10 AND myfield &lt;= 20;
 
 建立索引是有代价的，需要一直维护索引表的更新。比如对于一个很小的表来说就没必要建索引；如果一个表经常是执行插入更新操作，那么也需要节制的建立索引。总的来说有几个原则：
 
-<li>
+
 建立正确的索引。这里不仅需要确保索引在查询中真正生效，我们还希望可以选择最高效的索引。如果一个表建立太多的索引，那么在查询的时候SQLite可能不会选择最好的来执行。
-</li>
-<li>
+
+
 单列索引、多列索引与复合索引的选择。索引要综合数据表中不同的查询与排序语句一起考虑，如果查询结果集过大，还是希望可以通过复合索引直接在索引表返回查询结果。
-</li>
-<li>
+
+
 索引字段的选择。整型类型索引效率会远高于字符串索引，而对于主键SQLite会默认帮我们建立索引，所以主键尽量不要用复杂字段。
-</li>
+
 
 **总的来说索引优化是SQLite优化中最简单同时也是最有效的，但是它并不是简单的建一个索引就可以了，有的时候我们需要进一步调整查询语句甚至是表的结构，这样才能达到最好的效果。**
 
@@ -191,21 +191,21 @@ PRAGMA cache_size = 1000
 
 关于SQLite的使用优化还有很多很多，下面我简单提几个点。
 
-<li>
+
 慎用“`select*`”，需要使用多少列，就选取多少列。
-</li>
-<li>
+
+
 正确地使用事务。
-</li>
-<li>
+
+
 预编译与参数绑定，缓存被编译后的SQL语句。
-</li>
-<li>
+
+
 对于blob或超大的Text列，可能会超出一个页的大小，导致出现超大页。建议将这些列单独拆表，或者放到表字段的后面。
-</li>
-<li>
+
+
 定期整理或者清理无用或可删除的数据，例如朋友圈数据库会删除比较久远的数据，如果用户访问到这部分数据，重新从网络拉取即可。
-</li>
+
 
 在日常的开发中，我们都应该对这些知识有所了解，再来复习一下上面学到的SQLite优化方法。**通过引进ORM，可以大大的提升我们的开发效率。通过WAL模式和连接池，可以提高SQLite的并发性能。通过正确的建立索引，可以提升SQLite的查询速度。通过调整默认的页大小和缓存大小，可以提升SQLite的整体性能。**
 
@@ -219,18 +219,18 @@ PRAGMA cache_size = 1000
 
 创新是为了解决焦虑，技术都是逼出来的。对于SQLite损坏与恢复的研究，可以说是微信投入比较大的一块。关于SQLite数据库的损耗与修复，以及微信在这里的优化成果，你可以参考下面这些资料。
 
-<li>
+
 [How To Corrupt An SQLite Database File](https://sqlite.org/howtocorrupt.html)
-</li>
-<li>
+
+
 [微信 SQLite 数据库修复实践](https://mp.weixin.qq.com/s/N1tuHTyg3xVfbaSd4du-tw)
-</li>
-<li>
+
+
 [微信移动端数据库组件WCDB系列（二） — 数据库修复三板斧](https://mp.weixin.qq.com/s/Ln7kNOn3zx589ACmn5ESQA)
-</li>
-<li>
+
+
 [WCDB Android数据库修复](https://github.com/Tencent/wcdb/wiki/Android%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BF%AE%E5%A4%8D)
-</li>
+
 
 **2. 加密与安全**
 
@@ -250,15 +250,15 @@ SQLite的加解密都是以页为单位，默认会使用AES算法加密，加/�
 
 关于全文搜索，你可以参考这些资料：
 
-<li>
+
 [SQLite FTS3 and FTS4 Extensions](https://sqlite.org/fts3.html)
-</li>
-<li>
+
+
 [微信全文搜索优化之路](https://mp.weixin.qq.com/s/AhYECT3HVyn1ikB0YQ-UVg)
-</li>
-<li>
+
+
 [移动客户端多音字搜索](https://mp.weixin.qq.com/s/GCznwCtjJ2XUszyMcbNz8Q)
-</li>
+
 
 **关于SQLite的这些特性，我们需要根据自己的项目情况综合考虑。假如某个数据库存储的数据并不重要，这个时候万分之一的数据损坏率我们并不会关心。同样是否需要使用数据库加密，也要根据存储的数据是不是敏感内容。**
 
@@ -301,12 +301,12 @@ WCDB增加了[SQLiteTrace](https://tencent.github.io/wcdb/references/android/ref
 
 可能有同学会感叹为什么微信的人可以想到这样的方式，事实上这个思路在MySQL中是非常常见的做法。美团也开源了它们内部的SQL优化工具SQLAdvisor，你可以参考这些资料：
 
-<li>
+
 [SQL解析在美团的应用](https://tech.meituan.com/SQL_parser_used_in_mtdp.html)
-</li>
-<li>
+
+
 [美团点评SQL优化工具SQLAdvisor开源](https://tech.meituan.com/sqladvisor_pr.html)
-</li>
+
 
 ## 总结
 
@@ -326,18 +326,18 @@ WCDB增加了[SQLiteTrace](https://tencent.github.io/wcdb/references/android/ref
 
 除了今天文章中的参考资料，我还给希望进阶的同学准备了下面的资料，欢迎有兴趣的同学继续深入学习。
 
-<li>
+
 [SQLite官方文档](https://sqlite.org/docs.html)
-</li>
-<li>
+
+
 [SQLite源码分析](http://huili.github.io/sqlite/sqliteintro.html)
-</li>
-<li>
+
+
 [全面解析SQLite](https://github.com/AndroidAdvanceWithGeektime/Chapter14/blob/master/%E5%85%A8%E9%9D%A2%E8%A7%A3%E6%9E%90SQLite.pdf)
-</li>
-<li>
+
+
 图书《SQLite权威指南（第2版）》
-</li>
+
 
 欢迎你点击“请朋友读”，把今天的内容分享给好友，邀请他一起学习。最后别忘了在评论区提交今天的作业，我也为认真完成作业的同学准备了丰厚的“学习加油礼包”，期待与你一起切磋进步哦。
 

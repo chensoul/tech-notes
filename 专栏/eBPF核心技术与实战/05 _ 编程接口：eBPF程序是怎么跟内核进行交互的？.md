@@ -2,11 +2,11 @@
 <p>你好，我是倪朋飞。</p><p>上一讲，我带你一起梳理了 eBPF 在内核中的实现原理，以及 BPF 指令的具体格式。</p><p>用高级语言开发的 eBPF 程序，需要首先编译为 BPF 字节码，然后借助 bpf 系统调用加载到内核中，最后再通过性能监控等接口与具体的内核事件进行绑定。这样，内核的性能监控模块才会在内核事件发生时，自动执行我们开发的 eBPF 程序。</p><p>那么，eBPF 程序到底是如何跟内核事件进行绑定的？又该如何跟内核中的其他模块进行交互呢？今天，我就带你一起看看 eBPF 程序的编程接口。</p><h2>BPF 系统调用</h2><p>如下图（图片来自<a href="https://www.brendangregg.com/ebpf.html">brendangregg.com</a>）所示，一个完整的 eBPF 程序通常包含用户态和内核态两部分。其中，用户态负责 eBPF 程序的加载、事件绑定以及 eBPF 程序运行结果的汇总输出；内核态运行在 eBPF 虚拟机中，负责定制和控制系统的运行状态。</p><p><img src="https://static001.geekbang.org/resource/image/a7/6a/a7165eea1fd9fc24090a3a1e8987986a.png?wh=1500x550" alt="图片"></p><p>对于用户态程序来说，我想你已经了解，<strong>它们与内核进行交互时必须要通过系统调用来完成</strong>。而对应到 eBPF 程序中，我们最常用到的就是 <a href="https://man7.org/linux/man-pages/man2/bpf.2.html">bpf 系统调用</a>。</p><p>在命令行中输入 <code>man bpf</code>&nbsp;，就可以查询到 BPF 系统调用的调用格式：</p><pre><code class="language-plain">#include &lt;linux/bpf.h&gt;
 
 int bpf(int cmd, union bpf_attr *attr, unsigned int size);
-</code></pre><!-- [[[read_end]]] --><p>BPF 系统调用接受三个参数：</p><ul>
-<li>第一个，cmd ，代表操作命令，比如上一讲中我们看到的 BPF_PROG_LOAD 就是加载 eBPF 程序；</li>
-<li>第二个，attr，代表 bpf_attr 类型的 eBPF 属性指针，不同类型的操作命令需要传入不同的属性参数；</li>
-<li>第三个，size ，代表属性的大小。</li>
-</ul><p>注意，<strong>不同版本的内核所支持的 BPF 命令是不同的</strong>，具体支持的命令列表可以参考内核头文件 include/uapi/linux/bpf.h 中  <code>bpf_cmd</code> 的定义。比如，v5.13 内核已经支持 <a href="https://elixir.bootlin.com/linux/v5.13/source/include/uapi/linux/bpf.h#L828">36 个 BPF 命令</a>：</p><pre><code class="language-plain">enum bpf_cmd {
+</code></pre><!-- [[[read_end]]] --><p>BPF 系统调用接受三个参数：</p>
+第一个，cmd ，代表操作命令，比如上一讲中我们看到的 BPF_PROG_LOAD 就是加载 eBPF 程序；
+第二个，attr，代表 bpf_attr 类型的 eBPF 属性指针，不同类型的操作命令需要传入不同的属性参数；
+第三个，size ，代表属性的大小。
+<p>注意，<strong>不同版本的内核所支持的 BPF 命令是不同的</strong>，具体支持的命令列表可以参考内核头文件 include/uapi/linux/bpf.h 中  <code>bpf_cmd</code> 的定义。比如，v5.13 内核已经支持 <a href="https://elixir.bootlin.com/linux/v5.13/source/include/uapi/linux/bpf.h#L828">36 个 BPF 命令</a>：</p><pre><code class="language-plain">enum bpf_cmd {
 &nbsp; BPF_MAP_CREATE,
 &nbsp; BPF_MAP_LOOKUP_ELEM,
 &nbsp; BPF_MAP_UPDATE_ELEM,
@@ -135,11 +135,11 @@ bpftool map dump name stats_map
 
 //删除哈希表映射
 rm /sys/fs/bpf/stats_map
-</code></pre><h2><strong>BPF 类型格式 (BTF)</strong></h2><p>了解过 BPF 辅助函数和映射之后，我们再来看一个开发 eBPF 程序时最常碰到的问题：内核数据结构的定义。</p><p>在安装 BCC 工具的时候，你可能就注意到了，内核头文件 <code>linux-headers-$(uname -r)</code> 也是必须要安装的一个依赖项。这是因为 BCC 在编译 eBPF 程序时，需要从内核头文件中找到相应的内核数据结构定义。这样，你在调用 <code>bpf_probe_read</code> 时，才能从内存地址中提取到正确的数据类型。</p><p>但是，编译时依赖内核头文件也会带来很多问题。主要有这三个方面：</p><ul>
-<li>首先，在开发 eBPF 程序时，为了获得内核数据结构的定义，就需要引入一大堆的内核头文件；</li>
-<li>其次，内核头文件的路径和数据结构定义在不同内核版本中很可能不同。因此，你在升级内核版本时，就会遇到找不到头文件和数据结构定义错误的问题；</li>
-<li>最后，在很多生产环境的机器中，出于安全考虑，并不允许安装内核头文件，这时就无法得到内核数据结构的定义。<strong>在程序中重定义数据结构</strong>虽然可以暂时解决这个问题，但也很容易把使用着错误数据结构的 eBPF 程序带入新版本内核中运行。</li>
-</ul><p>那么，这么多的问题该怎么解决呢？不用担心，BPF 类型格式（BPF Type Format, BTF）的诞生正是为了解决这些问题。从内核 5.2 开始，只要开启了 <code>CONFIG_DEBUG_INFO_BTF</code>，在编译内核时，内核数据结构的定义就会自动内嵌在内核二进制文件 vmlinux 中。并且，你还可以借助下面的命令，把这些数据结构的定义导出到一个头文件中（通常命名为 <code>vmlinux.h</code>）:</p><pre><code class="language-plain">bpftool btf dump file /sys/kernel/btf/vmlinux format c &gt; vmlinux.h
+</code></pre><h2><strong>BPF 类型格式 (BTF)</strong></h2><p>了解过 BPF 辅助函数和映射之后，我们再来看一个开发 eBPF 程序时最常碰到的问题：内核数据结构的定义。</p><p>在安装 BCC 工具的时候，你可能就注意到了，内核头文件 <code>linux-headers-$(uname -r)</code> 也是必须要安装的一个依赖项。这是因为 BCC 在编译 eBPF 程序时，需要从内核头文件中找到相应的内核数据结构定义。这样，你在调用 <code>bpf_probe_read</code> 时，才能从内存地址中提取到正确的数据类型。</p><p>但是，编译时依赖内核头文件也会带来很多问题。主要有这三个方面：</p>
+首先，在开发 eBPF 程序时，为了获得内核数据结构的定义，就需要引入一大堆的内核头文件；
+其次，内核头文件的路径和数据结构定义在不同内核版本中很可能不同。因此，你在升级内核版本时，就会遇到找不到头文件和数据结构定义错误的问题；
+最后，在很多生产环境的机器中，出于安全考虑，并不允许安装内核头文件，这时就无法得到内核数据结构的定义。<strong>在程序中重定义数据结构</strong>虽然可以暂时解决这个问题，但也很容易把使用着错误数据结构的 eBPF 程序带入新版本内核中运行。
+<p>那么，这么多的问题该怎么解决呢？不用担心，BPF 类型格式（BPF Type Format, BTF）的诞生正是为了解决这些问题。从内核 5.2 开始，只要开启了 <code>CONFIG_DEBUG_INFO_BTF</code>，在编译内核时，内核数据结构的定义就会自动内嵌在内核二进制文件 vmlinux 中。并且，你还可以借助下面的命令，把这些数据结构的定义导出到一个头文件中（通常命名为 <code>vmlinux.h</code>）:</p><pre><code class="language-plain">bpftool btf dump file /sys/kernel/btf/vmlinux format c &gt; vmlinux.h
 </code></pre><p>如下图（图片来自<a href="https://www.grant.pizza/blog/vmlinux-header">GRANT SELTZER博客</a>）所示，有了内核数据结构的定义，你在开发 eBPF 程序时只需要引入一个 <code>vmlinux.h</code> 即可，不用再引入一大堆的内核头文件了。</p><p><img src="https://static001.geekbang.org/resource/image/45/20/45bbf696e8620d322d857ceab3871720.jpg?wh=1920x1204" alt="" title="vmlinux.h的使用示意图"></p><p>同时，借助 BTF、bpftool 等工具，我们也可以更好地了解 BPF 程序的内部信息，这也会让调试变得更加方便。比如，在查看 BPF 映射的内容时，你可以直接看到结构化的数据，而不只是十六进制数值：</p><pre><code class="language-c++"># bpftool map dump id 386
 [
 &nbsp; {
@@ -153,12 +153,12 @@ rm /sys/fs/bpf/stats_map
 &nbsp; &nbsp; &nbsp; }
 &nbsp; }
 ]
-</code></pre><p>解决了内核数据结构的定义问题，接下来的问题就是，<strong>如何让 eBPF 程序在内核升级之后，不需要重新编译就可以直接运行</strong>。eBPF 的一次编译到处执行（Compile Once Run Everywhere，简称 CO-RE）项目借助了 BTF 提供的调试信息，再通过下面的两个步骤，使得 eBPF 程序可以适配不同版本的内核：</p><ul>
-<li>第一，通过对 BPF 代码中的访问偏移量进行重写，解决了不同内核版本中数据结构偏移量不同的问题；</li>
-<li>第二，在 libbpf 中预定义不同内核版本中的数据结构的修改，解决了不同内核中数据结构不兼容的问题。</li>
-</ul><p>BTF和一次编译到处执行带来了很多的好处，但你也需要注意这一点：它们都要求比较新的内核版本（&gt;=5.2），并且需要非常新的发行版（如 Ubuntu 20.10+、RHEL 8.2+ 等）才会默认打开内核配置 <code>CONFIG_DEBUG_INFO_BTF</code>。对于旧版本的内核，虽然它们不会再去内置 BTF 的支持，但开源社区正在尝试通过 <a href="https://github.com/aquasecurity/btfhub">BTFHub</a> 等方法，为它们提供 BTF 调试信息。</p><h2>小结</h2><p>今天，我带你一起梳理了 eBPF 程序跟内核交互的基本方法。</p><p>一个完整的 eBPF 程序，通常包含用户态和内核态两部分：用户态程序需要通过 BPF 系统调用跟内核进行交互，进而完成 eBPF 程序加载、事件挂载以及映射创建和更新等任务；而在内核态中，eBPF 程序也不能任意调用内核函数，而是需要通过 BPF 辅助函数完成所需的任务。尤其是在访问内存地址的时候，必须要借助  <code>bpf_probe_read</code> 系列函数读取内存数据，以确保内存的安全和高效访问。</p><p>在 eBPF 程序需要大块存储时，我们还需要根据应用场景，引入特定类型的 BPF 映射，并借助它向用户空间的程序提供运行状态的数据。</p><p>这一讲的最后，我还带你一起了解了 BTF 和 CO-RE 项目，它们在提供轻量级调试信息的同时，还解决了跨内核版本的兼容性问题。很多开源社区的 eBPF 项目（如 BCC 等）也都在向 BTF 进行迁移。</p><h2>思考题</h2><p>最后，我想邀请你来聊一聊：</p><ol>
-<li>你是如何理解 BPF 系统调用和 BPF 辅助函数的？</li>
-<li>除了今天讲到的内容，bpftool 还提供了哪些有趣的功能呢？给你一个小提示：可以使用 man bpftool 查询它的使用文档。</li>
+</code></pre><p>解决了内核数据结构的定义问题，接下来的问题就是，<strong>如何让 eBPF 程序在内核升级之后，不需要重新编译就可以直接运行</strong>。eBPF 的一次编译到处执行（Compile Once Run Everywhere，简称 CO-RE）项目借助了 BTF 提供的调试信息，再通过下面的两个步骤，使得 eBPF 程序可以适配不同版本的内核：</p>
+第一，通过对 BPF 代码中的访问偏移量进行重写，解决了不同内核版本中数据结构偏移量不同的问题；
+第二，在 libbpf 中预定义不同内核版本中的数据结构的修改，解决了不同内核中数据结构不兼容的问题。
+<p>BTF和一次编译到处执行带来了很多的好处，但你也需要注意这一点：它们都要求比较新的内核版本（&gt;=5.2），并且需要非常新的发行版（如 Ubuntu 20.10+、RHEL 8.2+ 等）才会默认打开内核配置 <code>CONFIG_DEBUG_INFO_BTF</code>。对于旧版本的内核，虽然它们不会再去内置 BTF 的支持，但开源社区正在尝试通过 <a href="https://github.com/aquasecurity/btfhub">BTFHub</a> 等方法，为它们提供 BTF 调试信息。</p><h2>小结</h2><p>今天，我带你一起梳理了 eBPF 程序跟内核交互的基本方法。</p><p>一个完整的 eBPF 程序，通常包含用户态和内核态两部分：用户态程序需要通过 BPF 系统调用跟内核进行交互，进而完成 eBPF 程序加载、事件挂载以及映射创建和更新等任务；而在内核态中，eBPF 程序也不能任意调用内核函数，而是需要通过 BPF 辅助函数完成所需的任务。尤其是在访问内存地址的时候，必须要借助  <code>bpf_probe_read</code> 系列函数读取内存数据，以确保内存的安全和高效访问。</p><p>在 eBPF 程序需要大块存储时，我们还需要根据应用场景，引入特定类型的 BPF 映射，并借助它向用户空间的程序提供运行状态的数据。</p><p>这一讲的最后，我还带你一起了解了 BTF 和 CO-RE 项目，它们在提供轻量级调试信息的同时，还解决了跨内核版本的兼容性问题。很多开源社区的 eBPF 项目（如 BCC 等）也都在向 BTF 进行迁移。</p><h2>思考题</h2><p>最后，我想邀请你来聊一聊：</p><ol>
+你是如何理解 BPF 系统调用和 BPF 辅助函数的？
+除了今天讲到的内容，bpftool 还提供了哪些有趣的功能呢？给你一个小提示：可以使用 man bpftool 查询它的使用文档。
 </ol><p>期待你在留言区和我讨论，也欢迎把这节课分享给你的同事、朋友。让我们一起在实战中演练，在交流中进步。</p>
 <style>
     ul {
@@ -269,7 +269,7 @@ rm /sys/fs/bpf/stats_map
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/5e/96/a03175bc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -284,8 +284,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -300,8 +300,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/41/38/4f89095b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -316,8 +316,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/76/b0/14fec62f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -332,8 +332,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/bb/50/c8ebd5e1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -348,8 +348,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/47/00/3202bdf0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -364,8 +364,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJlaNica7xRH6LlMNJtrbK0toc1od8YdqLZOD2AbnOZ2QyKC13gvrrL9cOx5dyYNcsHnJkR6K4ibxZQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -380,8 +380,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/33/ae/5e05b9dc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -396,8 +396,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/3b/1d/cbfbd93e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -412,8 +412,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/25/6f/a7/565214bc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -428,8 +428,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/25/3c/92/81fa306d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -444,8 +444,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJOBwR7MCVqwZbPA5RQ2mjUjd571jUXUcBCE7lY5vSMibWn8D5S4PzDZMaAhRPdnRBqYbVOBTJibhJg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -460,8 +460,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/b5/02/3bf0509e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -476,8 +476,8 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -492,5 +492,4 @@ rm /sys/fs/bpf/stats_map
   </div>
 </div>
 </div>
-</li>
-</ul>
+

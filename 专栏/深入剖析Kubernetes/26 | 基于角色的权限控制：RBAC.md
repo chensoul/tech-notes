@@ -22,15 +22,15 @@
 
 而在这里，我只希望你能明确三个最基本的概念。
 
-<li>
+
 Role：角色，它其实是一组规则，定义了一组对Kubernetes API对象的操作权限。
-</li>
-<li>
+
+
 Subject：被作用者，既可以是“人”，也可以是“机器”，也可以是你在Kubernetes里定义的“用户”。
-</li>
-<li>
+
+
 RoleBinding：定义了“被作用者”和“角色”的绑定关系。
-</li>
+
 
 而这三个概念，其实就是整个RBAC体系的核心所在。
 
@@ -375,18 +375,18 @@ PolicyRule:
 
 除此之外，Kubernetes还提供了四个预先定义好的ClusterRole来供用户直接使用：
 
-<li>
+
 cluster-admin；
-</li>
-<li>
+
+
 admin；
-</li>
-<li>
+
+
 edit；
-</li>
-<li>
+
+
 view。
-</li>
+
 
 通过它们的名字，你应该能大致猜出它们都定义了哪些权限。比如，这个名叫view的ClusterRole，就规定了被作用者只有Kubernetes API的只读权限。
 

@@ -1,10 +1,10 @@
 <audio title="19｜Daemonset：忠实可靠的看门狗" src="https://static001.geekbang.org/resource/audio/2e/9a/2e9d4b72d991d455be0109d0bcd9779a.mp3" controls="controls"></audio> 
-<p>你好，我是Chrono。</p><p>上一次课里我们学习了Kubernetes里的一个新API对象Deployment，它代表了在线业务，能够管理多个Pod副本，让应用永远在线，还能够任意扩容缩容。</p><p>虽然Deployment非常有用，但是，它并没有完全解决运维部署应用程序的所有难题。因为和简单的离线业务比起来，在线业务的应用场景太多太复杂，Deployment的功能特性只覆盖了其中的一部分，无法满足其他场景的需求。</p><p>今天我们就来看看另一类代表在线业务API对象：<strong>DaemonSet</strong>，它会在Kubernetes集群的每个节点上都运行一个Pod，就好像是Linux系统里的“守护进程”（Daemon）。</p><h2>为什么要有DaemonSet</h2><p>想知道为什么Kubernetes会引入DaemonSet对象，那就得知道Deployment有哪些不足。</p><p>我们先简单复习一下Deployment，它能够创建任意多个的Pod实例，并且维护这些Pod的正常运行，保证应用始终处于可用状态。</p><p>但是，Deployment并不关心这些Pod会在集群的哪些节点上运行，<strong>在它看来，Pod的运行环境与功能是无关的，只要Pod的数量足够，应用程序应该会正常工作</strong>。</p><!-- [[[read_end]]] --><p>这个假设对于大多数业务来说是没问题的，比如Nginx、WordPress、MySQL，它们不需要知道集群、节点的细节信息，只要配置好环境变量和存储卷，在哪里“跑”都是一样的。</p><p>但是有一些业务比较特殊，它们不是完全独立于系统运行的，而是与主机存在“绑定”关系，必须要依附于节点才能产生价值，比如说：</p><ul>
-<li>网络应用（如kube-proxy），必须每个节点都运行一个Pod，否则节点就无法加入Kubernetes网络。</li>
-<li>监控应用（如Prometheus），必须每个节点都有一个Pod用来监控节点的状态，实时上报信息。</li>
-<li>日志应用（如Fluentd），必须在每个节点上运行一个Pod，才能够搜集容器运行时产生的日志数据。</li>
-<li>安全应用，同样的，每个节点都要有一个Pod来执行安全审计、入侵检查、漏洞扫描等工作。</li>
-</ul><p>这些业务如果用Deployment来部署就不太合适了，因为Deployment所管理的Pod数量是固定的，而且可能会在集群里“漂移”，但，实际的需求却是要在集群里的每个节点上都运行Pod，也就是说Pod的数量与节点数量保持同步。</p><p>所以，Kubernetes就定义了新的API对象DaemonSet，它在形式上和Deployment类似，都是管理控制Pod，但管理调度策略却不同。DaemonSet的目标是在集群的每个节点上运行且仅运行一个Pod，就好像是为节点配上一只“看门狗”，忠实地“守护”着节点，这就是DaemonSet名字的由来。</p><h2>如何使用YAML描述DaemonSet</h2><p>DaemonSet和Deployment都属于在线业务，所以它们也都是“apps”组，使用命令  <code>kubectl api-resources</code>  可以知道它的简称是 <code>ds</code> ，YAML文件头信息应该是：</p><pre><code class="language-yaml">apiVersion: apps/v1
+<p>你好，我是Chrono。</p><p>上一次课里我们学习了Kubernetes里的一个新API对象Deployment，它代表了在线业务，能够管理多个Pod副本，让应用永远在线，还能够任意扩容缩容。</p><p>虽然Deployment非常有用，但是，它并没有完全解决运维部署应用程序的所有难题。因为和简单的离线业务比起来，在线业务的应用场景太多太复杂，Deployment的功能特性只覆盖了其中的一部分，无法满足其他场景的需求。</p><p>今天我们就来看看另一类代表在线业务API对象：<strong>DaemonSet</strong>，它会在Kubernetes集群的每个节点上都运行一个Pod，就好像是Linux系统里的“守护进程”（Daemon）。</p><h2>为什么要有DaemonSet</h2><p>想知道为什么Kubernetes会引入DaemonSet对象，那就得知道Deployment有哪些不足。</p><p>我们先简单复习一下Deployment，它能够创建任意多个的Pod实例，并且维护这些Pod的正常运行，保证应用始终处于可用状态。</p><p>但是，Deployment并不关心这些Pod会在集群的哪些节点上运行，<strong>在它看来，Pod的运行环境与功能是无关的，只要Pod的数量足够，应用程序应该会正常工作</strong>。</p><!-- [[[read_end]]] --><p>这个假设对于大多数业务来说是没问题的，比如Nginx、WordPress、MySQL，它们不需要知道集群、节点的细节信息，只要配置好环境变量和存储卷，在哪里“跑”都是一样的。</p><p>但是有一些业务比较特殊，它们不是完全独立于系统运行的，而是与主机存在“绑定”关系，必须要依附于节点才能产生价值，比如说：</p>
+网络应用（如kube-proxy），必须每个节点都运行一个Pod，否则节点就无法加入Kubernetes网络。
+监控应用（如Prometheus），必须每个节点都有一个Pod用来监控节点的状态，实时上报信息。
+日志应用（如Fluentd），必须在每个节点上运行一个Pod，才能够搜集容器运行时产生的日志数据。
+安全应用，同样的，每个节点都要有一个Pod来执行安全审计、入侵检查、漏洞扫描等工作。
+<p>这些业务如果用Deployment来部署就不太合适了，因为Deployment所管理的Pod数量是固定的，而且可能会在集群里“漂移”，但，实际的需求却是要在集群里的每个节点上都运行Pod，也就是说Pod的数量与节点数量保持同步。</p><p>所以，Kubernetes就定义了新的API对象DaemonSet，它在形式上和Deployment类似，都是管理控制Pod，但管理调度策略却不同。DaemonSet的目标是在集群的每个节点上运行且仅运行一个Pod，就好像是为节点配上一只“看门狗”，忠实地“守护”着节点，这就是DaemonSet名字的由来。</p><h2>如何使用YAML描述DaemonSet</h2><p>DaemonSet和Deployment都属于在线业务，所以它们也都是“apps”组，使用命令  <code>kubectl api-resources</code>  可以知道它的简称是 <code>ds</code> ，YAML文件头信息应该是：</p><pre><code class="language-yaml">apiVersion: apps/v1
 kind: DaemonSet
 metadata:
 &nbsp; name: xxx-ds
@@ -57,13 +57,13 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
 </code></pre><p>现在我们先用 <code>kubectl taint</code> 命令把Master的“污点”加上：</p><pre><code class="language-plain">kubectl taint node master node-role.kubernetes.io/master:NoSchedule
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/3e/c4/3eb49484fd460e53a40fb239298077c4.png?wh=1920x103" alt="图片"></p><p>然后我们再重新部署加上了“容忍度”的DaemonSet：</p><pre><code class="language-plain">kubectl apply -f ds.yml
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/20/e8/2060a08c2b5572b71780c5f5dyyedae8.png?wh=1888x542" alt="图片"></p><p>你就会看到DaemonSet仍然有两个Pod，分别运行在Master和Worker节点上，与第一种方法的效果相同。</p><p>需要特别说明一下，“容忍度”并不是DaemonSet独有的概念，而是从属于Pod，所以理解了“污点”和“容忍度”之后，你可以在Job/CronJob、Deployment里为它们管理的Pod也加上 <code>tolerations</code>，从而能够更灵活地调度应用。</p><p>至于都有哪些污点、污点有哪些效果我就不细说了，Kubernetes官网文档（<a href="https://kubernetes.io/zh/docs/concepts/scheduling-eviction/taint-and-toleration/">https://kubernetes.io/zh/docs/concepts/scheduling-eviction/taint-and-toleration/</a>）上都列的非常清楚，在理解了工作原理之后，相信你自己学起来也不会太难。</p><h2>什么是静态Pod</h2><p>DaemonSet是在Kubernetes里运行节点专属Pod最常用的方式，但它不是唯一的方式，Kubernetes还支持另外一种叫“<strong>静态Pod</strong>”的应用部署手段。</p><p>“静态Pod”非常特殊，它不受Kubernetes系统的管控，不与apiserver、scheduler发生关系，所以是“静态”的。</p><p>但既然它是Pod，也必然会“跑”在容器运行时上，也会有YAML文件来描述它，而唯一能够管理它的Kubernetes组件也就只有在每个节点上运行的kubelet了。</p><p>“静态Pod”的YAML文件默认都存放在节点的 <code>/etc/kubernetes/manifests</code> 目录下，它是Kubernetes的专用目录。</p><p>下面的这张截图就是Master节点里目录的情况：</p><p><img src="https://static001.geekbang.org/resource/image/f5/c2/f5477bf666beffcaf3b8663d5a5692c2.png?wh=1842x486" alt="图片"></p><p>你可以看到，Kubernetes的4个核心组件apiserver、etcd、scheduler、controller-manager原来都以静态Pod的形式存在的，这也是为什么它们能够先于Kubernetes集群启动的原因。</p><p>如果你有一些DaemonSet无法满足的特殊的需求，可以考虑使用静态Pod，编写一个YAML文件放到这个目录里，节点的kubelet会定期检查目录里的文件，发现变化就会调用容器运行时创建或者删除静态Pod。</p><h2>小结</h2><p>好了，今天我们学习了Kubernetes里部署应用程序的另一种方式：DaemonSet，它与Deployment很类似，差别只在于Pod的调度策略，适用于在系统里运行节点的“守护进程”。</p><p>简单小结一下今天的内容：</p><ol>
-<li>DaemonSet的目标是为集群里的每个节点部署唯一的Pod，常用于监控、日志等业务。</li>
-<li>DaemonSet的YAML描述与Deployment非常接近，只是没有 <code>replicas</code> 字段。</li>
-<li>“污点”和“容忍度”是与DaemonSet相关的两个重要概念，分别从属于Node和Pod，共同决定了Pod的调度策略。</li>
-<li>静态Pod也可以实现和DaemonSet同样的效果，但它不受Kubernetes控制，必须在节点上纯手动部署，应当慎用。</li>
+DaemonSet的目标是为集群里的每个节点部署唯一的Pod，常用于监控、日志等业务。
+DaemonSet的YAML描述与Deployment非常接近，只是没有 <code>replicas</code> 字段。
+“污点”和“容忍度”是与DaemonSet相关的两个重要概念，分别从属于Node和Pod，共同决定了Pod的调度策略。
+静态Pod也可以实现和DaemonSet同样的效果，但它不受Kubernetes控制，必须在节点上纯手动部署，应当慎用。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>你觉得DaemonSet和Deployment在用法上还有哪些不同？它们分别适用于哪些场景？</li>
-<li>你觉得在Kubernetes里应该如何用好“污点”和“容忍度”这两个概念？</li>
+你觉得DaemonSet和Deployment在用法上还有哪些不同？它们分别适用于哪些场景？
+你觉得在Kubernetes里应该如何用好“污点”和“容忍度”这两个概念？
 </ol><p>欢迎留言分享你的想法，和其他同学一起参与讨论。我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/64/2e/64760f80fbbda9dd72c14a37826c9d2e.jpg?wh=1920x2209" alt=""></p>
 <style>
     ul {
@@ -174,7 +174,7 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/95/4e/1112248a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -189,8 +189,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/32/a8/d5bf5445.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -205,8 +205,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/92/4b/1262f052.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -221,8 +221,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/d0/51/f1c9ae2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -237,8 +237,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/94/fe/5fbf1bdc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -253,8 +253,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/99/87/98ebb20e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -269,8 +269,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -285,8 +285,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/88/cd/2c3808ce.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -301,8 +301,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/9c/31/e4677275.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -317,8 +317,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/09/d0/8609bddc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -333,8 +333,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7e/25/3932dafd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -349,8 +349,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/50/33/9dcd30c4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -365,8 +365,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -381,8 +381,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/c7/89/16437396.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -397,8 +397,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -413,8 +413,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/8c/bf/182ee8e6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -429,8 +429,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/05/93/3c3f2a6d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -445,8 +445,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/2c/68/c299bc71.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -461,8 +461,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/f0/25/d3da7ca9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -477,8 +477,8 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/9a/e1/7df2ad19.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -493,5 +493,4 @@ Taints:&nbsp; &nbsp;&lt;none&gt;
   </div>
 </div>
 </div>
-</li>
-</ul>
+

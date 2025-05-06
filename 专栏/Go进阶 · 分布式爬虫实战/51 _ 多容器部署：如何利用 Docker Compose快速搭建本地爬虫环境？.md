@@ -43,33 +43,33 @@ services:
       retries: 55
 networks:
   counter-net:
-</code></pre><p>在这个例子中，docker-compose.yml文件的根级别有 3 个指令。</p><ul>
-<li>
+</code></pre><p>在这个例子中，docker-compose.yml文件的根级别有 3 个指令。</p>
+
 <p>version<br>
 version指令是Compose配置文件中必须要有的，它始终位于文件的第一行。version定义了 Compose 文件格式的版本，我们这里使用的是最新的3.9版本。注意，version并未定义 Docker Compose 和 Docker 的版本。</p>
-</li>
-<li>
+
+
 <p>services<br>
 services指令用于定义应用程序需要部署的不同服务。这个例子中定义了两个服务，一个是我们爬虫项目的Worker，另一个是Worker依赖的MySQL数据库。</p>
-</li>
-<li>
+
+
 <p>networks<br>
 networks 的作用是告诉 Docker 创建一个新网络。默认情况下，Compose 将创建桥接网络。但是，你可以使用driver属性来指定不同的网络类型。</p>
-</li>
-</ul><p>除此之外，根级别配置中还可以设置其他指令，例如volumes、secrets、configs。其中，volumes 用于将数据挂载到容器，这是持久化容器数据的最佳方式。secrets主要用于swarm模式，可以管理敏感数据，安全传输数据（这些敏感数据不能直接存储在镜像或源码中，但在运行时又需要）。configs也用于swarm模式，它可以管理非敏感数据，例如配置文件等。</p><p>更进一步地，让我们来看看services中定义的服务。<strong>在services中我们定义了两个服务Worker 和MySQL 。</strong>Compose 会将每一个服务部署为一个容器，并且容器的名字会分别包含 Worker 与 MySQL。</p><p>在对 Worker 服务的配置中，各个配置的含义如下所示。</p><ul>
-<li>build用于构建镜像，其中 build: . 告诉 Docker 使用当前目录中的 Dockerfile 构建一个新镜像，新构建的镜像将用于创建容器。</li>
-<li>command，它是容器启动后运行的应用程序命令，该命令可以覆盖 Dockerfile 中设置的 CMD 指令。</li>
-<li>ports，表示端口映射。在这里， <code>"SRC:DST"</code> 表示将宿主机的SRC端口映射到容器中的DST端口，访问宿主机SRC端口的请求将会被转发到容器对应的DST端口中。</li>
-<li>networks，它可以告诉 Docker 要将服务的容器附加到哪个网络中。</li>
-<li>volumes，它可以告诉 Docker 要将宿主机的目录挂载到容器内的哪个目录。</li>
-<li>depends_on，表示启动服务前需要首先启动的依赖服务。在本例中，启动Worker容器前必须先确保MySQL可正常提供服务。</li>
-</ul><p>而在对MySQL服务的定义中，各个配置的含义如下所示。</p><ul>
-<li>image，用于指定当前容器启动的镜像版本，当前版本为mysql:5.7。如果在本地查找不到镜像，就从 Docker Hub 中拉取。</li>
-<li>environment，它可以设置容器的环境变量。环境变量可用于指定当前MySQL容器的时区，并配置初始数据库名，根用户的密码等。</li>
-<li>expose，描述性信息，表明当前容器暴露的端口号。</li>
-<li>networks，用于指定容器的命名空间。MySQL服务的networks应设置为和Worker服务相同的counter-net，这样两个容器共用同一个网络命名空间，可以使用回环地址进行通信。</li>
-<li>healthcheck，用于检测服务的健康状况，在这里它和depends_on配合在一起可以确保MySQL服务状态健康后再启动Worker服务。</li>
-</ul><p>要使用 Docker Compose 启动应用程序，可以使用 docker-compose up指令，它是启动 Compose 应用程序最常见的方式。docker-compose up指令可以构建或拉取所有需要的镜像，创建所有需要的网络和存储卷，并启动所有的容器。</p><p>如下所示，我们输入 docker-compose up，程序启动后可能会打印冗长的启动日志，等待几秒钟之后，服务就启动好了。根据我们的配置，将首先启动MySQL服务，接着启动Worker服务。</p><pre><code class="language-plain">» docker-compose up 
+
+<p>除此之外，根级别配置中还可以设置其他指令，例如volumes、secrets、configs。其中，volumes 用于将数据挂载到容器，这是持久化容器数据的最佳方式。secrets主要用于swarm模式，可以管理敏感数据，安全传输数据（这些敏感数据不能直接存储在镜像或源码中，但在运行时又需要）。configs也用于swarm模式，它可以管理非敏感数据，例如配置文件等。</p><p>更进一步地，让我们来看看services中定义的服务。<strong>在services中我们定义了两个服务Worker 和MySQL 。</strong>Compose 会将每一个服务部署为一个容器，并且容器的名字会分别包含 Worker 与 MySQL。</p><p>在对 Worker 服务的配置中，各个配置的含义如下所示。</p>
+build用于构建镜像，其中 build: . 告诉 Docker 使用当前目录中的 Dockerfile 构建一个新镜像，新构建的镜像将用于创建容器。
+command，它是容器启动后运行的应用程序命令，该命令可以覆盖 Dockerfile 中设置的 CMD 指令。
+ports，表示端口映射。在这里， <code>"SRC:DST"</code> 表示将宿主机的SRC端口映射到容器中的DST端口，访问宿主机SRC端口的请求将会被转发到容器对应的DST端口中。
+networks，它可以告诉 Docker 要将服务的容器附加到哪个网络中。
+volumes，它可以告诉 Docker 要将宿主机的目录挂载到容器内的哪个目录。
+depends_on，表示启动服务前需要首先启动的依赖服务。在本例中，启动Worker容器前必须先确保MySQL可正常提供服务。
+<p>而在对MySQL服务的定义中，各个配置的含义如下所示。</p>
+image，用于指定当前容器启动的镜像版本，当前版本为mysql:5.7。如果在本地查找不到镜像，就从 Docker Hub 中拉取。
+environment，它可以设置容器的环境变量。环境变量可用于指定当前MySQL容器的时区，并配置初始数据库名，根用户的密码等。
+expose，描述性信息，表明当前容器暴露的端口号。
+networks，用于指定容器的命名空间。MySQL服务的networks应设置为和Worker服务相同的counter-net，这样两个容器共用同一个网络命名空间，可以使用回环地址进行通信。
+healthcheck，用于检测服务的健康状况，在这里它和depends_on配合在一起可以确保MySQL服务状态健康后再启动Worker服务。
+<p>要使用 Docker Compose 启动应用程序，可以使用 docker-compose up指令，它是启动 Compose 应用程序最常见的方式。docker-compose up指令可以构建或拉取所有需要的镜像，创建所有需要的网络和存储卷，并启动所有的容器。</p><p>如下所示，我们输入 docker-compose up，程序启动后可能会打印冗长的启动日志，等待几秒钟之后，服务就启动好了。根据我们的配置，将首先启动MySQL服务，接着启动Worker服务。</p><pre><code class="language-plain">» docker-compose up 
 [+] Running 2/0
  ⠿ Container crawler-mysql-1           Created                                                                                                                                 0.0s
  ⠿ Container crawler-crawler-worker-1  Created                                                                                                                                 0.0s
@@ -324,7 +324,7 @@ networks:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -339,5 +339,4 @@ networks:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

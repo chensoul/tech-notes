@@ -287,18 +287,18 @@ $ kubectl exec -it example-pv-pod -- /bin/sh
 
 **需要注意的是，我们上面手动创建PV的方式，即Static的PV管理方式，在删除PV时需要按如下流程执行操作：**
 
-<li>
+
 删除使用这个PV的Pod；
-</li>
-<li>
+
+
 从宿主机移除本地磁盘（比如，umount它）；
-</li>
-<li>
+
+
 删除PVC；
-</li>
-<li>
+
+
 删除PV。
-</li>
+
 
 如果不按照这个流程的话，这个PV的删除就会失败。
 

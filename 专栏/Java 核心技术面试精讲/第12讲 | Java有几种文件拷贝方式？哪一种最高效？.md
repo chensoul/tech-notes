@@ -58,18 +58,18 @@ public static void copyFileByChannel(File source, File dest) throws
 
 从技术角度展开，下面这些方面值得注意：
 
-<li>
+
 不同的copy方式，底层机制有什么区别？
-</li>
-<li>
+
+
 为什么零拷贝（zero-copy）可能有性能优势？
-</li>
-<li>
+
+
 Buffer分类与使用。
-</li>
-<li>
+
+
 Direct Buffer对垃圾收集等方面的影响与实践选择。
-</li>
+
 
 接下来，我们一起来分析一下吧。
 
@@ -143,35 +143,35 @@ public static Path copy(Path source, Path target, CopyOption... options)
 
 我把源码分析过程简单记录如下，JDK的源代码中，内部实现和公共API定义也不是可以能够简单关联上的，NIO部分代码甚至是定义为模板而不是Java源文件，在build过程自动生成源码，下面顺便介绍一下部分JDK代码机制和如何绕过隐藏障碍。
 
-<li>
+
 首先，直接跟踪，发现FileSystemProvider只是个抽象类，阅读它的[源码](http://hg.openjdk.java.net/jdk/jdk/file/f84ae8aa5d88/src/java.base/share/classes/java/nio/file/spi/FileSystemProvider.java)能够理解到，原来文件系统实际逻辑存在于JDK内部实现里，公共API其实是通过ServiceLoader机制加载一系列文件系统实现，然后提供服务。
-</li>
-<li>
+
+
 我们可以在JDK源码里搜索FileSystemProvider和nio，可以定位到[sun/nio/fs](http://hg.openjdk.java.net/jdk/jdk/file/f84ae8aa5d88/src/java.base/share/classes/sun/nio/fs)，我们知道NIO底层是和操作系统紧密相关的，所以每个平台都有自己的部分特有文件系统逻辑。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/5e/f7/5e0bf3130dffa8e56f398f0856eb76f7.png" alt="" />
 
-<li>
+
 省略掉一些细节，最后我们一步步定位到UnixFileSystemProvider  → UnixCopyFile.Transfer，发现这是个本地方法。
-</li>
-<li>
+
+
 最后，明确定位到[UnixCopyFile.c](http://hg.openjdk.java.net/jdk/jdk/file/f84ae8aa5d88/src/java.base/unix/native/libnio/fs/UnixCopyFile.c)，其内部实现清楚说明竟然只是简单的用户态空间拷贝！
-</li>
+
 
 所以，我们明确这个最常见的copy方法其实不是利用transferTo，而是本地技术实现的用户态拷贝。
 
 前面谈了不少机制和源码，我简单从实践角度总结一下，如何提高类似拷贝等IO操作的性能，有一些宽泛的原则：
 
-<li>
+
 在程序中，使用缓存等机制，合理减少IO次数（在网络通信中，如TCP传输，window大小也可以看作是类似思路）。
-</li>
-<li>
+
+
 使用transferTo等机制，减少上下文切换和额外IO操作。
-</li>
-<li>
+
+
 尽量减少不必要的转换过程，比如编解码；对象序列化和反序列化，比如操作文本文件或者网络通信，如果不是过程中需要使用文本信息，可以考虑不要将二进制信息转换成字符串，直接传输二进制信息。
-</li>
+
 
 3.掌握NIO Buffer
 
@@ -181,33 +181,33 @@ public static Path copy(Path source, Path target, CopyOption... options)
 
 Buffer有几个基本属性：
 
-<li>
+
 capacity，它反映这个Buffer到底有多大，也就是数组的长度。
-</li>
-<li>
+
+
 position，要操作的数据起始位置。
-</li>
-<li>
+
+
 limit，相当于操作的限额。在读取或者写入时，limit的意义很明显是不一样的。比如，读取操作时，很可能将limit设置到所容纳数据的上限；而在写入时，则会设置容量或容量以下的可写限度。
-</li>
-<li>
+
+
 mark，记录上一次postion的位置，默认是0，算是一个便利性的考虑，往往不是必须的。
-</li>
+
 
 前面三个是我们日常使用最频繁的，我简单梳理下Buffer的基本操作：
 
-<li>
+
 我们创建了一个ByteBuffer，准备放入数据，capacity当然就是缓冲区大小，而position就是0，limit默认就是capacity的大小。
-</li>
-<li>
+
+
 当我们写入几个字节的数据时，position就会跟着水涨船高，但是它不可能超过limit的大小。
-</li>
-<li>
+
+
 如果我们想把前面写入的数据读出来，需要调用flip方法，将position设置为0，limit设置为以前的position那里。
-</li>
-<li>
+
+
 如果还想从头再读一遍，可以调用rewind，让limit不变，position再次设置为0。
-</li>
+
 
 更进一步的详细使用，我建议参考相关[教程](http://tutorials.jenkov.com/java-nio/buffers.html)。
 
@@ -215,21 +215,21 @@ mark，记录上一次postion的位置，默认是0，算是一个便利性的�
 
 我这里重点介绍两种特别的Buffer。
 
-<li>
+
 Direct Buffer：如果我们看Buffer的方法定义，你会发现它定义了isDirect()方法，返回当前Buffer是否是Direct类型。这是因为Java提供了堆内和堆外（Direct）Buffer，我们可以以它的allocate或者allocateDirect方法直接创建。
-</li>
-<li>
+
+
 MappedByteBuffer：它将文件按照指定大小直接映射为内存区域，当程序访问这个内存区域时将直接操作这块儿文件数据，省去了将数据从内核空间向用户空间传输的损耗。我们可以使用[FileChannel.map](https://docs.oracle.com/javase/9/docs/api/java/nio/channels/FileChannel.html#map-java.nio.channels.FileChannel.MapMode-long-long-)创建MappedByteBuffer，它本质上也是种Direct Buffer。
-</li>
+
 
 在实际使用中，Java会尽量对Direct Buffer仅做本地IO操作，对于很多大数据量的IO密集操作，可能会带来非常大的性能优势，因为：
 
-<li>
+
 Direct Buffer生命周期内内存地址都不会再发生更改，进而内核可以安全地对其进行访问，很多IO操作会很高效。
-</li>
-<li>
+
+
 减少了堆内对象存储的可能额外维护工作，所以访问效率可能有所提高。
-</li>
+
 
 但是请注意，Direct Buffer创建和销毁过程中，都会比一般的堆内Buffer增加部分开销，所以通常都建议用于长期使用、数据较大的场景。
 
@@ -246,15 +246,15 @@ Direct Buffer生命周期内内存地址都不会再发生更改，进而内核�
 
 对于Direct Buffer的回收，我有几个建议：
 
-<li>
+
 在应用程序中，显式地调用System.gc()来强制触发。
-</li>
-<li>
+
+
 另外一种思路是，在大量使用Direct Buffer的部分框架中，框架会自己在程序中调用释放方法，Netty就是这么做的，有兴趣可以参考其实现（PlatformDependent0）。
-</li>
-<li>
+
+
 重复使用Direct Buffer。
-</li>
+
 
 5.跟踪和诊断Direct Buffer内存占用？
 

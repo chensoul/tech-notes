@@ -3,11 +3,11 @@
     command
 	  ...
 	  ...
-</code></pre><p><strong>target，</strong>可以是一个object file（目标文件），也可以是一个执行文件，还可以是一个标签（label）。target可使用通配符，当有多个目标时，目标之间用空格分隔。</p><p><strong>prerequisites，</strong>代表生成该target所需要的依赖项。当有多个依赖项时，依赖项之间用空格分隔。</p><p><strong>command</strong>，代表该target要执行的命令（可以是任意的shell命令）。</p><ul>
-<li>在执行command之前，默认会先打印出该命令，然后再输出命令的结果；如果不想打印出命令，可在各个command前加上<code>@</code>。</li>
-<li>command可以为多条，也可以分行写，但每行都要以tab键开始。另外，如果后一条命令依赖前一条命令，则这两条命令需要写在同一行，并用分号进行分隔。</li>
-<li>如果要忽略命令的出错，需要在各个command之前加上减号<code>-</code>。</li>
-</ul><p><strong>只要targets不存在，或prerequisites中有一个以上的文件比targets文件新，那么command所定义的命令就会被执行，从而产生我们需要的文件，或执行我们期望的操作。</strong></p><p>我们直接通过一个例子来理解下Makefile的规则吧。</p><p>第一步，先编写一个hello.c文件。</p><pre><code>#include &lt;stdio.h&gt;
+</code></pre><p><strong>target，</strong>可以是一个object file（目标文件），也可以是一个执行文件，还可以是一个标签（label）。target可使用通配符，当有多个目标时，目标之间用空格分隔。</p><p><strong>prerequisites，</strong>代表生成该target所需要的依赖项。当有多个依赖项时，依赖项之间用空格分隔。</p><p><strong>command</strong>，代表该target要执行的命令（可以是任意的shell命令）。</p>
+在执行command之前，默认会先打印出该命令，然后再输出命令的结果；如果不想打印出命令，可在各个command前加上<code>@</code>。
+command可以为多条，也可以分行写，但每行都要以tab键开始。另外，如果后一条命令依赖前一条命令，则这两条命令需要写在同一行，并用分号进行分隔。
+如果要忽略命令的出错，需要在各个command之前加上减号<code>-</code>。
+<p><strong>只要targets不存在，或prerequisites中有一个以上的文件比targets文件新，那么command所定义的命令就会被执行，从而产生我们需要的文件，或执行我们期望的操作。</strong></p><p>我们直接通过一个例子来理解下Makefile的规则吧。</p><p>第一步，先编写一个hello.c文件。</p><pre><code>#include &lt;stdio.h&gt;
 int main()
 {
   printf(&quot;Hello World!\n&quot;);
@@ -66,21 +66,21 @@ build:
 build:
     go build -v .
 </code></pre><p>接下来，我给你介绍下Makefile中的4种变量赋值方法。</p><ol>
-<li><code>=</code> 最基本的赋值方法。</li>
+<code>=</code> 最基本的赋值方法。
 </ol><p>例如：</p><pre><code>BASE_IMAGE = alpine:3.10
 </code></pre><p>使用 <code>=</code> 进行赋值时，要注意下面这样的情况：</p><pre><code>A = a
 B = $(A) b
 A = c
 </code></pre><p>B最后的值为 c b，而不是a b。也就是说，在用变量给变量赋值时，右边变量的取值，取的是最终的变量值。</p><ol start="2">
-<li><code>:=</code>直接赋值，赋予当前位置的值。</li>
+<code>:=</code>直接赋值，赋予当前位置的值。
 </ol><p>例如：</p><pre><code>A = a
 B := $(A) b
 A = c
 </code></pre><p>B最后的值为 a b。通过 <code>:=</code> 的赋值方式，可以避免 <code>=</code> 赋值带来的潜在的不一致。</p><ol start="3">
-<li><code>?=</code> 表示如果该变量没有被赋值，则赋予等号后的值。</li>
+<code>?=</code> 表示如果该变量没有被赋值，则赋予等号后的值。
 </ol><p>例如：</p><pre><code>PLATFORMS ?= linux_amd64 linux_arm64
 </code></pre><ol start="4">
-<li><code>+=</code>表示将等号后面的值添加到前面的变量上。</li>
+<code>+=</code>表示将等号后面的值添加到前面的变量上。
 </ol><p>例如：</p><pre><code>MAKEFLAGS += --no-print-directory
 </code></pre><p>Makefile还支持<strong>多行变量</strong>。可以通过define关键字设置多行变量，变量中允许换行。定义方式为：</p><pre><code>define 变量名
 变量内容
@@ -117,30 +117,30 @@ endif
 else
 ...
 endif
-</code></pre><ul>
-<li>ifeq表示条件语句的开始，并指定一个条件表达式。表达式包含两个参数，参数之间用逗号分隔，并且表达式用圆括号括起来。</li>
-<li>else表示条件表达式为假的情况。</li>
-<li>endif表示一个条件语句的结束，任何一个条件表达式都应该以endif结束。</li>
-<li><conditional-directive>表示条件关键字，有4个关键字：ifeq、ifneq、ifdef、ifndef。</conditional-directive></li>
-</ul><p>为了加深你的理解，我们分别来看下这4个关键字的例子。</p><ol>
-<li>ifeq：条件判断，判断是否相等。</li>
+</code></pre>
+ifeq表示条件语句的开始，并指定一个条件表达式。表达式包含两个参数，参数之间用逗号分隔，并且表达式用圆括号括起来。
+else表示条件表达式为假的情况。
+endif表示一个条件语句的结束，任何一个条件表达式都应该以endif结束。
+<conditional-directive>表示条件关键字，有4个关键字：ifeq、ifneq、ifdef、ifndef。</conditional-directive>
+<p>为了加深你的理解，我们分别来看下这4个关键字的例子。</p><ol>
+ifeq：条件判断，判断是否相等。
 </ol><p>例如：</p><pre><code>ifeq (&lt;arg1&gt;, &lt;arg2&gt;)
 ifeq '&lt;arg1&gt;' '&lt;arg2&gt;'
 ifeq &quot;&lt;arg1&gt;&quot; &quot;&lt;arg2&gt;&quot;
 ifeq &quot;&lt;arg1&gt;&quot; '&lt;arg2&gt;'
 ifeq '&lt;arg1&gt;' &quot;&lt;arg2&gt;&quot;
 </code></pre><p>比较arg1和arg2的值是否相同，如果相同则为真。也可以用make函数/变量替代arg1或arg2，例如 <code>ifeq ($(origin ROOT_DIR),undefined)</code> 或 <code>ifeq ($(ROOT_PACKAGE),)</code> 。origin函数会在之后专门讲函数的一讲中介绍到。</p><ol start="2">
-<li>ifneq：条件判断，判断是否不相等。</li>
+ifneq：条件判断，判断是否不相等。
 </ol><pre><code>ifneq (&lt;arg1&gt;, &lt;arg2&gt;)
 ifneq '&lt;arg1&gt;' '&lt;arg2&gt;'
 ifneq &quot;&lt;arg1&gt;&quot; &quot;&lt;arg2&gt;&quot;
 ifneq &quot;&lt;arg1&gt;&quot; '&lt;arg2&gt;'
 ifneq '&lt;arg1&gt;' &quot;&lt;arg2&gt;&quot;
 </code></pre><p>比较arg1和arg2的值是否不同，如果不同则为真。</p><ol start="3">
-<li>ifdef：条件判断，判断变量是否已定义。</li>
+ifdef：条件判断，判断变量是否已定义。
 </ol><pre><code>ifdef &lt;variable-name&gt;
 </code></pre><p>如果<variable-name>值非空，则表达式为真，否则为假。<variable-name>也可以是函数的返回值。</variable-name></variable-name></p><ol start="4">
-<li>ifndef：条件判断，判断变量是否未定义。</li>
+ifndef：条件判断，判断变量是否未定义。
 </ol><pre><code>ifndef &lt;variable-name&gt;
 </code></pre><p>如果<variable-name>值为空，则表达式为真，否则为假。<variable-name>也可以是函数的返回值。</variable-name></variable-name></p><h3>函数</h3><p>Makefile同样也支持函数，函数语法包括定义语法和调用语法。</p><p><strong>我们先来看下自定义函数。</strong> make解释器提供了一系列的函数供Makefile调用，这些函数是Makefile的预定义函数。我们可以通过define关键字来自定义一个函数。自定义函数的语法为：</p><pre><code>define 函数名
 函数体
@@ -158,9 +158,9 @@ GOOS := $(word 1, $(subst _, ,$(PLATFORM)))
 </code></pre><p>上面的例子用到了两个函数：word和subst。word函数有两个参数，1和subst函数的输出。subst函数将PLATFORM变量值中的_替换成空格（替换后的PLATFORM值为linux amd64）。word函数取linux amd64字符串中的第一个单词。所以最后GOOS的值为linux。</p><p>Makefile预定义函数能够帮助我们实现很多强大的功能，在编写Makefile的过程中，如果有功能需求，可以优先使用这些函数。如果你想使用这些函数，那就需要知道有哪些函数，以及它们实现的功能。</p><p>常用的函数包括下面这些，你需要先有个印象，以后用到时再来查看。</p><p><img src="https://static001.geekbang.org/resource/image/96/5f/96da0853e8225a656d2c0489e544865f.jpg?wh=2248x3692" alt=""></p><h2>引入其他Makefile</h2><p>除了Makefile规则、Makefile语法之外，Makefile还有很多特性，比如可以引入其他Makefile、自动生成依赖关系、文件搜索等等。这里我再介绍一个IAM项目的Makefile用到的重点特性：引入其他Makefile。</p><p>在 <a href="https://time.geekbang.org/column/article/388920"><strong>14讲</strong></a> 中，我们介绍过Makefile要结构化、层次化，这一点可以通过<strong>在项目根目录下的Makefile中引入其他Makefile</strong>来实现。</p><p>在Makefile中，我们可以通过关键字include，把别的makefile包含进来，类似于C语言的<code>#include</code>，被包含的文件会插入在当前的位置。include用法为<code>include &lt;filename&gt;</code>，示例如下：</p><pre><code>include scripts/make-rules/common.mk
 include scripts/make-rules/golang.mk
 </code></pre><p>include也可以包含通配符<code>include scripts/make-rules/*</code>。make命令会按下面的顺序查找makefile文件：</p><ol>
-<li>如果是绝对或相对路径，就直接根据路径include进来。</li>
-<li>如果make执行时，有<code>-I</code>或<code>--include-dir</code>参数，那么make就会在这个参数所指定的目录下去找。</li>
-<li>如果目录<code>&lt;prefix&gt;/include</code>（一般是<code>/usr/local/bin</code>或<code>/usr/include</code>）存在的话，make也会去找。</li>
+如果是绝对或相对路径，就直接根据路径include进来。
+如果make执行时，有<code>-I</code>或<code>--include-dir</code>参数，那么make就会在这个参数所指定的目录下去找。
+如果目录<code>&lt;prefix&gt;/include</code>（一般是<code>/usr/local/bin</code>或<code>/usr/include</code>）存在的话，make也会去找。
 </ol><p>如果有文件没有找到，make会生成一条警告信息，但不会马上出现致命错误，而是继续载入其他的文件。一旦完成makefile的读取，make会再重试这些没有找到或是不能读取的文件。如果还是不行，make才会出现一条致命错误信息。如果你想让make忽略那些无法读取的文件继续执行，可以在include前加一个减号<code>-</code>，如<code>-include &lt;filename&gt;</code>。</p><h2>总结</h2><p>在这一讲里，为了帮助你编写一个高质量的Makefile，我重点介绍了Makefile规则和Makefile语法里的一些核心语法知识。</p><p>在讲Makefile规则时，我们主要学习了规则语法、伪目标和order-only依赖。掌握了这些Makefile规则，你就掌握了Makefile中最核心的内容。</p><p>在介绍Makefile的语法时，我只介绍了Makefile的核心语法，以及 IAM项目的Makefile用到的语法，包括命令、变量、条件语句和函数。你可能会觉得这些语法学习起来比较枯燥，但还是那句话，工欲善其事，必先利其器。希望你能熟练掌握Makefile的核心语法，为编写高质量的Makefile打好基础。</p><p>今天的内容就到这里啦，欢迎你在下面的留言区谈谈自己的看法，我们下一讲见。</p>
 <style>
     ul {
@@ -271,7 +271,7 @@ include scripts/make-rules/golang.mk
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -286,8 +286,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/52/40/e57a736e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -302,8 +302,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/6b/90/ca3bf377.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -318,8 +318,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/04/60/64d166b6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -334,8 +334,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/01/8c/41adb537.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -350,8 +350,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/7b/c5/35f92dad.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -366,8 +366,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/7b/c5/35f92dad.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -382,8 +382,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -398,8 +398,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/6b/90/ca3bf377.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -414,8 +414,8 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -430,5 +430,4 @@ include scripts/make-rules/golang.mk
   </div>
 </div>
 </div>
-</li>
-</ul>
+

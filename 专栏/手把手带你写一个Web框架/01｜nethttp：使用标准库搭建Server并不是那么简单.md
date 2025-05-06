@@ -1,8 +1,8 @@
 <audio title="01｜nethttp：使用标准库搭建Server并不是那么简单" src="https://static001.geekbang.org/resource/audio/05/47/05a5f2dfda387cfbded0fffaa7ff1a47.mp3" controls="controls"></audio> 
-<p>你好，我是轩脉刃。欢迎加入我的课程，和我一起从0开始构建Web框架。</p><p>之前我简单介绍了整个课程的设计思路，也是搭建Web框架的学习路径，我们会先基于标准库搭建起Server，然后一步一步增加控制器、路由、中间件，最后完善封装和重启，在整章学完后，你就能建立起一套自己的Web框架了。</p><p>其实你熟悉Golang的话就会知道，用官方提供的 net/http 标准库搭建一个Web Server，是一件非常简单的事。我在面试的时候也发现，不少同学，在怎么搭怎么用的问题上，回答的非常溜，但是再追问一句为什么这个 Server 这么设计，涉及的 net/http 实现原理是什么? 一概不知。</p><p>这其实是非常危险的。<strong>实际工作中，我们会因为不了解底层原理，想当然的认为它的使用方式</strong>，直接导致在代码编写、应用调优的时候出现各种问题。</p><p>所以今天，我想带着你从最底层的 HTTP 协议开始，搞清楚Web Server本质，通过 net/http 代码库梳理 HTTP 服务的主流程脉络，先知其所以然，再搭建框架的Server结构。</p><p>之后，我们会基于今天分析的整个 HTTP 服务主流程原理继续开发。所以这节课你掌握的程度，对于后续内容的理解至关重要。</p><h2>Web Server 的本质</h2><!-- [[[read_end]]] --><p>既然要搭 Web Server，那我也先简单介绍一下，维基百科上是这么解释的，Web Server 是一个通过 HTTP 协议处理Web请求的计算机系统。这句话乍听有点绕口，我给你解释下。</p><p>HTTP 协议，在 OSI 网络体系结构中，是基于TCP/IP之上第七层应用层的协议，全称叫做超文本传输协议。啥意思？就是说HTTP协议传输的都是文本字符，只是这些字符是有规则排列的。这些字符的排列规则，就是一种约定，也就是协议。这个协议还有一个专门的描述文档，就是<a href="https://datatracker.ietf.org/doc/html/rfc2616">RFC 2616</a>。</p><p>对于 HTTP 协议，无论是请求还是响应，传输的消息体都可以分为两个部分：HTTP头部和 HTTP Body体。头部描述的一般是和业务无关但与传输相关的信息，比如请求地址、编码格式、缓存时长等；Body 里面主要描述的是与业务相关的信息。<img src="https://static001.geekbang.org/resource/image/cb/e0/cbbafb7ac6128b6e6f8bde0c983c7ae0.jpg?wh=1920x1080" alt=""></p><p>Web Server 的本质，实际上就是<strong>接收、解析</strong> HTTP 请求传输的文本字符，理解这些文本字符的指令，然后进行<strong>计算</strong>，再将返回值<strong>组织成</strong> HTTP 响应的文本字符，通过 TCP 网络<strong>传输回去</strong>。</p><p>理解了Web Server 干的事情，我们接下来继续看看在语言层面怎么实现。</p><h2>一定要用标准库吗</h2><p>对 Web Server 来说，Golang 提供了 net 库和 net/http 库，分别对应OSI的 TCP 层和 HTTP 层，它们两个负责的就是 HTTP 的接收和解析。</p><p>一般我们会使用 net/http 库解析 HTTP 消息体。但是可能会有人问，如果我想实现 Web 服务，可不可以不用 net/http 库呢？比如我直接用 net 库，逐字读取消息体，然后自己解析获取的传输字符。</p><p>答案是可以的，如果你有兼容其它协议、追求极致性能的需求，而且你有把握能按照 HTTP 的RFC 标准进行解析，那完全可以自己封装一个HTTP库。</p><p>其实在一些大厂中确实是这么做的，每当有一些通用的协议需求，比如一个服务既要支持 HTTP，又要支持 Protocol Buffers，又或者想要支持自定义的协议，那么他们就可能抛弃 HTTP 库，甚至抛弃 net 库，直接自己进行网络事件驱动，解析 HTTP 协议。</p><p>有个开源库，叫 <a href="https://github.com/valyala/fasthttp">FastHTTP</a>，它就是抛弃标准库 net/http 来实现的。作者为了追求极高的HTTP性能，自己封装了网络事件驱动，解析了HTTP协议。你感兴趣的话，可以去看看。</p><p>但是现在绝大部分的 Web 框架，都是基于 net/http 标准库的。我认为原因主要有两点：</p><ul>
-<li>第一是<strong>相信官方开源的力量</strong>。自己实现HTTP协议的解析，不一定会比标准库实现得更好，即使当前标准库有一些不足之处，我们也都相信，随着开源贡献者越来越多，标准库也会最终达到完美。</li>
-<li>第二是<strong>Web 服务架构的变化</strong>。随着容器化、Kubernetes 等技术的兴起，业界逐渐达成共识，单机并发性能并不是评判 Web 服务优劣的唯一标准了，易用性、扩展性也是底层库需要考量的。</li>
-</ul><p>所以总体来说，net/http 标准库，作为官方开源库，其易用性和扩展性都经过开源社区和Golang官方的认证，是我们目前构建Web Server首选的HTTP协议库。</p><p>用net/http来创建一个 HTTP 服务，其实很简单，下面是<a href="https://pkg.go.dev/net/http@go1.15.5">官方文档</a>里的例子。我做了些注释，帮你理解。</p><pre><code class="language-go">// 创建一个Foo路由和处理函数
+<p>你好，我是轩脉刃。欢迎加入我的课程，和我一起从0开始构建Web框架。</p><p>之前我简单介绍了整个课程的设计思路，也是搭建Web框架的学习路径，我们会先基于标准库搭建起Server，然后一步一步增加控制器、路由、中间件，最后完善封装和重启，在整章学完后，你就能建立起一套自己的Web框架了。</p><p>其实你熟悉Golang的话就会知道，用官方提供的 net/http 标准库搭建一个Web Server，是一件非常简单的事。我在面试的时候也发现，不少同学，在怎么搭怎么用的问题上，回答的非常溜，但是再追问一句为什么这个 Server 这么设计，涉及的 net/http 实现原理是什么? 一概不知。</p><p>这其实是非常危险的。<strong>实际工作中，我们会因为不了解底层原理，想当然的认为它的使用方式</strong>，直接导致在代码编写、应用调优的时候出现各种问题。</p><p>所以今天，我想带着你从最底层的 HTTP 协议开始，搞清楚Web Server本质，通过 net/http 代码库梳理 HTTP 服务的主流程脉络，先知其所以然，再搭建框架的Server结构。</p><p>之后，我们会基于今天分析的整个 HTTP 服务主流程原理继续开发。所以这节课你掌握的程度，对于后续内容的理解至关重要。</p><h2>Web Server 的本质</h2><!-- [[[read_end]]] --><p>既然要搭 Web Server，那我也先简单介绍一下，维基百科上是这么解释的，Web Server 是一个通过 HTTP 协议处理Web请求的计算机系统。这句话乍听有点绕口，我给你解释下。</p><p>HTTP 协议，在 OSI 网络体系结构中，是基于TCP/IP之上第七层应用层的协议，全称叫做超文本传输协议。啥意思？就是说HTTP协议传输的都是文本字符，只是这些字符是有规则排列的。这些字符的排列规则，就是一种约定，也就是协议。这个协议还有一个专门的描述文档，就是<a href="https://datatracker.ietf.org/doc/html/rfc2616">RFC 2616</a>。</p><p>对于 HTTP 协议，无论是请求还是响应，传输的消息体都可以分为两个部分：HTTP头部和 HTTP Body体。头部描述的一般是和业务无关但与传输相关的信息，比如请求地址、编码格式、缓存时长等；Body 里面主要描述的是与业务相关的信息。<img src="https://static001.geekbang.org/resource/image/cb/e0/cbbafb7ac6128b6e6f8bde0c983c7ae0.jpg?wh=1920x1080" alt=""></p><p>Web Server 的本质，实际上就是<strong>接收、解析</strong> HTTP 请求传输的文本字符，理解这些文本字符的指令，然后进行<strong>计算</strong>，再将返回值<strong>组织成</strong> HTTP 响应的文本字符，通过 TCP 网络<strong>传输回去</strong>。</p><p>理解了Web Server 干的事情，我们接下来继续看看在语言层面怎么实现。</p><h2>一定要用标准库吗</h2><p>对 Web Server 来说，Golang 提供了 net 库和 net/http 库，分别对应OSI的 TCP 层和 HTTP 层，它们两个负责的就是 HTTP 的接收和解析。</p><p>一般我们会使用 net/http 库解析 HTTP 消息体。但是可能会有人问，如果我想实现 Web 服务，可不可以不用 net/http 库呢？比如我直接用 net 库，逐字读取消息体，然后自己解析获取的传输字符。</p><p>答案是可以的，如果你有兼容其它协议、追求极致性能的需求，而且你有把握能按照 HTTP 的RFC 标准进行解析，那完全可以自己封装一个HTTP库。</p><p>其实在一些大厂中确实是这么做的，每当有一些通用的协议需求，比如一个服务既要支持 HTTP，又要支持 Protocol Buffers，又或者想要支持自定义的协议，那么他们就可能抛弃 HTTP 库，甚至抛弃 net 库，直接自己进行网络事件驱动，解析 HTTP 协议。</p><p>有个开源库，叫 <a href="https://github.com/valyala/fasthttp">FastHTTP</a>，它就是抛弃标准库 net/http 来实现的。作者为了追求极高的HTTP性能，自己封装了网络事件驱动，解析了HTTP协议。你感兴趣的话，可以去看看。</p><p>但是现在绝大部分的 Web 框架，都是基于 net/http 标准库的。我认为原因主要有两点：</p>
+第一是<strong>相信官方开源的力量</strong>。自己实现HTTP协议的解析，不一定会比标准库实现得更好，即使当前标准库有一些不足之处，我们也都相信，随着开源贡献者越来越多，标准库也会最终达到完美。
+第二是<strong>Web 服务架构的变化</strong>。随着容器化、Kubernetes 等技术的兴起，业界逐渐达成共识，单机并发性能并不是评判 Web 服务优劣的唯一标准了，易用性、扩展性也是底层库需要考量的。
+<p>所以总体来说，net/http 标准库，作为官方开源库，其易用性和扩展性都经过开源社区和Golang官方的认证，是我们目前构建Web Server首选的HTTP协议库。</p><p>用net/http来创建一个 HTTP 服务，其实很简单，下面是<a href="https://pkg.go.dev/net/http@go1.15.5">官方文档</a>里的例子。我做了些注释，帮你理解。</p><pre><code class="language-go">// 创建一个Foo路由和处理函数
 http.Handle("/foo", fooHandler)
 
 // 创建一个bar路由和处理函数
@@ -40,11 +40,11 @@ func ServeFile(w ResponseWriter, r *Request, name string)
 func ServeTLS(l net.Listener, handler Handler, certFile, keyFile string) error
 func SetCookie(w ResponseWriter, cookie *Cookie)
 func StatusText(code int) string
-</code></pre><p>在这个库提供的方法中，我们去掉一些 New 和 Set 开头的函数，因为你从命名上可以看出，这些函数是对某个对象或者属性的设置。</p><p>剩下的函数大致可以分成三类：</p><ul>
-<li>为服务端提供创建 HTTP 服务的函数，名字中一般包含 Serve 字样，比如 Serve、ServeFile、ListenAndServe等。</li>
-<li>为客户端提供调用 HTTP 服务的类库，以 HTTP 的 method 同名，比如 Get、Post、Head等。</li>
-<li>提供中转代理的一些函数，比如ProxyURL、ProxyFromEnvironment 等。</li>
-</ul><p>我们现在研究的是，如何创建一个 HTTP 服务，所以关注包含 Serve 字样的函数就可以了。</p><pre><code class="language-go">// 通过监听的URL地址和控制器函数来创建HTTP服务
+</code></pre><p>在这个库提供的方法中，我们去掉一些 New 和 Set 开头的函数，因为你从命名上可以看出，这些函数是对某个对象或者属性的设置。</p><p>剩下的函数大致可以分成三类：</p>
+为服务端提供创建 HTTP 服务的函数，名字中一般包含 Serve 字样，比如 Serve、ServeFile、ListenAndServe等。
+为客户端提供调用 HTTP 服务的类库，以 HTTP 的 method 同名，比如 Get、Post、Head等。
+提供中转代理的一些函数，比如ProxyURL、ProxyFromEnvironment 等。
+<p>我们现在研究的是，如何创建一个 HTTP 服务，所以关注包含 Serve 字样的函数就可以了。</p><pre><code class="language-go">// 通过监听的URL地址和控制器函数来创建HTTP服务
 func ListenAndServe(addr string, handler Handler) error{}
 // 通过监听的URL地址和控制器函数来创建HTTPS服务
 func ListenAndServeTLS(addr, certFile, keyFile string, handler Handler) error{}
@@ -62,12 +62,12 @@ type Response struct{ ... }
 type ServeMux struct{ ... }
 type Server struct{ ... }
 type Transport struct{ ... }
-</code></pre><p>看结构的名字或者go doc查看结构说明文档，能逐渐了解它们的功能：</p><ul>
-<li>Client 负责构建HTTP客户端；</li>
-<li>Server 负责构建HTTP服务端；</li>
-<li>ServerMux 负责HTTP服务端路由；</li>
-<li>Transport、Request、Response、Cookie负责客户端和服务端传输对应的不同模块。</li>
-</ul><p>现在通过库方法（function）和结构体（struct），我们对整个库的结构和功能有大致印象了。整个库承担了两部分功能，一部分是构建HTTP客户端，一部分是构建HTTP服务端。</p><p>构建的HTTP服务端除了提供真实服务之外，也能提供代理中转服务，它们分别由 Client 和 Server 两个数据结构负责。除了这两个最重要的数据结构之外，HTTP 协议的每个部分，比如请求、返回、传输设置等都有具体的数据结构负责。</p><h3>结构函数（能力）</h3><p>下面从具体的需求出发，我们来阅读具体的结构函数（method）。</p><p>我们当前的需求是创建 HTTP 服务，开头我举了一个最简单的例子：</p><pre><code class="language-go">// 创建一个Foo路由和处理函数
+</code></pre><p>看结构的名字或者go doc查看结构说明文档，能逐渐了解它们的功能：</p>
+Client 负责构建HTTP客户端；
+Server 负责构建HTTP服务端；
+ServerMux 负责HTTP服务端路由；
+Transport、Request、Response、Cookie负责客户端和服务端传输对应的不同模块。
+<p>现在通过库方法（function）和结构体（struct），我们对整个库的结构和功能有大致印象了。整个库承担了两部分功能，一部分是构建HTTP客户端，一部分是构建HTTP服务端。</p><p>构建的HTTP服务端除了提供真实服务之外，也能提供代理中转服务，它们分别由 Client 和 Server 两个数据结构负责。除了这两个最重要的数据结构之外，HTTP 协议的每个部分，比如请求、返回、传输设置等都有具体的数据结构负责。</p><h3>结构函数（能力）</h3><p>下面从具体的需求出发，我们来阅读具体的结构函数（method）。</p><p>我们当前的需求是创建 HTTP 服务，开头我举了一个最简单的例子：</p><pre><code class="language-go">// 创建一个Foo路由和处理函数
 http.Handle("/foo", fooHandler)
 
 // 创建一个bar路由和处理函数
@@ -93,14 +93,14 @@ func (sh serverHandler) ServeHTTP(rw ResponseWriter, req *Request) {
 	handler.ServeHTTP(rw, req)
 }
 </code></pre><p>如果入口服务server结构已经设置了 Handler，就调用这个Handler来处理此次请求，反之则使用库自带的 DefaultServerMux。</p><p>这里的serverHandler设计，能同时保证这个库的扩展性和易用性：你可以很方便使用默认方法处理请求，但是一旦有需求，也能自己扩展出方法处理请求。</p><p>那么DefaultServeMux 是怎么寻找 Handler 的呢，这就是思维导图的最后一部分<strong>第七层</strong>。</p><p><img src="https://static001.geekbang.org/resource/image/34/fe/344fc7d6f2d1aca635ef1284185621fe.png?wh=2268x418" alt=""></p><p><code>DefaultServeMux.Handle</code> 是一个非常简单的 map 实现，key 是路径（pattern），value 是这个 pattern 对应的处理函数（handler）。它是通过 <code>mux.match</code>(path) 寻找对应 Handler，也就是从 DefaultServeMux 内部的 map 中直接根据 key 寻找到 value 的。</p><p>这种根据 map 直接查找路由的方式是不是可以满足我们的路由需求呢？我们会在第三讲路由中详细解说。</p><p>好，HTTP库 Server 的代码流程我们就梳理完成了，整个逻辑线大致是：</p><pre><code class="language-plain">创建服务 -&gt; 监听请求 -&gt; 创建连接 -&gt; 处理请求
-</code></pre><p>如果你觉得层次比较多，对照着思维导图多看几遍就顺畅了。这里我也给你整理了一下逻辑线各层的关键结论：</p><ul>
-<li>第一层，标准库创建HTTP服务是通过创建一个 Server 数据结构完成的；</li>
-<li>第二层，Server 数据结构在for循环中不断监听每一个连接；</li>
-<li>第三层，每个连接默认开启一个 Goroutine 为其服务；</li>
-<li>第四、五层，serverHandler 结构代表请求对应的处理逻辑，并且通过这个结构进行具体业务逻辑处理；</li>
-<li>第六层，Server 数据结构如果没有设置处理函数 Handler，默认使用 DefaultServerMux处理请求；</li>
-<li>第七层，DefaultServerMux 是使用 map 结构来存储和查找路由规则。</li>
-</ul><p>如果你对上面几点关键结论还有疑惑的，可以再去看一遍思维导图。阅读核心逻辑代码是会有点枯燥，但是<strong>这条逻辑线是HTTP服务启动最核心的主流程逻辑</strong>，后面我们会基于这个流程继续开发，你要掌握到能背下来的程度。千万不要觉得要背诵了，压力太大，其实对照着思维导图，顺几遍逻辑，理解了再记忆就很容易。</p><h2>创建框架的Server结构</h2><p>现在原理弄清楚了，该下手搭 HTTP 服务了。</p><p>刚刚咱也分析了主流程代码，其中第一层的关键结论就是：net/http 标准库创建服务，实质上就是通过创建 Server 数据结构来完成的。所以接下来，我们就来创建一个 Server 数据结构。</p><p>通过 <code>go doc net/http.Server</code> 我们可以看到 Server 的结构：</p><pre><code class="language-go">type Server struct {
+</code></pre><p>如果你觉得层次比较多，对照着思维导图多看几遍就顺畅了。这里我也给你整理了一下逻辑线各层的关键结论：</p>
+第一层，标准库创建HTTP服务是通过创建一个 Server 数据结构完成的；
+第二层，Server 数据结构在for循环中不断监听每一个连接；
+第三层，每个连接默认开启一个 Goroutine 为其服务；
+第四、五层，serverHandler 结构代表请求对应的处理逻辑，并且通过这个结构进行具体业务逻辑处理；
+第六层，Server 数据结构如果没有设置处理函数 Handler，默认使用 DefaultServerMux处理请求；
+第七层，DefaultServerMux 是使用 map 结构来存储和查找路由规则。
+<p>如果你对上面几点关键结论还有疑惑的，可以再去看一遍思维导图。阅读核心逻辑代码是会有点枯燥，但是<strong>这条逻辑线是HTTP服务启动最核心的主流程逻辑</strong>，后面我们会基于这个流程继续开发，你要掌握到能背下来的程度。千万不要觉得要背诵了，压力太大，其实对照着思维导图，顺几遍逻辑，理解了再记忆就很容易。</p><h2>创建框架的Server结构</h2><p>现在原理弄清楚了，该下手搭 HTTP 服务了。</p><p>刚刚咱也分析了主流程代码，其中第一层的关键结论就是：net/http 标准库创建服务，实质上就是通过创建 Server 数据结构来完成的。所以接下来，我们就来创建一个 Server 数据结构。</p><p>通过 <code>go doc net/http.Server</code> 我们可以看到 Server 的结构：</p><pre><code class="language-go">type Server struct {
     // 请求监听地址
 	Addr string
     // 请求核心处理函数
@@ -247,7 +247,7 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/2d/48/bc2648c4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -262,8 +262,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/53/a8/abc96f70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -278,8 +278,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJyibojtJCnzAE7E8sMqgiaiaAHl3FuzcXcicQnjnT5huUFMxGUMzV5NGuqzzHHr8dBzCs3xfuhwcOnPw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -294,8 +294,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5b/8f/4b0ab5db.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -310,8 +310,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/47/29/425a2030.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -326,8 +326,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -342,8 +342,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/cc/de/59a530dc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -358,8 +358,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEJfTnE46bP9zFU0MJicYZmKYTPhm97YjgSEmNVKr3ic1BY3CL8ibPUFCBVTqyoHQPpBcbe9GRKEN1CyA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -374,8 +374,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/27/f1/e4fc57a3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -390,8 +390,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/e6/54/86056001.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -406,8 +406,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/45/b2/701f5ad7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -422,8 +422,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/8f/1a/7a7e0225.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -438,8 +438,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/8f/1a/7a7e0225.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -454,8 +454,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/0a/23/c26f4e50.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -470,8 +470,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/72/85/c337e9a1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -486,8 +486,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLJHTX1IwEl1Eh1CCO2ejL2gKe08Vxib61UZz9l5WGA81ObK0Nk5MCZ3ic6IWcW5kyX0DtwBNMEMl2Q/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -502,8 +502,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -518,8 +518,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -534,8 +534,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/26/b5/74/cd80b9f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -550,8 +550,8 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/30/3c/0668d6ae.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -566,5 +566,4 @@ http.Handle("/static/", http.StripPrefix("/static", fs))
   </div>
 </div>
 </div>
-</li>
-</ul>
+

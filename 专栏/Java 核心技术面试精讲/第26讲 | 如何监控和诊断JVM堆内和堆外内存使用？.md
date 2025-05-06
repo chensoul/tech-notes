@@ -12,18 +12,18 @@
 
 以JConsole为例，其内存页面可以显示常见的**堆内存**和**各种堆外部分**使用状态。
 
-<li>
+
 也可以使用命令行工具进行运行时查询，如jstat和jmap等工具都提供了一些选项，可以查看堆、方法区等使用数据。
-</li>
-<li>
+
+
 或者，也可以使用jmap等提供的命令，生成堆转储（Heap Dump）文件，然后利用jhat或Eclipse MAT等堆转储分析工具进行详细分析。
-</li>
-<li>
+
+
 如果你使用的是Tomcat、Weblogic等Java EE服务器，这些服务器同样提供了内存管理相关的功能。
-</li>
-<li>
+
+
 另外，从某种程度上来说，GC日志等输出，同样包含着丰富的信息。
-</li>
+
 
 这里有一个相对特殊的部分，就是是堆外内存中的直接内存，前面的工具基本不适用，可以使用JDK自带的Native Memory Tracking（NMT）特性，它会从JVM本地内存分配的角度进行解读。
 
@@ -35,12 +35,12 @@
 
 关于内存监控与诊断，我会在知识扩展部分结合JVM参数和特性，尽量从庞杂的概念和JVM参数选项中，梳理出相对清晰的框架：
 
-<li>
+
 细化对各部分内存区域的理解，堆内结构是怎样的？如何通过参数调整？
-</li>
-<li>
+
+
 堆外内存到底包括哪些部分？具体大小受哪些因素影响？
-</li>
+
 
 ## 知识扩展
 
@@ -57,13 +57,13 @@
 
 新生代是大部分对象创建和销毁的区域，在通常的Java应用中，绝大部分对象生命周期都是很短暂的。其内部又分为Eden区域，作为对象初始分配的区域；两个Survivor，有时候也叫from、to区域，被用来放置从Minor GC中保留下来的对象。
 
-<li>
+
 JVM会随意选取一个Survivor区域作为“to”，然后会在GC过程中进行区域间拷贝，也就是将Eden中存活下来的对象和from区域的对象，拷贝到这个“to”区域。这种设计主要是为了防止内存的碎片化，并进一步清理无用对象。
-</li>
-<li>
+
+
 <p>从内存模型而不是垃圾收集的角度，对Eden区域继续进行划分，Hotspot JVM还有一个概念叫做Thread Local Allocation Buffer（TLAB），据我所知所有OpenJDK衍生出来的JVM都提供了TLAB的设计。这是JVM为每个线程分配的一个私有缓存区域，否则，多线程同时分配内存时，为避免操作同一地址，可能需要使用加锁等机制，进而影响分配速度，你可以参考下面的示意图。从图中可以看出，TLAB仍然在堆上，它是分配在Eden区域内的。其内部结构比较直观易懂，start、end就是起始地址，top（指针）则表示已经分配到哪里了。所以我们分配新对象，JVM就会移动top，当top和end相遇时，即表示该缓存已满，JVM会试图再从Eden里分配一块儿。<br />
 <img src="https://static001.geekbang.org/resource/image/f5/bd/f546839e98ea5d43b595235849b0f2bd.png" alt="" /></p>
-</li>
+
 
 2.老年代
 
@@ -144,12 +144,12 @@ JVM会随意选取一个Survivor区域作为“to”，然后会在GC过程中�
 
 我来仔细分析一下，NMT所表征的JVM本地内存使用：
 
-<li>
+
 第一部分非常明显是Java堆，我已经分析过使用什么参数调整，不再赘述。
-</li>
-<li>
+
+
 第二部分是Class内存占用，它所统计的就是Java类元数据所占用的空间，JVM可以通过类似下面的参数调整其大小：
-</li>
+
 
 ```
 -XX:MaxMetaspaceSize=value
@@ -163,12 +163,12 @@ JVM会随意选取一个Survivor区域作为“to”，然后会在GC过程中�
 
 ```
 
-<li>下面是Thread，这里既包括Java线程，如程序主线程、Cleaner线程等，也包括GC等本地线程。你有没有注意到，即使是一个HelloWorld程序，这个线程数量竟然还有25。似乎有很多浪费，设想我们要用Java作为Serverless运行时，每个function是非常短暂的，如何降低线程数量呢？<br />
+下面是Thread，这里既包括Java线程，如程序主线程、Cleaner线程等，也包括GC等本地线程。你有没有注意到，即使是一个HelloWorld程序，这个线程数量竟然还有25。似乎有很多浪费，设想我们要用Java作为Serverless运行时，每个function是非常短暂的，如何降低线程数量呢？<br />
 如果你充分理解了专栏讲解的内容，对JVM内部有了充分理解，思路就很清晰了：<br />
 JDK 9的默认GC是G1，虽然它在较大堆场景表现良好，但本身就会比传统的Parallel GC或者Serial GC之类复杂太多，所以要么降低其并行线程数目，要么直接切换GC类型；<br />
 JIT编译默认是开启了TieredCompilation的，将其关闭，那么JIT也会变得简单，相应本地线程也会减少。<br />
 我们来对比一下，这是默认参数情况的输出：<br />
-<img src="https://static001.geekbang.org/resource/image/97/42/97d060b306e44af3a8443f932a0a4d42.png" alt="" /></li>
+<img src="https://static001.geekbang.org/resource/image/97/42/97d060b306e44af3a8443f932a0a4d42.png" alt="" />
 
 下面是替换了默认GC，并关闭TieredCompilation的命令行<br />
 <img src="https://static001.geekbang.org/resource/image/b0/3b/b07d6da56f588cbfadbb7b381346213b.png" alt="" />
@@ -207,12 +207,12 @@ JIT编译默认是开启了TieredCompilation的，将其关闭，那么JIT也会
 
 可见，不仅总线程数大大降低（25 → 13），而且GC设施本身的内存开销就少了非常多。据我所知，AWS Lambda中Java运行时就是使用的Serial GC，可以大大降低单个function的启动和运行开销。
 
-<li>
+
 Compiler部分，就是JIT的开销，显然关闭TieredCompilation会降低内存使用。
-</li>
-<li>
+
+
 其他一些部分占比都非常低，通常也不会出现内存使用问题，请参考[官方文档](https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/tooldescr022.html#BABCBGFA)。唯一的例外就是Internal（JDK 11以后在Other部分）部分，其统计信息**包含着Direct Buffer的直接内存**，这其实是堆外内存中比较敏感的部分，很多堆外内存OOM就发生在这里，请参考专栏第12讲的处理步骤。原则上Direct Buffer是不推荐频繁创建或销毁的，如果你怀疑直接内存区域有问题，通常可以通过类似instrument构造函数等手段，排查可能的问题。
-</li>
+
 
 JVM内部结构就介绍到这里，主要目的是为了加深理解，很多方面只有在定制或调优JVM运行时才能真正涉及，随着微服务和Serverless等技术的兴起，JDK确实存在着为新特征的工作负载进行定制的需求。
 

@@ -25,165 +25,165 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;为什么我们要学习&#32;Kubernetes&#32;技术.md">00 为什么我们要学习 Kubernetes 技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;重新认识&#32;Kubernetes&#32;的核心组件.md">01 重新认识 Kubernetes 的核心组件.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;深入理解&#32;Kubernets&#32;的编排对象.md">02 深入理解 Kubernets 的编排对象.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;DevOps&#32;场景下落地&#32;K8s&#32;的困难分析.md">03 DevOps 场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;微服务应用场景下落地&#32;K8s&#32;的困难分析.md">04 微服务应用场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;解决&#32;K8s&#32;落地难题的方法论提炼.md">05 解决 K8s 落地难题的方法论提炼.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;练习篇：K8s&#32;核心实践知识掌握.md">06 练习篇：K8s 核心实践知识掌握.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;容器引擎&#32;containerd&#32;落地实践.md">07 容器引擎 containerd 落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;K8s&#32;集群安装工具&#32;kubeadm&#32;的落地实践.md">08 K8s 集群安装工具 kubeadm 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;南北向流量组件&#32;IPVS&#32;的落地实践.md">09 南北向流量组件 IPVS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;东西向流量组件&#32;Calico&#32;的落地实践.md">10 东西向流量组件 Calico 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;服务发现&#32;DNS&#32;的落地实践.md">11 服务发现 DNS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;练习篇：K8s&#32;集群配置测验.md">12 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;理解对方暴露服务的对象&#32;Ingress&#32;和&#32;Service.md">13 理解对方暴露服务的对象 Ingress 和 Service.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="14&#32;应用网关&#32;OpenResty&#32;对接&#32;K8s&#32;实践.md">14 应用网关 OpenResty 对接 K8s 实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Service&#32;层引流技术实践.md">15 Service 层引流技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;Cilium&#32;容器网络的落地实践.md">16 Cilium 容器网络的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;应用流量的优雅无损切换实践.md">17 应用流量的优雅无损切换实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;练习篇：应用流量无损切换技术测验.md">18 练习篇：应用流量无损切换技术测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;使用&#32;Rook&#32;构建生产可用存储环境实践.md">19 使用 Rook 构建生产可用存储环境实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;有状态应用的默认特性落地分析.md">20 有状态应用的默认特性落地分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;案例：分布式&#32;MySQL&#32;集群工具&#32;Vitess&#32;实践分析.md">21 案例：分布式 MySQL 集群工具 Vitess 实践分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;存储对象&#32;PV、PVC、Storage&#32;Classes&#32;的管理落地实践.md">22 存储对象 PV、PVC、Storage Classes 的管理落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;K8s&#32;集群中存储对象灾备的落地实践.md">23 K8s 集群中存储对象灾备的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;练习篇：K8s&#32;集群配置测验.md">24 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -243,10 +243,10 @@
 <p>原生 Kubernetes Service 提供对外暴露服务的能力，通过唯一的 ClusterIP 接入 Pod 业务负载容器组对外提供服务名（附注：服务发现使用，采用内部 kube-dns 解析服务名称）并提供流量的软负载均衡。缺点是 Service 的 ClusterIP 地址只能在集群内部被访问，如果需要对集群外部用户提供此 Service 的访问能力，Kubernetes 需要通过另外两种方式来实现此类需求，一种是 <strong>NodePort</strong>，另一种是 <strong>LoadBalancer</strong>。</p>
 <p><img src="assets/ea127350-f337-11ea-a9e7-47fb41a2df40.jpg" alt="nodeport" /></p>
 <p>当容器应用采用 NodePort 方式来暴露 Service 并让外部用户访问时会有如下困扰：</p>
-<ul>
-<li>外部访问服务时需要带 NodePort</li>
-<li>每次部署服务后，NodePort 端口会改变</li>
-</ul>
+
+外部访问服务时需要带 NodePort
+每次部署服务后，NodePort 端口会改变
+
 <p><img src="assets/fb9c8070-f337-11ea-a837-2d1765fb9067.jpg" alt="loadbalancer" /></p>
 <p>当容器应用采用 LoadBalancer 方式时，主要应用场景还是对接云厂商提供负载均衡上，当然云厂商都提供对应的负载均衡插件方便 Kubernetes 一键集成。</p>
 <p>对于大部分场景下，我们仍然需要采用私有的入口应用网关来对外提供服务暴露。这个时候通过暴露七层 Web 端口把外部流量挡在外面访问。同时对于用户来讲屏蔽了 NodePort 的存在，频繁部署应用的时候用户是不需要关心 NodePort 端口占用的。</p>
@@ -262,21 +262,21 @@
 <p>通常情况下，Kubernetes 控制器利用同步循环模式来检查控制器中的所需状态是否被更新或需要更改。为此，我们需要使用集群中的不同对象建立一个模型，特别是 Ingresses、Services、Endpoints、Secrets 和 Configmaps 来生成一个反映集群状态的当前配置文件。</p>
 <p>为了从集群中获取这个对象，我们使用 Kubernetes Informers，尤其是 <strong>FilteredSharedInformer</strong>。这个 Informer 允许在添加、修改或删除新对象时，使用回调对单个变化做出反应。不幸的是，我们无法知道某个特定的变化是否会影响最终的配置文件。因此在每一次变更时，我们都要根据集群的状态从头开始重建一个新的模型，并与当前模型进行比较。如果新模型与当前模型相等，那么我们就避免生成一个新的 Nginx 配置并触发重载。否则，我们检查是否仅是关于 Endpoints 的差异。如果是这样，我们就使用 HTTP POST 请求将新的 Endpoints 列表发送到 Nginx 内部运行的 Lua 处理程序，并再次避免生成新的 Nginx 配置和触发重载。如果运行的模型和新模型之间的区别不仅仅是 Endpoints，我们会根据新模型创建一个新的 Nginx 配置，替换当前模型并触发重载。</p>
 <p>为了避免进程重载，我们仍然需要清楚如下情况会导致重载:</p>
-<ul>
-<li>创建新的入口资源</li>
-<li>在现有的 Ingress 中增加了 TLS 部分</li>
-<li>Ingress 注解的变化，影响的不仅仅是上游配置。例如，负载平衡注解不需要重新加载。</li>
-<li>从 Ingress 中添加/删除一个路径。</li>
-<li>对象 Ingress、Service、Secret 被删除的时候</li>
-<li>从 Ingress 中缺失的一些引用对象是可用的，比如 Service 或 Secret</li>
-<li>密钥配置更新</li>
-</ul>
+
+创建新的入口资源
+在现有的 Ingress 中增加了 TLS 部分
+Ingress 注解的变化，影响的不仅仅是上游配置。例如，负载平衡注解不需要重新加载。
+从 Ingress 中添加/删除一个路径。
+对象 Ingress、Service、Secret 被删除的时候
+从 Ingress 中缺失的一些引用对象是可用的，比如 Service 或 Secret
+密钥配置更新
+
 <p>另外，因为有 Lua 加持，我们还需要了解如何添加 lua 插件到 Nginx Ingress Controller 中。例如用例子来作为范例理解下如何添加并激活插件：</p>
 <p>参考 <a href="https://github.com/ElvinEfendi/ingress-nginx-openidc">https://github.com/ElvinEfendi/ingress-nginx-openidc</a>，加入 Openidc Lua 插件。</p>
-<ul>
-<li>添加 Lua 插件到 rootfs/etc/nginx/lua/plugins/openidc/main.lua</li>
-<li>构建自己的 Ingress 镜像：<code>docker build -t ingress-nginx-openidc rootfs/</code></li>
-</ul>
+
+添加 Lua 插件到 rootfs/etc/nginx/lua/plugins/openidc/main.lua
+构建自己的 Ingress 镜像：<code>docker build -t ingress-nginx-openidc rootfs/</code>
+
 <p>Dockerfile 范例：</p>
 <pre><code class="language-dockerfile">FROM quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.26.1
 
@@ -290,10 +290,10 @@ COPY etc/nginx/template/nginx.tmpl /etc/nginx/template
 COPY etc/nginx/lua/plugins/openidc /etc/nginx/lua/plugins/openidc
 
 </code></pre>
-<ul>
-<li>更新 Nginx 配置激活 Lua 插件 /etc/nginx/template/nginx.tmpl，加入 <code>plugins.init({ &quot;openidc&quot; })</code></li>
-<li>把自定义 Ingress 镜像部署到集群中，就可以提供相应的插件能力。</li>
-</ul>
+
+更新 Nginx 配置激活 Lua 插件 /etc/nginx/template/nginx.tmpl，加入 <code>plugins.init({ &quot;openidc&quot; })</code>
+把自定义 Ingress 镜像部署到集群中，就可以提供相应的插件能力。
+
 <h3>零宕机生产部署</h3>
 <p>官方 Nginx Ingress Controller 通过容器部署在机器上，当需要升级配置时 Ingress Pod 仍然需要重启更新，此时网络流量会出现秒断。在生产环境中，这种情况是不允许出现的。我们需要 Nginx Ingress Controller 需要一直保持运行并接入流量。</p>
 <p>当终止 Pod 进程时，Kubernetes 会发出 SIGTERM 信号给容器主进程，默认等待 30 秒之后会发送 SIGKILL 立即终止容器进程。Kubernetes 启动容器进程能自主支持 SIGTERM 信号并能优雅关闭，但是并不是每一个容器进程都能处理，比如 Nginx 就无法直接支持。</p>
@@ -361,12 +361,12 @@ kubectl delete namespace ingress-temp
 <h3>为 Kubernetes ingress-nginx Controller 创建自定义 Annotation</h3>
 <p>云原生的 Ingress Controller 和 Nginx 的配置方式不一样的地方就是大量使用 Annotation 标签来定义一些重用的配置选项。我们需要多了解它的实现原理并能灵活运用，这样对我们的业务运营会很帮助。</p>
 <p>添加一个自定义 Annotation 的过程如下：</p>
-<ul>
-<li>git clone 官方 Ingress repo，在 internal/ingress/annotations 目录下创建自定义 annotation 目录。并添加 main.go，写入 Annotation 业务逻辑。</li>
-<li>在 internal/ingress/annotations/annotations.go 文件中加入此新增注解变量。</li>
-<li>在 types.go 声明注解的结构体对象，之后在 controller.go 中，你必须确保服务对象被注解中的值所填充。这个文件包含了处理一个 ingress 对象的逻辑，并将其转换为一个可以加载到 nginx 配置中的对象。</li>
-<li>nginx.tmpl 中加入注解结构体的展开变量，以方便生成最终的 nginx 配置模板。</li>
-</ul>
+
+git clone 官方 Ingress repo，在 internal/ingress/annotations 目录下创建自定义 annotation 目录。并添加 main.go，写入 Annotation 业务逻辑。
+在 internal/ingress/annotations/annotations.go 文件中加入此新增注解变量。
+在 types.go 声明注解的结构体对象，之后在 controller.go 中，你必须确保服务对象被注解中的值所填充。这个文件包含了处理一个 ingress 对象的逻辑，并将其转换为一个可以加载到 nginx 配置中的对象。
+nginx.tmpl 中加入注解结构体的展开变量，以方便生成最终的 nginx 配置模板。
+
 <p>完整的例子可以参考这里：</p>
 <blockquote>
 <p><a href="https://github.com/diazjf/ingress/commit/2e6ac94dd79e80e1b2d788115647f44a526afcfd">https://github.com/diazjf/ingress/commit/2e6ac94dd79e80e1b2d788115647f44a526afcfd</a></p>
@@ -374,10 +374,10 @@ kubectl delete namespace ingress-temp
 <h3>经验总结</h3>
 <p>Ingress 对象是 Kubernetes 引入流量的标准对象，在企业内部需要注意，尽量采用 Ingress 对象隔离流量分组。因为 Ingress 天然和 APIServer 集成监测，可以动态对外暴露服务能力。我们已经没有必要在做二次开发，定制开发自己的网关接入方案。直接采用 Ingress 网关都可以满足需求，不能满足需求的地方，OpenResty 提供的 Lua 插件机制可以很好地补充。除了官方提供的 Nginx ingress controller，其实国内也有开源厂商提供了内置更多插件的 OpenResty 网关，Apache APISIX Ingress（<a href="https://github.com/api7/ingress-controller">https://github.com/api7/ingress-controller</a>），通过上面的介绍，你可以快速应用起来。</p>
 <p>参考资料：</p>
-<ul>
-<li><a href="https://medium.com/better-programming/creating-a-custom-annotation-for-the-kubernetes-ingress-nginx-controller-444e9d486192">https://medium.com/better-programming/creating-a-custom-annotation-for-the-kubernetes-ingress-nginx-controller-444e9d486192</a></li>
-<li><a href="https://medium.com/codecademy-engineering/kubernetes-nginx-and-zero-downtime-in-production-2c910c6a5ed8">https://medium.com/codecademy-engineering/kubernetes-nginx-and-zero-downtime-in-production-2c910c6a5ed8</a></li>
-</ul>
+
+<a href="https://medium.com/better-programming/creating-a-custom-annotation-for-the-kubernetes-ingress-nginx-controller-444e9d486192">https://medium.com/better-programming/creating-a-custom-annotation-for-the-kubernetes-ingress-nginx-controller-444e9d486192</a>
+<a href="https://medium.com/codecademy-engineering/kubernetes-nginx-and-zero-downtime-in-production-2c910c6a5ed8">https://medium.com/codecademy-engineering/kubernetes-nginx-and-zero-downtime-in-production-2c910c6a5ed8</a>
+
 </div>
                     </div>
                     <div>

@@ -10,30 +10,30 @@
 
 关于问题中它们的区别：
 
-<li>
+
 Concurrent类型基于lock-free，在常见的多线程访问场景，一般可以提供较高吞吐量。
-</li>
-<li>
+
+
 而LinkedBlockingQueue内部则是基于锁，并提供了BlockingQueue的等待性方法。
-</li>
+
 
 不知道你有没有注意到，java.util.concurrent包提供的容器（Queue、List、Set）、Map，从命名上可以大概区分为Concurrent*、CopyOnWrite**和Blocking**等三类，同样是线程安全容器，可以简单认为：
 
-<li>
+
 Concurrent类型没有类似CopyOnWrite之类容器相对较重的修改开销。
-</li>
-<li>
+
+
 但是，凡事都是有代价的，Concurrent往往提供了较低的遍历一致性。你可以这样理解所谓的弱一致性，例如，当利用迭代器遍历时，如果容器发生修改，迭代器仍然可以继续进行遍历。
-</li>
-<li>
+
+
 与弱一致性对应的，就是我介绍过的同步容器常见的行为“fail-fast”，也就是检测到容器在遍历过程中发生了修改，则抛出ConcurrentModificationException，不再继续遍历。
-</li>
-<li>
+
+
 弱一致性的另外一个体现是，size等操作准确性是有限的，未必是100%准确。
-</li>
-<li>
+
+
 与此同时，读取的性能具有一定的不确定性。
-</li>
+
 
 ## 考点分析
 
@@ -41,15 +41,15 @@ Concurrent类型没有类似CopyOnWrite之类容器相对较重的修改开销�
 
 队列是非常重要的数据结构，我们日常开发中很多线程间数据传递都要依赖于它，Executor框架提供的各种线程池，同样无法离开队列。面试官可以从不同角度考察，比如：
 
-<li>
+
 哪些队列是有界的，哪些是无界的？（很多同学反馈了这个问题）
-</li>
-<li>
+
+
 针对特定场景需求，如何选择合适的队列实现？
-</li>
-<li>
+
+
 从源码的角度，常见的线程安全队列是如何实现的，并进行了哪些改进以提高性能表现？
-</li>
+
 
 为了能更好地理解这一讲，需要你掌握一些基本的队列本身和数据结构方面知识，如果这方面知识比较薄弱，《数据结构与算法分析》是一本比较全面的参考书，专栏还是尽量专注于Java领域的特性。
 
@@ -63,12 +63,12 @@ Concurrent类型没有类似CopyOnWrite之类容器相对较重的修改开销�
 
 我们可以从不同的角度进行分类，从基本的数据结构的角度分析，有两个特别的[Deque](https://docs.oracle.com/javase/9/docs/api/java/util/Deque.html)实现，ConcurrentLinkedDeque和LinkedBlockingDeque。Deque的侧重点是支持对队列头尾都进行插入和删除，所以提供了特定的方法，如:
 
-<li>
+
 尾部插入时需要的[addLast(e)](https://docs.oracle.com/javase/9/docs/api/java/util/Deque.html#addLast-E-)、[offerLast(e)](https://docs.oracle.com/javase/9/docs/api/java/util/Deque.html#offerLast-E-)。
-</li>
-<li>
+
+
 尾部删除所需要的[removeLast()](https://docs.oracle.com/javase/9/docs/api/java/util/Deque.html#removeLast--)、[pollLast()](https://docs.oracle.com/javase/9/docs/api/java/util/Deque.html#pollLast--)。
-</li>
+
 
 从上面这些角度，能够理解ConcurrentLinkedDeque和LinkedBlockingQueue的主要功能区别，也就足够日常开发的需要了。但是如果我们深入一些，通常会更加关注下面这些方面。
 
@@ -98,18 +98,18 @@ public ArrayBlockingQueue(int capacity, boolean fair)
 
 ```
 
-<li>
+
 LinkedBlockingQueue，容易被误解为无边界，但其实其行为和内部代码都是基于有界的逻辑实现的，只不过如果我们没有在创建队列时就指定容量，那么其容量限制就自动被设置为Integer.MAX_VALUE，成为了无界队列。
-</li>
-<li>
+
+
 SynchronousQueue，这是一个非常奇葩的队列实现，每个删除操作都要等待插入操作，反之每个插入操作也都要等待删除动作。那么这个队列的容量是多少呢？是1吗？其实不是的，其内部容量是0。
-</li>
-<li>
+
+
 PriorityBlockingQueue是无边界的优先队列，虽然严格意义上来讲，其大小总归是要受系统资源影响。
-</li>
-<li>
+
+
 DelayedQueue和LinkedTransferQueue同样是无边界的队列。对于无边界的队列，有一个自然的结果，就是put操作永远也不会发生其他BlockingQueue的那种等待情况。
-</li>
+
 
 如果我们分析不同队列的底层实现，BlockingQueue基本都是基于锁实现，一起来看看典型的LinkedBlockingQueue。
 
@@ -239,24 +239,24 @@ public class ConsumerProducer {
 
 以LinkedBlockingQueue、ArrayBlockingQueue和SynchronousQueue为例，我们一起来分析一下，根据需求可以从很多方面考量：
 
-<li>
+
 考虑应用场景中对队列边界的要求。ArrayBlockingQueue是有明确的容量限制的，而LinkedBlockingQueue则取决于我们是否在创建时指定，SynchronousQueue则干脆不能缓存任何元素。
-</li>
-<li>
+
+
 从空间利用角度，数组结构的ArrayBlockingQueue要比LinkedBlockingQueue紧凑，因为其不需要创建所谓节点，但是其初始分配阶段就需要一段连续的空间，所以初始内存需求更大。
-</li>
-<li>
+
+
 通用场景中，LinkedBlockingQueue的吞吐量一般优于ArrayBlockingQueue，因为它实现了更加细粒度的锁操作。
-</li>
-<li>
+
+
 ArrayBlockingQueue实现比较简单，性能更好预测，属于表现稳定的“选手”。
-</li>
-<li>
+
+
 如果我们需要实现的是两个线程之间接力性（handoff）的场景，按照[专栏上一讲](http://time.geekbang.org/column/article/9373)的例子，你可能会选择CountDownLatch，但是[SynchronousQueue](http://www.baeldung.com/java-synchronous-queue)也是完美符合这种场景的，而且线程间协调和数据传输统一起来，代码更加规范。
-</li>
-<li>
+
+
 可能令人意外的是，很多时候SynchronousQueue的性能表现，往往大大超过其他实现，尤其是在队列元素较小的场景。
-</li>
+
 
 今天我分析了Java中让人眼花缭乱的各种线程安全队列，试图从几个角度，让每个队列的特点更加明确，进而希望减少你在日常工作中使用时的困扰。
 

@@ -196,18 +196,18 @@ Consul的数据模型及存储是怎样的呢？
 
 最后我们再从其他方面做些比较。
 
-<li>
+
 线性读。etcd和Consul都支持线性读，而ZooKeeper并不具备。
-</li>
-<li>
+
+
 权限机制比较。etcd实现了RBAC的权限校验，而ZooKeeper和Consul实现的ACL。
-</li>
-<li>
+
+
 事务比较。etcd和Consul都提供了简易的事务能力，支持对字段进行比较，而ZooKeeper只提供了版本号检查能力，功能较弱。
-</li>
-<li>
+
+
 多数据中心。在多数据中心支持上，只有Consul是天然支持的，虽然它本身不支持数据自动跨数据中心同步，但是它提供的服务发现机制、[Prepared Query](https://www.consul.io/api-docs/query)功能，赋予了业务在一个可用区后端实例故障时，可将请求转发到最近的数据中心实例。而etcd和ZooKeeper并不支持。
-</li>
+
 
 ## 小结
 

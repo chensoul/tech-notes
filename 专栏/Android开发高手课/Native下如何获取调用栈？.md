@@ -34,24 +34,24 @@ backtrace:
 
 <img src="https://static001.geekbang.org/resource/image/09/2a/09cd560f823de783e22af03a5f837f2a.png" alt="">
 
-<li>
+
 首先假设我们处于函数main()并准备调用函数foo()，调用方会按倒序压入参数。此时第一个参数会在调用栈栈顶。
-</li>
-<li>
+
+
 调用invoke foo()伪指令，压入当前寄存器EIP的值到栈，然后载入函数foo()的地址到EIP。
-</li>
-<li>
+
+
 此时，由于我们已经更改了EIP的值（为foo()的地址），相当于我们已经进入了函数foo()。在执行一个函数之前，编译器都会给每个函数写一段序言（prologue），这里会压入旧的EBP值，并赋予当前EBP和ESP新的值，从而形成新的一个函数栈。
-</li>
-<li>
+
+
 下一步就行执行函数foo()本身的代码了。
-</li>
-<li>
+
+
 结束执行函数foo() 并准备返回，这里编译器也会给每个函数插入一段尾声（epilogue）用于恢复调用方的ESP和EBP来重建之前函数的栈和恢复寄存器。
-</li>
-<li>
+
+
 执行返回指令（ret），被调用函数的尾声（epilogue）已经恢复了EBP和ESP，然后我们可以从被恢复的栈中依次pop出EIP、所有的参数以及被暂存的寄存器的值。
-</li>
+
 
 读到这里，相信如果没有学过汇编原理的同学肯定会有一些懵，我来解释一下上面提到的寄存器缩写的具体含义，上述命名均使用了x86的命名方式。讲这些是希望你对函数调用有一个初步的理解，其中有很多细节在不同体系结构、不同编译器上的行为都有所区别，所以请你放松心情，跟我一起继续向后看。
 
@@ -93,12 +93,12 @@ void debugger::print_backtrace() {
 
 但是在ARM体系结构中，出于性能的考虑，天才的开发者为了节约R7/R11寄存器，使其可以作为通用寄存器来使用，因此无法保证保存足够的信息来形成上述调用栈的（即使你向编译器传入了“-fno-omit-frame-pointer”）。比如下面两种情况，ARM就会不遵循一般意义上的序言（prologue），感兴趣的同学可以具体查看[APCS Doc](https://www.cl.cam.ac.uk/~fms27/teaching/2001-02/arm-project/02-sort/apcs.txt#1018)。
 
-<li>
+
 函数为叶函数，即在函数体内再没有任何函数调用。
-</li>
-<li>
+
+
 函数体非常小。
-</li>
+
 
 ## Android中的unwind
 
@@ -138,17 +138,17 @@ DWARF 是一种标准调试信息格式。DWARF最早与ELF文件格式一起设
 
 下面给你一些外部链接，你可以阅读GCC中实现unwind的关键函数，有兴趣的同学可以在调试器中实现自己的unwinder。
 
-<li>
+
 [_Unwind_Backtrace](https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind.inc;h=12f62bca7335f3738fb723f00b1175493ef46345;hb=HEAD#l275)
-</li>
-<li>
+
+
 [uw_frame_state_for](https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind-dw2.c;h=b262fd9f5b92e2d0ea4f0e65152927de0290fcbd;hb=HEAD#l1222)
-</li>
-<li>
+
+
 [uw_update_context](https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind-dw2.c;h=b262fd9f5b92e2d0ea4f0e65152927de0290fcbd;hb=HEAD#l1494)
-</li>
-<li>
+
+
 [uw_update_context_1](https://gcc.gnu.org/git/gitweb.cgi?p=gcc.git;a=blob;f=libgcc/unwind-dw2.c;h=b262fd9f5b92e2d0ea4f0e65152927de0290fcbd;hb=HEAD#l1376)
-</li>
+
 
 

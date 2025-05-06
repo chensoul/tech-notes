@@ -25,165 +25,165 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;为什么我们要学习&#32;Kubernetes&#32;技术.md">00 为什么我们要学习 Kubernetes 技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;重新认识&#32;Kubernetes&#32;的核心组件.md">01 重新认识 Kubernetes 的核心组件.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;深入理解&#32;Kubernets&#32;的编排对象.md">02 深入理解 Kubernets 的编排对象.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;DevOps&#32;场景下落地&#32;K8s&#32;的困难分析.md">03 DevOps 场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;微服务应用场景下落地&#32;K8s&#32;的困难分析.md">04 微服务应用场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;解决&#32;K8s&#32;落地难题的方法论提炼.md">05 解决 K8s 落地难题的方法论提炼.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;练习篇：K8s&#32;核心实践知识掌握.md">06 练习篇：K8s 核心实践知识掌握.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;容器引擎&#32;containerd&#32;落地实践.md">07 容器引擎 containerd 落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;K8s&#32;集群安装工具&#32;kubeadm&#32;的落地实践.md">08 K8s 集群安装工具 kubeadm 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;南北向流量组件&#32;IPVS&#32;的落地实践.md">09 南北向流量组件 IPVS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="10&#32;东西向流量组件&#32;Calico&#32;的落地实践.md">10 东西向流量组件 Calico 的落地实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;服务发现&#32;DNS&#32;的落地实践.md">11 服务发现 DNS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;练习篇：K8s&#32;集群配置测验.md">12 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;理解对方暴露服务的对象&#32;Ingress&#32;和&#32;Service.md">13 理解对方暴露服务的对象 Ingress 和 Service.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;应用网关&#32;OpenResty&#32;对接&#32;K8s&#32;实践.md">14 应用网关 OpenResty 对接 K8s 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Service&#32;层引流技术实践.md">15 Service 层引流技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;Cilium&#32;容器网络的落地实践.md">16 Cilium 容器网络的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;应用流量的优雅无损切换实践.md">17 应用流量的优雅无损切换实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;练习篇：应用流量无损切换技术测验.md">18 练习篇：应用流量无损切换技术测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;使用&#32;Rook&#32;构建生产可用存储环境实践.md">19 使用 Rook 构建生产可用存储环境实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;有状态应用的默认特性落地分析.md">20 有状态应用的默认特性落地分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;案例：分布式&#32;MySQL&#32;集群工具&#32;Vitess&#32;实践分析.md">21 案例：分布式 MySQL 集群工具 Vitess 实践分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;存储对象&#32;PV、PVC、Storage&#32;Classes&#32;的管理落地实践.md">22 存储对象 PV、PVC、Storage Classes 的管理落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;K8s&#32;集群中存储对象灾备的落地实践.md">23 K8s 集群中存储对象灾备的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;练习篇：K8s&#32;集群配置测验.md">24 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -242,9 +242,9 @@
 <h3>容器网络路由的原理</h3>
 <p>众所周知容器原生网络模型基于单机的 veth 虚拟网桥实现，无法跨主机互联互通。如果想让容器跨主机互联互通，需要支持以下 3 点：</p>
 <ol>
-<li>网络控制面需要保证容器 IP 的唯一性</li>
-<li>两个容器需要放在一个数据平面</li>
-<li>需要工具来自动解决容器网络地址转换</li>
+网络控制面需要保证容器 IP 的唯一性
+两个容器需要放在一个数据平面
+需要工具来自动解决容器网络地址转换
 </ol>
 <p>这里我们通过一个原生网络路由的例子来帮助大家理解容器网络互联互通的基本原理：</p>
 <p><img src="assets/7dc3f9e0-dc3e-11ea-a66a-d5ea9de370fe.jpg" alt="9-1-hosts-container-network" /></p>
@@ -448,10 +448,10 @@ Accepted connection from 172.26.5.10, port 53246
 <h3>总结</h3>
 <p>Calico 作为业内常用的方案，它的好处就是灵活配置。因为它有 BGP 协议支持，可以跨数据中心的互联互通。从实践角度来看，它具备复杂场景下灵活配置的特点，所以也在业界主流比较推荐。当然这里我们的目的并不是推荐 Calico，我们仍然需要依据你当前集群的具体需要来规划，让容器网络能更方便的使用。</p>
 <p>参考文章：</p>
-<ul>
-<li><a href="https://docs.docker.com/network/bridge/">https://docs.docker.com/network/bridge/</a></li>
-<li><a href="https://www.tecmint.com/test-network-throughput-in-linux/">https://www.tecmint.com/test-network-throughput-in-linux/</a></li>
-</ul>
+
+<a href="https://docs.docker.com/network/bridge/">https://docs.docker.com/network/bridge/</a>
+<a href="https://www.tecmint.com/test-network-throughput-in-linux/">https://www.tecmint.com/test-network-throughput-in-linux/</a>
+
 </div>
                     </div>
                     <div>

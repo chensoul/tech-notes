@@ -237,10 +237,10 @@ goroutine-5: current counter value is 6
 goroutine-1: current counter value is 2
 goroutine-7: current counter value is 8
 goroutine-3: current counter value is 4
-</code></pre><h2>带缓冲channel的惯用法</h2><p>带缓冲的channel与无缓冲的channel的最大不同之处，就在于它的<strong>异步性</strong>。也就是说，对一个带缓冲channel，在缓冲区未满的情况下，对它进行发送操作的Goroutine不会阻塞挂起；在缓冲区有数据的情况下，对它进行接收操作的Goroutine也不会阻塞挂起。</p><p>这种特性让带缓冲的channel有着与无缓冲channel不同的应用场合。接下来我们一个个来分析。</p><h3>第一种用法：用作消息队列</h3><p>channel经常被Go初学者视为在多个Goroutine之间通信的消息队列，这是因为，channel的原生特性与我们认知中的消息队列十分相似，包括Goroutine安全、有FIFO（first-in, first out）保证等。</p><p>其实，和无缓冲channel更多用于信号/事件管道相比，可自行设置容量、异步收发的带缓冲channel更适合被用作为消息队列，并且，带缓冲channel在数据收发的性能上要明显好于无缓冲channel。</p><p>我们可以通过对channel读写的基本测试来印证这一点。下面是一些关于无缓冲channel和带缓冲channel收发性能测试的结果（Go 1.17, MacBook Pro 8核）。基准测试的代码比较多，我就不全部贴出来了，你可以到<a href="https://github.com/bigwhite/publication/tree/master/column/timegeek/go-first-course/33/go-channel-operation-benchmark">这里</a>下载。</p><ul>
-<li><strong>单接收单发送性能的基准测试</strong><br>
-我们先来看看针对一个channel只有一个发送Goroutine和一个接收Goroutine的情况，两种channel的收发性能比对数据：</li>
-</ul><pre><code class="language-plain">// 无缓冲channel
+</code></pre><h2>带缓冲channel的惯用法</h2><p>带缓冲的channel与无缓冲的channel的最大不同之处，就在于它的<strong>异步性</strong>。也就是说，对一个带缓冲channel，在缓冲区未满的情况下，对它进行发送操作的Goroutine不会阻塞挂起；在缓冲区有数据的情况下，对它进行接收操作的Goroutine也不会阻塞挂起。</p><p>这种特性让带缓冲的channel有着与无缓冲channel不同的应用场合。接下来我们一个个来分析。</p><h3>第一种用法：用作消息队列</h3><p>channel经常被Go初学者视为在多个Goroutine之间通信的消息队列，这是因为，channel的原生特性与我们认知中的消息队列十分相似，包括Goroutine安全、有FIFO（first-in, first out）保证等。</p><p>其实，和无缓冲channel更多用于信号/事件管道相比，可自行设置容量、异步收发的带缓冲channel更适合被用作为消息队列，并且，带缓冲channel在数据收发的性能上要明显好于无缓冲channel。</p><p>我们可以通过对channel读写的基本测试来印证这一点。下面是一些关于无缓冲channel和带缓冲channel收发性能测试的结果（Go 1.17, MacBook Pro 8核）。基准测试的代码比较多，我就不全部贴出来了，你可以到<a href="https://github.com/bigwhite/publication/tree/master/column/timegeek/go-first-course/33/go-channel-operation-benchmark">这里</a>下载。</p>
+<strong>单接收单发送性能的基准测试</strong><br>
+我们先来看看针对一个channel只有一个发送Goroutine和一个接收Goroutine的情况，两种channel的收发性能比对数据：
+<pre><code class="language-plain">// 无缓冲channel
 // go-channel-operation-benchmark/unbuffered-chan
 
 $go test -bench . one_to_one_test.go
@@ -271,10 +271,10 @@ BenchmarkBufferedChan1To1SendCap100-8   	23089318	        53.06 ns/op
 BenchmarkBufferedChan1To1RecvCap100-8   	23474095	        51.33 ns/op
 PASS
 ok  	command-line-arguments	2.542s
-</code></pre><ul>
-<li><strong>多接收多发送性能基准测试</strong><br>
-我们再来看看，针对一个channel有多个发送Goroutine和多个接收Goroutine的情况，两种channel的收发性能比对数据（这里建立10个发送Goroutine和10个接收Goroutine）：</li>
-</ul><pre><code class="language-plain">// 无缓冲channel
+</code></pre>
+<strong>多接收多发送性能基准测试</strong><br>
+我们再来看看，针对一个channel有多个发送Goroutine和多个接收Goroutine的情况，两种channel的收发性能比对数据（这里建立10个发送Goroutine和10个接收Goroutine）：
+<pre><code class="language-plain">// 无缓冲channel
 // go-channel-operation-benchmark/unbuffered-chan
 
 $go test -bench .  multi_to_multi_test.go 
@@ -305,11 +305,11 @@ BenchmarkBufferedChanNToNSendCap100-8   	 1236453	       966.4 ns/op
 BenchmarkBufferedChanNToNRecvCap100-8   	 1279766	       969.4 ns/op
 PASS
 ok  	command-line-arguments	4.309s
-</code></pre><p>综合前面这些结果数据，我们可以得出几个初步结论：</p><ul>
-<li>无论是1收1发还是多收多发，带缓冲channel的收发性能都要好于无缓冲channel；</li>
-<li>对于带缓冲channel而言，发送与接收的Goroutine数量越多，收发性能会有所下降；</li>
-<li>对于带缓冲channel而言，选择适当容量会在一定程度上提升收发性能。</li>
-</ul><p>不过你要注意的是，Go支持channel的初衷是将它作为Goroutine间的通信手段，它并不是专门用于消息队列场景的。如果你的项目需要专业消息队列的功能特性，比如支持优先级、支持权重、支持离线持久化等，那么channel就不合适了，可以使用第三方的专业的消息队列实现。</p><h3>第二种用法：用作计数信号量（counting semaphore）</h3><p>Go并发设计的一个惯用法，就是将带缓冲channel用作计数信号量（counting semaphore）。带缓冲channel中的当前数据个数代表的是，当前同时处于活动状态（处理业务）的Goroutine的数量，而带缓冲channel的容量（capacity），就代表了允许同时处于活动状态的Goroutine的最大数量。向带缓冲channel的一个发送操作表示获取一个信号量，而从channel的一个接收操作则表示释放一个信号量。</p><p>这里我们来看一个将带缓冲channel用作计数信号量的例子：</p><pre><code class="language-plain">var active = make(chan struct{}, 3)
+</code></pre><p>综合前面这些结果数据，我们可以得出几个初步结论：</p>
+无论是1收1发还是多收多发，带缓冲channel的收发性能都要好于无缓冲channel；
+对于带缓冲channel而言，发送与接收的Goroutine数量越多，收发性能会有所下降；
+对于带缓冲channel而言，选择适当容量会在一定程度上提升收发性能。
+<p>不过你要注意的是，Go支持channel的初衷是将它作为Goroutine间的通信手段，它并不是专门用于消息队列场景的。如果你的项目需要专业消息队列的功能特性，比如支持优先级、支持权重、支持离线持久化等，那么channel就不合适了，可以使用第三方的专业的消息队列实现。</p><h3>第二种用法：用作计数信号量（counting semaphore）</h3><p>Go并发设计的一个惯用法，就是将带缓冲channel用作计数信号量（counting semaphore）。带缓冲channel中的当前数据个数代表的是，当前同时处于活动状态（处理业务）的Goroutine的数量，而带缓冲channel的容量（capacity），就代表了允许同时处于活动状态的Goroutine的最大数量。向带缓冲channel的一个发送操作表示获取一个信号量，而从channel的一个接收操作则表示释放一个信号量。</p><p>这里我们来看一个将带缓冲channel用作计数信号量的例子：</p><pre><code class="language-plain">var active = make(chan struct{}, 3)
 var jobs = make(chan int, 10)
 
 func main() {
@@ -342,10 +342,10 @@ func main() {
 2022/01/02 10:08:57 handle job: 6
 2022/01/02 10:08:59 handle job: 3
 2022/01/02 10:08:59 handle job: 2
-</code></pre><p>从示例运行结果中的时间戳中，我们可以看到，虽然我们创建了很多Goroutine，但由于计数信号量的存在，同一时间内处于活动状态（正在处理job）的Goroutine的数量最多为3个。</p><h3>len(channel)的应用</h3><p><strong>len</strong>是Go语言的一个内置函数，它支持接收数组、切片、map、字符串和channel类型的参数，并返回对应类型的“长度”，也就是一个整型值。</p><p>针对channel ch的类型不同，len(ch)有如下两种语义：</p><ul>
-<li>当ch为无缓冲channel时，len(ch)总是返回0；</li>
-<li>当ch为带缓冲channel时，len(ch)返回当前channel ch中尚未被读取的元素个数。</li>
-</ul><p>这样一来，针对带缓冲channel的len调用似乎才是有意义的。那我们是否可以使用len函数来实现带缓冲channel的“判满”、“判有”和“判空”逻辑呢？就像下面示例中伪代码这样：</p><pre><code class="language-plain">var ch chan T = make(chan T, capacity)
+</code></pre><p>从示例运行结果中的时间戳中，我们可以看到，虽然我们创建了很多Goroutine，但由于计数信号量的存在，同一时间内处于活动状态（正在处理job）的Goroutine的数量最多为3个。</p><h3>len(channel)的应用</h3><p><strong>len</strong>是Go语言的一个内置函数，它支持接收数组、切片、map、字符串和channel类型的参数，并返回对应类型的“长度”，也就是一个整型值。</p><p>针对channel ch的类型不同，len(ch)有如下两种语义：</p>
+当ch为无缓冲channel时，len(ch)总是返回0；
+当ch为带缓冲channel时，len(ch)返回当前channel ch中尚未被读取的元素个数。
+<p>这样一来，针对带缓冲channel的len调用似乎才是有意义的。那我们是否可以使用len函数来实现带缓冲channel的“判满”、“判有”和“判空”逻辑呢？就像下面示例中伪代码这样：</p><pre><code class="language-plain">var ch chan T = make(chan T, capacity)
 
 // 判空
 if len(ch) == 0 {
@@ -495,12 +495,12 @@ func main() {
 ... ... //循环输出0
 7
 program end
-</code></pre><p>我们原本期望上面这个在依次输出5和7两个数字后退出，但实际运行的输出结果却是在输出5之后，程序输出了许多的0值，之后才输出7并退出。</p><p>这是怎么回事呢？我们简单分析一下这段代码的运行过程：</p><ul>
-<li>前5s，select一直处于阻塞状态；</li>
-<li>第5s，ch1返回一个5后被close，select语句的<code>case x := &lt;-ch1</code>这个分支被选出执行，程序输出5，并回到for循环并重新select；</li>
-<li>由于ch1被关闭，从一个已关闭的channel接收数据将永远不会被阻塞，于是新一轮select又把<code>case x := &lt;-ch1</code>这个分支选出并执行。由于ch1处于关闭状态，从这个channel获取数据，我们会得到这个channel对应类型的零值，这里就是0。于是程序再次输出0；程序按这个逻辑循环执行，一直输出0值；</li>
-<li>2s后，ch2被写入了一个数值7。这样在某一轮select的过程中，分支<code>case x := &lt;-ch2</code>被选中得以执行，程序输出7之后满足退出条件，于是程序终止。</li>
-</ul><p>那我们可以怎么改进一下这个程序，让它能按照我们的预期输出呢？</p><p>是时候让nil channel登场了！用nil channel改进后的示例代码是这样的：</p><pre><code class="language-plain">func main() {
+</code></pre><p>我们原本期望上面这个在依次输出5和7两个数字后退出，但实际运行的输出结果却是在输出5之后，程序输出了许多的0值，之后才输出7并退出。</p><p>这是怎么回事呢？我们简单分析一下这段代码的运行过程：</p>
+前5s，select一直处于阻塞状态；
+第5s，ch1返回一个5后被close，select语句的<code>case x := &lt;-ch1</code>这个分支被选出执行，程序输出5，并回到for循环并重新select；
+由于ch1被关闭，从一个已关闭的channel接收数据将永远不会被阻塞，于是新一轮select又把<code>case x := &lt;-ch1</code>这个分支选出并执行。由于ch1处于关闭状态，从这个channel获取数据，我们会得到这个channel对应类型的零值，这里就是0。于是程序再次输出0；程序按这个逻辑循环执行，一直输出0值；
+2s后，ch2被写入了一个数值7。这样在某一轮select的过程中，分支<code>case x := &lt;-ch2</code>被选中得以执行，程序输出7之后满足退出条件，于是程序终止。
+<p>那我们可以怎么改进一下这个程序，让它能按照我们的预期输出呢？</p><p>是时候让nil channel登场了！用nil channel改进后的示例代码是这样的：</p><pre><code class="language-plain">func main() {
     ch1, ch2 := make(chan int), make(chan int)
     go func() {
         time.Sleep(time.Second * 5)
@@ -694,7 +694,7 @@ func sendTime(c interface{}, seq uintptr) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/70/6d/11ea66f0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -709,8 +709,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/0a/a4/828a431f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -725,8 +725,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/32/40/d56f476c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -741,8 +741,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/44/b5/7eba5a0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -757,8 +757,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -773,8 +773,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/d4/d9/c3296187.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -789,8 +789,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/22/b1/54/6d663b95.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -805,8 +805,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/54/9a/76c0af70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -821,8 +821,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -837,8 +837,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -853,8 +853,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/43/c6/0ba36190.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -869,8 +869,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/f2/f5/b82f410d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -885,8 +885,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/3d/70/3d8aa6fc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -901,8 +901,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/16/48/01567df1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -917,8 +917,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/53/a8/abc96f70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -933,8 +933,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -949,8 +949,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKfxYdHJ3NNnOzBFu2N6oNPXhfMRibh3nMjneJLN6WCfVStQKLaJNVehUDmcpsj1mIfFegiauToaxbQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -965,8 +965,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/8c/f9/e1dab0ca.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -981,8 +981,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/45/b2/701f5ad7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -997,8 +997,8 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/8c/f9/e1dab0ca.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -1013,5 +1013,4 @@ func sendTime(c interface{}, seq uintptr) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

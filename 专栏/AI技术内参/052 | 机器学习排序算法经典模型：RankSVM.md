@@ -65,20 +65,20 @@
 
 **论文链接**
 
-<li>
+
 [Support vector learning for ordinal regression](hhttp://www.herbrich.me/papers/icann99_ordinal.pdf)
-</li>
-<li>
+
+
 [Support Vector Machine Learning for Interdependent and Structured Output Spaces](http://www.machinelearning.org/proceedings/icml2004/papers/76.pdf)
-</li>
-<li>
+
+
 [A Support Vector Method for Multivariate Performance Measures](https://www.cs.cornell.edu/people/tj/publications/joachims_05a.pdf)
-</li>
-<li>
+
+
 [Large Margin Methods for Structured and Interdependent Output Variables](http://www.jmlr.org/papers/volume6/tsochantaridis05a/tsochantaridis05a.pdf)
-</li>
-<li>
+
+
 [Training Linear SVMs in Linear Time](https://www.cs.cornell.edu/people/tj/publications/joachims_06a.pdf)
-</li>
+
 
 

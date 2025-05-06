@@ -375,7 +375,7 @@ loop:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/70/67/0c1359c2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -390,8 +390,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/1d/de/62bfa83f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -406,8 +406,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo5vic8QksE4b8ricXxKrEWJyOX9pwiadhk3kvHYoLXoKRTWvbFCxibFTbExNQWDG4nvNfpic9t1umibKww/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -422,8 +422,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/58/45/9ba77dc3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -438,8 +438,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/7b/bd/ccb37425.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -454,8 +454,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -470,8 +470,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5c/da/0a8bc27b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -486,8 +486,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0a/da/dcf8f2b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -502,8 +502,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/70/6d/11ea66f0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -518,8 +518,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/05/e4/3e676c4d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -534,8 +534,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5c/da/0a8bc27b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -550,8 +550,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/44/b5/7eba5a0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -566,8 +566,8 @@ loop:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -582,5 +582,4 @@ loop:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

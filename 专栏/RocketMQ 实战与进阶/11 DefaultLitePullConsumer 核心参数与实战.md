@@ -25,195 +25,195 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;搭建学习环境准备篇.md">01 搭建学习环境准备篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;RocketMQ&#32;核心概念扫盲篇.md">02 RocketMQ 核心概念扫盲篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;消息发送&#32;API&#32;详解与版本变迁说明.md">03 消息发送 API 详解与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;结合实际应用场景谈消息发送.md">04 结合实际应用场景谈消息发送.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;消息发送核心参数与工作原理详解.md">05 消息发送核心参数与工作原理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;消息发送常见错误与解决方案.md">06 消息发送常见错误与解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;事务消息使用及方案选型思考.md">07 事务消息使用及方案选型思考.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;消息消费&#32;API&#32;与版本变迁说明.md">08 消息消费 API 与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;DefaultMQPushConsumer&#32;核心参数与工作原理.md">09 DefaultMQPushConsumer 核心参数与工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;DefaultMQPushConsumer&#32;使用示例与注意事项.md">10 DefaultMQPushConsumer 使用示例与注意事项.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="11&#32;DefaultLitePullConsumer&#32;核心参数与实战.md">11 DefaultLitePullConsumer 核心参数与实战.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;结合实际场景再聊&#32;DefaultLitePullConsumer&#32;的使用.md">12 结合实际场景再聊 DefaultLitePullConsumer 的使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;结合实际场景顺序消费、消息过滤实战.md">13 结合实际场景顺序消费、消息过滤实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;消息消费积压问题排查实战.md">14 消息消费积压问题排查实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;RocketMQ&#32;常用命令实战.md">15 RocketMQ 常用命令实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;RocketMQ&#32;集群性能摸高.md">16 RocketMQ 集群性能摸高.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;RocketMQ&#32;集群性能调优.md">17 RocketMQ 集群性能调优.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;RocketMQ&#32;集群平滑运维.md">18 RocketMQ 集群平滑运维.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;RocketMQ&#32;集群监控（一）.md">19 RocketMQ 集群监控（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;RocketMQ&#32;集群监控（二）.md">20 RocketMQ 集群监控（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;RocketMQ&#32;集群告警.md">21 RocketMQ 集群告警.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;RocketMQ&#32;集群踩坑记.md">22 RocketMQ 集群踩坑记.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;消息轨迹、ACL&#32;与多副本搭建.md">23 消息轨迹、ACL 与多副本搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;RocketMQ-Console&#32;常用页面指标获取逻辑.md">24 RocketMQ-Console 常用页面指标获取逻辑.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;RocketMQ&#32;Nameserver&#32;背后的设计理念.md">25 RocketMQ Nameserver 背后的设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Java&#32;并发编程实战.md">26 Java 并发编程实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（一）.md">27 从 RocketMQ 学基于文件的编程模式（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（二）.md">28 从 RocketMQ 学基于文件的编程模式（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;从&#32;RocketMQ&#32;学&#32;Netty&#32;网络编程技巧.md">29 从 RocketMQ 学 Netty 网络编程技巧.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;RocketMQ&#32;学习方法之我见.md">30 RocketMQ 学习方法之我见.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -496,22 +496,22 @@
 <p>首先大家来看一下如下这个场景：</p>
 <p><img src="assets/20200817190929584.png" alt="5" /></p>
 <p>即 Broker 端没有新消息时，Broker 端采取何种措施呢？我想基本有如下两种策略进行选择：</p>
-<ul>
-<li>Broker 端没有新消息，立即返回，拉取结果中不包含任何消息。</li>
-<li>当前拉取请求在 Broker 端挂起，在 Broker 端挂起，并且轮询 Broker 端是否有新消息，即轮询机制。</li>
-</ul>
+
+Broker 端没有新消息，立即返回，拉取结果中不包含任何消息。
+当前拉取请求在 Broker 端挂起，在 Broker 端挂起，并且轮询 Broker 端是否有新消息，即轮询机制。
+
 <p>上面说的第二种方式，有一个“高大上”的名字——<strong>轮询</strong>，根据轮询的方式又可以分为<strong>长轮询、短轮询</strong>。</p>
-<ul>
-<li><strong>短轮询</strong>：第一次未拉取到消息后等待一个时间间隔后再试，默认为 1s，可以在 Broker 的配置文件中设置 shortPollingTimeMills 改变默认值，即轮询一次，<strong>注意：只轮询一次</strong>。</li>
-<li><strong>长轮询</strong>：可以由 PULL 客户端设置在 Broker 端挂起的超时时间，默认为 20s，然后在 Broker 端没有拉取到消息后默认每隔 5s 一次轮询，并且在 Broker 端获取到新消息后，会唤醒拉取线程，结束轮询，尝试一次消息拉取，然后返回一批消息到客户端，长轮询的时序图如下所示：</li>
-</ul>
+
+<strong>短轮询</strong>：第一次未拉取到消息后等待一个时间间隔后再试，默认为 1s，可以在 Broker 的配置文件中设置 shortPollingTimeMills 改变默认值，即轮询一次，<strong>注意：只轮询一次</strong>。
+<strong>长轮询</strong>：可以由 PULL 客户端设置在 Broker 端挂起的超时时间，默认为 20s，然后在 Broker 端没有拉取到消息后默认每隔 5s 一次轮询，并且在 Broker 端获取到新消息后，会唤醒拉取线程，结束轮询，尝试一次消息拉取，然后返回一批消息到客户端，长轮询的时序图如下所示：
+
 <p><img src="assets/20200817190938839.png" alt="6" /></p>
 <p>从这里可以看出，长轮询比短轮询，轮询等待的时间长，短轮询只轮询一次，并且默认等待时间为 1s，而长轮询默认一次阻塞 5s，但支持被唤醒。</p>
 <p>在 broker 端与长轮询相关的参数如下：</p>
-<ul>
-<li>longPollingEnable：是否开启长轮询，默认为 true。</li>
-<li>shortPollingTimeMills：短轮询等待的时间，默认为 1000，表示 1s。</li>
-</ul>
+
+longPollingEnable：是否开启长轮询，默认为 true。
+shortPollingTimeMills：短轮询等待的时间，默认为 1000，表示 1s。
+
 <h3>小结</h3>
 <p>本篇详细介绍了 RocketMQ 于 4.6.0 版本引入的新版 PULL 模式消息者实现类核心方法与核心属性，并给出简单的使用示例，然后重点总结了 Lite Pull 与 PUSH 模式的差异，并思考其使用场景，最后总结了一下消息拉取模式中一个非常重要的机制——长轮询机制，一次消息拉取尽可能拉取到消息做最大努力。</p>
 </div>

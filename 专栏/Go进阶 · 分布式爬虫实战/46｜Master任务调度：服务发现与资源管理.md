@@ -323,8 +323,8 @@ master2-192.168.0.107:9091
 /resources/xxx
 {"ID":"1602250527570137088","Name":"xxx","AssignedNode":"go.micro.server.worker-2|192.168.0.107:9089","CreationTime":1670841268805921000}
 </code></pre><h2>总结</h2><p>这节课。我们实现了Master的两个重要功能：服务发现与资源管理。</p><p>对于服务发现，我们借助了micro registry提供的接口，实现了节点的注册、发现和状态获取。micro的registry接口是一个插件，这意味着我们可以轻松使用不同插件与不同的注册中心交互。在这里我们使用的仍然是go-micro的etcd插件，借助etcd clientv3的API实现了服务发现与注册的相关功能。</p><p>而对于资源管理，这节课我们为资源加上了必要的ID信息，我们使用了分布式的雪花算法来保证生成ID全局唯一。同时，我们用随机的方式为资源分配了其所属的Worker节点并验证了分配的效果。在下一节课程中，我们还会继续实现负载均衡的资源分配。</p><h2>课后题</h2><p>学完这节课，给你留两道思考题。</p><ol>
-<li>我们什么时候需要全量拉取资源？什么时候需要使用事件监听机制？你认为监听机制是可靠的吗？</li>
-<li>我们前面提到的 Snowflake 雪花算法生成的分布式ID，在什么场景下是不适用的？</li>
+我们什么时候需要全量拉取资源？什么时候需要使用事件监听机制？你认为监听机制是可靠的吗？
+我们前面提到的 Snowflake 雪花算法生成的分布式ID，在什么场景下是不适用的？
 </ol><p>欢迎你在留言区与我交流讨论，我们下节课见。</p>
 <style>
     ul {
@@ -435,7 +435,7 @@ master2-192.168.0.107:9091
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/3a/de/ed40f1bb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -450,8 +450,8 @@ master2-192.168.0.107:9091
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -466,5 +466,4 @@ master2-192.168.0.107:9091
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -12,12 +12,12 @@
 
 通过上一期的学习，你应该已经掌握了一些UI测试和问题定位的工具。
 
-<li>
+
 测试工具：Profile GPU Rendering和Show GPU Overdraw，具体的使用方法你可以参考[《检查GPU渲染速度和绘制过度》](https://developer.android.com/studio/profile/inspect-gpu-rendering)。
-</li>
-<li>
+
+
 问题定位工具：Systrace和Tracer for OpenGL ES，具体使用方法可以参考[《Slow rendering》](https://developer.android.com/topic/performance/vitals/render)。
-</li>
+
 
 在Android Studio 3.1之后，Android推荐使用[Graphics API Debugger](https://github.com/google/gapid)（GAPID）来替代Tracer for OpenGL ES工具。GAPID可以说是升级版，它不仅可以跨平台，而且功能更加强大，支持Vulkan与回放。
 
@@ -155,15 +155,15 @@ java.lang.RuntimeException: Can't create handler inside thread that has not call
 
 渲染流程中measure和layout也是需要CPU在主线程执行的，对于这块内容网上有很多优化的文章，一般的常规方法有：
 
-<li>
+
 **减少UI布局层次**。例如尽量扁平化，使用`&lt;ViewStub&gt;` `&lt;Merge&gt;`等优化。
-</li>
-<li>
+
+
 **优化layout的开销**。尽量不使用RelativeLayout或者基于weighted LinearLayout，它们layout的开销非常巨大。这里我推荐使用ConstraintLayout替代RelativeLayout或者weighted LinearLayout。
-</li>
-<li>
+
+
 **背景优化**。尽量不要重复去设置背景，这里需要注意的是主题背景（theme)， theme默认会是一个纯色背景，如果我们自定义了界面的背景，那么主题的背景我们来说是无用的。但是由于主题背景是设置在DecorView中，所以这里会带来重复绘制，也会带来绘制性能损耗。
-</li>
+
 
 对于measure和layout，我们能不能像Create View一样实现线程的预布局呢？这样可以大大地提升首次显示的性能。
 
@@ -221,21 +221,21 @@ Litho虽然强大，但也有自己的缺点。它为了实现measure/layout异�
 
 由于本期我们主要讨论UI渲染相关的内容，我来着重分析一下Flutter的渲染步骤，相关的具体知识你可以阅读[《Flutter原理与实践》](https://tech.meituan.com/2018/08/09/waimai-flutter-practice.html)。
 
-<li>
+
 首先UI Runner会执行root isolate（可以简单理解为main函数。需要简单解释一下isolate的概念，isolate是Dart虚拟机中一种执行并发代码实现，Dart虚拟机实现了Actor的并发模型，与大名鼎鼎的Erlang使用了类似的并发模型。如果不太了解Actor的同学，可以简单认为isolate就是Dart虚拟机的“线程”，Root isolate会通知引擎有帧要渲染）。
-</li>
-<li>
+
+
 Flutter引擎得到通知后，会告知系统我们要同步VSYNC。
-</li>
-<li>
+
+
 得到GPU的VSYNC信号后，对UI Widgets进行Layout并生成一个Layer Tree。
-</li>
-<li>
+
+
 然后Layer Tree会交给GPU Runner进行合成和栅格化。
-</li>
-<li>
+
+
 GPU Runner使用Skia库绘制相关图形。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/d0/a9/d0ac4c878a5c61a7226ea09aac8f97a9.png" alt="">
 
@@ -255,15 +255,15 @@ Flutter也采用了类似Litho、React属性不可变，单向数据流的方案
 
 如何将它们应用到我们的项目中？你可以参考下面的一些实践方案：
 
-<li>
+
 [RenderScript渲染利器](https://www.jianshu.com/p/b72da42e1463)
-</li>
-<li>
+
+
 [RenderScript :简单而快速的图像处理](http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2016/0504/4205.html?utm_source=itdadao&amp;utm_medium=referral)
-</li>
-<li>
+
+
 [Android RenderScript 简单高效实现图片的高斯模糊效果](http://yifeng.studio/2016/10/20/android-renderscript-blur/)
-</li>
+
 
 ## 总结
 

@@ -70,12 +70,12 @@ web-02:
     username: jianfengye # 用户名
     rsa_key: "/Users/user/.ssh/id_rsa"
     known_hosts: "/Users/user/.ssh/known_hosts"
-</code></pre><p>这里注意下，SSH的连接方式有两种，一种是直接使用用户名密码来连接远程服务器，还有一种是使用rsa key文件来连接远端服务器，所以这里的配置需要同时支持两种配置。<strong>对于使用rsa key文件的方式，需要设置rsk_key的私钥地址和负责安全验证的known_hosts</strong>。</p><p>定义好了SSH的服务协议，服务提供者和服务实现并没有什么特别，就不展示具体代码了，在GitHub上的<a href="https://github.com/gohade/coredemo/blob/geekbang/28/framework/provider/ssh/provider.go">provider/ssh/provider.go</a> 和<a href="https://github.com/gohade/coredemo/blob/geekbang/28/framework/provider/ssh/service.go">provider/ssh/service.go</a>中。我们简单说一下思路。</p><p>对于服务提供者，我们实现基本的五个函数Register/Boot/IsDefer/Param/Name。另外这个ssh服务并不是框架启动时候必要加载的，所以设置IsDefer为true，而Param我们就照例把服务容器container作为参数，传递给Register设定的实例化方法。</p><p>而SSH服务的具体实现，同样类似Redis，先配置更新，再查询是否已经实例化，若已经实例化，返回实例化对象；若没有实例化，实例化client，并且存在map中。</p><p>完成了SSH的服务协议、服务提供者、服务实例，我们就重点讨论下如何使用SSH的服务协议来实现自动化部署。</p><h2>自动化部署</h2><p>首先还是思考清楚自动化部署的命令设计。我们的hade框架是同时支持前后端的开发框架，所以自动化部署是需要同时支持前后端部署的，也就是说它的命令也需要支持前后端的部署，这里我们设计一个显示帮助信息的一级命令<code>./hade deploy</code> 和四个二级命令：</p><ul>
-<li><code>./hade deploy frontend</code> ，部署前端</li>
-<li><code>./hade  deploy backend</code> ，部署后端</li>
-<li><code>./hade deploy all</code> ，同时部署前后端</li>
-<li><code>./hade deploy rollback</code> ，部署回滚</li>
-</ul><p>同时也设计一下部署配置文件。</p><p>首先，我们是需要知道部署在哪个或者哪几个服务器上的，所以需要有一个数组配置项connections来定义部署服务器。而部署服务器的具体用户名密码配置，在前面SSH的配置里是存在的，所以这里直接把SSH的配置路径放在我们的connections中就可以了。</p><p>其次，还要知道我们要部署的远端服务器的目标文件夹是什么？所以这里需要有一个remote_folder配置项来配置远端文件夹。</p><p>然后就是前端部署的配置frontend了。我们知道，在本地编译之后，会直接编译成了dist目录下的HTML/JS/CSS文件，这些文件直接上传到远端文件夹就是可以使用的了。</p><p>但是，在上传前端编译文件之前和在远端服务器执行一些命令之后，是有可能要做一些操作的。比如上传前先清空远端文件夹、上传后更新nginx等。所以这里，<strong>我们设计两个数组结构pre_action和post_action来分别存放部署的前置命令和部署的后置命令</strong>。</p><p>最后就是后端部署的配置backend。同前端部署一样，我们也有部署的前置命令和后置命令。但是后端编译还有一个不同点。</p><p>因为后端是Golang编译的，而它的编译其实是分平台的，加上Go支持“交叉编译”。就是说，比如我的工作机器是Mac操作系统，Web服务器是Linux操作系统，那么我需要编译Linux操作系统的后端程序，但是我可以直接在Mac操作系统上使用GOOS 和 GOARCH 来编译Linux操作系统的程序：</p><pre><code class="language-go">GOOS=linux GOARCH=amd64 go build ./
+</code></pre><p>这里注意下，SSH的连接方式有两种，一种是直接使用用户名密码来连接远程服务器，还有一种是使用rsa key文件来连接远端服务器，所以这里的配置需要同时支持两种配置。<strong>对于使用rsa key文件的方式，需要设置rsk_key的私钥地址和负责安全验证的known_hosts</strong>。</p><p>定义好了SSH的服务协议，服务提供者和服务实现并没有什么特别，就不展示具体代码了，在GitHub上的<a href="https://github.com/gohade/coredemo/blob/geekbang/28/framework/provider/ssh/provider.go">provider/ssh/provider.go</a> 和<a href="https://github.com/gohade/coredemo/blob/geekbang/28/framework/provider/ssh/service.go">provider/ssh/service.go</a>中。我们简单说一下思路。</p><p>对于服务提供者，我们实现基本的五个函数Register/Boot/IsDefer/Param/Name。另外这个ssh服务并不是框架启动时候必要加载的，所以设置IsDefer为true，而Param我们就照例把服务容器container作为参数，传递给Register设定的实例化方法。</p><p>而SSH服务的具体实现，同样类似Redis，先配置更新，再查询是否已经实例化，若已经实例化，返回实例化对象；若没有实例化，实例化client，并且存在map中。</p><p>完成了SSH的服务协议、服务提供者、服务实例，我们就重点讨论下如何使用SSH的服务协议来实现自动化部署。</p><h2>自动化部署</h2><p>首先还是思考清楚自动化部署的命令设计。我们的hade框架是同时支持前后端的开发框架，所以自动化部署是需要同时支持前后端部署的，也就是说它的命令也需要支持前后端的部署，这里我们设计一个显示帮助信息的一级命令<code>./hade deploy</code> 和四个二级命令：</p>
+<code>./hade deploy frontend</code> ，部署前端
+<code>./hade  deploy backend</code> ，部署后端
+<code>./hade deploy all</code> ，同时部署前后端
+<code>./hade deploy rollback</code> ，部署回滚
+<p>同时也设计一下部署配置文件。</p><p>首先，我们是需要知道部署在哪个或者哪几个服务器上的，所以需要有一个数组配置项connections来定义部署服务器。而部署服务器的具体用户名密码配置，在前面SSH的配置里是存在的，所以这里直接把SSH的配置路径放在我们的connections中就可以了。</p><p>其次，还要知道我们要部署的远端服务器的目标文件夹是什么？所以这里需要有一个remote_folder配置项来配置远端文件夹。</p><p>然后就是前端部署的配置frontend了。我们知道，在本地编译之后，会直接编译成了dist目录下的HTML/JS/CSS文件，这些文件直接上传到远端文件夹就是可以使用的了。</p><p>但是，在上传前端编译文件之前和在远端服务器执行一些命令之后，是有可能要做一些操作的。比如上传前先清空远端文件夹、上传后更新nginx等。所以这里，<strong>我们设计两个数组结构pre_action和post_action来分别存放部署的前置命令和部署的后置命令</strong>。</p><p>最后就是后端部署的配置backend。同前端部署一样，我们也有部署的前置命令和后置命令。但是后端编译还有一个不同点。</p><p>因为后端是Golang编译的，而它的编译其实是分平台的，加上Go支持“交叉编译”。就是说，比如我的工作机器是Mac操作系统，Web服务器是Linux操作系统，那么我需要编译Linux操作系统的后端程序，但是我可以直接在Mac操作系统上使用GOOS 和 GOARCH 来编译Linux操作系统的程序：</p><pre><code class="language-go">GOOS=linux GOARCH=amd64 go build ./
 </code></pre><p>这样编译出来的文件就是可以在Linux运行的后端进程了。所以在后端部署的配置项里面，我们增加GOOS 和 GOARCH分别表示后端的交叉编译参数。</p><p>完整的配置文件在config/development/deploy.yaml中：</p><pre><code class="language-yaml">connections: # 要自动化部署的连接
     - ssh.web-01
 
@@ -95,11 +95,11 @@ backend: # 后端部署配置
     post_action: # 部署后置命令
         - "chmod 777 /home/yejianfeng/coredemo/hade"
         - "/home/yejianfeng/coredemo/hade app restart"
-</code></pre><p>好，配置文件设计好了，下面我们开始实现对应的命令。</p><p>其实估计你对如何实现，已经大致心中有数了。一级命令 <code>./hade deploy</code>  还是并没有什么内容，只是将帮助信息打印出来，之前也做过很多次，就不描述了。二级命令按之前的套路，一般是先编译，再部署，最后上传到目标服务器。</p><h3>部署前端</h3><p>看二级命令  <code>./hade deploy frontend</code>。对于部署前端，我们分为三个步骤：</p><ul>
-<li>创建要部署的文件夹；</li>
-<li>编译前端文件到部署文件夹中；</li>
-<li>上传部署文件夹，并且执行对应的前置和后置的shell。</li>
-</ul><p>在framework/command/deploy.go中：</p><pre><code class="language-go">// deployFrontendCommand 部署前端
+</code></pre><p>好，配置文件设计好了，下面我们开始实现对应的命令。</p><p>其实估计你对如何实现，已经大致心中有数了。一级命令 <code>./hade deploy</code>  还是并没有什么内容，只是将帮助信息打印出来，之前也做过很多次，就不描述了。二级命令按之前的套路，一般是先编译，再部署，最后上传到目标服务器。</p><h3>部署前端</h3><p>看二级命令  <code>./hade deploy frontend</code>。对于部署前端，我们分为三个步骤：</p>
+创建要部署的文件夹；
+编译前端文件到部署文件夹中；
+上传部署文件夹，并且执行对应的前置和后置的shell。
+<p>在framework/command/deploy.go中：</p><pre><code class="language-go">// deployFrontendCommand 部署前端
 var deployFrontendCommand = &amp;cobra.Command{
     Use:   "frontend",
     Short: "部署前端",
@@ -532,7 +532,7 @@ backend: # 后端部署配置
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5a/76/3f8dcda6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -547,8 +547,8 @@ backend: # 后端部署配置
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5a/76/3f8dcda6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -563,8 +563,8 @@ backend: # 后端部署配置
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/f1/ed/4e249c6b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -579,5 +579,4 @@ backend: # 后端部署配置
   </div>
 </div>
 </div>
-</li>
-</ul>
+

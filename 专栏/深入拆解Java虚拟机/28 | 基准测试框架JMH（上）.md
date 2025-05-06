@@ -271,15 +271,15 @@ inline,org/sample/MyBenchmark.testMethod
 
 这里我展示了其中三个比较重要的配置文件。
 
-<li>
+
 `MANIFEST.MF`中指定了该jar包的默认入口，即`org.openjdk.jmh.Main`[7]。
-</li>
-<li>
+
+
 `BenchmarkList`中存放了测试配置。该配置是根据`MyBenchmark.java`里的注解自动生成的，具体我会在下一篇中详细介绍源代码中如何配置。
-</li>
-<li>
+
+
 `CompilerHints`中存放了传递给Java虚拟机的`-XX:CompileCommandFile`参数的内容。它规定了无法内联以及必须内联的几个方法，其中便有存放业务逻辑的测试方法`testMethod`。
-</li>
+
 
 在编译`MyBenchmark_testMethod_jmhTest`类中的测试方法时，JMH会让即时编译器强制内联对`MyBenchmark.testMethod`的方法调用，以避免调用开销。
 

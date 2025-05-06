@@ -1,9 +1,9 @@
 <audio title="34 _ SDK 设计（下）：IAM项目Go SDK设计和实现" src="https://static001.geekbang.org/resource/audio/7b/01/7b72394f7175da9db183106b51076101.mp3" controls="controls"></audio> 
-<p>你好，我是孔令飞。</p><p>上一讲，我介绍了公有云厂商普遍采用的SDK设计方式。其实，还有一些比较优秀的SDK设计方式，比如 Kubernetes的 <a href="https://github.com/kubernetes/client-go">client-go</a> SDK设计方式。IAM项目参考client-go，也实现了client-go风格的SDK：<a href="https://github.com/marmotedu/marmotedu-sdk-go">marmotedu-sdk-go</a>。</p><p>和 <a href="https://time.geekbang.org/column/article/406389">33讲</a> 介绍的SDK设计方式相比，client-go风格的SDK具有以下优点：</p><ul>
-<li>大量使用了Go interface特性，将接口的定义和实现解耦，可以支持多种实现方式。</li>
-<li>接口调用层级跟资源的层级相匹配，调用方式更加友好。</li>
-<li>多版本共存。</li>
-</ul><p>所以，我更推荐你使用marmotedu-sdk-go。接下来，我们就来看下marmotedu-sdk-go是如何设计和实现的。</p><h2>marmotedu-sdk-go设计</h2><p>和medu-sdk-go相比，marmotedu-sdk-go的设计和实现要复杂一些，但功能更强大，使用体验也更好。</p><p>这里，我们先来看一个使用SDK调用iam-authz-server  <code>/v1/authz</code> 接口的示例，代码保存在<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/examples/authz_clientset/main.go"> marmotedu-sdk-go/examples/authz_clientset/main.go</a>文件中：</p><pre><code class="language-go">package main
+<p>你好，我是孔令飞。</p><p>上一讲，我介绍了公有云厂商普遍采用的SDK设计方式。其实，还有一些比较优秀的SDK设计方式，比如 Kubernetes的 <a href="https://github.com/kubernetes/client-go">client-go</a> SDK设计方式。IAM项目参考client-go，也实现了client-go风格的SDK：<a href="https://github.com/marmotedu/marmotedu-sdk-go">marmotedu-sdk-go</a>。</p><p>和 <a href="https://time.geekbang.org/column/article/406389">33讲</a> 介绍的SDK设计方式相比，client-go风格的SDK具有以下优点：</p>
+大量使用了Go interface特性，将接口的定义和实现解耦，可以支持多种实现方式。
+接口调用层级跟资源的层级相匹配，调用方式更加友好。
+多版本共存。
+<p>所以，我更推荐你使用marmotedu-sdk-go。接下来，我们就来看下marmotedu-sdk-go是如何设计和实现的。</p><h2>marmotedu-sdk-go设计</h2><p>和medu-sdk-go相比，marmotedu-sdk-go的设计和实现要复杂一些，但功能更强大，使用体验也更好。</p><p>这里，我们先来看一个使用SDK调用iam-authz-server  <code>/v1/authz</code> 接口的示例，代码保存在<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/examples/authz_clientset/main.go"> marmotedu-sdk-go/examples/authz_clientset/main.go</a>文件中：</p><pre><code class="language-go">package main
 
 import (
 	"context"
@@ -63,11 +63,11 @@ func main() {
 
 	fmt.Printf("Authorize response: %s.\n", ret.ToString())
 }
-</code></pre><!-- [[[read_end]]] --><p>在上面的代码示例中，包含了下面的操作。</p><ul>
-<li>首先，调用 <code>BuildConfigFromFlags</code> 函数，创建出SDK的配置实例config；</li>
-<li>接着，调用 <code>marmotedu.NewForConfig(config)</code> 创建了IAM项目的客户端 <code>clientset</code> ;</li>
-<li>最后，调用以下代码请求 <code>/v1/authz</code> 接口执行资源授权请求：</li>
-</ul><pre><code class="language-go">ret, err := clientset.Iam().AuthzV1().Authz().Authorize(context.TODO(), request, metav1.AuthorizeOptions{})&nbsp; &nbsp;&nbsp;
+</code></pre><!-- [[[read_end]]] --><p>在上面的代码示例中，包含了下面的操作。</p>
+首先，调用 <code>BuildConfigFromFlags</code> 函数，创建出SDK的配置实例config；
+接着，调用 <code>marmotedu.NewForConfig(config)</code> 创建了IAM项目的客户端 <code>clientset</code> ;
+最后，调用以下代码请求 <code>/v1/authz</code> 接口执行资源授权请求：
+<pre><code class="language-go">ret, err := clientset.Iam().AuthzV1().Authz().Authorize(context.TODO(), request, metav1.AuthorizeOptions{})&nbsp; &nbsp;&nbsp;
 if err != nil {&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     panic(err.Error())&nbsp; &nbsp;&nbsp;
 }&nbsp; &nbsp;&nbsp;
@@ -137,10 +137,10 @@ iamclient,, err := iam.NewForConfig(config)
 </code></pre><p>参考示例为 <a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/examples/authz_iam/main.go">marmotedu-sdk-go/examples/authz_iam/main.go</a>。</p><h3>服务级别客户端创建</h3><p><code>AuthzV1Interface</code> 对应的客户端实现为<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/marmotedu/service/iam/authz/v1/authz_client.go#L21-L23">AuthzV1Client</a>，所在的包为 <a href="https://github.com/marmotedu/marmotedu-sdk-go/tree/v1.0.2/marmotedu/service/iam/authz/v1">marmotedu-sdk-go/marmotedu/service/iam/authz/v1</a>，AuthzV1Client客户端的创建方式为：</p><pre><code class="language-go">config, err := clientcmd.BuildConfigFromFlags("", "/root/.iam/config")
 client, err := v1.NewForConfig(config)
 </code></pre><p>调用方式为 <code>client.资源名.接口</code> ，例如：</p><pre><code class="language-go">rsp, err := client.Authz().Authorize()
-</code></pre><p>参考示例为 <a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/examples/authz/main.go">marmotedu-sdk-go/examples/authz/main.go</a>。</p><p>上面我介绍了marmotedu-sdk-go的客户端创建方法，接下来我们再来看下，这些客户端具体是如何执行REST API请求的。</p><h2>marmotedu-sdk-go的实现</h2><p>marmotedu-sdk-go的实现和medu-sdk-go一样，也是采用分层结构，分为API层和基础层。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/c4/b2/c40439c97998a01758923394116c33b2.jpg?wh=2248x2097" alt=""></p><p><a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/client.go#L95-L105">RESTClient</a>是整个SDK的核心，RESTClient向下通过调用<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/request.go#L28-L50">Request</a>模块，来完成HTTP请求方法、请求路径、请求体、认证信息的构建。Request模块最终通过调用<a href="https://github.com/parnurzeal/gorequest">gorequest</a>包提供的方法，完成HTTP的POST、PUT、GET、DELETE等请求，获取HTTP返回结果，并解析到指定的结构体中。RESTClient向上提供 <code>Post()</code> 、 <code>Put()</code> 、 <code>Get()</code> 、 <code>Delete()</code> 等方法来供客户端完成HTTP请求。</p><p>marmotedu-sdk-go提供了两类客户端，分别是RESTClient客户端和基于RESTClient封装的客户端。</p><ul>
-<li>RESTClient：Raw类型的客户端，可以通过指定HTTP的请求方法、请求路径、请求参数等信息，直接发送HTTP请求，例如 <code>client.Get().AbsPath("/version").Do().Into()</code> 。</li>
-<li>基于RESTClient封装的客户端：例如AuthzV1Client、APIV1Client等，执行特定REST资源、特定API接口的请求，方便开发者调用。</li>
-</ul><p>接下来，我们具体看下如何创建RESTClient客户端，以及Request模块的实现。</p><h3>RESTClient客户端实现</h3><p>我通过下面两个步骤，实现了RESTClient客户端。</p><p><strong>第一步，创建</strong><a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/config.go#L29-L60">rest.Config</a><strong>类型的变量。</strong></p><p><a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/tools/clientcmd/client_config.go#L190-L203">BuildConfigFromFlags</a>函数通过加载yaml格式的配置文件，来创建 <code>rest.Config</code> 类型的变量，加载的yaml格式配置文件内容为：</p><pre><code class="language-yaml">apiVersion: v1
+</code></pre><p>参考示例为 <a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/examples/authz/main.go">marmotedu-sdk-go/examples/authz/main.go</a>。</p><p>上面我介绍了marmotedu-sdk-go的客户端创建方法，接下来我们再来看下，这些客户端具体是如何执行REST API请求的。</p><h2>marmotedu-sdk-go的实现</h2><p>marmotedu-sdk-go的实现和medu-sdk-go一样，也是采用分层结构，分为API层和基础层。如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/c4/b2/c40439c97998a01758923394116c33b2.jpg?wh=2248x2097" alt=""></p><p><a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/client.go#L95-L105">RESTClient</a>是整个SDK的核心，RESTClient向下通过调用<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/request.go#L28-L50">Request</a>模块，来完成HTTP请求方法、请求路径、请求体、认证信息的构建。Request模块最终通过调用<a href="https://github.com/parnurzeal/gorequest">gorequest</a>包提供的方法，完成HTTP的POST、PUT、GET、DELETE等请求，获取HTTP返回结果，并解析到指定的结构体中。RESTClient向上提供 <code>Post()</code> 、 <code>Put()</code> 、 <code>Get()</code> 、 <code>Delete()</code> 等方法来供客户端完成HTTP请求。</p><p>marmotedu-sdk-go提供了两类客户端，分别是RESTClient客户端和基于RESTClient封装的客户端。</p>
+RESTClient：Raw类型的客户端，可以通过指定HTTP的请求方法、请求路径、请求参数等信息，直接发送HTTP请求，例如 <code>client.Get().AbsPath("/version").Do().Into()</code> 。
+基于RESTClient封装的客户端：例如AuthzV1Client、APIV1Client等，执行特定REST资源、特定API接口的请求，方便开发者调用。
+<p>接下来，我们具体看下如何创建RESTClient客户端，以及Request模块的实现。</p><h3>RESTClient客户端实现</h3><p>我通过下面两个步骤，实现了RESTClient客户端。</p><p><strong>第一步，创建</strong><a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/config.go#L29-L60">rest.Config</a><strong>类型的变量。</strong></p><p><a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/tools/clientcmd/client_config.go#L190-L203">BuildConfigFromFlags</a>函数通过加载yaml格式的配置文件，来创建 <code>rest.Config</code> 类型的变量，加载的yaml格式配置文件内容为：</p><pre><code class="language-yaml">apiVersion: v1
 user:
   #token: # JWT Token
   username: admin # iam 用户名
@@ -271,11 +271,11 @@ func (r *Request) URL() *url.URL
 func (r *Request) Verb(verb string) *Request
 func (r *Request) VersionedParams(v interface{}) *Request
 </code></pre><p>通过Request结构体的定义和使用方法，我们不难猜测出：Request模块通过 <code>Name</code> 、 <code>Resource</code> 、 <code>Body</code> 、 <code>SetHeader</code> 等方法来设置Request结构体中的各个字段。这些字段最终用来构建出一个HTTP请求，并通过 <code>Do</code> 方法来执行HTTP请求。</p><p>那么，如何构建并执行一个HTTP请求呢？我们可以通过以下5步，来构建并执行HTTP请求：</p><ol>
-<li>构建HTTP URL；</li>
-<li>构建HTTP Method；</li>
-<li>构建HTTP Body；</li>
-<li>执行HTTP请求；</li>
-<li>保存HTTP返回结果。</li>
+构建HTTP URL；
+构建HTTP Method；
+构建HTTP Body；
+执行HTTP请求；
+保存HTTP返回结果。
 </ol><p>接下来，我们就来具体看下Request模块是如何构建这些请求参数，并发送HTTP请求的。</p><p><strong>第一步，构建HTTP URL。</strong></p><p>首先，通过<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/rest/url_utils.go#L69-L81">defaultServerURLFor</a>函数返回了<code>http://iam.api.marmotedu.com:8080</code> 和 <code>/v1</code> ，并将二者分别保存在了Request类型结构体变量中 <code>c</code> 字段的 <code>base</code> 字段和 <code>versionedAPIPath</code> 字段中。</p><p>通过 <a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/rest/request.go#L379-L416">Do</a> 方法执行HTTP时，会调用<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/rest/request.go#L392">r.URL()</a>方法来构建请求URL。 <code>r.URL</code> 方法中，通过以下代码段构建了HTTP请求URL：</p><pre><code class="language-go">func (r *Request) URL() *url.URL {
 &nbsp; &nbsp; p := r.pathPrefix
 &nbsp; &nbsp; if len(r.resource) != 0 {
@@ -363,10 +363,10 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 &nbsp; &nbsp; return nil&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
 }
-</code></pre><p><code>r.body</code> 是在Do方法中，执行完HTTP请求后设置的，它的值为HTTP请求返回的Body。</p><h3>请求认证</h3><p>接下来，我再来介绍下marmotedu-sdk-go另外一个比较核心的功能：请求认证。</p><p>marmotedu-sdk-go支持两种认证方式：</p><ul>
-<li>Basic认证：通过给请求添加 <code>Authorization: Basic xxxx</code> 来实现。</li>
-<li>Bearer认证：通过给请求添加 <code>Authorization: Bearer xxxx</code> 来实现。这种方式又支持直接指定JWT Token，或者通过指定密钥对由SDK自动生成JWT Token。</li>
-</ul><p>Basic认证和Bearer认证，我在 <a href="https://time.geekbang.org/column/article/398410">25讲</a>介绍过，你可以返回查看下。</p><p>认证头是RESTClient客户端发送HTTP请求时指定的，具体实现位于<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/request.go#L53-L102">NewRequest</a>函数中：</p><pre><code class="language-go">switch {
+</code></pre><p><code>r.body</code> 是在Do方法中，执行完HTTP请求后设置的，它的值为HTTP请求返回的Body。</p><h3>请求认证</h3><p>接下来，我再来介绍下marmotedu-sdk-go另外一个比较核心的功能：请求认证。</p><p>marmotedu-sdk-go支持两种认证方式：</p>
+Basic认证：通过给请求添加 <code>Authorization: Basic xxxx</code> 来实现。
+Bearer认证：通过给请求添加 <code>Authorization: Bearer xxxx</code> 来实现。这种方式又支持直接指定JWT Token，或者通过指定密钥对由SDK自动生成JWT Token。
+<p>Basic认证和Bearer认证，我在 <a href="https://time.geekbang.org/column/article/398410">25讲</a>介绍过，你可以返回查看下。</p><p>认证头是RESTClient客户端发送HTTP请求时指定的，具体实现位于<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/request.go#L53-L102">NewRequest</a>函数中：</p><pre><code class="language-go">switch {
     case c.content.HasTokenAuth():
         r.SetHeader("Authorization", fmt.Sprintf("Bearer %s", c.content.BearerToken))
     case c.content.HasKeyAuth():
@@ -377,8 +377,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
         r.SetHeader("Authorization", "Basic "+basicAuth(c.content.Username, c.content.Password))
 }
 </code></pre><p>上面的代码会根据配置信息，自动判断使用哪种认证方式。</p><h2>总结</h2><p>这一讲中，我介绍了Kubernetes client-go风格的SDK实现方式。和公有云厂商的SDK设计相比，client-go风格的SDK设计有很多优点。</p><p>marmotedu-sdk-go在设计时，通过接口实现了3类客户端，分别是项目级别的客户端、应用级别的客户端和服务级别的客户端。开发人员可以根据需要，自行创建客户端类型。</p><p>marmotedu-sdk-go通过<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/config.go#L191-L237">RESTClientFor</a>，创建了RESTClient类型的客户端，RESTClient向下通过调用<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.2/rest/request.go#L28-L50">Request</a>模块，来完成HTTP请求方法、请求路径、请求体、认证信息的构建。Request模块最终通过调用<a href="https://github.com/parnurzeal/gorequest">gorequest</a>包提供的方法，完成HTTP的POST、PUT、GET、DELETE等请求，获取HTTP返回结果，并解析到指定的结构体中。RESTClient向上提供 <code>Post()</code> 、 <code>Put()</code> 、 <code>Get()</code> 、 <code>Delete()</code> 等方法，来供客户端完成HTTP请求。</p><h2>课后练习</h2><ol>
-<li>阅读<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/rest/url_utils.go#L69-L81">defaultServerURLFor</a>源码，思考下defaultServerURLFor是如何构建请求地址 <code>http://iam.api.marmotedu.com:8080</code> 和API版本 <code>/v1</code> 的。</li>
-<li>使用<a href="https://github.com/parnurzeal/gorequest">gorequest</a>包，编写一个可以执行以下HTTP请求的示例：</li>
+阅读<a href="https://github.com/marmotedu/marmotedu-sdk-go/blob/v1.0.3/rest/url_utils.go#L69-L81">defaultServerURLFor</a>源码，思考下defaultServerURLFor是如何构建请求地址 <code>http://iam.api.marmotedu.com:8080</code> 和API版本 <code>/v1</code> 的。
+使用<a href="https://github.com/parnurzeal/gorequest">gorequest</a>包，编写一个可以执行以下HTTP请求的示例：
 </ol><pre><code class="language-bash">curl -XPOST http://example.com/v1/user -d '{"username":"colin","address":"shenzhen"}'
 </code></pre><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
@@ -490,7 +490,7 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -505,8 +505,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKotsBr2icbYNYlRSlicGUD1H7lulSTQUAiclsEz9gnG5kCW9qeDwdYtlRMXic3V6sj9UrfKLPJnQojag/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -521,8 +521,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -537,8 +537,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/83/17/df99b53d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -553,8 +553,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -569,8 +569,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/ff/c6/3586506e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -585,8 +585,8 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/51/84/5b7d4d95.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -601,5 +601,4 @@ func (c *RESTClient) Verb(verb string) *Request {&nbsp; &nbsp; &nbsp; &nbsp; &nb
   </div>
 </div>
 </div>
-</li>
-</ul>
+

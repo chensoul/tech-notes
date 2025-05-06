@@ -118,7 +118,7 @@
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/a0/c5/9259d5ca.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -133,8 +133,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/60/a1/8f003697.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -149,5 +149,4 @@
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -10,15 +10,15 @@ Java提供了不同层面的线程安全支持。在传统集合框架内部，�
 
 另外，更加普遍的选择是利用并发包提供的线程安全容器类，它提供了：
 
-<li>
+
 各种并发容器，比如ConcurrentHashMap、CopyOnWriteArrayList。
-</li>
-<li>
+
+
 各种线程安全队列（Queue/Deque），如ArrayBlockingQueue、SynchronousQueue。
-</li>
-<li>
+
+
 各种有序容器的线程安全版本等。
-</li>
+
 
 具体保证线程安全的方式，包括有从简单的synchronize方式，到基于更加精细化的，比如基于分离锁实现的ConcurrentHashMap等并发实现等。具体选择要看开发的场景需求，总体来说，并发包内提供的容器通用场景，远优于早期的简单同步实现。
 
@@ -28,18 +28,18 @@ Java提供了不同层面的线程安全支持。在传统集合框架内部，�
 
 如果要深入思考并回答这个问题及其扩展方面，至少需要：
 
-<li>
+
 理解基本的线程安全工具。
-</li>
-<li>
+
+
 理解传统集合框架并发编程中Map存在的问题，清楚简单同步方式的不足。
-</li>
-<li>
+
+
 梳理并发包内，尤其是ConcurrentHashMap采取了哪些方法来提高并发表现。
-</li>
-<li>
+
+
 最好能够掌握ConcurrentHashMap自身的演进，目前的很多分析资料还是基于其早期版本。
-</li>
+
 
 今天我主要是延续专栏之前两讲的内容，重点解读经常被同时考察的HashMap和ConcurrentHashMap。今天这一讲并不是对并发方面的全面梳理，毕竟这也不是专栏一讲可以介绍完整的，算是个开胃菜吧，类似CAS等更加底层的机制，后面会在Java进阶模块中的并发主题有更加系统的介绍。
 
@@ -78,12 +78,12 @@ private static class SynchronizedMap&lt;K,V&gt;
 
 早期ConcurrentHashMap，其实现是基于：
 
-<li>
+
 分离锁，也就是将内部进行分段（Segment），里面则是HashEntry的数组，和HashMap类似，哈希相同的条目也是以链表形式存放。
-</li>
-<li>
+
+
 HashEntry内部使用volatile的value字段来保证可见性，也利用了不可变对象的机制以改进利用Unsafe提供的底层能力，比如volatile access，去直接完成部分操作，以最优化性能，毕竟Unsafe中的很多操作都是JVM intrinsic优化过的。
-</li>
+
 
 你可以参考下面这个早期ConcurrentHashMap内部结构的示意图，其核心是利用分段设计，在进行并发操作的时候，只需要锁定相应段，这样就有效避免了类似Hashtable整体同步的问题，大大提高了性能。
 
@@ -164,15 +164,15 @@ final V put(K key, int hash, V value, boolean onlyIfAbsent) {
 
 所以，从上面的源码清晰的看出，在进行并发写操作时：
 
-<li>
+
 ConcurrentHashMap会获取再入锁，以保证数据一致性，Segment本身就是基于ReentrantLock的扩展实现，所以，在并发修改期间，相应Segment是被锁定的。
-</li>
-<li>
+
+
 在最初阶段，进行重复性的扫描，以确定相应key值是否已经在数组里面，进而决定是更新还是放置操作，你可以在代码里看到相应的注释。重复扫描、检测冲突是ConcurrentHashMap的常见技巧。
-</li>
-<li>
+
+
 我在专栏上一讲介绍HashMap时，提到了可能发生的扩容问题，在ConcurrentHashMap中同样存在。不过有一个明显区别，就是它进行的不是整体的扩容，而是单独对Segment进行扩容，细节就不介绍了。
-</li>
+
 
 另外一个Map的size方法同样需要关注，它的实现涉及分离锁的一个副作用。
 
@@ -182,24 +182,24 @@ ConcurrentHashMap会获取再入锁，以保证数据一致性，Segment本身�
 
 下面我来对比一下，**在Java 8和之后的版本中，ConcurrentHashMap发生了哪些变化呢？**
 
-<li>
+
 总体结构上，它的内部存储变得和我在专栏上一讲介绍的HashMap结构非常相似，同样是大的桶（bucket）数组，然后内部也是一个个所谓的链表结构（bin），同步的粒度要更细致一些。
-</li>
-<li>
+
+
 其内部仍然有Segment定义，但仅仅是为了保证序列化时的兼容性而已，不再有任何结构上的用处。
-</li>
-<li>
+
+
 因为不再使用Segment，初始化操作大大简化，修改为lazy-load形式，这样可以有效避免初始开销，解决了老版本很多人抱怨的这一点。
-</li>
-<li>
+
+
 数据存储利用volatile来保证可见性。
-</li>
-<li>
+
+
 使用CAS等操作，在特定场景进行无锁并发操作。
-</li>
-<li>
+
+
 使用Unsafe、LongAdder之类底层手段，进行极端情况的优化。
-</li>
+
 
 先看看现在的数据存储内部实现，我们可以发现Key是final的，因为在生命周期中，一个条目的Key发生变化是不可能的；与此同时val，则声明为volatile，以保证可见性。
 

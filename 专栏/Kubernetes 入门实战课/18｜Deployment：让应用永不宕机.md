@@ -44,26 +44,26 @@ spec:
 &nbsp; &nbsp; ...
 </code></pre><p>你也许会产生疑问：为什么要这么麻烦？为什么不能像Job对象一样，直接用“template”里定义好的Pod就行了呢？</p><p>这是因为在线业务和离线业务的应用场景差异很大。离线业务中的Pod基本上是一次性的，只与这个业务有关，紧紧地绑定在Job对象里，一般不会被其他对象所使用。</p><p>而在线业务就要复杂得多了，因为Pod永远在线，除了要在Deployment里部署运行，还可能会被其他的API对象引用来管理，比如负责负载均衡的Service对象。</p><p>所以Deployment和Pod实际上是一种松散的组合关系，Deployment实际上并不“持有”Pod对象，它只是帮助Pod对象能够有足够的副本数量运行，仅此而已。如果像Job那样，把Pod在模板里“写死”，那么其他的对象再想要去管理这些Pod就无能为力了。</p><p>好明白了这一点，那我们该用什么方式来描述Deployment和Pod的组合关系呢？</p><p>Kubernetes采用的是这种“贴标签”的方式，通过在API对象的“metadata”元信息里加各种标签（labels），我们就可以使用类似关系数据库里查询语句的方式，筛选出具有特定标识的那些对象。<strong>通过标签这种设计，Kubernetes就解除了Deployment和模板里Pod的强绑定，把组合关系变成了“弱引用”</strong>。</p><p>虽然话是这么说，但对于很多Kubernetes的初学者来说，理解Deployment里的spec定义还是一个难点。</p><p>所以我还是画了一张图，用不同的颜色来区分Deployment YAML里的字段，并且用虚线特别标记了 <code>matchLabels</code> 和 <code>labels</code> 之间的联系，希望能够帮助你理解Deployment与被它管理的Pod的组合关系。</p><p><img src="https://static001.geekbang.org/resource/image/1f/b0/1f1fdcd112a07cce85757e27fbcc1bb0.jpg?wh=1920x2316" alt="图片"></p><h2>如何使用kubectl操作Deployment</h2><p>把Deployment的YAML写好之后，我们就可以用 <code>kubectl apply</code> 来创建对象了：</p><pre><code class="language-plain">kubectl apply -f deploy.yml
 </code></pre><p>要查看Deployment的状态，仍然是用 <code>kubectl get</code> 命令：</p><pre><code class="language-plain">kubectl get deploy
-</code></pre><p><img src="https://static001.geekbang.org/resource/image/a5/72/a5b3f8a4c6ac5560dc9dfyybfb257872.png?wh=1222x184" alt="图片"></p><p>它显示的信息都很重要：</p><ul>
-<li>READY表示运行的Pod数量，前面的数字是当前数量，后面的数字是期望数量，所以“2/2”的意思就是要求有两个Pod运行，现在已经启动了两个Pod。</li>
-<li>UP-TO-DATE指的是当前已经更新到最新状态的Pod数量。因为如果要部署的Pod数量很多或者Pod启动比较慢，Deployment完全生效需要一个过程，UP-TO-DATE就表示现在有多少个Pod已经完成了部署，达成了模板里的“期望状态”。</li>
-<li>AVAILABLE要比READY、UP-TO-DATE更进一步，不仅要求已经运行，还必须是健康状态，能够正常对外提供服务，它才是我们最关心的Deployment指标。</li>
-<li>最后一个AGE就简单了，表示Deployment从创建到现在所经过的时间，也就是运行的时间。</li>
-</ul><p>因为Deployment管理的是Pod，我们最终用的也是Pod，所以还需要用 <code>kubectl get pod</code> 命令来看看Pod的状态：</p><pre><code class="language-plain">kubectl get pod
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/a5/72/a5b3f8a4c6ac5560dc9dfyybfb257872.png?wh=1222x184" alt="图片"></p><p>它显示的信息都很重要：</p>
+READY表示运行的Pod数量，前面的数字是当前数量，后面的数字是期望数量，所以“2/2”的意思就是要求有两个Pod运行，现在已经启动了两个Pod。
+UP-TO-DATE指的是当前已经更新到最新状态的Pod数量。因为如果要部署的Pod数量很多或者Pod启动比较慢，Deployment完全生效需要一个过程，UP-TO-DATE就表示现在有多少个Pod已经完成了部署，达成了模板里的“期望状态”。
+AVAILABLE要比READY、UP-TO-DATE更进一步，不仅要求已经运行，还必须是健康状态，能够正常对外提供服务，它才是我们最关心的Deployment指标。
+最后一个AGE就简单了，表示Deployment从创建到现在所经过的时间，也就是运行的时间。
+<p>因为Deployment管理的是Pod，我们最终用的也是Pod，所以还需要用 <code>kubectl get pod</code> 命令来看看Pod的状态：</p><pre><code class="language-plain">kubectl get pod
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/4e/cb/4e47298ab0fa443e2c8936ac8ed9e5cb.png?wh=1554x244" alt="图片"></p><p>从截图里你可以看到，被Deployment管理的Pod自动带上了名字，命名的规则是Deployment的名字加上两串随机数（其实是Pod模板的Hash值）。</p><p>好，到现在对象创建成功，Deployment和Pod的状态也都没问题，可以正常服务，我们是时候检验一下Deployment部署的效果了，看看是否如前面所说的，Deployment部署的应用真的可以做到“永不宕机”？</p><p>来尝试一下吧，让我们用 <code>kubectl delete</code> 删除一个Pod，模拟一下Pod发生故障的情景：</p><pre><code class="language-plain">kubectl delete pod ngx-dep-6796688696-jm6tt
 </code></pre><p>然后再查看Pod的状态：</p><pre><code class="language-plain">kubectl get pod
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/44/80/4467538713d83434bf6ff983acde1c80.png?wh=1562x248" alt="图片"></p><p>你就会“惊喜”地发现，被删除的Pod确实是消失了，但Kubernetes在Deployment的管理之下，很快又创建出了一个新的Pod，保证了应用实例的数量始终是我们在YAML里定义的数量。</p><p>这就证明，Deployment确实实现了它预定的目标，能够让应用“永远在线”“永不宕机”。</p><p><strong>在Deployment部署成功之后，你还可以随时调整Pod的数量，实现所谓的“应用伸缩”</strong>。这项工作在Kubernetes出现之前对于运维来说是一件很困难的事情，而现在由于有了Deployment就变得轻而易举了。</p><p><code>kubectl scale</code> 是专门用于实现“扩容”和“缩容”的命令，你只要用参数 <code>--replicas</code> 指定需要的副本数量，Kubernetes就会自动增加或者删除Pod，让最终的Pod数量达到“期望状态”。</p><p>比如下面的这条命令，就把Nginx应用扩容到了5个：</p><pre><code class="language-plain">kubectl scale --replicas=5 deploy ngx-dep
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/84/c4/843cc2d702b4e4034bb3a2f2f988fdc4.png?wh=1486x302" alt="图片"></p><p>但要注意， <code>kubectl scale</code> 是命令式操作，扩容和缩容只是临时的措施，如果应用需要长时间保持一个确定的Pod数量，最好还是编辑Deployment的YAML文件，改动“replicas”，再以声明式的 <code>kubectl apply</code> 修改对象的状态。</p><p>因为Deployment使用了 <code>selector</code> 字段，这里我就顺便提一下Kubernetes里 <code>labels</code> 字段的使用方法吧。</p><p>之前我们通过 <code>labels</code> 为对象“贴”了各种“标签”，在使用 <code>kubectl get</code> 命令的时候，加上参数 <code>-l</code>，使用 <code>==</code>、<code>!=</code>、<code>in</code>、<code>notin</code> 的表达式，就能够很容易地用“标签”筛选、过滤出所要查找的对象（有点类似社交媒体的 <code>#tag</code> 功能），效果和Deployment里的 <code>selector</code> 字段是一样的。</p><p>看两个例子，第一条命令找出“app”标签是 <code>nginx</code> 的所有Pod，第二条命令找出“app”标签是 <code>ngx</code>、<code>nginx</code>、<code>ngx-dep</code> 的所有Pod：</p><pre><code class="language-plain">kubectl get pod -l app=nginx
 kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/b0/26/b07ba6a3a9207a5a998c237a6ef49d26.png?wh=1692x546" alt="图片"></p><h2>小结</h2><p>好了，今天我们学习了Kubernetes里的一个重要的对象：Deployment，它表示的是在线业务，和Job/CronJob的结构类似，也包装了Pod对象，通过添加额外的控制功能实现了应用永不宕机，你也可以再对比一下<a href="https://time.geekbang.org/column/article/531566">第13讲</a>来加深对它的理解。</p><p>我再简单小结一下今天的内容：</p><ol>
-<li>Pod只能管理容器，不能管理自身，所以就出现了Deployment，由它来管理Pod。</li>
-<li>Deployment里有三个关键字段，其中的template和Job一样，定义了要运行的Pod模板。</li>
-<li>replicas字段定义了Pod的“期望数量”，Kubernetes会自动维护Pod数量到正常水平。</li>
-<li>selector字段定义了基于labels筛选Pod的规则，它必须与template里Pod的labels一致。</li>
-<li>创建Deployment使用命令 <code>kubectl apply</code>，应用的扩容、缩容使用命令 <code>kubectl scale</code>。</li>
+Pod只能管理容器，不能管理自身，所以就出现了Deployment，由它来管理Pod。
+Deployment里有三个关键字段，其中的template和Job一样，定义了要运行的Pod模板。
+replicas字段定义了Pod的“期望数量”，Kubernetes会自动维护Pod数量到正常水平。
+selector字段定义了基于labels筛选Pod的规则，它必须与template里Pod的labels一致。
+创建Deployment使用命令 <code>kubectl apply</code>，应用的扩容、缩容使用命令 <code>kubectl scale</code>。
 </ol><p>学了Deployment这个API对象，我们今后就不应该再使用“裸Pod”了。即使我们只运行一个Pod，也要以Deployment的方式来创建它，虽然它的 <code>replicas</code> 字段值是1，但Deployment会保证应用永远在线。</p><p>另外，作为Kubernetes里最常用的对象，Deployment的本事还不止这些，它还支持滚动更新、版本回退，自动伸缩等高级功能，这些在“高级篇”里我们再详细学习。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>如果把Deployment里的 <code>replicas</code> 字段设置成0会有什么效果？有什么意义呢？</li>
-<li>你觉得Deployment能够应用在哪些场景里？有没有什么缺点或者不足呢？</li>
+如果把Deployment里的 <code>replicas</code> 字段设置成0会有什么效果？有什么意义呢？
+你觉得Deployment能够应用在哪些场景里？有没有什么缺点或者不足呢？
 </ol><p>欢迎在留言区分享你的想法。</p><p>这一章我们学习的Kubernetes高级对象，对云计算、集群管理非常重要。多多思考，打好基础，我们继续深入。下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/22/7f/22a054fac2709bbcaabe209aa6fff47f.jpg?wh=1920x2635" alt=""></p>
 <style>
     ul {
@@ -174,7 +174,7 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/1b/f8/01e7fc0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -189,8 +189,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -205,8 +205,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/cb/3d/b290414d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -221,8 +221,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKx6EdicYYuYK745brMa9yAlkZs2YmzxRAm4BQ2kw9GbtcC8ebnQlyBfIJnGjH57ib4HVlQIpSbTrBw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -237,8 +237,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -253,8 +253,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2c/7e/f1efd18b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -269,8 +269,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -285,8 +285,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2f/85/6f/1654f4b9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -301,8 +301,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -317,8 +317,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/1b/f8/01e7fc0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -333,8 +333,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -349,8 +349,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/e4/15/31fc864e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -365,8 +365,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/3b/29/0f86235e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -381,8 +381,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -397,8 +397,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/ce/05/4c493ef9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -413,8 +413,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/b9/6f/b40d1acf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -429,8 +429,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/f7/b1/982ea185.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -445,8 +445,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/45/c3/775fe460.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -461,8 +461,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b9/4b/2376a469.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -477,8 +477,8 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/dotGbXAlAZg0bhCq4P96A40mdyavzR33jSqIHk8xLlic4B5PYNDIP5MEa1Fk9yxzdz9scHUM7IUNR71nVZNoV7Q/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -493,5 +493,4 @@ kubectl get pod -l 'app in (ngx, nginx, ngx-dep)'
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -1,16 +1,16 @@
 <audio title="23｜如何监听镜像版本变化触发 GitOps？" src="https://static001.geekbang.org/resource/audio/03/96/03d2a0b24207b6416f9e2c32116c5896.mp3" controls="controls"></audio> 
 <p>你好，我是王炜。</p><p>上一节课，我带你学习了如何使用 ArgoCD 来创建生产可用的 GitOps 工作流。值得注意的是，我们创建的 GitOps 工作流有下面两个重要的特点。</p><ol>
-<li>源码和 Helm Chart 在同一个仓库下。</li>
-<li>在 CI 阶段更新了 Helm Chart 镜像版本。</li>
-</ol><p>在开发和发布分工明确的团队中，我更推荐你将源码和应用定义分离，考虑到安全性和发布的严谨性，也尽量不要通过 CI 直接修改应用定义。</p><p>更合理的研发规范设计应该是这样的：开发负责编写代码，并通过 CI 生成制品，也就是 Docker 镜像，并对生成的制品负责。而基础架构部门或者 SRE 团队则对应用定义负责。在发布环节，<strong>开发可以随时控制要发布的镜像版本，而无需关注其他的应用细节</strong>，他们之间的工作流程图如下。</p><p><img src="https://static001.geekbang.org/resource/image/ca/00/ca9a2a6b7c938738ae56153906e4b200.jpg?wh=1920x1267" alt="图片"></p><p>从上面这张工作流程图我们可以看出，开发和 SRE 团队各司其职，只操作和自己相关的 Git 仓库，互不干扰。但 SRE 团队要怎么知道开发团队什么时候发布以及发布什么版本的镜像呢？</p><p>最原始的办法是：开发在需要发布的时候将镜像版本告诉 SRE 团队，SRE 团队手动修改 Helm Chart 镜像版本并推送到 Git 仓库，等待 ArgoCD 同步完成。</p><p>这种办法虽然有效，但沟通效率低且容易出错，<strong>我们需要一种自动化的机制来替代这个过程</strong>。</p><!-- [[[read_end]]] --><p>借助 ArgoCD Image Updater，我们可以让 ArgoCD 自动监控镜像仓库的更新情况，一旦工作负载的镜像版本有更新，ArgoCD 就会自动将工作负载升级为新的镜像版本，并且还可以自动将镜像的版本号回写到 Helm Chart 仓库中，保持应用定义和集群状态的一致性。</p><p>这节课，我会进一步改造在上一节课创建的 GitOps 工作流，并加入 ArgoCD Image Updater，实现自动监听镜像变更以及回写 Helm Chart。</p><p>在开始今天的学习之前，你需要做好如下准备。</p><ul>
-<li>按照第一章<a href="https://time.geekbang.org/column/article/612571">第 2 讲</a>的内容在本地配置好 Kind 集群，安装 Ingress-Nginx，并暴露 80 和 443 端口。</li>
-<li>配置好 Kubectl，使其能够访问 Kind 集群。</li>
-<li>按照上一节课的内容在集群内安装 ArgoCD 和 CLI 工具。</li>
-<li>克隆 <a href="https://github.com/lyzhang1999/kubernetes-example">kubernetes-example</a> 示例应用代码并推送到自己的 GitHub 仓库中，然后按照<a href="https://time.geekbang.org/column/article/622743">第 16 讲</a>的内容配置好 GitHub Action 和 DockerHub Registry。</li>
-<li>将示例应用 .github/workflows/argocd-image-updater.yaml 文件的 env.DOCKERHUB_USERNAME 字段修改为你的 DockerHub 用户名。</li>
-</ul><h2>工作流总览</h2><p>在正式进入实战之前，我先简单介绍一下我们最终要实现的效果，如下图所示。</p><p><img src="https://static001.geekbang.org/resource/image/c2/27/c23e00e27754a19a91321c85bfba5e27.jpg?wh=1920x1400" alt="图片"></p><p>相比较上一节课的 GitOps 工作流，这节课实现的效果主要有下面两个差异。</p><ol>
-<li>将一个 Git 仓库拆分成了两个，一个存放源码，一个存放 Helm Chart。</li>
-<li>不再使用 CI 更新 Helm Chart 镜像版本，而是使用 ArgoCD Image Updater 来自动监控镜像仓库的变更。</li>
+源码和 Helm Chart 在同一个仓库下。
+在 CI 阶段更新了 Helm Chart 镜像版本。
+</ol><p>在开发和发布分工明确的团队中，我更推荐你将源码和应用定义分离，考虑到安全性和发布的严谨性，也尽量不要通过 CI 直接修改应用定义。</p><p>更合理的研发规范设计应该是这样的：开发负责编写代码，并通过 CI 生成制品，也就是 Docker 镜像，并对生成的制品负责。而基础架构部门或者 SRE 团队则对应用定义负责。在发布环节，<strong>开发可以随时控制要发布的镜像版本，而无需关注其他的应用细节</strong>，他们之间的工作流程图如下。</p><p><img src="https://static001.geekbang.org/resource/image/ca/00/ca9a2a6b7c938738ae56153906e4b200.jpg?wh=1920x1267" alt="图片"></p><p>从上面这张工作流程图我们可以看出，开发和 SRE 团队各司其职，只操作和自己相关的 Git 仓库，互不干扰。但 SRE 团队要怎么知道开发团队什么时候发布以及发布什么版本的镜像呢？</p><p>最原始的办法是：开发在需要发布的时候将镜像版本告诉 SRE 团队，SRE 团队手动修改 Helm Chart 镜像版本并推送到 Git 仓库，等待 ArgoCD 同步完成。</p><p>这种办法虽然有效，但沟通效率低且容易出错，<strong>我们需要一种自动化的机制来替代这个过程</strong>。</p><!-- [[[read_end]]] --><p>借助 ArgoCD Image Updater，我们可以让 ArgoCD 自动监控镜像仓库的更新情况，一旦工作负载的镜像版本有更新，ArgoCD 就会自动将工作负载升级为新的镜像版本，并且还可以自动将镜像的版本号回写到 Helm Chart 仓库中，保持应用定义和集群状态的一致性。</p><p>这节课，我会进一步改造在上一节课创建的 GitOps 工作流，并加入 ArgoCD Image Updater，实现自动监听镜像变更以及回写 Helm Chart。</p><p>在开始今天的学习之前，你需要做好如下准备。</p>
+按照第一章<a href="https://time.geekbang.org/column/article/612571">第 2 讲</a>的内容在本地配置好 Kind 集群，安装 Ingress-Nginx，并暴露 80 和 443 端口。
+配置好 Kubectl，使其能够访问 Kind 集群。
+按照上一节课的内容在集群内安装 ArgoCD 和 CLI 工具。
+克隆 <a href="https://github.com/lyzhang1999/kubernetes-example">kubernetes-example</a> 示例应用代码并推送到自己的 GitHub 仓库中，然后按照<a href="https://time.geekbang.org/column/article/622743">第 16 讲</a>的内容配置好 GitHub Action 和 DockerHub Registry。
+将示例应用 .github/workflows/argocd-image-updater.yaml 文件的 env.DOCKERHUB_USERNAME 字段修改为你的 DockerHub 用户名。
+<h2>工作流总览</h2><p>在正式进入实战之前，我先简单介绍一下我们最终要实现的效果，如下图所示。</p><p><img src="https://static001.geekbang.org/resource/image/c2/27/c23e00e27754a19a91321c85bfba5e27.jpg?wh=1920x1400" alt="图片"></p><p>相比较上一节课的 GitOps 工作流，这节课实现的效果主要有下面两个差异。</p><ol>
+将一个 Git 仓库拆分成了两个，一个存放源码，一个存放 Helm Chart。
+不再使用 CI 更新 Helm Chart 镜像版本，而是使用 ArgoCD Image Updater 来自动监控镜像仓库的变更。
 </ol><p>此外，由于在日常开发中，我们一般会采用多分支进行开发，这就随时可能产生新的镜像版本。为了将开发过程和需要发布到生产环境的镜像区分开，我们会为 Main 分支构建出来的镜像增加一个 Prefix 标识，例如 <code>main-${commit_Id}</code>，并配置 ArgoCD Image Updater 只监控包含特定标识的镜像版本。</p><p>最终实现的效果是，当开发将代码提交到 Git 仓库 Main 分支后，将触发自动构建，并将新的镜像版本推送到镜像仓库。ArgoCD Image Updater 会以 Poll 的方式每 2 分钟检查一次工作负载的镜像是否有新的版本，如果有，那么就将工作负载的镜像更新为最新版本，并将镜像版本号写入到存放 Helm Chart 的仓库中。</p><h2>安装和配置 ArgoCD Image Updater</h2><p>监听镜像版本的变更需要用到 ArgoCD Image Updater，而它要求和 ArgoCD 一起协同工作，所以在安装之前，请务必先确保在集群内已经安装好 ArgoCD。</p><h3>安装 ArgoCD Image Updater</h3><p>你可以通过下面的命令进行安装。</p><pre><code class="language-plain">kubectl apply -n argocd -f https://ghproxy.com/https://raw.githubusercontent.com/argoproj-labs/argocd-image-updater/stable/manifests/install.yaml
 serviceaccount/argocd-image-updater created
 role.rbac.authorization.k8s.io/argocd-image-updater created
@@ -63,15 +63,15 @@ spec:
       - CreateNamespace=true
 </code></pre><p>然后，使用 kubectl apply 命令创建 ArgoCD Application，效果等同于使用 argocd app create 命令创建应用。</p><pre><code class="language-yaml">$ kubectl apply -n argocd -f application.yaml
 application.argoproj.io/example created
-</code></pre><p>ArgoCD Image Updater 通过 Application Annotations 标签来实现对应的功能，我简单解释一下每一个标签的作用。</p><ul>
-<li>argocd-image-updater.argoproj.io/image-list：指定需要监听的镜像，这里我们指定示例应用的前后端镜像 lyzhang1999/frontend 和 lyzhang1999/backend，同时为前后端镜像法指定了别名，分别为 frontend 和 backend。这里的别名非常重要，会影响下面所有的设置。</li>
-<li>argocd-image-updater.argoproj.io/update-strategy：指定镜像更新策略。注意，<strong>latest 并不代表监听 latest 镜像版本</strong>，而是以最新推送的镜像作为更新策略。此外，semver 策略可以识别最高语义化版本的标签，digest 策略可以用来区分同一 Tag 下不同镜像 digest 的变更。</li>
-<li>argocd-image-updater.argoproj.io/write-back-method：表示将镜像版本回写到镜像仓库。注意，这里对仓库的写权限来源于使用 argocd repo add 命令为 ArgoCD 配置的仓库访问权限。</li>
-<li>argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.pull-secret：为不同的镜像别名指定镜像拉取凭据。</li>
-<li>argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.allow-tags：配置符合更新条件的镜像 Tag，在这里我们使用正则表达式匹配那些镜像 Tag 以 main 开头的镜像版本，其他镜像版本则忽略。</li>
-<li>argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.helm.image-name：配置 Helm Chart values.yaml 镜像名称所在的节点，在示例应用中，backend.image 和 frontend.image 是values.yaml 配置镜像名称的节点，ArgoCD 在回写仓库时会覆盖这个值。</li>
-<li>argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.helm.image-tag：配置 Helm Chart values.yaml 镜像版本所在的节点，在示例应用中，backend.tag 和 frontend.tag 是 values.yaml 配置镜像版本的节点，ArgoCD 在回写仓库时将会覆盖这个值。</li>
-</ul><h2>体验 GitOps 工作流</h2><p>接下来，你可以尝试修改 frontend/src/App.js 文件，例如修改文件第 49 行的“Hi! I am a geekbang”内容。修改完成后，<strong>将代码推送到 GitHub 的 main 分支</strong>。</p><p>此时会触发两个 GitHub Action 工作流。其中，当 build-every-branch 工作流被触发时，它将构建 Tag 为 main 开头的镜像版本，并将其推送到镜像仓库中，如下图所示。</p><p><img src="https://static001.geekbang.org/resource/image/a5/66/a571d8f3f53ce2547d8e9df97b789b66.png?wh=1920x407" alt="图片"></p><p>和我们上一节课介绍的另一个 GitHub Action 工作流不同的是，它也不会去主动修改 kubernetes-example-helm 仓库的 values.yaml 文件，在完成镜像推送后工作流也就结束了。</p><p>与此同时，ArgoCD Image Updater 将会每 2 分钟从镜像仓库检索 frontend 和 backend 的镜像版本，一旦发现有新的并且以 main 开头的镜像版本，它将自动使用新版本来更新集群内工作负载的镜像，并将镜像版本回写到 kubernetes-example-helm 仓库。</p><p>在回写时，ArgoCD Image Updater 并不会直接修改仓库的 values.yaml 文件，而是会创建一个专门用于覆盖 Helm Chart values.yaml 的 .argocd-source-example.yaml 文件。</p><p><img src="https://static001.geekbang.org/resource/image/15/0e/15df9ed2a0d349c7b6448fe0be99cb0e.png?wh=1818x522" alt="图片"></p><p>当我们看到这个文件时，说明 ArgoCD Image Updater 已经触发了镜像更新，并且成功将镜像版本回写到了镜像仓库。同时，这个文件记录了详细的覆盖 values.yaml 值的策略。</p><pre><code class="language-yaml">helm:
+</code></pre><p>ArgoCD Image Updater 通过 Application Annotations 标签来实现对应的功能，我简单解释一下每一个标签的作用。</p>
+argocd-image-updater.argoproj.io/image-list：指定需要监听的镜像，这里我们指定示例应用的前后端镜像 lyzhang1999/frontend 和 lyzhang1999/backend，同时为前后端镜像法指定了别名，分别为 frontend 和 backend。这里的别名非常重要，会影响下面所有的设置。
+argocd-image-updater.argoproj.io/update-strategy：指定镜像更新策略。注意，<strong>latest 并不代表监听 latest 镜像版本</strong>，而是以最新推送的镜像作为更新策略。此外，semver 策略可以识别最高语义化版本的标签，digest 策略可以用来区分同一 Tag 下不同镜像 digest 的变更。
+argocd-image-updater.argoproj.io/write-back-method：表示将镜像版本回写到镜像仓库。注意，这里对仓库的写权限来源于使用 argocd repo add 命令为 ArgoCD 配置的仓库访问权限。
+argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.pull-secret：为不同的镜像别名指定镜像拉取凭据。
+argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.allow-tags：配置符合更新条件的镜像 Tag，在这里我们使用正则表达式匹配那些镜像 Tag 以 main 开头的镜像版本，其他镜像版本则忽略。
+argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.helm.image-name：配置 Helm Chart values.yaml 镜像名称所在的节点，在示例应用中，backend.image 和 frontend.image 是values.yaml 配置镜像名称的节点，ArgoCD 在回写仓库时会覆盖这个值。
+argocd-image-updater.argoproj.io/&lt;镜像别名&gt;.helm.image-tag：配置 Helm Chart values.yaml 镜像版本所在的节点，在示例应用中，backend.tag 和 frontend.tag 是 values.yaml 配置镜像版本的节点，ArgoCD 在回写仓库时将会覆盖这个值。
+<h2>体验 GitOps 工作流</h2><p>接下来，你可以尝试修改 frontend/src/App.js 文件，例如修改文件第 49 行的“Hi! I am a geekbang”内容。修改完成后，<strong>将代码推送到 GitHub 的 main 分支</strong>。</p><p>此时会触发两个 GitHub Action 工作流。其中，当 build-every-branch 工作流被触发时，它将构建 Tag 为 main 开头的镜像版本，并将其推送到镜像仓库中，如下图所示。</p><p><img src="https://static001.geekbang.org/resource/image/a5/66/a571d8f3f53ce2547d8e9df97b789b66.png?wh=1920x407" alt="图片"></p><p>和我们上一节课介绍的另一个 GitHub Action 工作流不同的是，它也不会去主动修改 kubernetes-example-helm 仓库的 values.yaml 文件，在完成镜像推送后工作流也就结束了。</p><p>与此同时，ArgoCD Image Updater 将会每 2 分钟从镜像仓库检索 frontend 和 backend 的镜像版本，一旦发现有新的并且以 main 开头的镜像版本，它将自动使用新版本来更新集群内工作负载的镜像，并将镜像版本回写到 kubernetes-example-helm 仓库。</p><p>在回写时，ArgoCD Image Updater 并不会直接修改仓库的 values.yaml 文件，而是会创建一个专门用于覆盖 Helm Chart values.yaml 的 .argocd-source-example.yaml 文件。</p><p><img src="https://static001.geekbang.org/resource/image/15/0e/15df9ed2a0d349c7b6448fe0be99cb0e.png?wh=1818x522" alt="图片"></p><p>当我们看到这个文件时，说明 ArgoCD Image Updater 已经触发了镜像更新，并且成功将镜像版本回写到了镜像仓库。同时，这个文件记录了详细的覆盖 values.yaml 值的策略。</p><pre><code class="language-yaml">helm:
 &nbsp; parameters:
 &nbsp; - name: frontend.image
 &nbsp; &nbsp; value: lyzhang1999/frontend
@@ -195,7 +195,7 @@ application.argoproj.io/example created
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/a3/49/4a488f4c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -210,8 +210,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/76/f5/e3f5bd8d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -226,8 +226,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ab/ca/bb1ebf5d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -242,8 +242,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIFEQibKmCdPwDP9CcOuEdVNiatE0ekwBZKt5utJhzDKlZiciaEnRTN48eoNzXZpXTDEXMkwU3GQbSDLQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -258,8 +258,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b9/9b/d2989ff5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -274,8 +274,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/6e/fe/79955244.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -290,8 +290,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b9/9b/d2989ff5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -306,8 +306,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -322,8 +322,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/cBh6rmNsSIbHEAGKiaq25yz9tqGuJEjbIYn2K0uFBLEe8lBNjL3SUOicibPbAO5SdH6TxV65kcCpK6FOB1hBr3PBQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -338,8 +338,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/2a/ff/a9d72102.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -354,8 +354,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -370,8 +370,8 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -386,5 +386,4 @@ application.argoproj.io/example created
   </div>
 </div>
 </div>
-</li>
-</ul>
+

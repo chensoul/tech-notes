@@ -79,15 +79,15 @@ void assignWindowLayers(boolean setLayoutNeeded) {
 
 ## 相关资料
 
-<li>
+
 [ftrace kernel doc](https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/trace/ftrace.rst)
-</li>
-<li>
+
+
 [ftrace的使用](https://source.android.google.cn/devices/tech/debug/ftrace)
-</li>
-<li>
+
+
 [A look at ftrace](https://lwn.net/Articles/322666/)
-</li>
+
 
 ## 福利彩蛋
 

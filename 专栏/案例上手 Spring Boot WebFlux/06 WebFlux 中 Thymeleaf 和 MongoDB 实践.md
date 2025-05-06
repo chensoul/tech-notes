@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -212,12 +212,12 @@ db.createUser({ user: 'admin', pwd: 'admin', roles: [ { role: &quot;root&quot;, 
 <p>类似上面讲的工程搭建，新建一个工程编写此案例，工程如图：</p>
 <p><img src="assets/cbf51d78c7955bca4fcc32863ac482881524710.png" alt="file" /></p>
 <p>核心目录如下：</p>
-<ul>
-<li>pom.xml Maven 依赖配置</li>
-<li>application.properties 配置文件，配置 mongo 连接属性配置</li>
-<li>dao 数据访问层</li>
-<li>controller 展示层实现</li>
-</ul>
+
+pom.xml Maven 依赖配置
+application.properties 配置文件，配置 mongo 连接属性配置
+dao 数据访问层
+controller 展示层实现
+
 <h3>新增 POM 依赖与配置</h3>
 <p>在 pom.xml 配置新的依赖：</p>
 <pre><code>    &lt;!-- Spring Boot 响应式 MongoDB 依赖 --&gt;

@@ -22,28 +22,28 @@
 &lt;!DOCTYPE html&gt;
 ...
 * Closing connection 0
-</code></pre><p>使用curl命令的 -vvv 标识可以打印出详细的协议日志，下面我逐行解读一下。</p><ul>
-<li>第一行：curl 命令是执行HTTP请求的常见工具。其中，<a href="https://www.baidu.xn--com-t33er8od2z/">www.baidu.com</a>是域名。*</li>
-<li>第二行通过DNS解析出它对应的IP地址为110.242.68.3。</li>
-<li>第三行：“TCP_NODELAY set ”表明 TCP 正在无延迟地直接发送数据，TCP_NODELAY是TCP众多选项的一个。</li>
-<li>第四行：“port 80” 代表连接到服务的80端口， 80端口其实是HTTP协议的默认端口。</li>
-<li>有<code>&gt;</code> 标识的5-8行数据才是真正发送到服务器的HTTP请求。数据GET / HTTP/1.1 表明当前使用的是HTTP的GET方法，并且协议版本是HTTP1.1。</li>
-<li>HTTP协议可以在请求头中加入多个key-value信息。第六行“Host: <a href="https://www.baidu.com">www.baidu.com</a>”表示当前请求的主机，我们这里是百度的域名。第七行“User-Agent”表示最终用户发出 HTTP 请求的计算机程序，在这里是curl工具。</li>
-<li>另外，第七行Accept标头还告诉我们 Web 服务器客户端可以理解的内容类型。这里*/*表示类型不限，可能是图片、视频、文字等。</li>
-<li>十到十七行表示服务端返回的信息，它们的规则跟前面类似。“HTTP/1.1 200 OK ”是服务器的响应。服务器使用 HTTP 版本和响应状态码进行响应。状态码 1XX 表示信息，2XX 表示成功，3XX 表示重定向，4XX 表示请求有问题，5XX 表示服务器异常。在这里状态码为 200 ，说明响应成功了。</li>
-<li>第十二行：“Content-Length: 2381 ”表明服务器返回消息的大小为2381字节。下一行的“Content-Type: text/html ”表明当前返回的是HTML文本。</li>
-<li>第十四行：“Date: Mon, 27 Jun 2022 16:04:17 GMT ”是当前Web服务器生成消息时的格林威治时间。</li>
-<li>第十五行：“Set-Cookie”的意思是，服务器让客户端设置cookie信息，这样客户端再次请求该网站时，HTTP 请求头中将带上cookie信息，这样服务器可以减少鉴权操作，从而加快消息处理和返回的速度。</li>
-<li>一连串响应头的后面是百度返回的HTML文本，这就是我们在浏览器上访问页面的源代码，并最终被浏览器渲染。</li>
-<li>最后* Closing connection 0 表明连接最终被关闭。</li>
-</ul><p>如果你想更深入地学习HTTP协议，推荐你阅读《HTTP: The Definitive Guide》 和《High Performance Browser Networking》这两本书。</p><h2>HTTP协议的困境</h2><p>HTTP1.0版本诞生于1995年，在20余年里，HTTP协议已经成为了最广泛使用的网络协议。但是随着互联网的快速发展，网络环境发生了不少变化，包括：</p><ul>
-<li>更多的资源分布在不同的主机中，当我们访问一个网页时，这个网页的图片等资源可能来自于外部几十个网站；</li>
-<li>资源占用的空间也越来越大；</li>
-<li>另外，相对于网络带宽，网络往返延迟变成最大的瓶颈。</li>
-</ul><p>在这个背景下，HTTP开始面临一系列性能问题，例如头阻塞问题（Head of Line）等。这就有了后续一系列对HTTP协议的优化，并产生了HTTP/2 和QUIC协议。</p><p>如果你想更深入地学习HTTP/2协议，推荐你阅读《HTTP/2 in Action》。如果你想深入了解QUIC协议，推荐你阅读QUIC的<a href="https://datatracker.ietf.org/doc/html/rfc9000">协议文档</a>以及这篇解释HTTP/3的<a href="https://www.smashingmagazine.com/2021/08/http3-core-concepts-part1/">文章</a>。</p><h2>HTTP请求底层原理</h2><p>我之前在<a href="https://time.geekbang.org/column/article/596287">第7讲</a>已经介绍过，借助epoll多路复用的机制和Go语言的调度器，Go可以在同步编程的语义下实现异步I/O的网络编程。在这个认知基础上，我们继续来看看HTTP标准库如何高效实现HTTP协议的请求与处理。</p><p>我们还是继续使用发送请求这个简单的例子。当http.Get函数完成基本的请求封装后，会进入到核心的主入口函数Transport.roundTrip，参数中会传递request请求数据。</p><p>Transport.roundTrip函数会选择一个合适的连接来发送这个request请求，并返回response。整个流程主要分为两步：</p><ul>
-<li>使用getConn函数来获得底层TCP连接；</li>
-<li>调用roundTrip函数发送request并返回response，此外还需要处理特殊协议，例如重定向、keep-alive等。</li>
-</ul><p>要注意的是，并不是每一次getConn函数都需要经过TCP的3次握手才能建立新的连接。具体的getConn函数如下：</p><pre><code class="language-plain">// 获取链接
+</code></pre><p>使用curl命令的 -vvv 标识可以打印出详细的协议日志，下面我逐行解读一下。</p>
+第一行：curl 命令是执行HTTP请求的常见工具。其中，<a href="https://www.baidu.xn--com-t33er8od2z/">www.baidu.com</a>是域名。*
+第二行通过DNS解析出它对应的IP地址为110.242.68.3。
+第三行：“TCP_NODELAY set ”表明 TCP 正在无延迟地直接发送数据，TCP_NODELAY是TCP众多选项的一个。
+第四行：“port 80” 代表连接到服务的80端口， 80端口其实是HTTP协议的默认端口。
+有<code>&gt;</code> 标识的5-8行数据才是真正发送到服务器的HTTP请求。数据GET / HTTP/1.1 表明当前使用的是HTTP的GET方法，并且协议版本是HTTP1.1。
+HTTP协议可以在请求头中加入多个key-value信息。第六行“Host: <a href="https://www.baidu.com">www.baidu.com</a>”表示当前请求的主机，我们这里是百度的域名。第七行“User-Agent”表示最终用户发出 HTTP 请求的计算机程序，在这里是curl工具。
+另外，第七行Accept标头还告诉我们 Web 服务器客户端可以理解的内容类型。这里*/*表示类型不限，可能是图片、视频、文字等。
+十到十七行表示服务端返回的信息，它们的规则跟前面类似。“HTTP/1.1 200 OK ”是服务器的响应。服务器使用 HTTP 版本和响应状态码进行响应。状态码 1XX 表示信息，2XX 表示成功，3XX 表示重定向，4XX 表示请求有问题，5XX 表示服务器异常。在这里状态码为 200 ，说明响应成功了。
+第十二行：“Content-Length: 2381 ”表明服务器返回消息的大小为2381字节。下一行的“Content-Type: text/html ”表明当前返回的是HTML文本。
+第十四行：“Date: Mon, 27 Jun 2022 16:04:17 GMT ”是当前Web服务器生成消息时的格林威治时间。
+第十五行：“Set-Cookie”的意思是，服务器让客户端设置cookie信息，这样客户端再次请求该网站时，HTTP 请求头中将带上cookie信息，这样服务器可以减少鉴权操作，从而加快消息处理和返回的速度。
+一连串响应头的后面是百度返回的HTML文本，这就是我们在浏览器上访问页面的源代码，并最终被浏览器渲染。
+最后* Closing connection 0 表明连接最终被关闭。
+<p>如果你想更深入地学习HTTP协议，推荐你阅读《HTTP: The Definitive Guide》 和《High Performance Browser Networking》这两本书。</p><h2>HTTP协议的困境</h2><p>HTTP1.0版本诞生于1995年，在20余年里，HTTP协议已经成为了最广泛使用的网络协议。但是随着互联网的快速发展，网络环境发生了不少变化，包括：</p>
+更多的资源分布在不同的主机中，当我们访问一个网页时，这个网页的图片等资源可能来自于外部几十个网站；
+资源占用的空间也越来越大；
+另外，相对于网络带宽，网络往返延迟变成最大的瓶颈。
+<p>在这个背景下，HTTP开始面临一系列性能问题，例如头阻塞问题（Head of Line）等。这就有了后续一系列对HTTP协议的优化，并产生了HTTP/2 和QUIC协议。</p><p>如果你想更深入地学习HTTP/2协议，推荐你阅读《HTTP/2 in Action》。如果你想深入了解QUIC协议，推荐你阅读QUIC的<a href="https://datatracker.ietf.org/doc/html/rfc9000">协议文档</a>以及这篇解释HTTP/3的<a href="https://www.smashingmagazine.com/2021/08/http3-core-concepts-part1/">文章</a>。</p><h2>HTTP请求底层原理</h2><p>我之前在<a href="https://time.geekbang.org/column/article/596287">第7讲</a>已经介绍过，借助epoll多路复用的机制和Go语言的调度器，Go可以在同步编程的语义下实现异步I/O的网络编程。在这个认知基础上，我们继续来看看HTTP标准库如何高效实现HTTP协议的请求与处理。</p><p>我们还是继续使用发送请求这个简单的例子。当http.Get函数完成基本的请求封装后，会进入到核心的主入口函数Transport.roundTrip，参数中会传递request请求数据。</p><p>Transport.roundTrip函数会选择一个合适的连接来发送这个request请求，并返回response。整个流程主要分为两步：</p>
+使用getConn函数来获得底层TCP连接；
+调用roundTrip函数发送request并返回response，此外还需要处理特殊协议，例如重定向、keep-alive等。
+<p>要注意的是，并不是每一次getConn函数都需要经过TCP的3次握手才能建立新的连接。具体的getConn函数如下：</p><pre><code class="language-plain">// 获取链接
 func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persistConn, err error) {
 	 ...
 
@@ -70,10 +70,10 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
 		return nil, err
 	}
 }
-</code></pre><p>可以看到，Go标准库在这里使用了连接池来优化获取连接的过程。之前已经与服务器完成请求的连接一般不会立即被销毁（HTTP/1.1默认使用了keep-alive:true，可以复用连接），而是会调用tryPutIdleConn函数放入到连接池中。通过下图左侧的部分可以看到请求结束后连接的归宿（连接也可能会直接被销毁，例如请求头中指定了keep-alive属性为false 或者连接已经超时）。</p><p><img src="https://static001.geekbang.org/resource/image/2e/3f/2ef71447e2e1f6ceae194864ae10c43f.jpg?wh=1920x1667" alt=""></p><p>使用连接池的收益是非常明显的，因为复用连接之后就不用再进行TCP三次握手了，这大大减少了请求的时间。举个特别的例子，在使用了HTTPS协议时，在三次握手基础上还增加了额外的鉴权协调，初始化的建连过程甚至需要花费几十到上百毫秒。</p><p>另外连接池的设计也很有讲究，例如连接池中的连接到了一定的时间需要强制关闭。获取连接时的逻辑如下：</p><ul>
-<li>当连接池中有对应的空闲连接时，直接使用该连接；</li>
-<li>当连接池中没有对应的空闲连接时，正常情况下会通过异步与服务端建连的方式获取连接，并将当前协程放入到等待队列中。</li>
-</ul><p>连接的第一步是通过Resolver.resolveAddrList方法访问DNS服务器，获取<a href="https://www.baidu.com">www.baidu.com</a> 网站对应的IP地址。下面这张图展示了借助DNS协议查找域名对应的IP地址的过程。</p><p><img src="https://static001.geekbang.org/resource/image/66/9d/6608af192fe75a581yyf8d3411af779d.jpg?wh=1920x1047" alt="图片" title="DNS解析流程"></p><p>客户端首先查看是否有本地缓存，如果没有，则会用递归方式从权威域名服务器中获取DNS信息并缓存下来。如果你想深入了解DNS协议，可以参考《Introduction to Computer Networks and Cybersecurity》的第二章。</p><p>在与远程服务器建连的过程中，当前的协程会进入阻塞等待的状态。正常情况下，当前请求的协程会等待连接完毕。但是因为建立连接的过程还是比较耗时的，所以如果在这个过程中正好有一个其他连接使用完了，协程就会优先使用该连接。</p><p>这种巧妙的设计依托了轻量级协程的优势，获取连接的具体流程如下图右侧所示：</p><p><img src="https://static001.geekbang.org/resource/image/2e/3f/2ef71447e2e1f6ceae194864ae10c43f.jpg?wh=1920x1667" alt=""></p><p>为利用协程并发的优势，Transport.roundTrip协程获取到连接后，会调用Transport.dialConn创建读写buffer以及读数据与写数据的两个协程，分别负责处理发送请求和服务器返回的消息：</p><pre><code class="language-plain">func (t *Transport) dialConn(ctx context.Context, cm connectMethod) (pconn *persistConn, err error) {
+</code></pre><p>可以看到，Go标准库在这里使用了连接池来优化获取连接的过程。之前已经与服务器完成请求的连接一般不会立即被销毁（HTTP/1.1默认使用了keep-alive:true，可以复用连接），而是会调用tryPutIdleConn函数放入到连接池中。通过下图左侧的部分可以看到请求结束后连接的归宿（连接也可能会直接被销毁，例如请求头中指定了keep-alive属性为false 或者连接已经超时）。</p><p><img src="https://static001.geekbang.org/resource/image/2e/3f/2ef71447e2e1f6ceae194864ae10c43f.jpg?wh=1920x1667" alt=""></p><p>使用连接池的收益是非常明显的，因为复用连接之后就不用再进行TCP三次握手了，这大大减少了请求的时间。举个特别的例子，在使用了HTTPS协议时，在三次握手基础上还增加了额外的鉴权协调，初始化的建连过程甚至需要花费几十到上百毫秒。</p><p>另外连接池的设计也很有讲究，例如连接池中的连接到了一定的时间需要强制关闭。获取连接时的逻辑如下：</p>
+当连接池中有对应的空闲连接时，直接使用该连接；
+当连接池中没有对应的空闲连接时，正常情况下会通过异步与服务端建连的方式获取连接，并将当前协程放入到等待队列中。
+<p>连接的第一步是通过Resolver.resolveAddrList方法访问DNS服务器，获取<a href="https://www.baidu.com">www.baidu.com</a> 网站对应的IP地址。下面这张图展示了借助DNS协议查找域名对应的IP地址的过程。</p><p><img src="https://static001.geekbang.org/resource/image/66/9d/6608af192fe75a581yyf8d3411af779d.jpg?wh=1920x1047" alt="图片" title="DNS解析流程"></p><p>客户端首先查看是否有本地缓存，如果没有，则会用递归方式从权威域名服务器中获取DNS信息并缓存下来。如果你想深入了解DNS协议，可以参考《Introduction to Computer Networks and Cybersecurity》的第二章。</p><p>在与远程服务器建连的过程中，当前的协程会进入阻塞等待的状态。正常情况下，当前请求的协程会等待连接完毕。但是因为建立连接的过程还是比较耗时的，所以如果在这个过程中正好有一个其他连接使用完了，协程就会优先使用该连接。</p><p>这种巧妙的设计依托了轻量级协程的优势，获取连接的具体流程如下图右侧所示：</p><p><img src="https://static001.geekbang.org/resource/image/2e/3f/2ef71447e2e1f6ceae194864ae10c43f.jpg?wh=1920x1667" alt=""></p><p>为利用协程并发的优势，Transport.roundTrip协程获取到连接后，会调用Transport.dialConn创建读写buffer以及读数据与写数据的两个协程，分别负责处理发送请求和服务器返回的消息：</p><pre><code class="language-plain">func (t *Transport) dialConn(ctx context.Context, cm connectMethod) (pconn *persistConn, err error) {
 	...
   // buffer
 	pconn.br = bufio.NewReaderSize(pconn, t.readBufferSize())
@@ -85,8 +85,8 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
 	go pconn.writeLoop()
 }
 </code></pre><p>整个处理流程和协程间协调如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/5b/17/5b18b3086f15317c87d11yyfca965017.jpg?wh=1920x1047" alt="" title="HTTP请求的完整流程"></p><p>HTTP请求调用的核心函数是roundTrip，它会首先传递请求给writeLoop协程，让writeLoop协程写入数据。接着，通知readLoop协程让它准备好读取数据。等writeLoop成功写入数据后，writeLoop会通知readLoop断开后是否可以重用连接。然后writeLoop会通知上游写入是否成功。如果写入失败，上游会直接关闭连接。</p><p>当readLoop接收到服务器发送的响应数据之后，会通知上游并且将response数据返回到上游，应用层会获取返回的response数据，并进行相应的业务处理 。应用层读取完毕response数据后，HTTP标准库会自动调用close函数，该函数会通知readLoop“数据读取完毕”。这样readLoop就可以进一步决策了。readLoop需要判断是继续循环等待服务器消息，还是将当前连接放入到连接池中，或者是直接销毁。</p><p>Go HTTP标准库使用了连接池等技术帮助我们更好地管理连接、高效读写消息、并托管了与操作系统之间的交互。</p><h2>总结</h2><p>数据包到达操作系统之后，借助硬件、驱动、CPU与操作系统之间的紧密配合，可以被快速处理。操作系统对网络协议做了大量的托管处理，依靠内核对链路层、网络层、传输层进行了处理。而应用层则需要依靠具体的应用程序进行处理。</p><p>在内核与应用程序之间，内核暴露了Socket编程的API和很多I/O多路复用的机制，它们被Go标准库封装起来，而HTTP标准库又在此基础上封装了HTTP协议。HTTP标准库处理复杂多样的协议语言（HTTP、HTTPS、HTTP/2），通过连接池对连接进行复用管理、并且将读写分离为两个协程，高效处理数据并形成清晰的语义。</p><h2>课后题</h2><p>学完这节课，我也给你留两道思考题吧。</p><ol>
-<li>你认为Go标准库的这种实现方式有哪些不足的地方？</li>
-<li>Go标准库使用了连接池，你觉得实现一个连接池应该考虑哪些因素？</li>
+你认为Go标准库的这种实现方式有哪些不足的地方？
+Go标准库使用了连接池，你觉得实现一个连接池应该考虑哪些因素？
 </ol><p>欢迎你在留言区留下自己思考的结果，也可以把这节课分享给对这个话题感兴趣的同事和朋友，我们下节课再见！</p>
 <style>
     ul {
@@ -197,7 +197,7 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/35/77/95e95b32.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -212,8 +212,8 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/4c/fc/0e887697.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -228,8 +228,8 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/87/e1/b85dce85.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -244,8 +244,8 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEIqvYMQ1yscgB6xS4nDkoOuP6KiaCiaichQA1OiaQ9rFmNtT9icgrZxeH1WRn5HfiaibDguj8e0lBpo65ricA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -260,8 +260,8 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/54/21/8c13a2b4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -276,5 +276,4 @@ func (t *Transport) getConn(treq *transportRequest, cm connectMethod) (pc *persi
   </div>
 </div>
 </div>
-</li>
-</ul>
+

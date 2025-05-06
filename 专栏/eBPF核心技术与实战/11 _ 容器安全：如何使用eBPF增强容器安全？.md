@@ -34,12 +34,12 @@ docker run -it --rm --name bash --hostname bash ubuntu:impish
   /* 4. 输出PID命名空间、主机名和进程基本信息 */
   printf("%-12ld %-8s %-6d %-6d %-8s", (uint64)$pidns, $cname, curtask-&gt;parent-&gt;pid, pid, comm); join(args-&gt;argv);
 }
-</code></pre><p>这段代码中的具体内容含义如下：</p><ul>
-<li>第 1 处，把内置变量 <code>curtask</code> 转换为我们想要的 <code>task_struct</code> 结构体；</li>
-<li>第 2 处，从进程信息的 nsproxy 中读取 PID 命名空间编号；</li>
-<li>第 3 处，从进程信息的 nsproxy 中读取 UTS 命名空间的主机名（也就是在容器中执行 <code>hostname</code> 命令后的输出）；</li>
-<li>第 4 处你已经非常熟悉了，就是把刚才获取的信息输出，以便我们观察。</li>
-</ul><p>由于这儿用到了很多内核数据结构，在运行之前，还需要给它引入相关数据结构定义的头文件：</p><pre><code class="language-c++">#include &lt;linux/sched.h&gt;
+</code></pre><p>这段代码中的具体内容含义如下：</p>
+第 1 处，把内置变量 <code>curtask</code> 转换为我们想要的 <code>task_struct</code> 结构体；
+第 2 处，从进程信息的 nsproxy 中读取 PID 命名空间编号；
+第 3 处，从进程信息的 nsproxy 中读取 UTS 命名空间的主机名（也就是在容器中执行 <code>hostname</code> 命令后的输出）；
+第 4 处你已经非常熟悉了，就是把刚才获取的信息输出，以便我们观察。
+<p>由于这儿用到了很多内核数据结构，在运行之前，还需要给它引入相关数据结构定义的头文件：</p><pre><code class="language-c++">#include &lt;linux/sched.h&gt;
 #include &lt;linux/nsproxy.h&gt;
 #include &lt;linux/utsname.h&gt;
 #include &lt;linux/pid_namespace.h&gt;
@@ -68,13 +68,13 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   printf("Killing shell command in container %s: %s ", $cname, $pidns, comm); join(args-&gt;argv);
  signal(9); /* SIGKILL */
 }
-</code></pre><p>这段代码中的具体内容含义如下：</p><ul>
-<li><code>/comm == "bash"/</code> 表示对进程名称进行过滤，只处理 Bash 进程；</li>
-<li><code>signal(9)</code> 表示向进程发送 SIGKILL 信号，即杀死进程。</li>
-</ul><p>加入与上一小节中相同的头文件，然后把它保存到 <code>block-container-shell.bt</code> 文件（你也可以在 <a href="https://github.com/feiskyer/ebpf-apps/blob/main/bpftrace/block-container-shell.bt">GitHub</a> 上找到完整代码）中，然后运行下面的命令来执行：</p><pre><code class="language-bash">sudo bpftrace --unsafe block-container-shell.bt
+</code></pre><p>这段代码中的具体内容含义如下：</p>
+<code>/comm == "bash"/</code> 表示对进程名称进行过滤，只处理 Bash 进程；
+<code>signal(9)</code> 表示向进程发送 SIGKILL 信号，即杀死进程。
+<p>加入与上一小节中相同的头文件，然后把它保存到 <code>block-container-shell.bt</code> 文件（你也可以在 <a href="https://github.com/feiskyer/ebpf-apps/blob/main/bpftrace/block-container-shell.bt">GitHub</a> 上找到完整代码）中，然后运行下面的命令来执行：</p><pre><code class="language-bash">sudo bpftrace --unsafe block-container-shell.bt
 </code></pre><p>接着，回到容器终端，执行任意命令都会失败，并且失败信息都是 <code>Killed</code> 。</p><p>需要注意，这种直接杀死进程的方法实际上比较危险，如果出现误杀，可能会导致大量进程都无法正常启动。所以 bpftrace 要求你加上 <code>--unsafe</code>选项后才可以正常运行。</p><h2>小结</h2><p>今天，我带你一起梳理了 eBPF 的安全能力，并以容器应用为例，带你用 eBPF 分析并阻止了容器中的命令执行。</p><p>eBPF 所支持的 kprobe、uprobe、tracepoint 等各类探针已经非常全面地涵盖了从应用到内核中的各类安全问题相关的跟踪点，再配合其开销低、实时性好，且不需要修改并重新编译内核和应用等特性，使 eBPF 特别适合用于安全事件的动态监测和实时分析诊断。对于安全策略的执行，eBPF 也已经支持了 LSM 钩子、向进程发送信号、丢弃网络数据包等各类操作。</p><p>在这一讲的最后，我想提醒你：既然 eBPF 提供了这么强大的功能，在用好 eBPF 这些丰富特性的同时，你也要特别留意 eBPF 程序自身的安全性。比如，禁止普通用户和普通容器应用运行 eBPF 程序，而只允许管理员和系统服务运行。对容器来说，你可以利用 Capabilities 禁止普通容器的 <code>CAP_PERFMON</code>、<code>CAP_BPF</code>和 <code>CAP_SYS_ADMIN</code>等权限。</p><h2>思考题</h2><p>最后，我想邀请你来聊一聊：</p><ol>
-<li>在了解 eBPF 之前，你是如何监测、分析和阻止容器的安全问题的？</li>
-<li>在阻止容器 Bash 命令执行的案例中，除了杀死进程之外，还有哪些其他的方法？</li>
+在了解 eBPF 之前，你是如何监测、分析和阻止容器的安全问题的？
+在阻止容器 Bash 命令执行的案例中，除了杀死进程之外，还有哪些其他的方法？
 </ol><p>期待你在留言区和我讨论，也欢迎把这节课分享给你的同事、朋友。让我们一起在实战中演练，在交流中进步。</p>
 <style>
     ul {
@@ -185,7 +185,7 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/5e/96/a03175bc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -200,8 +200,8 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/5e/96/a03175bc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -216,8 +216,8 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/41/38/4f89095b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -232,8 +232,8 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/cd/db/7467ad23.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -248,8 +248,8 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/32/a8/d5bf5445.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -264,8 +264,8 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIsEia7TcYPiaO53QIydh4tPonwnpktgrhLeJqg4sNa8s11XNVTVajrI9jKibHs0FYn0EW8d8t3EM8ibQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -280,5 +280,4 @@ sudo bpftrace -e "uretprobe:/proc/$PID/root/usr/bin/bash:readline { printf(\"Use
   </div>
 </div>
 </div>
-</li>
-</ul>
+

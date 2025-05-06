@@ -28,15 +28,15 @@ Pinterest的创始人在很长一段时间里都只是专注于用户的增长�
 
 于是Pinterest开始开拓各种赚钱的路径。经过多年的发展，Pinterest目前的盈利模式主要有三种：
 
-<li>
+
 Pinterest允许企业付费在Pinterest上建立自己的页面，用来宣传企业相关的产品。这个做法和Facebook、Twitter，乃至Glassdoor都很像。
-</li>
-<li>
+
+
 Pinterest允许企业通过投放图片广告的方式，把自己的图片增加到用户的图片合集里。这些图片被称为Promoted Pins。这类似于谷歌和Facebook的广告赚钱法，只不过这里是展示图片。
-</li>
-<li>
+
+
 Pinterest还尝试给它手机端的APP增加了购买的功能。这样，当用户看到自己喜欢的东西，比如衣服、包、化妆品等的时候，就可以直接购买了。而Pinterest则从中抽成。
-</li>
+
 
 总体来说，目前Pinterest是赚钱的，但是赚得并不是很多。这和它庞大的用户基数比起来，赚钱的潜力还有很大发挥空间的。
 

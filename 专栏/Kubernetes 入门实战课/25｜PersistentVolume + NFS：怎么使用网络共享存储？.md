@@ -133,13 +133,13 @@ spec:
 &nbsp; &nbsp; &nbsp; &nbsp; - name: nfs-dyn-10m-vol
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; mountPath: /tmp
 </code></pre><p>使用 <code>kubectl apply</code> 创建好PVC和Pod，让我们来查看一下集群里的PV状态：</p><p><img src="https://static001.geekbang.org/resource/image/57/bb/570d73409db1edc757yy10e6aba56ebb.png?wh=1920x271" alt="图片"></p><p>从截图你可以看到，虽然我们没有直接定义PV对象，但由于有NFS Provisioner，它就自动创建一个PV，大小刚好是在PVC里申请的10MB。</p><p>如果你这个时候再去NFS服务器上查看共享目录，也会发现多出了一个目录，名字与这个自动创建的PV一样，但加上了名字空间和PVC的前缀：</p><p><img src="https://static001.geekbang.org/resource/image/a9/ea/a9b6942b824bc9f7841850ee15yy68ea.png?wh=1714x126" alt="图片"></p><p>我还是把Pod、PVC、StorageClass和Provisioner的关系画成了一张图，你可以清楚地看出来这些对象的关联关系，还有Pod是如何最终找到存储设备的：</p><p><img src="https://static001.geekbang.org/resource/image/e3/1e/e3905990be6fb8739fb51a4ab9856f1e.jpg?wh=1920x856" alt="图片"></p><h2>小结</h2><p>好了，今天的这节课里我们继续学习PV/PVC，引入了网络存储系统，以NFS为例研究了静态存储卷和动态存储卷的用法，其中的核心对象是StorageClass和Provisioner。</p><p>我再小结一下今天的要点：</p><ol>
-<li>在Kubernetes集群里，网络存储系统更适合数据持久化，NFS是最容易使用的一种网络存储系统，要事先安装好服务端和客户端。</li>
-<li>可以编写PV手工定义NFS静态存储卷，要指定NFS服务器的IP地址和共享目录名。</li>
-<li>使用NFS动态存储卷必须要部署相应的Provisioner，在YAML里正确配置NFS服务器。</li>
-<li>动态存储卷不需要手工定义PV，而是要定义StorageClass，由关联的Provisioner自动创建PV完成绑定。</li>
+在Kubernetes集群里，网络存储系统更适合数据持久化，NFS是最容易使用的一种网络存储系统，要事先安装好服务端和客户端。
+可以编写PV手工定义NFS静态存储卷，要指定NFS服务器的IP地址和共享目录名。
+使用NFS动态存储卷必须要部署相应的Provisioner，在YAML里正确配置NFS服务器。
+动态存储卷不需要手工定义PV，而是要定义StorageClass，由关联的Provisioner自动创建PV完成绑定。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>动态存储卷相比静态存储卷有什么好处？有没有缺点？</li>
-<li>StorageClass在动态存储卷的分配过程中起到了什么作用？</li>
+动态存储卷相比静态存储卷有什么好处？有没有缺点？
+StorageClass在动态存储卷的分配过程中起到了什么作用？
 </ol><p>期待你的思考。如果觉得有收获，也欢迎你分享给朋友一起讨论。我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/20/ff/2022f24dcc6a3d76214bbc59c3bd2aff.jpg?wh=1920x2122" alt="图片"></p>
 <style>
     ul {
@@ -250,7 +250,7 @@ spec:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/83/af/1cb42cd3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -265,8 +265,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b3/d9/cf061262.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -281,8 +281,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/1b/f9/018197f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -297,8 +297,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/83/af/1cb42cd3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -313,8 +313,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/8f/48/c7fb8067.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -329,8 +329,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -345,8 +345,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/65/da/29fe3dde.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -361,8 +361,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/94/fe/5fbf1bdc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -377,8 +377,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0c/5a/3b01789e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -393,8 +393,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ce/58/71ed845f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -409,8 +409,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/9b/64/dadf0ca5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -425,8 +425,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/9b/64/dadf0ca5.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -441,8 +441,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/g4os8I4iaB6jn06PsvyqI1BooV5XbOC0vI3niaJ4I3SlAhkbBKG2eewlPHHJ4ROcDia18bbPFSZPDXXmgHXtrBlLg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -457,8 +457,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/ca/07/22dd76bf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -473,8 +473,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/3b/29/0f86235e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -489,8 +489,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7e/25/3932dafd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -505,8 +505,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7e/25/3932dafd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -521,8 +521,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -537,8 +537,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/3c/4d/3dec4bfe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -553,8 +553,8 @@ spec:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/73/52/8a4cf5e9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -569,5 +569,4 @@ spec:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -44,27 +44,27 @@ Extra这个字段中的“Using filesort”表示的就是需要排序，MySQL�
 
 通常情况下，这个语句执行流程如下所示 ：
 
-<li>
+
 初始化sort_buffer，确定放入name、city、age这三个字段；
-</li>
-<li>
+
+
 从索引city找到第一个满足city='杭州’条件的主键id，也就是图中的ID_X；
-</li>
-<li>
+
+
 到主键id索引取出整行，取name、city、age三个字段的值，存入sort_buffer中；
-</li>
-<li>
+
+
 从索引city取下一个记录的主键id；
-</li>
-<li>
+
+
 重复步骤3、4直到city的值不满足查询条件为止，对应的主键id也就是图中的ID_Y；
-</li>
-<li>
+
+
 对sort_buffer中的数据按照字段name做快速排序；
-</li>
-<li>
+
+
 按照排序结果取前1000行返回给客户端。
-</li>
+
 
 我们暂且把这个排序过程，称为全字段排序，执行流程的示意图如下所示，下一篇文章中我们还会用到这个排序。
 
@@ -142,27 +142,27 @@ city、name、age 这三个字段的定义总长度是36，我把max_length_for_
 
 但这时，排序的结果就因为少了city和age字段的值，不能直接返回了，整个执行流程就变成如下所示的样子：
 
-<li>
+
 初始化sort_buffer，确定放入两个字段，即name和id；
-</li>
-<li>
+
+
 从索引city找到第一个满足city='杭州’条件的主键id，也就是图中的ID_X；
-</li>
-<li>
+
+
 到主键id索引取出整行，取name、id这两个字段，存入sort_buffer中；
-</li>
-<li>
+
+
 从索引city取下一个记录的主键id；
-</li>
-<li>
+
+
 重复步骤3、4直到不满足city='杭州’条件为止，也就是图中的ID_Y；
-</li>
-<li>
+
+
 对sort_buffer中的数据按照字段name进行排序；
-</li>
-<li>
+
+
 遍历排序结果，取前1000行，并按照id的值回到原表中取出city、name和age三个字段返回给客户端。
-</li>
+
 
 这个执行流程的示意图如下，我把它称为rowid排序。
 
@@ -224,18 +224,18 @@ alter table t add index city_user(city, name);
 
 这样整个查询过程的流程就变成了：
 
-<li>
+
 从索引(city,name)找到第一个满足city='杭州’条件的主键id；
-</li>
-<li>
+
+
 到主键id索引取出整行，取name、city、age三个字段的值，作为结果集的一部分直接返回；
-</li>
-<li>
+
+
 从索引(city,name)取下一个记录主键id；
-</li>
-<li>
+
+
 重复步骤2、3，直到查到第1000条记录，或者是不满足city='杭州’条件时循环结束。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/3f/92/3f590c3a14f9236f2d8e1e2cb9686692.jpg" alt="">
 
@@ -260,15 +260,15 @@ alter table t add index city_user_age(city, name, age);
 
 这时，对于city字段的值相同的行来说，还是按照name字段的值递增排序的，此时的查询语句也就不再需要排序了。这样整个查询语句的执行流程就变成了：
 
-<li>
+
 从索引(city,name,age)找到第一个满足city='杭州’条件的记录，取出其中的city、name和age这三个字段的值，作为结果集的一部分直接返回；
-</li>
-<li>
+
+
 从索引(city,name,age)取下一个记录，同样取出这三个字段的值，作为结果集的一部分直接返回；
-</li>
-<li>
+
+
 重复执行步骤2，直到查到第1000条记录，或者是不满足city='杭州’条件时循环结束。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/df/d6/df4b8e445a59c53df1f2e0f115f02cd6.jpg" alt="">
 

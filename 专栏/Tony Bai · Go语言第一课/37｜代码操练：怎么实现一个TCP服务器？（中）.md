@@ -3,12 +3,12 @@
 $cd tcp-server-demo1
 $go mod init github.com/bigwhite/tcp-server-demo1
 go: creating new go.mod: module github.com/bigwhite/tcp-server-demo1
-</code></pre><!-- [[[read_end]]] --><p>为了方便学习，我这里再将上一讲中的自定义协议规范贴出来对照参考：</p><p><img src="https://static001.geekbang.org/resource/image/70/21/70b43197100a790f3a78db50997c1d21.jpg?wh=1980x1080" alt=""></p><h3>深入协议字段</h3><p>上一讲，我们没有深入到协议规范中对协议的各个字段进行讲解，但在建立抽象之前，我们有必要了解一下各个字段的具体含义。</p><p>这是一个高度简化的、基于二进制模式定义的协议。二进制模式定义的特点，就是采用长度字段标识独立数据包的边界。</p><p>在这个协议规范中，我们看到：请求包和应答包的第一个字段（totalLength）都是包的总长度，它就是用来标识包边界的那个字段，也是在应用层用于“分割包”的最重要字段。</p><p>请求包与应答包的第二个字段也一样，都是commandID，这个字段用于标识包类型，这里我们定义四种包类型：</p><ul>
-<li>连接请求包（值为0x01）</li>
-<li>消息请求包（值为0x02）</li>
-<li>连接响应包（值为0x81）</li>
-<li>消息响应包（值为0x82）</li>
-</ul><p>换为对应的代码就是：</p><pre><code class="language-plain">const (
+</code></pre><!-- [[[read_end]]] --><p>为了方便学习，我这里再将上一讲中的自定义协议规范贴出来对照参考：</p><p><img src="https://static001.geekbang.org/resource/image/70/21/70b43197100a790f3a78db50997c1d21.jpg?wh=1980x1080" alt=""></p><h3>深入协议字段</h3><p>上一讲，我们没有深入到协议规范中对协议的各个字段进行讲解，但在建立抽象之前，我们有必要了解一下各个字段的具体含义。</p><p>这是一个高度简化的、基于二进制模式定义的协议。二进制模式定义的特点，就是采用长度字段标识独立数据包的边界。</p><p>在这个协议规范中，我们看到：请求包和应答包的第一个字段（totalLength）都是包的总长度，它就是用来标识包边界的那个字段，也是在应用层用于“分割包”的最重要字段。</p><p>请求包与应答包的第二个字段也一样，都是commandID，这个字段用于标识包类型，这里我们定义四种包类型：</p>
+连接请求包（值为0x01）
+消息请求包（值为0x02）
+连接响应包（值为0x81）
+消息响应包（值为0x82）
+<p>换为对应的代码就是：</p><pre><code class="language-plain">const (
     CommandConn   = iota + 0x01 // 0x01，连接请求包
     CommandSubmit               // 0x02，消息请求包
 )
@@ -76,11 +76,11 @@ func (p *myFrameCodec) Decode(r io.Reader) (FramePayload, error) {
 
     return FramePayload(buf), nil
 }
-</code></pre><p>在在这段实现中，有三点事项需要我们注意：</p><ul>
-<li>网络字节序使用大端字节序（BigEndian），因此无论是Encode还是Decode，我们都是用binary.BigEndian；</li>
-<li>binary.Read或Write会根据参数的宽度，读取或写入对应的字节个数的字节，这里totalLen使用int32，那么Read或Write只会操作数据流中的4个字节；</li>
-<li>这里没有设置网络I/O操作的Deadline，io.ReadFull一般会读满你所需的字节数，除非遇到EOF或ErrUnexpectedEOF。</li>
-</ul><p>在工程实践中，保证打包与解包正确的最有效方式就是<strong>编写单元测试</strong>，StreamFrameCodec接口的Decode和Encode方法的参数都是接口类型，这让我们可以很容易为StreamFrameCodec接口的实现编写测试用例。下面是我为myFrameCodec编写了两个测试用例：</p><pre><code class="language-plain">// tcp-server-demo1/frame/frame_test.go
+</code></pre><p>在在这段实现中，有三点事项需要我们注意：</p>
+网络字节序使用大端字节序（BigEndian），因此无论是Encode还是Decode，我们都是用binary.BigEndian；
+binary.Read或Write会根据参数的宽度，读取或写入对应的字节个数的字节，这里totalLen使用int32，那么Read或Write只会操作数据流中的4个字节；
+这里没有设置网络I/O操作的Deadline，io.ReadFull一般会读满你所需的字节数，除非遇到EOF或ErrUnexpectedEOF。
+<p>在工程实践中，保证打包与解包正确的最有效方式就是<strong>编写单元测试</strong>，StreamFrameCodec接口的Decode和Encode方法的参数都是接口类型，这让我们可以很容易为StreamFrameCodec接口的实现编写测试用例。下面是我为myFrameCodec编写了两个测试用例：</p><pre><code class="language-plain">// tcp-server-demo1/frame/frame_test.go
 
 func TestEncode(t *testing.T) {
     codec := NewMyFrameCodec()
@@ -530,8 +530,8 @@ handleConn: frame decode error: EOF
 handleConn: frame decode error: EOF
 handleConn: frame decode error: EOF
 </code></pre><p>从结果来看，我们实现的这一版服务端运行正常！</p><h2>小结</h2><p>好了，今天的课讲到这里就结束了，现在我们一起来回顾一下吧。</p><p>在上一讲完成对socket编程模型、网络I/O操作的技术预研后，这一讲我们正式进入基于TCP的自定义应用层协议的通信服务端的设计与实现环节。</p><p>在这一环节中，我们首先建立了对协议的抽象，这是实现通信服务端的基石。我们使用Frame的概念来表示TCP字节流中的每一个协议消息，这使得在业务层的视角下，连接上的字节流就是由一个接着一个Frame组成的。接下来，我们又建立了第二个抽象Packet，来表示业务层真正需要的消息。</p><p>在这两个抽象的基础上，我们实现了frame与packet各自的打包与解包，整个实现是低耦合的，我们可以在对frame编写测试用例时体会到这一点。</p><p>最后，我们把上一讲提到的、一个Goroutine负责处理一个连接的典型Go网络服务端程序结构与frame、packet的实现组装到一起，就实现了我们的第一版服务端。之后，我们还编写了客户端模拟器对这个服务端的实现做了验证。</p><p>这个服务端采用的是Go经典阻塞I/O的编程模型，你是不是已经感受到了这种模型在开发阶段带来的好处了呢！</p><h2>思考题</h2><p>在这讲的中间部分，我已经把作业留给你了：</p><ol>
-<li>为packet包编写单元测试；</li>
-<li>为我们的服务端增加优雅退出机制，以及捕捉某个链接上出现的可能导致整个程序退出的panic。</li>
+为packet包编写单元测试；
+为我们的服务端增加优雅退出机制，以及捕捉某个链接上出现的可能导致整个程序退出的panic。
 </ol><h3><a href="https://github.com/bigwhite/publication/tree/master/column/timegeek/go-first-course/37">项目的源代码在这里！</a></h3>
 <style>
     ul {
@@ -642,7 +642,7 @@ handleConn: frame decode error: EOF
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/f5/96/0cf9f3c7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -657,8 +657,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/b5/e6/c67f12bd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -673,8 +673,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/71/26/773e6dcb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -689,8 +689,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKfYfHAvhZmsKiauxPAt9T2D7ntiaZrP8mial07CAdWiaCEJMawZwficjL3PFvZl35WM7D6ibcYf6miaERJQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -705,8 +705,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -721,8 +721,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/51/d4/ca703443.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -737,8 +737,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/0a/23/c26f4e50.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -753,8 +753,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/a3/49/4a488f4c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -769,8 +769,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/5JKZO1Ziax3Ky03noshpVNyEvZw0pUwjLcHrHRo1XNPKXdmCE88homb6ltA15CdVRnjzjgGs3Ex42CaDbeYzNuQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -785,8 +785,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0a/da/dcf8f2b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -801,8 +801,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -817,8 +817,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/05/92/b609f7e3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -833,8 +833,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erZCyXaP2gbxwFHxvtnyaaF2Pyy5KkSMsk9kh7SJl8icp1CD6wicb6VJibiblGibbpDo6IuHrdST6AnWQg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -849,8 +849,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/2d/df/4949b250.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -865,8 +865,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83erwcUXd1YciaE2VmCRZUjbm0hscIAwvXJOQtibK2aor2DrmxxPszsfecZ11dibniakRSkMYrhp8ibsHWoA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -881,8 +881,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/56/4e/9291fac0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -897,8 +897,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/x3gOkI2Dl1Gb3WRic44roicJMILgHfdFRic8nfR7oh0asf0KONEj7U2or6YHMmCcyibskvVE5Pjypz2ALGwBXRyMPA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -913,8 +913,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/62/6f/8fb1a57b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -929,8 +929,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/62/6f/8fb1a57b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -945,8 +945,8 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/90/23/5c74e9b7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -961,5 +961,4 @@ handleConn: frame decode error: EOF
   </div>
 </div>
 </div>
-</li>
-</ul>
+

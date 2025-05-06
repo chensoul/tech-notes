@@ -41,12 +41,12 @@ Tomcat的NioEndpoint组件实现了I/O多路复用模型，接下来我会介绍
 
 我们知道，对于Java的多路复用器的使用，无非是两步：
 
-<li>
+
 创建一个Selector，在它身上注册各种感兴趣的事件，然后调用select方法，等待感兴趣的事情发生。
-</li>
-<li>
+
+
 感兴趣的事情发生了，比如可以读了，这时便创建一个新的线程从Channel中读数据。
-</li>
+
 
 Tomcat的NioEndpoint组件虽然实现比较复杂，但基本原理就是上面两步。我们先来看看它有哪些组件，它一共包含LimitLatch、Acceptor、Poller、SocketProcessor和Executor共5个组件，它们的工作过程如下图所示。
 
@@ -111,12 +111,12 @@ public class LimitLatch {
 
 理解上面的代码时有两个要点：
 
-<li>
+
 用户线程通过调用LimitLatch的countUpOrAwait方法来拿到锁，如果暂时无法获取，这个线程会被阻塞到AQS的队列中。那AQS怎么知道是阻塞还是不阻塞用户线程呢？其实这是由AQS的使用者来决定的，也就是内部类Sync来决定的，因为Sync类重写了AQS的**tryAcquireShared()方法**。它的实现逻辑是如果当前连接数count小于limit，线程能获取锁，返回1，否则返回-1。
-</li>
-<li>
+
+
 如何用户线程被阻塞到了AQS的队列，那什么时候唤醒呢？同样是由Sync内部类决定，Sync重写了AQS的**tryReleaseShared()方法**，其实就是当一个连接请求处理完了，这时又可以接收一个新连接了，这样前面阻塞的线程将会被唤醒。
-</li>
+
 
 其实你会发现AQS就是一个骨架抽象类，它帮我们搭了个架子，用来控制线程的阻塞和唤醒。具体什么时候阻塞、什么时候唤醒由你来决定。我们还注意到，当前线程数被定义成原子变量AtomicLong，而limit变量用volatile关键字来修饰，这些并发编程的实际运用。
 
@@ -133,12 +133,12 @@ serverSock.configureBlocking(true);
 
 从上面的初始化代码我们可以看到两个关键信息：
 
-<li>
+
 bind方法的第二个参数表示操作系统的等待队列长度，我在上面提到，当应用层面的连接数到达最大值时，操作系统可以继续接收连接，那么操作系统能继续接收的最大连接数就是这个队列长度，可以通过acceptCount参数配置，默认是100。
-</li>
-<li>
+
+
 ServerSocketChannel被设置成阻塞模式，也就是说它是以阻塞的方式接收连接的。
-</li>
+
 
 ServerSocketChannel通过accept()接受新的连接，accept()方法返回获得SocketChannel对象，然后将SocketChannel对象封装在一个PollerEvent对象中，并将PollerEvent对象压入Poller的Queue里，这是个典型的“生产者-消费者”模式，Acceptor与Poller线程之间通过Queue通信。
 

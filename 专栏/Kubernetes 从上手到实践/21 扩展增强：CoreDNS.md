@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -287,9 +287,9 @@ deployment.apps/saythx-redis created
 master $ kubectl apply -f redis-service.yaml
 service/saythx-redis created
 </code></pre>
-<ul>
-<li>查看其部署情况：</li>
-</ul>
+
+查看其部署情况：
+
 <pre><code>master $ kubectl -n work get all
 NAME                               READY     STATUS    RESTARTS   AGE
 pod/saythx-redis-8558c7d7d-8v4lp   1/1       Running   0          2m
@@ -303,9 +303,9 @@ deployment.apps/saythx-redis   1         1         1            1           2m
 NAME                                     DESIRED   CURRENT   READY     AGE
 replicaset.apps/saythx-redis-8558c7d7d   1         1         1         2m
 </code></pre>
-<ul>
-<li>验证 DNS 是否正确解析:</li>
-</ul>
+
+验证 DNS 是否正确解析:
+
 <pre><code># 使用 AlpineLinux 的镜像创建一个 Pod 并进入其中
 master $ kubectl run alpine -it --rm --restart='Never' --image='alpine' sh
 If you don't see a command prompt, try pressing enter.
@@ -329,19 +329,19 @@ OK: 9 MiB in 18 packages
 saythx-redis.work.svc.cluster.local. 5 IN A     10.109.215.147
 </code></pre>
 <p>通过以上操作，可以看到相应的 <code>Service</code> 记录可被正确解析。这里有几个点需要注意：</p>
-<ul>
-<li>
+
+
 <p>域名解析是可跨 <code>Namespace</code> 的</p>
 <p>刚才的示例中，我们没有指定 <code>Namespace</code> 所以刚才我们所在的 <code>Namespace</code> 是 <code>default</code>。而我们的解析实验成功了。说明 CoreDNS 的解析是全局的。<strong>虽然解析是全局的，但不代表网络互通</strong></p>
-</li>
-<li>
+
+
 <p>域名有特定格式</p>
 <p>可以看到刚才我们使用的完整域名是 <code>saythx-redis.work.svc.cluster.local</code> , 注意开头的便是 <strong>Service 名.Namespace 名</strong> 当然，我们也可以直接通过 <code>host</code> 命令查询:</p>
 <pre><code>/ # host -t srv  saythx-redis.work
 saythx-redis.work.svc.cluster.local has SRV record 0 100 6379 saythx-redis.work.svc.cluster.local.
 </code></pre>
-</li>
-</ul>
+
+
 <h2>配置和监控</h2>
 <p>CoreDNS 使用 <code>ConfigMap</code> 的方式进行配置，但是如果更改了配置，<code>Pod</code> 重启后才会生效。</p>
 <p>我们通过以下命令可查看其配置：</p>

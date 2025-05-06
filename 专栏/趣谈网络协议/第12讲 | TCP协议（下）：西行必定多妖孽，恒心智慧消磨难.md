@@ -40,15 +40,15 @@ TCP协议使用的也是同样的模式。为了保证顺序性，每一个包�
 
 <img src="https://static001.geekbang.org/resource/image/dd/44/dd67ba62279a3849c11ffc1deea25d44.jpg" alt="">
 
-<li>
+
 LastByteAcked：第一部分和第二部分的分界线
-</li>
-<li>
+
+
 LastByteSent：第二部分和第三部分的分界线
-</li>
-<li>
+
+
 LastByteAcked + AdvertisedWindow：第三部分和第四部分的分界线
-</li>
+
 
 对于接收端来讲，它的缓存里记录的内容要简单一些。
 
@@ -62,15 +62,15 @@ LastByteAcked + AdvertisedWindow：第三部分和第四部分的分界线
 ﻿﻿<br>
 <img src="https://static001.geekbang.org/resource/image/9d/be/9d597af268016f67caa14178627188be.jpg" alt="">
 
-<li>
+
 MaxRcvBuffer：最大缓存的量；
-</li>
-<li>
+
+
 LastByteRead之后是已经接收了，但是还没被应用层读取的；
-</li>
-<li>
+
+
 NextByteExpected是第一部分和第二部分的分界线。
-</li>
+
 
 第二部分的窗口有多大呢？
 
@@ -94,15 +94,15 @@ AdvertisedWindow其实是MaxRcvBuffer减去A。
 
 发送端和接收端当前的状态如下：
 
-<li>
+
 1、2、3没有问题，双方达成了一致。
-</li>
-<li>
+
+
 4、5接收方说ACK了，但是发送方还没收到，有可能丢了，有可能在路上。
-</li>
-<li>
+
+
 6、7、8、9肯定都发了，但是8、9已经到了，但是6、7没到，出现了乱序，缓存着但是没办法ACK。
-</li>
+
 
 根据这个例子，我们可以知道，顺序问题和丢包问题都有可能发生，所以我们先来看**确认与重发的机制**。
 
@@ -213,20 +213,20 @@ AdvertisedWindow其实是MaxRcvBuffer减去A。
 
 好了，这一节我们就到这里，总结一下：
 
-<li>
+
 顺序问题、丢包问题、流量控制都是通过滑动窗口来解决的，这其实就相当于你领导和你的工作备忘录，布置过的工作要有编号，干完了有反馈，活不能派太多，也不能太少；
-</li>
-<li>
+
+
 拥塞控制是通过拥塞窗口来解决的，相当于往管道里面倒水，快了容易溢出，慢了浪费带宽，要摸着石头过河，找到最优值。
-</li>
+
 
 最后留两个思考题：
 
-<li>
+
 TCP的BBR听起来很牛，你知道他是如何达到这个最优点的嘛？
-</li>
-<li>
+
+
 学会了UDP和TCP，你知道如何基于这两种协议写程序吗？这样的程序会有什么坑呢？
-</li>
+
 
 欢迎你留言和我讨论。趣谈网络协议，我们下期见！

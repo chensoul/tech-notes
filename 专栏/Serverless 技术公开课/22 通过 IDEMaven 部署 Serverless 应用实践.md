@@ -25,189 +25,189 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;架构的演进.md">01 架构的演进.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;Serverless&#32;的价值.md">02 Serverless 的价值.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;常见&#32;Serverless&#32;架构模式.md">03 常见 Serverless 架构模式.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;Serverless&#32;技术选型.md">04 Serverless 技术选型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;函数计算简介.md">05 函数计算简介.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;函数计算是如何工作的？.md">06 函数计算是如何工作的？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;函数粘合云服务提供端到端解决方案.md">07 函数粘合云服务提供端到端解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;函数计算的开发与配置.md">08 函数计算的开发与配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;函数的调试与部署.md">09 函数的调试与部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;自动化&#32;CI&amp;CD&#32;与灰度发布.md">10 自动化 CI&amp;CD 与灰度发布.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;函数计算的可观测性.md">11 函数计算的可观测性.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;典型案例&#32;1：函数计算在音视频场景实践.md">12 典型案例 1：函数计算在音视频场景实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;典型案例&#32;3：十分钟搭建弹性可扩展的&#32;Web&#32;API.md">13 典型案例 3：十分钟搭建弹性可扩展的 Web API.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;Serverless&#32;Kubernetes&#32;容器服务介绍.md">14 Serverless Kubernetes 容器服务介绍.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Serverless&#32;Kubernetes&#32;应用部署及扩缩容.md">15 Serverless Kubernetes 应用部署及扩缩容.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;使用&#32;Spot&#32;低成本运行&#32;Job&#32;任务.md">16 使用 Spot 低成本运行 Job 任务.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;低成本运行&#32;Spark&#32;数据计算.md">17 低成本运行 Spark 数据计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;GPU&#32;机器学习开箱即用.md">18 GPU 机器学习开箱即用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;基于&#32;Knative&#32;低成本部署在线应用，灵活自动伸缩.md">19 基于 Knative 低成本部署在线应用，灵活自动伸缩.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;快速构建&#32;JenkinsGitlab&#32;持续集成环境.md">20 快速构建 JenkinsGitlab 持续集成环境.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;在线应用的&#32;Serverless&#32;实践.md">21 在线应用的 Serverless 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="22&#32;通过&#32;IDEMaven&#32;部署&#32;Serverless&#32;应用实践.md">22 通过 IDEMaven 部署 Serverless 应用实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;企业级&#32;CICD&#32;工具部署&#32;Serverless&#32;应用的落地实践.md">23 企业级 CICD 工具部署 Serverless 应用的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;Serverless&#32;应用如何管理日志&amp;持久化数据.md">24 Serverless 应用如何管理日志&amp;持久化数据.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;Serverless&#32;应用引擎产品的流量负载均衡和路由策略配置实践.md">25 Serverless 应用引擎产品的流量负载均衡和路由策略配置实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Spring&#32;CloudDubbo&#32;应用无缝迁移到&#32;Serverless&#32;架构.md">26 Spring CloudDubbo 应用无缝迁移到 Serverless 架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;SAE&#32;应用分批发布与无损下线的最佳实践.md">27 SAE 应用分批发布与无损下线的最佳实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/Serverless%20%E6%8A%80%E6%9C%AF%E5%85%AC%E5%BC%80%E8%AF%BE%EF%BC%88%E5%AE%8C%EF%BC%89/28%20%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E5%8E%8B%E6%B5%8B%E5%B7%A5%E5%85%B7+%20SAE%20%E5%BC%B9%E6%80%A7%E8%83%BD%E5%8A%9B%E8%BD%BB%E6%9D%BE%E5%BA%94%E5%AF%B9%E5%A4%A7%E4%BF%83.md">28 如何通过压测工具+ SAE 弹性能力轻松应对大促.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;SAE&#32;极致应用部署效率.md">29 SAE 极致应用部署效率.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -273,11 +273,11 @@
 <h3>Maven 插件部署</h3>
 <p><img src="assets/2020-09-07-110027.jpg" alt="3.jpg" /></p>
 <p>如何使用 Maven 插件进行部署？首先需要为应用添加 Maven 依赖 toolkit-maven-plugin，接下来需要编写配置文件来配置插件的具体行为，这里定义了三个配置文件：</p>
-<ul>
-<li><strong>toolkit_profile.yaml 账号配置文件</strong>，用来配置阿里云 ak、sk 来标识阿里云用户，这里推荐使用子账号 ak、sk 以降低安全风险。</li>
-<li><strong>toolkit_package.yaml 打包配置文件</strong>，用来声明部署应用的类型，可以选择 war、jar、url 以及镜像的方式来进行部署，若采用 war、jar 的方式，则会将当前应用进行打包上传，而 url 或者镜像的方式则要显示的填写对应的包地址或者镜像地址进行部署。</li>
-<li><strong>toolkit_deploy.yaml 部署配置</strong>，即可以配置该应用的环境变量、启动参数、健康检查等内容，这与控制台上的配置选项是一致的。</li>
-</ul>
+
+<strong>toolkit_profile.yaml 账号配置文件</strong>，用来配置阿里云 ak、sk 来标识阿里云用户，这里推荐使用子账号 ak、sk 以降低安全风险。
+<strong>toolkit_package.yaml 打包配置文件</strong>，用来声明部署应用的类型，可以选择 war、jar、url 以及镜像的方式来进行部署，若采用 war、jar 的方式，则会将当前应用进行打包上传，而 url 或者镜像的方式则要显示的填写对应的包地址或者镜像地址进行部署。
+<strong>toolkit_deploy.yaml 部署配置</strong>，即可以配置该应用的环境变量、启动参数、健康检查等内容，这与控制台上的配置选项是一致的。
+
 <p>这三个文件都有对应的模板，具体的模板选项可以查看<a href="https://help.aliyun.com/document_detail/110639.html?spm=a2c4g.11186623.6.611.5a3473c76owo99">产品文档</a>，接下来通过运行 Maven 打包部署命令 mvn clean package toolkit:deploy 即可自动化部署到 SAE 上。</p>
 <h3>IDE 插件部署</h3>
 <p><img src="assets/2020-09-07-110135.jpg" alt="img" /></p>

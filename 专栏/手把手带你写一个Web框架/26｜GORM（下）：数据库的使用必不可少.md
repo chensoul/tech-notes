@@ -115,10 +115,10 @@ func WithDryRun() contract.DBOption {
 </code></pre><p>之后，在使用ORM服务的时候，我们就可以这样设置：</p><pre><code class="language-go">gormService := c.MustMake(contract.ORMKey).(contract.ORMService)
 // 可变参数为WithDryRun()
 db, err := gormService.GetDB(orm.WithDryRun())
-</code></pre><h3>服务提供者</h3><p>下一步来完成服务提供者，我们也并不需要过于复杂的设计，只要注意一下两点：</p><ul>
-<li>ORM服务一定是要延迟加载的，因为这个服务并不是一个基础服务。如果设置为非延迟加载，在框架启动的时候就会去建立这个服务，这并不是我们想要的。所以我们设计ORM的provider的时候，需要将IsDefer函数设置为true。</li>
-<li>第二点考虑到我们后续会使用container中的配置服务，来创建具体的gorm.DB实例，传递一个container是必要的。</li>
-</ul><p>所以具体的服务提供者代码如下，在framework/provider/orm/provider.go中：</p><pre><code class="language-go">package orm
+</code></pre><h3>服务提供者</h3><p>下一步来完成服务提供者，我们也并不需要过于复杂的设计，只要注意一下两点：</p>
+ORM服务一定是要延迟加载的，因为这个服务并不是一个基础服务。如果设置为非延迟加载，在框架启动的时候就会去建立这个服务，这并不是我们想要的。所以我们设计ORM的provider的时候，需要将IsDefer函数设置为true。
+第二点考虑到我们后续会使用container中的配置服务，来创建具体的gorm.DB实例，传递一个container是必要的。
+<p>所以具体的服务提供者代码如下，在framework/provider/orm/provider.go中：</p><pre><code class="language-go">package orm
 
 import (
    "github.com/gohade/hade/framework"
@@ -317,12 +317,12 @@ func NewHadeGorm(params ...interface{}) (interface{}, error) {
             return nil, err
         }
     }
-</code></pre><p><strong>之后根据dsn字符串判断数据库实例gorm.DB是否已经存在了</strong>。如果存在直接返回gorm.DB，如果不存在需要实例化gorm.DB，这一步逻辑稍微复杂一点：</p><ul>
-<li>根据配置项orm.Config中的不同驱动，来实例化gorm.DB（支持MySQL/Postgres/SQLite/SQL Server/ClickHouse）</li>
-<li>根据配置项orm.Config中的连接池配置，设置gorm.DB的连接池</li>
-<li>将实例化后的gorm.DB和DSN放入map映射中</li>
-<li>返回实例化后的gorm.DB</li>
-</ul><p>代码如下：</p><pre><code class="language-go">// 如果最终的config没有设置dsn,就生成dsn
+</code></pre><p><strong>之后根据dsn字符串判断数据库实例gorm.DB是否已经存在了</strong>。如果存在直接返回gorm.DB，如果不存在需要实例化gorm.DB，这一步逻辑稍微复杂一点：</p>
+根据配置项orm.Config中的不同驱动，来实例化gorm.DB（支持MySQL/Postgres/SQLite/SQL Server/ClickHouse）
+根据配置项orm.Config中的连接池配置，设置gorm.DB的连接池
+将实例化后的gorm.DB和DSN放入map映射中
+返回实例化后的gorm.DB
+<p>代码如下：</p><pre><code class="language-go">// 如果最终的config没有设置dsn,就生成dsn
     if config.Dsn == "" {
         dsn, err := config.FormatDsn()
         if err != nil {
@@ -632,7 +632,7 @@ func (api *DemoApi) DemoOrm(c *gin.Context) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/24/3d/0682fdb9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -647,8 +647,8 @@ func (api *DemoApi) DemoOrm(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/72/85/c337e9a1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -663,8 +663,8 @@ func (api *DemoApi) DemoOrm(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/23/50/1f5154fe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -679,8 +679,8 @@ func (api *DemoApi) DemoOrm(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/b0/d3/200e82ff.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -695,5 +695,4 @@ func (api *DemoApi) DemoOrm(c *gin.Context) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

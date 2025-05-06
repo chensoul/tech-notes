@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -236,17 +236,17 @@
 <h2>方案选择</h2>
 <p>在上一节中，我们知道 K8S 中有多种功能组件，而这些组件要在本地全部搭建好，需要一些基础知识，以及在搭建过程中会浪费不少的时间，从而可能会影响我们正常的搭建集群的目标。</p>
 <p>所以，我们这里提供两个最简单，最容易实现我们目标的工具</p>
-<ul>
-<li><a href="https://github.com/kubernetes-sigs/kind/">KIND</a> 。</li>
-<li><a href="https://github.com/kubernetes/minikube">Minikube</a> 。</li>
-</ul>
+
+<a href="https://github.com/kubernetes-sigs/kind/">KIND</a> 。
+<a href="https://github.com/kubernetes/minikube">Minikube</a> 。
+
 <h2>KIND</h2>
 <h3>介绍</h3>
 <p>KIND（Kubernetes in Docker）是为了能提供更加简单，高效的方式来启动 K8S 集群，目前主要用于比如 <code>Kubernetes</code> 自身的 CI 环境中。</p>
 <h3>安装</h3>
-<ul>
-<li>可以直接在项目的 <a href="https://github.com/kubernetes-sigs/kind/releases">Release 页面</a> 下载已经编译好的二进制文件。(下文中使用的是 v0.1.0 版本的二进制包)</li>
-</ul>
+
+可以直接在项目的 <a href="https://github.com/kubernetes-sigs/kind/releases">Release 页面</a> 下载已经编译好的二进制文件。(下文中使用的是 v0.1.0 版本的二进制包)
+
 <p>注意：如果不直接使用二进制包，而是使用 <code>go get sigs.k8s.io/kind</code> 的方式下载，则与下文中的配置文件不兼容。<strong>请参考使用 Kind 搭建你的本地 Kubernetes 集群</strong> 这篇文章。</p>
 <p>更新（2020年2月5日）：KIND 已经发布了 v0.7.0 版本，如果你想使用新版本，建议参考 <a href="https://zhuanlan.zhihu.com/p/105173589">使用 Kind 在离线环境创建 K8S 集群</a> ，这篇文章使用了最新版本的 KIND。</p>
 <p><img src="assets/16898b9e3d57fcab" alt="img" /></p>
@@ -312,16 +312,16 @@ Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;12&quot;, GitVersi
 <p>Minikube 是 K8S 官方为了开发者能在个人电脑上运行 K8S 而提供的一套工具。实现上是通过 Go 语言编写，通过调用虚拟化管理程序，创建出一个运行在虚拟机内的单节点集群。</p>
 <p>注：从这里也可以看出，对于 K8S 集群的基本功能而言，节点数并没有什么限制。只有一个节点同样可以创建集群。</p>
 <h3>前期准备</h3>
-<ul>
-<li>首先需要确认 BIOS 已经开启了 <code>VT-x</code> 或者 <code>AMD-v</code> 虚拟化的支持。具体方式可参考 <a href="https://www.shaileshjha.com/how-to-find-out-if-intel-vt-x-or-amd-v-virtualization-technology-is-supported-in-windows-10-windows-8-windows-vista-or-windows-7-machine/">确认是否已开启 BIOS 虚拟化</a>, <a href="https://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/">开启 BIOS 虚拟化支持</a> 这两篇文章。</li>
-<li>其次我们需要安装一个虚拟化管理程序，这里的选择可根据你实际在用的操作系统来决定。官方推荐如下:
-<ul>
-<li>macOS: <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> 或 <a href="https://www.vmware.com/products/fusion">VMware Fusion</a> 或 <a href="https://github.com/moby/hyperkit">HyperKit</a>。如果使用 Hyperkit 需要注意系统必须是 <code>OS X 10.10.3 Yosemite</code> 及之后版本的。</li>
-<li>Linux: <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> 或 <a href="http://www.linux-kvm.org/">KVM</a>。</li>
-<li>Windows: <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> 或 <a href="https://msdn.microsoft.com/en-us/virtualization/hyperv_on_windows/quick_start/walkthrough_install">Hyper-V</a>。</li>
-</ul>
-</li>
-</ul>
+
+首先需要确认 BIOS 已经开启了 <code>VT-x</code> 或者 <code>AMD-v</code> 虚拟化的支持。具体方式可参考 <a href="https://www.shaileshjha.com/how-to-find-out-if-intel-vt-x-or-amd-v-virtualization-technology-is-supported-in-windows-10-windows-8-windows-vista-or-windows-7-machine/">确认是否已开启 BIOS 虚拟化</a>, <a href="https://www.howtogeek.com/213795/how-to-enable-intel-vt-x-in-your-computers-bios-or-uefi-firmware/">开启 BIOS 虚拟化支持</a> 这两篇文章。
+其次我们需要安装一个虚拟化管理程序，这里的选择可根据你实际在用的操作系统来决定。官方推荐如下:
+
+macOS: <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> 或 <a href="https://www.vmware.com/products/fusion">VMware Fusion</a> 或 <a href="https://github.com/moby/hyperkit">HyperKit</a>。如果使用 Hyperkit 需要注意系统必须是 <code>OS X 10.10.3 Yosemite</code> 及之后版本的。
+Linux: <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> 或 <a href="http://www.linux-kvm.org/">KVM</a>。
+Windows: <a href="https://www.virtualbox.org/wiki/Downloads">VirtualBox</a> 或 <a href="https://msdn.microsoft.com/en-us/virtualization/hyperv_on_windows/quick_start/walkthrough_install">Hyper-V</a>。
+
+
+
 <p>我个人推荐无论你在以上哪种操作系统中使用 Minikube 都选择用 <code>Virtualbox</code> 作为虚拟化管理程序，1. Virtualbox 无论操作体验还是安装都比较简单 2. Minikube 对其支持更完备，并且也已经经过大量用户测试，相关问题均已基本修复。</p>
 <p><em>如果你是在 Linux 系统上面，其实还有一个选择，便是将 Minikube 的 --vm-driver 参数设置为 none ，并且在本机已经正确安装 Docker。 这种方式是无需虚拟化支持的。</em></p>
 <h3>安装 kubectl</h3>
@@ -329,9 +329,9 @@ Server Version: version.Info{Major:&quot;1&quot;, Minor:&quot;12&quot;, GitVersi
 <p><strong>注：由于 API 版本兼容的问题，尽量保持 kubectl 版本与 K8S 集群版本保持一致，或版本相差在在一个小版本内。</strong></p>
 <p>官方文档提供了 <code>macOS</code>, <code>Linux</code>, <code>Windows</code> 等操作系统上的安装方式，且描述很详细，这里不过多赘述，<a href="https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl">文档地址</a>。</p>
 <p><strong>此处提供一个不同于官方文档中的安装方式。</strong></p>
-<ul>
-<li>访问 K8S 主仓库的 <a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG.md">CHANGELOG 文件</a> 找到你所需要的版本。 由于我们将要使用的 Minikube 是官方最新的稳定版 v0.28.2，而它内置的 Kubernetes 的版本是 v1.10 所以，我们选择使用对应的 <a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md">1.10 版本</a>的 <code>kubectl</code>。当然，我们也可以通过传递参数的方式来创建不同版本的集群。如 <code>minikube start --kubernetes-version v1.11.3</code> 用此命令创建 <code>v1.11.3</code> 版本的集群，当然 <code>kubectl</code> 的版本也需要相应升级。</li>
-</ul>
+
+访问 K8S 主仓库的 <a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG.md">CHANGELOG 文件</a> 找到你所需要的版本。 由于我们将要使用的 Minikube 是官方最新的稳定版 v0.28.2，而它内置的 Kubernetes 的版本是 v1.10 所以，我们选择使用对应的 <a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md">1.10 版本</a>的 <code>kubectl</code>。当然，我们也可以通过传递参数的方式来创建不同版本的集群。如 <code>minikube start --kubernetes-version v1.11.3</code> 用此命令创建 <code>v1.11.3</code> 版本的集群，当然 <code>kubectl</code> 的版本也需要相应升级。
+
 <p><img src="assets/165d772ecb0454f6" alt="img" /></p>
 <p>点击<a href="https://github.com/kubernetes/kubernetes/blob/master/CHANGELOG-1.10.md#client-binaries">Client Binaries</a> 找到你符合所需系统架构的对应包下载即可。这里我以 <a href="https://dl.k8s.io/v1.10.7/kubernetes-client-linux-amd64.tar.gz">Linux 下 64 位的包</a>为例。</p>
 <pre><code>➜  wget https://dl.k8s.io/v1.10.7/kubernetes-client-linux-amd64.tar.gz
@@ -422,10 +422,10 @@ kubectl: Correctly Configured: pointing to minikube-vm at 192.168.99.100
 <p>执行 <code>minikube dashboard</code> 后会自动打开浏览器，默认情况下监听在通过 <code>minikube ip</code> 所获得 IP 的 3000 端口。如下图所示：</p>
 <p><img src="assets/165de25c7c517d78" alt="img" /></p>
 <h3>相关链接:</h3>
-<ul>
-<li><a href="https://websiteforstudents.com/installing-virtualbox-ubuntu-17-04/">安装 VirtualBox</a></li>
-<li><a href="https://juejin.im/post/6844903807562989582">使用 Kind 搭建你的本地 Kubernetes 集群</a></li>
-</ul>
+
+<a href="https://websiteforstudents.com/installing-virtualbox-ubuntu-17-04/">安装 VirtualBox</a>
+<a href="https://juejin.im/post/6844903807562989582">使用 Kind 搭建你的本地 Kubernetes 集群</a>
+
 <h2>总结</h2>
 <p>本节中，我们为了能更快的体验到 K8S 集群，避免很多繁琐的安装步骤，我们选择了使用官方提供的 <code>Minikube</code> 工具来搭建一个本地集群。</p>
 <p>Minikube 的本质其实是将一套 “定制化” 的 K8S 集群打包成 ISO 镜像，当执行 <code>minikube start</code> 的时候，便通过此镜像启动一个虚拟机，在此虚拟机上通过 <code>kubeadm</code> 工具来搭建一套只有一个节点的 K8S 集群。关于 <code>kubeadm</code> 工具，我们在下节进行讲解。</p>

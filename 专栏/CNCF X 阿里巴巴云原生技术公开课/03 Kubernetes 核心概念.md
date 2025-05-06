@@ -25,111 +25,111 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;第一堂“云原生”课.md">01 第一堂“云原生”课.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;容器基本概念.md">02 容器基本概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="03&#32;Kubernetes&#32;核心概念.md">03 Kubernetes 核心概念.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;理解&#32;Pod&#32;和容器设计模式.md">04 理解 Pod 和容器设计模式.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;应用编排与管理：核心原理.md">05 应用编排与管理：核心原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;应用编排与管理.md">06 应用编排与管理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;应用编排与管理：Job&#32;&amp;&#32;DaemonSet.md">07 应用编排与管理：Job &amp; DaemonSet.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;应用配置管理.md">08 应用配置管理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用存储和持久化数据卷：核心知识.md">09 应用存储和持久化数据卷：核心知识.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用存储和持久化数据卷：存储快照与拓扑调度(至天).md">10 应用存储和持久化数据卷：存储快照与拓扑调度(至天).md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;可观测性：你的应用健康吗？（莫源）.md">11 可观测性：你的应用健康吗？（莫源）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;可观测性-监控与日志（莫源）.md">12 可观测性-监控与日志（莫源）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;Kubernetes&#32;网络概念及策略控制（叶磊）.md">13 Kubernetes 网络概念及策略控制（叶磊）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;Kubernetes&#32;Service（溪恒）.md">14 Kubernetes Service（溪恒）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;从&#32;0&#32;开始创作云原生应用（殷达）.md">15 从 0 开始创作云原生应用（殷达）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;深入解析&#32;Linux&#32;容器（华敏）.md">16 深入解析 Linux 容器（华敏）.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -191,14 +191,14 @@
 <p>这是一艘载着一堆集装箱的轮船，轮船在大海上运着集装箱奔波，把集装箱送到它们该去的地方。我们之前其实介绍过一个概念叫做 container，container 这个英文单词也有另外的一个意思就是“集装箱”。Kubernetes 也就借着这个寓意，希望成为运送集装箱的一个轮船，来帮助我们管理这些集装箱，也就是管理这些容器。</p>
 <p>这个就是为什么会选用 Kubernetes 这个词来代表这个项目的原因。更具体一点地来说：Kubernetes 是一个自动化的容器编排平台，它负责应用的部署、应用的弹性以及应用的管理，这些都是基于容器的。</p>
 <h2>Kubernetes 有如下几个核心的功能</h2>
-<ul>
-<li>服务的发现与负载的均衡；</li>
-<li>容器的自动装箱，我们也会把它叫做 scheduling，就是“调度”，把一个容器放到一个集群的某一个机器上，Kubernetes 会帮助我们去做存储的编排，让存储的声明周期与容器的生命周期能有一个连接；</li>
-<li>Kubernetes 会帮助我们去做自动化的容器的恢复。在一个集群中，经常会出现宿主机的问题或者说是 OS 的问题，导致容器本身的不可用，Kubernetes 会自动地对这些不可用的容器进行恢复；</li>
-<li>Kubernetes 会帮助我们去做应用的自动发布与应用的回滚，以及与应用相关的配置密文的管理；</li>
-<li>对于 job 类型任务，Kubernetes 可以去做批量的执行；</li>
-<li>为了让这个集群、这个应用更富有弹性，Kubernetes 也支持水平的伸缩。</li>
-</ul>
+
+服务的发现与负载的均衡；
+容器的自动装箱，我们也会把它叫做 scheduling，就是“调度”，把一个容器放到一个集群的某一个机器上，Kubernetes 会帮助我们去做存储的编排，让存储的声明周期与容器的生命周期能有一个连接；
+Kubernetes 会帮助我们去做自动化的容器的恢复。在一个集群中，经常会出现宿主机的问题或者说是 OS 的问题，导致容器本身的不可用，Kubernetes 会自动地对这些不可用的容器进行恢复；
+Kubernetes 会帮助我们去做应用的自动发布与应用的回滚，以及与应用相关的配置密文的管理；
+对于 job 类型任务，Kubernetes 可以去做批量的执行；
+为了让这个集群、这个应用更富有弹性，Kubernetes 也支持水平的伸缩。
+
 <p>下面，我们希望以三个例子跟大家更切实地介绍一下 Kubernetes 的能力。</p>
 <h3>调度</h3>
 <p>Kubernetes 可以把用户提交的容器放到 Kubernetes 管理的集群的某一台节点上去。Kubernetes 的调度器是执行这项能力的组件，它会观察正在被调度的这个容器的大小、规格。</p>
@@ -219,12 +219,12 @@
 <p><img src="assets/FlcotYqNLPbCvnibylrLt33enE1M" alt="avatar" /></p>
 <p>Kubernetes 的 Master 包含四个主要的组件：API Server、Controller、Scheduler 以及 etcd。如下图所示：</p>
 <p><img src="assets/FrFh4R6uKA2VDeclmHMZPxqTWbl_" alt="avatar" /></p>
-<ul>
-<li><strong>API Server：</strong> 顾名思义是用来处理 API 操作的，Kubernetes 中所有的组件都会和 API Server 进行连接，组件与组件之间一般不进行独立的连接，都依赖于 API Server 进行消息的传送；</li>
-<li><strong>Controller：</strong> 是控制器，它用来完成对集群状态的一些管理。比如刚刚我们提到的两个例子之中，第一个自动对容器进行修复、第二个自动进行水平扩张，都是由 Kubernetes 中的 Controller 来进行完成的；</li>
-<li><strong>Scheduler：</strong> 是调度器，“调度器”顾名思义就是完成调度的操作，就是我们刚才介绍的第一个例子中，把一个用户提交的 Container，依据它对 CPU、对 memory 请求大小，找一台合适的节点，进行放置；</li>
-<li><strong>etcd：</strong> 是一个分布式的一个存储系统，API Server 中所需要的这些原信息都被放置在 etcd 中，etcd 本身是一个高可用系统，通过 etcd 保证整个 Kubernetes 的 Master 组件的高可用性。</li>
-</ul>
+
+<strong>API Server：</strong> 顾名思义是用来处理 API 操作的，Kubernetes 中所有的组件都会和 API Server 进行连接，组件与组件之间一般不进行独立的连接，都依赖于 API Server 进行消息的传送；
+<strong>Controller：</strong> 是控制器，它用来完成对集群状态的一些管理。比如刚刚我们提到的两个例子之中，第一个自动对容器进行修复、第二个自动进行水平扩张，都是由 Kubernetes 中的 Controller 来进行完成的；
+<strong>Scheduler：</strong> 是调度器，“调度器”顾名思义就是完成调度的操作，就是我们刚才介绍的第一个例子中，把一个用户提交的 Container，依据它对 CPU、对 memory 请求大小，找一台合适的节点，进行放置；
+<strong>etcd：</strong> 是一个分布式的一个存储系统，API Server 中所需要的这些原信息都被放置在 etcd 中，etcd 本身是一个高可用系统，通过 etcd 保证整个 Kubernetes 的 Master 组件的高可用性。
+
 <p>我们刚刚提到的 API Server，它本身在部署结构上是一个可以水平扩展的一个部署组件；Controller 是一个可以进行热备的一个部署组件，它只有一个 active，它的调度器也是相应的，虽然只有一个 active，但是可以进行热备。</p>
 <h3>Kubernetes 的架构：Node</h3>
 <p>Kubernetes 的 Node 是真正运行业务负载的，每个业务负载会以 Pod 的形式运行。等一下我会介绍一下 Pod 的概念。一个 Pod 中运行的一个或者多个容器，真正去运行这些 Pod 的组件的是叫做 <strong>kubelet</strong>，也就是 Node 上最为关键的组件，它通过 API Server 接收到所需要 Pod 运行的状态，然后提交到我们下面画的这个 Container Runtime 组件中。</p>
@@ -285,38 +285,38 @@
 <h2>以一个 demo 结尾</h2>
 <p>最后一部分，我想以一个例子来结束，让大家跟我一起来尝试一个 kubernetes，在尝试 Kubernetes 之前，我希望大家能在本机上安装一下 Kubernetes，安装一个 Kubernetes 沙箱环境。</p>
 <p>安装这个沙箱环境，主要有三个步骤：</p>
-<ul>
-<li>
+
+
 <p>首先需要安装一个虚拟机，来在虚拟机中启动 Kubernetes。我们会推荐大家利用 virtualbox 来作为虚拟机的运行环境；</p>
 <p>安装 VirtualBox： <a href="https://www.virtualbox.org/wiki/Downloads">https://www.virtualbox.org/wiki/Downloads</a></p>
-</li>
-<li>
+
+
 <p>其次我们需要在虚拟机中启动 Kubernetes，Kubernetes 有一个非常有意思的项目，叫 minikube，也就是启动一个最小的 local 的 Kubernetes 的一个环境。</p>
 <p>minikube 我们推荐使用下面写到的阿里云的版本，它和官方 minikube 的主要区别就是把 minikube 中所需要的 Google 上的依赖换成国内访问比较快的一些镜像，这样就方便了大家的安装工作；</p>
 <p>安装 MiniKube（中国版）: <a href="https://yq.aliyun.com/articles/221687">https://yq.aliyun.com/articles/221687</a></p>
-</li>
-<li>
+
+
 <p>最后在安装完 virtualbox 和 minikube 之后，大家可以对 minikube 进行启动，也就是下面这个命令。</p>
-</li>
-</ul>
+
+
 <p>启动命令：minikube start —vm-driver virtualbox</p>
 <p>如果大家不是 Mac 系统，其他操作系统请访问下面这个链接，查看其它操作系统如何安装 minikube 沙箱环境。</p>
 <p><a href="https://kubernetes.io/docs/tasks/tools/install-minikube，">https://kubernetes.io/docs/tasks/tools/install-minikube/</a></p>
 <p>当大家安装好之后，我会跟大家一起做一个例子，来做三件事情：</p>
-<ul>
-<li>
+
+
 <p>提交一个 nginx deployment；</p>
 <p>kubectl apply  -f  <a href="https://k8s.io/examples/application/deployment.yaml">https://k8s.io/examples/application/deployment.yaml</a></p>
-</li>
-<li>
+
+
 <p>升级 nginx deployment；</p>
 <p>kubectl apply -f  <a href="https://k8s.io/examples/application/deployment-update.yaml">https://k8s.io/examples/application/deployment-update.yaml</a></p>
-</li>
-<li>
+
+
 <p>扩容 nginx deployment。</p>
 <p>kubectl apply -f  <a href="https://k8s.io/examples/application/deployment-update.yaml">https://k8s.io/examples/application/deployment-update.yaml</a></p>
-</li>
-</ul>
+
+
 <p>第一步，我们提交一个 nginx 的 Deployment，然后对这个 Deployment 进行一次版本升级，也就是改变它中间 Pod 的版本。最后我们也会尝试对 nginx 进行一次扩容，进行一次水平的伸缩，下面就让大家一起跟我来尝试这三个操作吧。</p>
 <p>首先，我们先看一下 minikube 的 status，可以看到 kubelet master 和 kubectl 都是配置好的。</p>
 <p><img src="assets/FlOUt7JuwbE0UBUz8NwA9vVYCuUl" alt="avatar" /></p>
@@ -347,10 +347,10 @@
 <p><img src="assets/Ft0eDGSed6lpc2TROivAJNV4wKpm" alt="avatar" /></p>
 <p>以上这就是这堂课中所有的内容了，我们关注了 kubernetes 的核心概念以及 kubernetes 的架构设计，希望大家能在这节课中有所收获，也希望大家能关注云原生技术课堂中的其他内容，谢谢大家的观看！</p>
 <h2>本节总结</h2>
-<ul>
-<li>Kubernetes 是一个自动化的容器编排平台，它负责应用的部署、应用的弹性以及应用的管理，这些都是基于容器的；</li>
-<li>Kubernetes 架构是一个比较典型的二层架构和 server-client 架构。</li>
-</ul>
+
+Kubernetes 是一个自动化的容器编排平台，它负责应用的部署、应用的弹性以及应用的管理，这些都是基于容器的；
+Kubernetes 架构是一个比较典型的二层架构和 server-client 架构。
+
 </div>
                     </div>
                     <div>

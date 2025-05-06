@@ -28,8 +28,8 @@ SGML还规定了一些特殊的节点类型，在我们之前的DOM课程中已�
 
 HTML中，用于描述一个元素的标签分为开始标签、结束标签和自闭合标签。开始标签和自闭合标签中，又可以有属性。
 
-<li>开始标签：`&lt;tagname&gt;`
-<ul>
+开始标签：`&lt;tagname&gt;`
+
 - 带属性的开始标签： `&lt;tagname attributename="attributevalue"&gt;`
 
 HTML中开始标签的标签名称只能使用英文字母。

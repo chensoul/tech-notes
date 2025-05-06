@@ -198,24 +198,24 @@ Dyld 的入口函数是 __dyld_start，dyld 属于用户态进程，不在 XNU �
 
 今天我跟你介绍了 iOS 系统的内核 XNU，以及 XNU 是如何加载 App 的。总体来说，XNU 加载就是为 Mach-O 创建一个新进程，建立虚拟内存空间，解析Mach-O文件，最后映射到内存空间。流程可以概括为：
 
-<li>
+
 fork 新进程；
-</li>
-<li>
+
+
 为 Mach-O 分配内存；
-</li>
-<li>
+
+
 解析 Mach-O；
-</li>
-<li>
+
+
 读取 Mach-O 头信息；
-</li>
-<li>
+
+
 遍历 load command 信息，将 Mach-O 映射到内存；
-</li>
-<li>
+
+
 启动 dyld。
-</li>
+
 
 ## 课后作业
 

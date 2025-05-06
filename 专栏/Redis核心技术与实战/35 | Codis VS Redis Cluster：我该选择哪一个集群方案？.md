@@ -168,18 +168,18 @@ codis server其实就是Redis实例，只不过增加了和集群操作相关的
 
 最后，在实际应用的时候，对于这两种方案，我们该怎么选择呢？我再给你提4条建议。
 
-<li>
+
 从稳定性和成熟度来看，Codis应用得比较早，在业界已经有了成熟的生产部署。虽然Codis引入了proxy和Zookeeper，增加了集群复杂度，但是，proxy的无状态设计和Zookeeper自身的稳定性，也给Codis的稳定使用提供了保证。而Redis Cluster的推出时间晚于Codis，相对来说，成熟度要弱于Codis，如果你想选择一个成熟稳定的方案，Codis更加合适些。
-</li>
-<li>
+
+
 从业务应用客户端兼容性来看，连接单实例的客户端可以直接连接codis proxy，而原本连接单实例的客户端要想连接Redis Cluster的话，就需要开发新功能。所以，如果你的业务应用中大量使用了单实例的客户端，而现在想应用切片集群的话，建议你选择Codis，这样可以避免修改业务应用中的客户端。
-</li>
-<li>
+
+
 从使用Redis新命令和新特性来看，Codis server是基于开源的Redis 3.2.8开发的，所以，Codis并不支持Redis后续的开源版本中的新增命令和数据类型。另外，Codis并没有实现开源Redis版本的所有命令，比如BITOP、BLPOP、BRPOP，以及和与事务相关的MUTLI、EXEC等命令。[Codis官网](https://github.com/CodisLabs/codis/blob/release3.2/doc/unsupported_cmds.md)上列出了不被支持的命令列表，你在使用时记得去核查一下。所以，如果你想使用开源Redis 版本的新特性，Redis Cluster是一个合适的选择。
-</li>
-<li>
+
+
 从数据迁移性能维度来看，Codis能支持异步迁移，异步迁移对集群处理正常请求的性能影响要比使用同步迁移的小。所以，如果你在应用集群时，数据迁移比较频繁的话，Codis是个更合适的选择。
-</li>
+
 
 ## 小结
 

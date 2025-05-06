@@ -285,20 +285,20 @@ age + 10 * 2  + 10
 
 本讲的示例代码位于lab/antlrtest，代码链接我放在了文末，供你参考。
 
-<li>
+
 Hello.g4（用Antlr重写了前几讲的词法规则）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/Hello.g4) [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/Hello.g4)
-</li>
-<li>
+
+
 CommonLexer.g4（比较成熟的词法文件）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/CommonLexer.g4)  [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/CommonLexer.g4)
-</li>
-<li>
+
+
 PlayScript.g4（用Antlr重写了前几讲的语法规则）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.g4)  [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.g4)
-</li>
-<li>
+
+
 ASTEvaluator.java（对AST遍历，实现整数的算术运算）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/ASTEvaluator.java)  [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/ASTEvaluator.java)
-</li>
-<li>
+
+
 PlayScript.java（一个测试程序，实现词法分析、语法分析、公式计算）：[码云](https://gitee.com/richard-gong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.java)  [GitHub](https://github.com/RichardGong/PlayWithCompiler/blob/master/lab/antlrtest/src/antlrtest/PlayScript.java)
-</li>
+
 
 

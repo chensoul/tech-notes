@@ -10,15 +10,15 @@
 
 通常来讲，无论采用什么API测试工具，API测试的基本步骤主要包括以下三大步骤：
 
-<li>
+
 准备测试数据（这是可选步骤，不一定所有API测试都需要这一步）；
-</li>
-<li>
+
+
 通过API测试工具，发起对被测API的request；
-</li>
-<li>
+
+
 验证返回结果的response。
-</li>
+
 
 对API的测试往往是使用API测试工具，比如常见的命令行工具cURL、图形界面工具Postman或者SoapUI、API性能测试的JMeter等。
 
@@ -111,32 +111,32 @@ Postman是目前使用最广泛的Http请求模拟工具之一，常常被用于
 
 具体的操作，主要包括：
 
-<li>
+
 发起API调用；
-</li>
-<li>
+
+
 添加结果验证；
-</li>
-<li>
+
+
 保存测试用例；
-</li>
-<li>
+
+
 基于Postman的测试代码自动生成。
-</li>
+
 
 **第一步，发起API调用**
 
 我们的目标是对Account API做测试，所以这里你需要选择Postmant的“Request”模块。进入相应界面后，你需要按照图5的提示依次执行以下三步操作，发起Account API的调用。
 
-<li>
+
 在endpoint输入框中输入“[http://127.0.0.1:8080/account/ID_008](http://127.0.0.1:8080/account/ID_008)”；
-</li>
-<li>
+
+
 选择“GET”方法；
-</li>
-<li>
+
+
 点击“Send”按钮发起API调用。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/d7/b1/d7bc64b03f6296ffabf79ce6c938e1b1.png" alt="" />
 
@@ -150,35 +150,35 @@ Postman是目前使用最广泛的Http请求模拟工具之一，常常被用于
 
 在Postman中添加结果验证也非常方便，假定我们在Account API测试过程中有以下四个验证点：
 
-<li>
+
 请求的返回状态码（Status Code）应该是200；
-</li>
-<li>
+
+
 请求的响应时间应该小于200  ms；
-</li>
-<li>
+
+
 请求返回的response header中应该包含“Content-Type”参数；
-</li>
-<li>
+
+
 请求返回的response body中，“type”的值应该是“friends”；
-</li>
+
 
 那么，接下来我们一起来看看如何使用Postman来添加这四个验证点。
 
 为此，我们首先打开“Tests”界面，然后在右下角的“SNIPPETS”中依次点击：
 
-<li>
+
 “Status code: Code is 200”
-</li>
-<li>
+
+
 “Response time is less than 200  ms”
-</li>
-<li>
+
+
 “Response headers：Content-Type header check”
-</li>
-<li>
+
+
 “Response body: JSON value check”
-</li>
+
 
 完成以上操作后，“Tests”中会自动生成验证代码，接着只要按照具体的测试要求，对这些生成的代码进行一些小修改就可以了。
 
@@ -202,8 +202,8 @@ Collection是用来保存测试request的一个集合，Collection内部还可�
 
 至此，你已经掌握了Postman最基本的使用方法，但还有一个问题没有解决。很多时候，你希望将你的测试request作为回归测试用例集成到CI/CD的流程中，这就要求可以通过命令行的方式执行你的测试。为了达到这个目的，目前有两种做法：
 
-<li>**将Postman中的测试request用自动化的方式直接转换成API测试的代码。** 目前Postman已经支持这个功能了，可以将保存的测试request自动化转换成常见测试框架直接支持的代码，而且支持多语言。<br />
-比如，基于Java的“OK HTTP”和“Unirest”，基于Python的“http.client”和“Requests”，基于NodeJS的“Native”“Request”和“Unirest”，基于JavaScript的“JQuery AJAX”和“XHR”等等。你可以点击如图8所示的“Code”按钮进入代码生成界面。</li>
+**将Postman中的测试request用自动化的方式直接转换成API测试的代码。** 目前Postman已经支持这个功能了，可以将保存的测试request自动化转换成常见测试框架直接支持的代码，而且支持多语言。<br />
+比如，基于Java的“OK HTTP”和“Unirest”，基于Python的“http.client”和“Requests”，基于NodeJS的“Native”“Request”和“Unirest”，基于JavaScript的“JQuery AJAX”和“XHR”等等。你可以点击如图8所示的“Code”按钮进入代码生成界面。
 
 <img src="https://static001.geekbang.org/resource/image/52/41/523124687d3551e1da9bbe300b0faf41.png" alt="" />
 
@@ -247,8 +247,8 @@ API之间是存在依赖关系的，比如你的被测对象是API A，但是API
 一直以来，异步API测试都是API测试中比较困难的部分。**在我看来，对异步API的测试主要分为两个部分：一是，测试异步调用是否成功，二是，测试异步调用的业务逻辑处理是否正确。**
 
 - 异步调用是否成功，这个还比较简单，主要检查返回值和后台工作线程是否被创建两个方面就可以了。
-<li>但是，对异步调用业务逻辑的测试就比较复杂了，因为异步API通常发生在一些比较慢的操作上，比如数据库I/O、消息队列I/O等，此时测试往往需要去验证数据库中的值、消息队列中的值等，这就需要测试代码具有访问和操作数据库或者消息队列的能力。<br />
-在实际工程项目中，这些能力一般会在测试框架级别提供，也就是说要求API测试框架中包含对应的工具类去访问和操作数据库或者消息队列等。</li>
+但是，对异步调用业务逻辑的测试就比较复杂了，因为异步API通常发生在一些比较慢的操作上，比如数据库I/O、消息队列I/O等，此时测试往往需要去验证数据库中的值、消息队列中的值等，这就需要测试代码具有访问和操作数据库或者消息队列的能力。<br />
+在实际工程项目中，这些能力一般会在测试框架级别提供，也就是说要求API测试框架中包含对应的工具类去访问和操作数据库或者消息队列等。
 
 ## 总结
 

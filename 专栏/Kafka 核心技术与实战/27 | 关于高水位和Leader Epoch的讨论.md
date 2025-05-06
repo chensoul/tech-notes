@@ -73,10 +73,10 @@
 处理生产者请求的逻辑如下：
 
 1. 写入消息到本地磁盘。
-<li>更新分区高水位值。<br>
+更新分区高水位值。<br>
 i. 获取Leader副本所在Broker端保存的所有远程副本LEO值（LEO-1，LEO-2，……，LEO-n）。<br>
 ii. 获取Leader副本高水位值：currentHW。<br>
-iii. 更新 currentHW = max{currentHW, min（LEO-1, LEO-2, ……，LEO-n）}。</li>
+iii. 更新 currentHW = max{currentHW, min（LEO-1, LEO-2, ……，LEO-n）}。
 
 处理Follower副本拉取消息的逻辑如下：
 
@@ -90,10 +90,10 @@ iii. 更新 currentHW = max{currentHW, min（LEO-1, LEO-2, ……，LEO-n）}。
 
 1. 写入消息到本地磁盘。
 1. 更新LEO值。
-<li>更新高水位值。<br>
+更新高水位值。<br>
 i. 获取Leader发送的高水位值：currentHW。<br>
 ii. 获取步骤2中更新过的LEO值：currentLEO。<br>
-iii. 更新高水位为min(currentHW, currentLEO)。</li>
+iii. 更新高水位为min(currentHW, currentLEO)。
 
 ## 副本同步机制解析
 

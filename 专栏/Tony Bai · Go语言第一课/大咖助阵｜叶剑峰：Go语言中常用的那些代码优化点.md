@@ -1,8 +1,8 @@
 <audio title="大咖助阵｜叶剑峰：Go语言中常用的那些代码优化点" src="https://static001.geekbang.org/resource/audio/74/9f/74b646c051fc8120d04fe96ae634d09f.mp3" controls="controls"></audio> 
-<p>你好，我是轩脉刃，是<a href="https://time.geekbang.org/column/intro/100090601">《手把手带你写一个Web框架》</a>专栏的作者。</p><p>很高兴应编辑邀请，为 Tony Bai 老师的专栏写一篇加餐文章。Tony Bai大佬是我很早在微博关注的一名Go先行者。他的《Gopher Daily》也是我经常学习阅读的Go语言资料之一。很高兴看到Tony Bai老师在极客时间也开了一个专栏，将他的经验分享出来。</p><p>这篇加餐，我主要想和你聊一聊Go语言中常用的一些代码优化点。在Go语言中，如果你不断地在一线写代码，一定多多少少都会有一些写代码的套路和经验。这些套路和经验可以帮助你在实际工作中遇到类似问题时，更成竹在胸。</p><p>所以这里，我想和你分享一下我个人在开发过程中看到和使用到的一些常用的代码优化点，希望能给你日常编码带来一些帮助。</p><h2>第一点：使用pkg/errors而不是官方error库</h2><p>其实我们可以思考一下，我们在一个项目中使用错误机制，最核心的几个需求是什么？我觉得主要是这两点：</p><ul>
-<li>附加信息：我们希望错误出现的时候能附带一些描述性的错误信息，甚至这些信息是可以嵌套的；</li>
-<li>附加堆栈：我们希望错误不仅仅打印出错误信息，也能打印出这个错误的堆栈信息，让我们可以知道出错的具体代码。</li>
-</ul><p>在Go语言的演进过程中，error传递的信息太少一直是被诟病的一点。使用官方的error库，我们只能打印一条简单的错误信息，而没有更多的信息辅助快速定位错误。所以，我推荐你在应用层使用 github.com/pkg/errors 来替换官方的error库。因为使用pkg/errors，我们不仅能传递出标准库error的错误信息，还能传递出抛出error的堆栈信息。</p><!-- [[[read_end]]] --><p>这里，我们看一个例子直观感受一下。假设我们有一个项目叫errdemo，他有sub1,sub2两个子包。sub1和sub2两个包都有Diff和IoDiff两个函数。</p><p><img src="https://static001.geekbang.org/resource/image/d9/b4/d9eb082d98575e2cddb4c473f82d0bb4.png?wh=546x698" alt="图片"></p><p>我们设计的这个程序，在sub2.go和sub1.go中都抛出了错误，且错误信息都为diff error。我们看下使用标准库error和pkg/errors都能返回什么信息：</p><pre><code class="language-plain">// sub2.go
+<p>你好，我是轩脉刃，是<a href="https://time.geekbang.org/column/intro/100090601">《手把手带你写一个Web框架》</a>专栏的作者。</p><p>很高兴应编辑邀请，为 Tony Bai 老师的专栏写一篇加餐文章。Tony Bai大佬是我很早在微博关注的一名Go先行者。他的《Gopher Daily》也是我经常学习阅读的Go语言资料之一。很高兴看到Tony Bai老师在极客时间也开了一个专栏，将他的经验分享出来。</p><p>这篇加餐，我主要想和你聊一聊Go语言中常用的一些代码优化点。在Go语言中，如果你不断地在一线写代码，一定多多少少都会有一些写代码的套路和经验。这些套路和经验可以帮助你在实际工作中遇到类似问题时，更成竹在胸。</p><p>所以这里，我想和你分享一下我个人在开发过程中看到和使用到的一些常用的代码优化点，希望能给你日常编码带来一些帮助。</p><h2>第一点：使用pkg/errors而不是官方error库</h2><p>其实我们可以思考一下，我们在一个项目中使用错误机制，最核心的几个需求是什么？我觉得主要是这两点：</p>
+附加信息：我们希望错误出现的时候能附带一些描述性的错误信息，甚至这些信息是可以嵌套的；
+附加堆栈：我们希望错误不仅仅打印出错误信息，也能打印出这个错误的堆栈信息，让我们可以知道出错的具体代码。
+<p>在Go语言的演进过程中，error传递的信息太少一直是被诟病的一点。使用官方的error库，我们只能打印一条简单的错误信息，而没有更多的信息辅助快速定位错误。所以，我推荐你在应用层使用 github.com/pkg/errors 来替换官方的error库。因为使用pkg/errors，我们不仅能传递出标准库error的错误信息，还能传递出抛出error的堆栈信息。</p><!-- [[[read_end]]] --><p>这里，我们看一个例子直观感受一下。假设我们有一个项目叫errdemo，他有sub1,sub2两个子包。sub1和sub2两个包都有Diff和IoDiff两个函数。</p><p><img src="https://static001.geekbang.org/resource/image/d9/b4/d9eb082d98575e2cddb4c473f82d0bb4.png?wh=546x698" alt="图片"></p><p>我们设计的这个程序，在sub2.go和sub1.go中都抛出了错误，且错误信息都为diff error。我们看下使用标准库error和pkg/errors都能返回什么信息：</p><pre><code class="language-plain">// sub2.go
 package sub2
 import (
     "errors"
@@ -187,21 +187,21 @@ func NewFoo(id int, options ...FooOption) *Foo {
    }
    return foo
 }
-</code></pre><p>现在我们来解释下上面的这段代码，我们创建了一个FooOption的函数类型，这个函数类型代表的函数结构是 <code>func(foo *Foo)</code> 。这个结构很简单，就是将foo指针传递进去，能让内部函数进行修改。</p><p>然后我们针对三个初始化字段name，age，db定义了三个返回了FooOption的函数，负责修改它们：</p><ul>
-<li>WithName；</li>
-<li>WithAge；</li>
-<li>WithDB。</li>
-</ul><p>以WithName为例，这个函数参数为string，返回值为FooOption。在返回值的FooOption中，根据参数修改了Foo指针。</p><pre><code class="language-plain">// WithName 代表Name为可选参数
+</code></pre><p>现在我们来解释下上面的这段代码，我们创建了一个FooOption的函数类型，这个函数类型代表的函数结构是 <code>func(foo *Foo)</code> 。这个结构很简单，就是将foo指针传递进去，能让内部函数进行修改。</p><p>然后我们针对三个初始化字段name，age，db定义了三个返回了FooOption的函数，负责修改它们：</p>
+WithName；
+WithAge；
+WithDB。
+<p>以WithName为例，这个函数参数为string，返回值为FooOption。在返回值的FooOption中，根据参数修改了Foo指针。</p><pre><code class="language-plain">// WithName 代表Name为可选参数
 func WithName(name string) FooOption {
    return func(foo *Foo) {
       foo.name = name
    }
 }
 </code></pre><p>顺便说一下，这种函数我们一般都以With开头，表示我这次初始化“带着”这个字段。</p><p>而最后NewFoo函数的参数，我们就改造为两个部分：一个部分是“非Option”字段，就是必填字段，假设我们的Foo结构实际上只有一个必填字段id，而其他字段皆是选填的；第二个部分就是其他所有选填字段，我们使用一个可变参数 options 替换：</p><pre><code class="language-plain">NewFoo(id int, options ...FooOption)
-</code></pre><p>在具体的NewFoo实现中，也变化成2个步骤：</p><ul>
-<li>按照默认值初始化一个foo对象；</li>
-<li>遍历options改造这个foo对象。</li>
-</ul><p>按照这样改造之后，我们具体使用Foo结构的函数就变成了这个样子：</p><pre><code class="language-plain">// 具体使用NewFoo的函数
+</code></pre><p>在具体的NewFoo实现中，也变化成2个步骤：</p>
+按照默认值初始化一个foo对象；
+遍历options改造这个foo对象。
+<p>按照这样改造之后，我们具体使用Foo结构的函数就变成了这个样子：</p><pre><code class="language-plain">// 具体使用NewFoo的函数
 func Bar() {
    foo := NewFoo(1, WithAge(15), WithName("foo"))
    fmt.Println(foo)
@@ -243,12 +243,12 @@ var mod string
    }
    ...
 }
-</code></pre><p>我简单解释下这段代码。首先，整段代码的作用是解析出三个变量name、mod、version。最开始我们先定义这三个变量，然后使用三个大括号，分别将这三个变量的解析逻辑封装在里面。这样，每个大括号里面的err变量的作用域就完全局限在括号中了。所以，我们每次都可以直接使用 := 来创建一个新的 err并处理它，不用再额外思考这个err 变量是否前面已经创建过了。</p><p>你可以自己观察一下，大括号在代码语义上还有一个好处，就是归类和展示。</p><p>归类的意思就是，这个大括号里面的变量和逻辑是一个完整的部分，他们内部创建的变量不会泄漏到外部。这个等于告诉后续的阅读者，你在阅读的时候，如果对这个逻辑不感兴趣，可以不阅读里面的内容；如果你感兴趣，就可以进入里面进行阅读。</p><p>基本上所有IDE都支持对大括号封装的内容进行压缩。这里我使用的是Goland，压缩后，我的命令行的主体逻辑就更清晰了：</p><p><img src="https://static001.geekbang.org/resource/image/d6/08/d66665bf45f98f1295011636cf981808.png?wh=1784x1620" alt="图片"></p><p>所以，使用大括号，结合IDE，你的代码的可读性能得到很大的提升。</p><h2>总结</h2><p>好了，这次的分享到这里就结束了。今天我给你总结了四个Go语言中常用的写法</p><ul>
-<li>使用pkg/error而不是官方error库；</li>
-<li>在初始化slice的时候尽量补全cap；</li>
-<li>初始化一个类的时候，如果类的构造参数较多，尽量使用Option写法；</li>
-<li>巧用大括号控制变量作用域。</li>
-</ul><p>这几种写法和注意事项都是我在工作和阅读开源项目中的一些总结和经验，每个经验都是对应为了解决不同的问题。</p><p>虽然说Go已经对代码做了不少的规范和优化，但是好的代码和不那么好的代码还是有一些差距的，这些写法优化点就是其中一部分。</p><p>我今天只列出的了四个点，当然了，还有很多类似的Go写法优化点等着你去发现。相信你在工作生活中也能遇到不少，只要你平时能多思考、多总结、多动手，也能积攒出属于自己的一本小小的优化手册。</p>
+</code></pre><p>我简单解释下这段代码。首先，整段代码的作用是解析出三个变量name、mod、version。最开始我们先定义这三个变量，然后使用三个大括号，分别将这三个变量的解析逻辑封装在里面。这样，每个大括号里面的err变量的作用域就完全局限在括号中了。所以，我们每次都可以直接使用 := 来创建一个新的 err并处理它，不用再额外思考这个err 变量是否前面已经创建过了。</p><p>你可以自己观察一下，大括号在代码语义上还有一个好处，就是归类和展示。</p><p>归类的意思就是，这个大括号里面的变量和逻辑是一个完整的部分，他们内部创建的变量不会泄漏到外部。这个等于告诉后续的阅读者，你在阅读的时候，如果对这个逻辑不感兴趣，可以不阅读里面的内容；如果你感兴趣，就可以进入里面进行阅读。</p><p>基本上所有IDE都支持对大括号封装的内容进行压缩。这里我使用的是Goland，压缩后，我的命令行的主体逻辑就更清晰了：</p><p><img src="https://static001.geekbang.org/resource/image/d6/08/d66665bf45f98f1295011636cf981808.png?wh=1784x1620" alt="图片"></p><p>所以，使用大括号，结合IDE，你的代码的可读性能得到很大的提升。</p><h2>总结</h2><p>好了，这次的分享到这里就结束了。今天我给你总结了四个Go语言中常用的写法</p>
+使用pkg/error而不是官方error库；
+在初始化slice的时候尽量补全cap；
+初始化一个类的时候，如果类的构造参数较多，尽量使用Option写法；
+巧用大括号控制变量作用域。
+<p>这几种写法和注意事项都是我在工作和阅读开源项目中的一些总结和经验，每个经验都是对应为了解决不同的问题。</p><p>虽然说Go已经对代码做了不少的规范和优化，但是好的代码和不那么好的代码还是有一些差距的，这些写法优化点就是其中一部分。</p><p>我今天只列出的了四个点，当然了，还有很多类似的Go写法优化点等着你去发现。相信你在工作生活中也能遇到不少，只要你平时能多思考、多总结、多动手，也能积攒出属于自己的一本小小的优化手册。</p>
 <style>
     ul {
       list-style: none;
@@ -358,7 +358,7 @@ var mod string
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cb/38/4c9cfdf4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ var mod string
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/26/38/ef063dc2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ var mod string
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/1d/dd/95cdb4d8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ var mod string
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/96/47/93838ff7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ var mod string
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,5 +437,4 @@ var mod string
   </div>
 </div>
 </div>
-</li>
-</ul>
+

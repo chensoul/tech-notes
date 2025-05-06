@@ -56,11 +56,11 @@ GoogleNet不仅和VGG一样在把架构做“深”上下文章，而且在模�
 
 **参考文献**
 
-<li>
+
 K. Simonyan, A. Zisserman. **Very Deep Convolutional Networks for Large-Scale Image Recognition**. International Conference on Learning Representations, 2015.
-</li>
-<li>
+
+
 C. Szegedy et al. **Going deeper with convolutions**. IEEE Conference on Computer Vision and Pattern Recognition (CVPR), Boston, MA, pp. 1-9, 2015.
-</li>
+
 
 

@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -218,34 +218,34 @@
 <blockquote>
 <p>索引模板是一种告诉Elasticsearch在创建索引时如何配置索引的方法。</p>
 </blockquote>
-<ul>
-<li><strong>使用方式</strong></li>
-</ul>
+
+<strong>使用方式</strong>
+
 <p>在创建索引之前可以先配置模板，这样在创建索引（手动创建索引或通过对文档建立索引）时，模板设置将用作创建索引的基础。</p>
 <h3>模板类型</h3>
 <p>模板有两种类型：<strong>索引模板</strong>和<strong>组件模板</strong>。</p>
 <ol>
-<li><strong>组件模板</strong>是可重用的构建块，用于配置映射，设置和别名；它们不会直接应用于一组索引。</li>
-<li><strong>索引模板</strong>可以包含组件模板的集合，也可以直接指定设置，映射和别名。</li>
+<strong>组件模板</strong>是可重用的构建块，用于配置映射，设置和别名；它们不会直接应用于一组索引。
+<strong>索引模板</strong>可以包含组件模板的集合，也可以直接指定设置，映射和别名。
 </ol>
 <h3>索引模板中的优先级</h3>
 <ol>
-<li>可组合模板优先于旧模板。如果没有可组合模板匹配给定索引，则旧版模板可能仍匹配并被应用。</li>
-<li>如果使用显式设置创建索引并且该索引也与索引模板匹配，则创建索引请求中的设置将优先于索引模板及其组件模板中指定的设置。</li>
-<li>如果新数据流或索引与多个索引模板匹配，则使用优先级最高的索引模板。</li>
+可组合模板优先于旧模板。如果没有可组合模板匹配给定索引，则旧版模板可能仍匹配并被应用。
+如果使用显式设置创建索引并且该索引也与索引模板匹配，则创建索引请求中的设置将优先于索引模板及其组件模板中指定的设置。
+如果新数据流或索引与多个索引模板匹配，则使用优先级最高的索引模板。
 </ol>
 <h3>内置索引模板</h3>
 <p>Elasticsearch具有内置索引模板，每个索引模板的优先级为100，适用于以下索引模式：</p>
 <ol>
-<li><code>logs-*-*</code></li>
-<li><code>metrics-*-*</code></li>
-<li><code>synthetics-*-*</code></li>
+<code>logs-*-*</code>
+<code>metrics-*-*</code>
+<code>synthetics-*-*</code>
 </ol>
 <p>所以在涉及内建索引模板时，要避免索引模式冲突。更多可以参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/index-templates.html">这里</a></p>
 <h3>案例</h3>
-<ul>
-<li>首先<strong>创建两个索引组件模板</strong>：</li>
-</ul>
+
+首先<strong>创建两个索引组件模板</strong>：
+
 <pre><code class="language-bash">PUT _component_template/component_template1
 {
   &quot;template&quot;: {
@@ -277,9 +277,9 @@ PUT _component_template/runtime_component_template
 </code></pre>
 <p>执行结果如下</p>
 <p><img src="assets/es-index-template-1.png" alt="img" /></p>
-<ul>
-<li><strong>创建使用组件模板的索引模板</strong></li>
-</ul>
+
+<strong>创建使用组件模板的索引模板</strong>
+
 <pre><code class="language-bash">PUT _index_template/template_1
 {
   &quot;index_patterns&quot;: [&quot;bar*&quot;],
@@ -315,9 +315,9 @@ PUT _component_template/runtime_component_template
 </code></pre>
 <p>执行结果如下</p>
 <p><img src="assets/es-index-template-2.png" alt="img" /></p>
-<ul>
-<li>创建一个匹配<code>bar*</code>的索引<code>bar-test</code></li>
-</ul>
+
+创建一个匹配<code>bar*</code>的索引<code>bar-test</code>
+
 <pre><code class="language-bash">PUT /bar-test
 </code></pre>
 <p>然后获取mapping</p>
@@ -378,9 +378,9 @@ PUT _component_template/runtime_component_template
 }
 </code></pre>
 <h3>模拟组件模板和自身模板结合后的结果</h3>
-<ul>
-<li>新建两个模板</li>
-</ul>
+
+新建两个模板
+
 <pre><code class="language-bash">PUT /_component_template/ct1
 {
   &quot;template&quot;: {

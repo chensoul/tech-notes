@@ -220,53 +220,53 @@ qemu-system-x86_64
 
 ```
 
-<li>
+
 -enable-kvm：表示启用硬件辅助虚拟化。
-</li>
-<li>
+
+
 -name instance-00000024：表示虚拟机的名称。
-</li>
-<li>
+
+
 <p>-machine pc-i440fx-trusty,accel=kvm,usb=off：machine是什么呢？其实就是计算机体系结构。不知道什么是体系结构的话，可以订阅极客时间的另一个专栏《深入浅出计算机组成原理》。<br>
 qemu会模拟多种体系结构，常用的有普通PC机，也即x86的32位或者64位的体系结构、Mac电脑PowerPC的体系结构、Sun的体系结构、MIPS的体系结构，精简指令集。如果使用KVM hardware-assisted virtualization，也即BIOS中VD-T是打开的，则参数中accel=kvm。如果不使用hardware-assisted virtualization，用的是纯模拟，则有参数accel = tcg，-no-kvm。</p>
-</li>
-<li>
+
+
 -cpu SandyBridge,+erms,+smep,+fsgsbase,+pdpe1gb,+rdrand,+f16c,+osxsave,+dca,+pcid,+pdcm,+xtpr,+tm2,+est,+smx,+vmx,+ds_cpl,+monitor,+dtes64,+pbe,+tm,+ht,+ss,+acpi,+ds,+vme：表示设置CPU，SandyBridge是Intel处理器，后面的加号都是添加的CPU的参数，这些参数会显示在/proc/cpuinfo里面。
-</li>
-<li>
+
+
 -m 2048：表示内存。
-</li>
-<li>
+
+
 <p>-smp 1,sockets=1,cores=1,threads=1：SMP我们解析过，叫对称多处理器，和NUMA对应。qemu仿真了一个具有1个vcpu，一个socket，一个core，一个threads的处理器。<br>
 socket、core、threads是什么概念呢？socket就是主板上插cpu的槽的数目，也即常说的“路”，core就是我们平时说的“核”，即双核、4核等。thread就是每个core的硬件线程数，即超线程。举个具体的例子，某个服务器是：2路4核超线程（一般默认为2个线程），通过cat /proc/cpuinfo，我们看到的是2**4**2=16个processor，很多人也习惯成为16核了。</p>
-</li>
-<li>
+
+
 -rtc base=utc,driftfix=slew：表示系统时间由参数-rtc指定。
-</li>
-<li>
+
+
 -device cirrus-vga,id=video0,bus=pci.0,addr=0x2：表示显示器用参数-vga设置，默认为cirrus，它模拟了CL-GD5446PCI VGA card。
-</li>
-<li>
+
+
 有关网卡，使用-net参数和-device。
-</li>
-<li>
+
+
 从HOST角度：-netdev tap,fd=32,id=hostnet0,vhost=on,vhostfd=37。
-</li>
-<li>
+
+
 从GUEST角度：-device virtio-net-pci,netdev=hostnet0,id=net0,mac=fa:16:3e:d1:2d:99,bus=pci.0,addr=0x3。
-</li>
-<li>
+
+
 有关硬盘，使用-hda -hdb，或者使用-drive和-device。
-</li>
-<li>
+
+
 从HOST角度：-drive file=/var/lib/nova/instances/1f8e6f7e-5a70-4780-89c1-464dc0e7f308/disk,if=none,id=drive-virtio-disk0,format=qcow2,cache=none
-</li>
-<li>
+
+
 从GUEST角度：-device virtio-blk-pci,scsi=off,bus=pci.0,addr=0x4,drive=drive-virtio-disk0,id=virtio-disk0,bootindex=1
-</li>
-<li>
+
+
 -vnc 0.0.0.0:12：设置VNC。
-</li>
+
 
 在main函数中，接下来的for循环和大量的switch case语句，就是对于这些参数的解析，我们不一一解析，后面真的用到这些参数的时候，我们再仔细看。
 

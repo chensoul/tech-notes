@@ -1,9 +1,9 @@
 <audio title="23｜管理接口：如何集成swagger自动生成文件？" src="https://static001.geekbang.org/resource/audio/ab/a8/ab932f310208bb2d7de2ac0694442ba8.mp3" controls="controls"></audio> 
-<p>你好，我是轩脉刃。</p><p>不管你是前端页面开发，还是后端服务开发，你一定经历过前后端联调的场景，前后端联调最痛苦的事情，莫过于没有完善的接口文档、没有可以调用调试的接口返回值了，所以一般都会采用形如Postman这样的第三方工具，来进行接口的调用和联调。</p><p>但是这一节课，我们要做的事情，就是为自己的Web应用集成swagger，使用swagger自动生成一个可以查看接口、可以调用执行的页面。</p><h3>swagger</h3><p>说到swagger，可能有的同学还比较陌生，我来简要介绍一下。swagger框架在2009年启动，之前是Reverb公司内部开发的一个项目，他们的工程师在与第三方调试REST接口的过程中，为了解决大量的接口与文档问题，就设计了swagger这个项目。</p><p>项目最终成型的方案是，先设计一个JSON规则，开发工程师把所有服务接口按照这种规则来写成一个JSON文件，<strong>这个JSON文件可以直接生成一个交互式UI，可以提供调用者查看、调用调试</strong>。</p><p>swagger的应用是非常广泛的。非常多的开源项目在提供对外接口的时候都使用swagger来进行描述。比如目前最火的Kubernetes项目，每次在发布版本的时候，都会在项目根目录上，带上符合swagger规则的<a href="https://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json">JSON文件</a>，用来向使用者提供内部接口。</p><!-- [[[read_end]]] --><p>swagger的产品有两类。</p><p>一个是前面说的JSON规则，就是OpenAPI的文档，它说明了我们要写一个接口说明文档的每个字段含义和要求。</p><p>OpenAPI的规则也是有版本的，目前最新版本是3.0，但是3.0版本目前市场上相应的配套支持还不成熟，比如Golang版本的SDK库<a href="https://github.com/go-openapi/spec">spec</a>还不支持。目前市面上对OpenAPI2.0的支持还是最全的。所以我们的hade框架就使用swagger2.0版本。</p><p>swagger的另外一类产品是工具，包括swagger-ui、swagger-editor和swagger-codegen。</p><p><a href="https://editor.swagger.io/">swagger-editor</a>提供一个开源网站，在线编辑swagger文件。<a href="https://swagger.io/tools/swagger-codegen/download/">swagger-codegen</a>提供一个Java命令行工具，通过swagger文件生成client端代码。而<a href="https://petstore.swagger.io/">swagger-ui</a>，通过提供一个开源网站，将swagger接口在线展示出来，并且可以让调用者查看、调试。我们的目标是生成一个可以查看接口，进行调用调试的页面，所以要将swagger-ui集成进hade框架。</p><h3>命令设计</h3><p>了解了swagger，结合框架，我们照例先思考下希望如何使用它。</p><p>按照swagger的定义，我们应该在业务项目中维护一个JSON文件，这个文件描述了这个业务的所有接口。但是你想过没有，<strong>随着项目的接口数越来越大，维护swagger的JSON描述文档本身，就是一个很大很繁杂的工作量</strong>。</p><p>由于每个接口在代码开发的时候，我们都会有注释，而更新代码的时候，我们是会去更新注释的。所以能不能有一个方法，通过代码的注释，自动生成这个JSON文件呢？</p><p>好，这个就是我们希望定义的一个swagger命令，<code>./hade swagger gen</code> ，能通过注释生成swagger.json文件。</p><p>但是考虑具体的实现设计，怎么用Golang的代码，注释生成swagger.json呢？既然swagger.json是有一定的规则的，那么注释的写法也是有一定规则的吧？是的。目前有一个最流行的将Golang注释转化为swagger.json 的开源项目<a href="https://github.com/swaggo/swag">swag</a>。</p><h3>swag项目</h3><p>这个swag项目是MIT 协议，目前已经有4.9k 个star了。它的用法和我们想要的一样，生成swagger.json分三步：</p><ul>
-<li>在API接口中编写注释。注释的详细写法需要参考<a href="https://github.com/swaggo/swag#declarative-comments-format">说明文档</a>。</li>
-<li>下载swag工具或者安装swag库</li>
-<li>使用工具或者库将指定代码生成swagger.json</li>
-</ul><p>步骤很简单，不过第一步怎么写swag的注释说明文档，是使用这个技术必须要学习的一个知识，这个的学习确实是有些门槛的，需要熟读对应的说明文档才能写出比较好的注释。这里我们用一个例子来讲解我在编写代码的时候常用的一些字段，供你参考。</p><pre><code class="language-go">// Demo2  for godoc
+<p>你好，我是轩脉刃。</p><p>不管你是前端页面开发，还是后端服务开发，你一定经历过前后端联调的场景，前后端联调最痛苦的事情，莫过于没有完善的接口文档、没有可以调用调试的接口返回值了，所以一般都会采用形如Postman这样的第三方工具，来进行接口的调用和联调。</p><p>但是这一节课，我们要做的事情，就是为自己的Web应用集成swagger，使用swagger自动生成一个可以查看接口、可以调用执行的页面。</p><h3>swagger</h3><p>说到swagger，可能有的同学还比较陌生，我来简要介绍一下。swagger框架在2009年启动，之前是Reverb公司内部开发的一个项目，他们的工程师在与第三方调试REST接口的过程中，为了解决大量的接口与文档问题，就设计了swagger这个项目。</p><p>项目最终成型的方案是，先设计一个JSON规则，开发工程师把所有服务接口按照这种规则来写成一个JSON文件，<strong>这个JSON文件可以直接生成一个交互式UI，可以提供调用者查看、调用调试</strong>。</p><p>swagger的应用是非常广泛的。非常多的开源项目在提供对外接口的时候都使用swagger来进行描述。比如目前最火的Kubernetes项目，每次在发布版本的时候，都会在项目根目录上，带上符合swagger规则的<a href="https://github.com/kubernetes/kubernetes/blob/master/api/openapi-spec/swagger.json">JSON文件</a>，用来向使用者提供内部接口。</p><!-- [[[read_end]]] --><p>swagger的产品有两类。</p><p>一个是前面说的JSON规则，就是OpenAPI的文档，它说明了我们要写一个接口说明文档的每个字段含义和要求。</p><p>OpenAPI的规则也是有版本的，目前最新版本是3.0，但是3.0版本目前市场上相应的配套支持还不成熟，比如Golang版本的SDK库<a href="https://github.com/go-openapi/spec">spec</a>还不支持。目前市面上对OpenAPI2.0的支持还是最全的。所以我们的hade框架就使用swagger2.0版本。</p><p>swagger的另外一类产品是工具，包括swagger-ui、swagger-editor和swagger-codegen。</p><p><a href="https://editor.swagger.io/">swagger-editor</a>提供一个开源网站，在线编辑swagger文件。<a href="https://swagger.io/tools/swagger-codegen/download/">swagger-codegen</a>提供一个Java命令行工具，通过swagger文件生成client端代码。而<a href="https://petstore.swagger.io/">swagger-ui</a>，通过提供一个开源网站，将swagger接口在线展示出来，并且可以让调用者查看、调试。我们的目标是生成一个可以查看接口，进行调用调试的页面，所以要将swagger-ui集成进hade框架。</p><h3>命令设计</h3><p>了解了swagger，结合框架，我们照例先思考下希望如何使用它。</p><p>按照swagger的定义，我们应该在业务项目中维护一个JSON文件，这个文件描述了这个业务的所有接口。但是你想过没有，<strong>随着项目的接口数越来越大，维护swagger的JSON描述文档本身，就是一个很大很繁杂的工作量</strong>。</p><p>由于每个接口在代码开发的时候，我们都会有注释，而更新代码的时候，我们是会去更新注释的。所以能不能有一个方法，通过代码的注释，自动生成这个JSON文件呢？</p><p>好，这个就是我们希望定义的一个swagger命令，<code>./hade swagger gen</code> ，能通过注释生成swagger.json文件。</p><p>但是考虑具体的实现设计，怎么用Golang的代码，注释生成swagger.json呢？既然swagger.json是有一定的规则的，那么注释的写法也是有一定规则的吧？是的。目前有一个最流行的将Golang注释转化为swagger.json 的开源项目<a href="https://github.com/swaggo/swag">swag</a>。</p><h3>swag项目</h3><p>这个swag项目是MIT 协议，目前已经有4.9k 个star了。它的用法和我们想要的一样，生成swagger.json分三步：</p>
+在API接口中编写注释。注释的详细写法需要参考<a href="https://github.com/swaggo/swag#declarative-comments-format">说明文档</a>。
+下载swag工具或者安装swag库
+使用工具或者库将指定代码生成swagger.json
+<p>步骤很简单，不过第一步怎么写swag的注释说明文档，是使用这个技术必须要学习的一个知识，这个的学习确实是有些门槛的，需要熟读对应的说明文档才能写出比较好的注释。这里我们用一个例子来讲解我在编写代码的时候常用的一些字段，供你参考。</p><pre><code class="language-go">// Demo2  for godoc
 // @Summary 获取所有学生
 // @Description 获取所有学生，不进行分页
 // @Produce  json
@@ -22,14 +22,14 @@ type UserDTO struct {
    Name string `json:"name"`
 }
 </code></pre><p>观察注释。第一行  <code>Demo2 for godoc</code> 这个在swagger中并没有实际作用，它是用来给godoc工具生成说明文档的。从第二行开始，就是我们swaggo的注释语法了，使用@符号加上关键字的方式来进行说明。<br>
-例子的关键字有这些：</p><ul>
-<li>Summary，为接口增加简要说明</li>
-<li>Description，为接口增加详细说明</li>
-<li>Produce，说明接口返回格式</li>
-<li>Tags，为接口打标签，可以为多个，便于查看者查找</li>
-<li>Success，接口返回成功时候的说明</li>
-<li>Router，接口的路由调用</li>
-</ul><p>具体对应的swagger-ui界面是这样的：<br>
+例子的关键字有这些：</p>
+Summary，为接口增加简要说明
+Description，为接口增加详细说明
+Produce，说明接口返回格式
+Tags，为接口打标签，可以为多个，便于查看者查找
+Success，接口返回成功时候的说明
+Router，接口的路由调用
+<p>具体对应的swagger-ui界面是这样的：<br>
 <img src="https://static001.geekbang.org/resource/image/94/ec/94c4a5c83dc771be6f8b60527e9951ec.png?wh=2872x1644" alt=""></p><p>我们对照注释和界面，很容易就看出每个注释的最终显示效果。不过这里再啰嗦解释下比较复杂的Success注释。</p><p>在这个例子中，是这样使用Success注释的：</p><pre><code class="language-go">// @Success 200 {array} UserDTO
 </code></pre><p>在成功的时候，返回UserDTO结构的数组，这里，swaggo会自动去项目中寻找UserDTO结构，来生成swagger-ui中的返回结构说明。</p><p>不过这里能这么写，是因为恰好UserDTO是和API放在同一个namespace下，如果你的返回结构放在不同的namespace下，需要在注释中注明返回结构的命名空间。比如：</p><pre><code class="language-go">// @Success 200 {array} model.Account
 </code></pre><p>同时，这个返回结构还支持返回对象嵌套，比如下面这个例子：</p><pre><code class="language-go">// 返回了一个JsonResult对象，其中这个对象的data字段是Order结构
@@ -171,9 +171,9 @@ func main()&nbsp; {
 func (engine *Engine) GetContainer() framework.Container {
    return engine.container
 }
-</code></pre><p>现在就是真正的万事俱备了，我们来改造应用路由app/http/route.go。</p><ul>
-<li>首先要引入gin-swagger提示的三个import。</li>
-</ul><p>这里我将最后一个docs对应的import，放在了同级目录的app/http/swagger.go文件中。</p><p>我是这么考虑的，<strong>docs.go是我们用命令行生成的，而生成的时候swagger的全局说明配置是放在swagger.go中的</strong>，所以这两个文件关系更为紧密，比较适合放在一起。</p><p>app/http/swagger.go文件信息：</p><pre><code class="language-go">// Package http API.
+</code></pre><p>现在就是真正的万事俱备了，我们来改造应用路由app/http/route.go。</p>
+首先要引入gin-swagger提示的三个import。
+<p>这里我将最后一个docs对应的import，放在了同级目录的app/http/swagger.go文件中。</p><p>我是这么考虑的，<strong>docs.go是我们用命令行生成的，而生成的时候swagger的全局说明配置是放在swagger.go中的</strong>，所以这两个文件关系更为紧密，比较适合放在一起。</p><p>app/http/swagger.go文件信息：</p><pre><code class="language-go">// Package http API.
 // @title hade
 // @version 1.1
 // @description hade测试
@@ -323,7 +323,7 @@ func Routes(r *gin.Engine) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -338,5 +338,4 @@ func Routes(r *gin.Engine) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

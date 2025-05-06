@@ -10,30 +10,30 @@
 
 先推荐几本书。
 
-<li>
+
 [Don’t Make Me Think](https://book.douban.com/subject/1827702/) ，这是我看的第一本和设计相关的书。这本书对我的影响也比较深远。这本书践行了自己的理论，整本书短小精悍，语言轻松诙谐，书中穿插大量色彩丰富的屏幕截图、趣味丛生的卡通插图以及包含大量信息的图表，使枯燥的设计原理变得平易近人。
-</li>
-<li>
+
+
 [Simple and Usable Web,Mobile,and Interaction Design](https://book.douban.com/subject/5394309/) ，中文版译名为《简约至上》。本书作者贾尔斯（Giles）有20多年交互式设计的探索与实践。提出了合理删除、分层组织、适时隐藏和巧妙转移这四个达成简约至上的终极策略，讲述了为什么应该站在主流用户一边，以及如何从他们的真实需求和期望出发，简化设计，提升易用性。
-</li>
-<li>
+
+
 [Designing with the Mind in Mind: Simple Guide to Understanding User Interface Design Rules](https://book.douban.com/subject/6792322/) ，中文版译名为《认知与设计：理解UI设计准则》。这本书语言清晰明了，将设计准则与其核心的认知学和感知科学高度统一起来，使得设计准则更容易在具体环境中得到应用。涵盖了交互计算机系统设计的方方面面，为交互系统设计提供了支持工程方法。不仅如此，这也是一本人类行为原理的入门书。
-</li>
-<li>
+
+
 [Designing Interfaces: Patterns for Effective Interaction Design](https://book.douban.com/subject/25716088/) ，中文版译名为《界面设计模式》。这本书开篇即总结了“与人有关”的各类问题，为读者提供了界面设计总体思路上的指引，帮助读者举一反三。然后，收集并分析了很多常用的界面设计模式，帮助读者理解在实现级别的各种常用解决方案，将它们灵活地运用到自己的设计中。
-</li>
+
 
 除了上面的这几本书，还有下面的这几篇文章也是很不错的，推荐一读。
 
-<li>
+
 [The Psychology Principles Every UI/UX Designer Needs to Know](https://uxplanet.org/the-psychology-principles-every-ui-ux-designer-needs-to-know-24116fd65778) ，这篇文章讲述了6大用户界面用户体验设计的心理学原则。
-</li>
-<li>
+
+
 [18 designers predict UI/UX trends for 2018](https://blog.figma.com/18-designers-predict-ui-ux-trends-for-2018-2d04d41361c6)， 我倒不觉得这篇文章中所说的UI/UX是在2018年的趋势，我反而觉得，这18条原则是指导性的思想。
-</li>
-<li>
+
+
 [The Evolution of UI/UX Designers Into Product Designers](https://medium.com/thinking-design/the-evolution-of-ui-ux-designers-into-product-designers-623e4e7eaab3) ，这篇文章是Adobe公司的一篇博客，其在回顾整个产品设计的演化过程中有一些不错的思考和想法，并提供了一些方法论。
-</li>
+
 
 # 原子设计（Atomic Design）
 
@@ -71,12 +71,12 @@
 
 微软于2017年5月11日的Microsoft Build 2017开发者大会上公开了该设计体系。
 
-<li>
+
 [What’s new and coming for Windows UI: XAML and composition](https://channel9.msdn.com/Events/Build/2017/B8100) ，从概念上讲了一下Fluent Design System的各个部分。
-</li>
-<li>
+
+
 [Introducing Fluent Design](https://channel9.msdn.com/Events/Build/2017/B8066) ，介绍了Fluent Design System的各个部分。
-</li>
+
 
 还有Build 2018上的一些微软的YouTube分享。
 
@@ -97,35 +97,35 @@ Material Design于2014年的Google I/O大会上发布（参看 [Google I/O 2014 
 
 下面是几个可供你使用的Material UI的工程实现。
 
-<li>
+
 [Material Design Lite](https://www.getmdl.io/) ，这是 Google 官方的框架，简单易用。
-</li>
-<li>
+
+
 [Materialize](https://materializecss.com/) ，一组类似于Bootstrap的前端UI框架。
-</li>
-<li>
+
+
 [Material-UI](https://material-ui.com/) 是基于Google Material Design的React组件实现。
-</li>
-<li>
+
+
 [MUI](https://www.muicss.com/) 是一个轻量级的CSS框架，遵循Google的Material Design设计方针。
-</li>
+
 
 ## 其它公司
 
 接下来再来推荐其它几家公司的设计语言。
 
-<li>
+
 [苹果公司的设计指南](https://developer.apple.com/design/)，在这个网站有苹果的各种设备的设计规范和指导，一方面可以让你的App能和苹果的UI融合在一起，另一方面，你也可以从中看到苹果的审美和思维方式。
-</li>
-<li>
+
+
 [IBM公司的设计语言](https://www.ibm.com/design/language/) ，我们总觉得IBM公司是一家比较传统的没有新意的公司，但是并不是这样的。IBM公司的这个设计语言的确比较出众。所以，在这里推荐一下。
-</li>
-<li>
+
+
 [Salesforce公司的Lightning Design System](https://www.lightningdesignsystem.com/) ，是在Salesforce生态系统中用于创建统一UI的设计模式、组件和指南的集合，是一个企业级的产品。
-</li>
-<li>
+
+
 [Facebook Design - What’s on our mind?](http://facebook.design/) ，Facebook的设计师们收集的一系列的文章、视频和资源。很不错哦。
-</li>
+
 
 ## 动画效果设计
 
@@ -135,9 +135,9 @@ Material Design于2014年的Google I/O大会上发布（参看 [Google I/O 2014 
 
 除此之外，还有几个动画设计指南和相关文章供你参考和学习。
 
-<li>
+
 [6 Animation Guidelines for UX Design](https://blog.prototypr.io/6-animation-guidelines-for-ux-design-74c90eb5e47a)。这是Prototypr公司的一个指南，其中主要指出，动画效果不是为了炫配，而是能让你的UI/UX能活起来，自然，不消耗时间，并且是生动故事型的动画效果。其中还推荐了如下几篇很不错的文章。
-<ul>
+
 - [Transitional Interfaces](https://medium.com/@pasql/transitional-interfaces-926eb80d64e3)
 - [UI Animation and UX: A Not-So-Secret Friendship](https://alistapart.com/article/ui-animation-and-ux-a-not-so-secret-friendship)
 - [Invisible animation](https://medium.com/@stevenfabre/invisible-animation-ffa27d0b77e5)
@@ -162,47 +162,47 @@ Great UI/UX Animations是设计师丹尼尔（Daniel）收集的一些很不错�
 
 ## 文章资源
 
-<li>
+
 [Web Designer News](http://webdesignernews.com) ，一个文章聚合的网站。除此之外，还有两个文章聚合网站，你也可以订阅。一个是[Designer News](https://www.designernews.co/) ，另一个是 [Reddit Web Design](https://www.reddit.com/r/web_design/)。
-</li>
-<li>
+
+
 [Marvel Blog](http://blog.marvelapp.com) ，Marvel团队的博客。
-</li>
-<li>
+
+
 [The Next Web](http://thenextweb.com/section/creative/) ，内容主要涵盖国际技术新闻、商业和文化等多个方面。
-</li>
-<li>
+
+
 [Medium - Design](https://medium.com/design) ，Medium现在已经成为一个好文章的集散地了，这个地方必去。
-</li>
-<li>
+
+
 [Smashing Magazine](http://smashingmagazine.com) ，这个地方是给专业的Web设计师和程序员的。不但有设计还有HTML、CSS和JavaScript等各种资源。
-</li>
-<li>
+
+
 [Sitepoint](https://www.sitepoint.com/design-ux/) ，这个网站上也有很多不错的给Web前端程序员和设计师看的文章（当然，给程序员看的有点简单了，我觉得更像是让设计师来学写程序的网站）。
-</li>
+
 
 ## 设计收集
 
 接下来推荐一些优秀设计的聚集地。
 
-<li>
+
 [Awwwards](http://awwwards.com) ，这个网站给一些设计得不错网站的评分，在这里你可以看到很多设计不错的网站。
-</li>
-<li>
+
+
 [One Page Love](http://onepagelove.com) ，就是一个单页的网页设计的收集。
-</li>
-<li>
+
+
 [Inspired UI](http://inspired-ui.com/) ，移动App的设计模式。
-</li>
-<li>
+
+
 [Behance](http://behance.net)，这个地言有很不错的很有创意的作品。
-</li>
-<li>
+
+
 [Dribbble](http://dribbble.com) ，这应该是设计师都知道也都爱去的网站。除了你可以看到一些很不错的作品外，你还可以在这里看到很多不错的设计师。
-</li>
-<li>
+
+
 [UI Movement](https://uimovement.com) ，也是个设计的收集网站，上面有很多很不错的UI设计，大量的动画。虽说会像抖音一样，让你不知不觉就看了好几小时，但是它比抖音让你的收获大多了。
-</li>
+
 
 # 小结
 
@@ -215,8 +215,8 @@ Great UI/UX Animations是设计师丹尼尔（Daniel）收集的一些很不错�
 下面是《程序员练级攻略》系列文章的目录。
 
 - [开篇词](https://time.geekbang.org/column/article/8136)
-<li>入门篇
-<ul>
+入门篇
+
 - [零基础启蒙](https://time.geekbang.org/column/article/8216)
 - [正式入门](https://time.geekbang.org/column/article/8217)
 

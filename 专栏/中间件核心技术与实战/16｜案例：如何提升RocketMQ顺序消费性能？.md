@@ -1,57 +1,57 @@
 <audio title="16｜案例：如何提升RocketMQ顺序消费性能？" src="https://static001.geekbang.org/resource/audio/13/b9/13f52d5e7c58ac738412e57b519117b9.mp3" controls="controls"></audio> 
-<p>你好，我是丁威。</p><p>在课程正式开始之前，我想先分享一段我的经历。我记得2020年双十一的时候，公司订单中心有一个业务出现了很大程度的延迟。我们的系统为了根据订单状态的变更进行对应的业务处理，使用了RocketMQ的顺序消费。但是经过排查，我们发现每一个队列都积压了上千万条消息。</p><p>当时为了解决这个问题，我们首先决定快速扩容消费者。因为当时主题的总队列为64个，所以我们一口气将消费者扩容到了64台。但上千万条消息毕竟还是太多了。还有其他办法能够加快消息的消费速度吗？比较尴尬的是，没有，我们当时能做的只有等待。</p><p>作为公司消息中间件的负责人，在故障发生时没有其他其他补救手段确实比较无奈。事后，我对顺序消费模型进行了反思与改善。接下来，我想和你介绍我是如何优化RocketMQ的顺序消费性能的。</p><h2>RocketMQ顺序消费实现原理</h2><p>我们先来了解一下 RocketMQ 顺序消费的实现原理。RocketMQ支持局部顺序消息消费，可以保证同一个消费队列上的消息顺序消费。例如，消息发送者向主题为ORDER_TOPIC的4个队列共发送12条消息， RocketMQ 可以保证1、4、8这三条按顺序消费，但无法保证消息4和消息2的先后顺序。</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/c4/04/c483d9fcfd0948938395e89c83cf4704.jpg?wh=1690x641" alt="图片"></p><p>那RocketMQ是怎么做到分区顺序消费的呢？我们可以看一下它的工作机制：</p><p><img src="https://static001.geekbang.org/resource/image/51/61/51ef84yy8790bd41aef99787fd2b1961.jpg?wh=1920x1328" alt="图片"></p><p>顺序消费实现的核心要点可以细分为三个阶段。</p><p><strong>第一阶段：消费队列负载。</strong></p><p>RebalanceService线程启动后，会以20s的频率计算每一个消费组的队列负载、当前消费者的消费队列集合（用newAssignQueueSet表），然后与上一次分配结果（用oldAssignQueueSet表示）进行对比。这时候会出现两种情况。</p><ul>
-<li>如果一个队列在newAssignQueueSet中，但并不在oldAssignQueueSet中，表示这是新分配的队列。这时候我们可以尝试向<strong>Broker申请锁</strong>：
-<ul>
-<li>如果成功获取锁，则为该队列创建拉取任务并放入到PullMessageService的pullRequestQueue中，以此唤醒Pull线程，触发消息拉取流程；</li>
-<li>如果未获取锁，说明该队列当前被其他消费者锁定，放弃本次拉取，等下次重平衡时再尝试申请锁。</li>
-</ul>
-</li>
-</ul><p><strong>这种情况下，消费者能够拉取消息的前提条件是，在Broker上加锁成功。</strong></p><ul>
-<li>如果一个队列在newAssignQueueSet中不存在，但存在于oldAssignQueueSet中，表示该队列应该分配给其他消费者，需要将该队列丢弃。但在丢弃之前，要<strong>尝试申请ProceeQueue的锁</strong>：
-<ul>
-<li>如果成功锁定ProceeQueue，说明ProceeQueue中的消息已消费，可以将该ProceeQueue丢弃，并释放锁；</li>
-<li>如果未能成功锁定ProceeQueue，说明该队列中的消息还在消费，暂时不丢弃ProceeQueue，这时消费者并不会释放Broker中申请的锁，其他消费者也就暂时无法消费该队列中的消息。</li>
-</ul>
-</li>
-</ul><p><strong>这样，消费者在经历队列重平衡之后，就会创建拉取任务，并驱动Pull线程进入到消息拉取流程。</strong></p><p><strong>第二阶段：消息拉取。</strong></p><p>PullMessageService线程启动，从pullRequestQueue中获取拉取任务。如果该队列中没有待拉取任务，则Pull线程会阻塞，等待RebalanceImpl线程创建拉取任务，并向Broker发起消息拉取请求：</p><ul>
-<li>如果未拉取到消息。可能是Tag过滤的原因，被过滤的消息其实也可以算成被成功消费了。所以如果此时处理队列中没有待消费的消息，就提交位点（当前已拉取到最大位点+1），同时再将拉取请求放到待拉取任务的末尾，反复拉取，实现Push模式。</li>
-<li>如果拉取到一批消息。首先要将拉取到的消息放入ProceeQueue(TreeMap)，同时将消息提交到消费线程池，进入消息消费流程。再将拉取请求放到待拉取任务的末尾，反复拉取，实现Push模式。</li>
-</ul><p><strong>第三阶段：顺序消费。</strong></p><p>RocketMQ一次只会拉取一个队列中的消息，然后将其提交到线程池。为了保证顺序消费，RocketMQ在消费过程中有下面几个关键点：</p><ul>
-<li>申请MessageQueue锁，确保在同一时间，一个队列中只有一个线程能处理队列中的消息，未获取锁的线程阻塞等待。</li>
-<li>获取MessageQueue锁后，从处理队列中依次拉取一批消息（消息偏移量从小到大），保证消费时严格遵循消息存储顺序。</li>
-<li>申请MessageQueue对应的ProcessQueue，申请成功后调用业务监听器，执行相应的业务逻辑。</li>
-</ul><p>经过上面三个关键步骤，RocketMQ就可以实现队列（Kafka中称为分区）级别的顺序消费了。</p><h2>RocketMQ顺序消费设计缺陷</h2><p>回顾上面RocketMQ实现顺序消费的核心关键词，我们发现其实就是加锁、加锁、加锁。没错，为了实现顺序消费，RocketMQ需要进行三次加锁：</p><ul>
-<li>进行队列负载平衡后，对新分配的队列，并不能立即进行消息拉取，必须先在Broker端获取队列的锁；</li>
-<li>消费端在正式消费数据之前，需要锁定MessageQueue和ProceeQueue。</li>
-</ul><p>上述三把锁的控制，让并发度受到了队列数量的限制。在互联网、高并发编程领域，通常是“<strong>谈锁色变</strong>”，锁几乎成为了性能低下的代名词。试图减少锁的使用、缩小锁的范围几乎是性能优化的主要手段。</p><h2>RocketMQ顺序消费优化方案</h2><p>而RocketMQ为了实现顺序消费引入了三把锁，极大地降低了并发性能。那如何对其进行优化呢？</p><h3>破局思路：关联顺序性</h3><p>我们不妨来看一个金融行业的真实业务场景：<strong>银行账户余额变更短信通知</strong>。</p><p>当用户的账户余额发生变更时，金融机构需要发送一条短信，告知用户余额变更情况。为了实现余额变更和发送短信的解耦，架构设计时通常会引入消息中间件，它的基本实现思路你可以参考这张图：</p><p><img src="https://static001.geekbang.org/resource/image/ce/dc/cea0d3f79617c677e8dec11d03c322dc.jpg?wh=1920x494" alt="图片"></p><p>基于RocketMQ的顺序消费机制，我们可以实现基于队列的顺序消费，在消息发送时只需要确保同一个账号的多条消息（多次余额变更通知）发送到同一个队列，消费端使用顺序消费，就可以保证同一个账号的多次余额变更短信不会顺序错乱。</p><p>q0队列中依次发送了账号ID为1、3、5、3、9的5条消息，这些消息将严格按照顺序执行。但是，我们为账号1和账号3发送余额变更短信，时间顺序必须和实际的时间顺序保持一致吗？</p><p>答案是显而易见的，没有这个必要。</p><p>例如，用户1在10:00:01发生了一笔电商订单扣款，而用户2在10:00:02同样发生了一笔电商订单扣款，那银行先发短信告知用户2余额发生变更，然后再通知用户1，并没有破坏业务规则。</p><p>不过要注意的是，同一个用户的两次余额变更，必须按照发生顺序来通知，这就是所谓的<strong>关联顺序性</strong>。</p><p>显然，RocketMQ顺序消费模型并没有做到关联顺序性。针对这个问题，我们可以看到一条清晰的优化路线：<strong>并发执行同一个队列中不同账号的消息，串行执行同一个队列中相同账号的消息</strong>。</p><h3>RocketMQ顺序模型优化</h3><p>基于关联顺序性的整体指导思路，我设计出了一种<strong>顺序消费改进模型</strong>：</p><p><img src="https://static001.geekbang.org/resource/image/9a/82/9ae8ed21d5c0023c013ce98cd1fe8682.jpg?wh=1920x932" alt="图片"></p><p>详细说明一下。</p><ol>
-<li>消息拉取线程（PullMeessageService）从Broker端拉取一批消息。</li>
-<li>遍历消息，获取消息的Key（消息发送者在发送消息时根据Key选择队列，同一个Key的消息进入同一个队列）的HashCode和线程数量，将消息投递到对应的线程。</li>
-<li>消息进入到某一个消费线程中，排队单线程执行消费，遵循严格的消费顺序。</li>
+<p>你好，我是丁威。</p><p>在课程正式开始之前，我想先分享一段我的经历。我记得2020年双十一的时候，公司订单中心有一个业务出现了很大程度的延迟。我们的系统为了根据订单状态的变更进行对应的业务处理，使用了RocketMQ的顺序消费。但是经过排查，我们发现每一个队列都积压了上千万条消息。</p><p>当时为了解决这个问题，我们首先决定快速扩容消费者。因为当时主题的总队列为64个，所以我们一口气将消费者扩容到了64台。但上千万条消息毕竟还是太多了。还有其他办法能够加快消息的消费速度吗？比较尴尬的是，没有，我们当时能做的只有等待。</p><p>作为公司消息中间件的负责人，在故障发生时没有其他其他补救手段确实比较无奈。事后，我对顺序消费模型进行了反思与改善。接下来，我想和你介绍我是如何优化RocketMQ的顺序消费性能的。</p><h2>RocketMQ顺序消费实现原理</h2><p>我们先来了解一下 RocketMQ 顺序消费的实现原理。RocketMQ支持局部顺序消息消费，可以保证同一个消费队列上的消息顺序消费。例如，消息发送者向主题为ORDER_TOPIC的4个队列共发送12条消息， RocketMQ 可以保证1、4、8这三条按顺序消费，但无法保证消息4和消息2的先后顺序。</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/c4/04/c483d9fcfd0948938395e89c83cf4704.jpg?wh=1690x641" alt="图片"></p><p>那RocketMQ是怎么做到分区顺序消费的呢？我们可以看一下它的工作机制：</p><p><img src="https://static001.geekbang.org/resource/image/51/61/51ef84yy8790bd41aef99787fd2b1961.jpg?wh=1920x1328" alt="图片"></p><p>顺序消费实现的核心要点可以细分为三个阶段。</p><p><strong>第一阶段：消费队列负载。</strong></p><p>RebalanceService线程启动后，会以20s的频率计算每一个消费组的队列负载、当前消费者的消费队列集合（用newAssignQueueSet表），然后与上一次分配结果（用oldAssignQueueSet表示）进行对比。这时候会出现两种情况。</p>
+如果一个队列在newAssignQueueSet中，但并不在oldAssignQueueSet中，表示这是新分配的队列。这时候我们可以尝试向<strong>Broker申请锁</strong>：
+
+如果成功获取锁，则为该队列创建拉取任务并放入到PullMessageService的pullRequestQueue中，以此唤醒Pull线程，触发消息拉取流程；
+如果未获取锁，说明该队列当前被其他消费者锁定，放弃本次拉取，等下次重平衡时再尝试申请锁。
+
+
+<p><strong>这种情况下，消费者能够拉取消息的前提条件是，在Broker上加锁成功。</strong></p>
+如果一个队列在newAssignQueueSet中不存在，但存在于oldAssignQueueSet中，表示该队列应该分配给其他消费者，需要将该队列丢弃。但在丢弃之前，要<strong>尝试申请ProceeQueue的锁</strong>：
+
+如果成功锁定ProceeQueue，说明ProceeQueue中的消息已消费，可以将该ProceeQueue丢弃，并释放锁；
+如果未能成功锁定ProceeQueue，说明该队列中的消息还在消费，暂时不丢弃ProceeQueue，这时消费者并不会释放Broker中申请的锁，其他消费者也就暂时无法消费该队列中的消息。
+
+
+<p><strong>这样，消费者在经历队列重平衡之后，就会创建拉取任务，并驱动Pull线程进入到消息拉取流程。</strong></p><p><strong>第二阶段：消息拉取。</strong></p><p>PullMessageService线程启动，从pullRequestQueue中获取拉取任务。如果该队列中没有待拉取任务，则Pull线程会阻塞，等待RebalanceImpl线程创建拉取任务，并向Broker发起消息拉取请求：</p>
+如果未拉取到消息。可能是Tag过滤的原因，被过滤的消息其实也可以算成被成功消费了。所以如果此时处理队列中没有待消费的消息，就提交位点（当前已拉取到最大位点+1），同时再将拉取请求放到待拉取任务的末尾，反复拉取，实现Push模式。
+如果拉取到一批消息。首先要将拉取到的消息放入ProceeQueue(TreeMap)，同时将消息提交到消费线程池，进入消息消费流程。再将拉取请求放到待拉取任务的末尾，反复拉取，实现Push模式。
+<p><strong>第三阶段：顺序消费。</strong></p><p>RocketMQ一次只会拉取一个队列中的消息，然后将其提交到线程池。为了保证顺序消费，RocketMQ在消费过程中有下面几个关键点：</p>
+申请MessageQueue锁，确保在同一时间，一个队列中只有一个线程能处理队列中的消息，未获取锁的线程阻塞等待。
+获取MessageQueue锁后，从处理队列中依次拉取一批消息（消息偏移量从小到大），保证消费时严格遵循消息存储顺序。
+申请MessageQueue对应的ProcessQueue，申请成功后调用业务监听器，执行相应的业务逻辑。
+<p>经过上面三个关键步骤，RocketMQ就可以实现队列（Kafka中称为分区）级别的顺序消费了。</p><h2>RocketMQ顺序消费设计缺陷</h2><p>回顾上面RocketMQ实现顺序消费的核心关键词，我们发现其实就是加锁、加锁、加锁。没错，为了实现顺序消费，RocketMQ需要进行三次加锁：</p>
+进行队列负载平衡后，对新分配的队列，并不能立即进行消息拉取，必须先在Broker端获取队列的锁；
+消费端在正式消费数据之前，需要锁定MessageQueue和ProceeQueue。
+<p>上述三把锁的控制，让并发度受到了队列数量的限制。在互联网、高并发编程领域，通常是“<strong>谈锁色变</strong>”，锁几乎成为了性能低下的代名词。试图减少锁的使用、缩小锁的范围几乎是性能优化的主要手段。</p><h2>RocketMQ顺序消费优化方案</h2><p>而RocketMQ为了实现顺序消费引入了三把锁，极大地降低了并发性能。那如何对其进行优化呢？</p><h3>破局思路：关联顺序性</h3><p>我们不妨来看一个金融行业的真实业务场景：<strong>银行账户余额变更短信通知</strong>。</p><p>当用户的账户余额发生变更时，金融机构需要发送一条短信，告知用户余额变更情况。为了实现余额变更和发送短信的解耦，架构设计时通常会引入消息中间件，它的基本实现思路你可以参考这张图：</p><p><img src="https://static001.geekbang.org/resource/image/ce/dc/cea0d3f79617c677e8dec11d03c322dc.jpg?wh=1920x494" alt="图片"></p><p>基于RocketMQ的顺序消费机制，我们可以实现基于队列的顺序消费，在消息发送时只需要确保同一个账号的多条消息（多次余额变更通知）发送到同一个队列，消费端使用顺序消费，就可以保证同一个账号的多次余额变更短信不会顺序错乱。</p><p>q0队列中依次发送了账号ID为1、3、5、3、9的5条消息，这些消息将严格按照顺序执行。但是，我们为账号1和账号3发送余额变更短信，时间顺序必须和实际的时间顺序保持一致吗？</p><p>答案是显而易见的，没有这个必要。</p><p>例如，用户1在10:00:01发生了一笔电商订单扣款，而用户2在10:00:02同样发生了一笔电商订单扣款，那银行先发短信告知用户2余额发生变更，然后再通知用户1，并没有破坏业务规则。</p><p>不过要注意的是，同一个用户的两次余额变更，必须按照发生顺序来通知，这就是所谓的<strong>关联顺序性</strong>。</p><p>显然，RocketMQ顺序消费模型并没有做到关联顺序性。针对这个问题，我们可以看到一条清晰的优化路线：<strong>并发执行同一个队列中不同账号的消息，串行执行同一个队列中相同账号的消息</strong>。</p><h3>RocketMQ顺序模型优化</h3><p>基于关联顺序性的整体指导思路，我设计出了一种<strong>顺序消费改进模型</strong>：</p><p><img src="https://static001.geekbang.org/resource/image/9a/82/9ae8ed21d5c0023c013ce98cd1fe8682.jpg?wh=1920x932" alt="图片"></p><p>详细说明一下。</p><ol>
+消息拉取线程（PullMeessageService）从Broker端拉取一批消息。
+遍历消息，获取消息的Key（消息发送者在发送消息时根据Key选择队列，同一个Key的消息进入同一个队列）的HashCode和线程数量，将消息投递到对应的线程。
+消息进入到某一个消费线程中，排队单线程执行消费，遵循严格的消费顺序。
 </ol><p>为了让你更加直观地体会两种设计的优劣，我们来看一下两种模式针对一批消息的消费行为对比：</p><p><img src="https://static001.geekbang.org/resource/image/38/63/384003e610539cf1f7cc0e7334d0c463.jpg?wh=1920x1135" alt="图片"></p><p>在这里，方案一是RocketMQ内置的顺序消费模型。实际执行过程中，线程三、线程四也会处理消息，但内部线程在处理消息之前必须获取队列锁，所以说同一时刻一个队列只会有一个线程真正存在消费动作。</p><p>方案二是优化后的顺序消费模型，它和方案一相比最大的优势是并发度更高。</p><p>方案一的并发度取决于消费者分配的队列数，单个消费者的消费并发度并不会随着线程数的增加而升高，而方案二的并发度与消息队列数无关，消费者线程池的线程数量越高，并发度也就越高。</p><h2>代码实现</h2><p>在实际生产过程中，再好看的架构方案如果不能以较为简单的方式落地，那就等于零，相当于什么都没干。</p><p>所以我们就尝试落地这个方案。接下来我们基于RocketMQ4.6版本的DefaultLitePullConsumer类，引入新的线程模型，实现新的Push模式。</p><p>为了方便你阅读代码，我们先详细看看各个类的职责（类图）与运转主流程（时序图）。</p><h3>类图设计</h3><p><img src="https://static001.geekbang.org/resource/image/c4/94/c469fabd860ff2eff3c3a117e764e394.jpg?wh=1920x783" alt="图片"></p><ol>
-<li>
+
 <p>DefaultMQLitePushConsumer<br>
 基于DefaultMQLitePullCOnsumer实现的Push模式，它的内部对线程模型进行了优化，对标DefaultMQPushConsumer。</p>
-</li>
-<li>
+
+
 <p>ConsumeMessageQueueService<br>
 消息消费队列消费服务类接口，只定义了void execute(List&lt; MessageExt &gt; msg) 方法，是基于MessageQueue消费的抽象。</p>
-</li>
-<li>
+
+
 <p>AbstractConsumeMessageService<br>
 消息消费队列服务抽象类，定义一个抽象方法selectTaskQueue来进行<strong>消息的路由策略</strong>，同时实现最小位点机制，拥有两个实现类：</p>
-</li>
-</ol><ul>
-<li>顺序消费模型（ConsumeMessageQueueOrderlyService)，消息路由时按照Key的哈希与线程数取模；</li>
-<li>并发消费模型（ConsumerMessageQueueConcurrentlyService），消息路由时使用默认的轮循机制选择线程。</li>
-</ul><ol start="4">
-<li>AbstractConsumerTask<br>
-定义消息消费的流程，同样有两个实现类，分别是并发消费模型（ConcurrentlyConsumerTask)和顺序消费模型（OrderlyConsumerTask）。</li>
+
+</ol>
+顺序消费模型（ConsumeMessageQueueOrderlyService)，消息路由时按照Key的哈希与线程数取模；
+并发消费模型（ConsumerMessageQueueConcurrentlyService），消息路由时使用默认的轮循机制选择线程。
+<ol start="4">
+AbstractConsumerTask<br>
+定义消息消费的流程，同样有两个实现类，分别是并发消费模型（ConcurrentlyConsumerTask)和顺序消费模型（OrderlyConsumerTask）。
 </ol><h3>时序图</h3><p>类图只能简单介绍各个类的职责，接下来，我们用时序图勾画出核心的设计要点：</p><p><img src="https://static001.geekbang.org/resource/image/47/01/4754a410033f5452aaa7947353122c01.jpg?wh=1920x1099" alt="图片"></p><p>这里，我主要解读一下与顺序消费优化模型相关的核心流程：</p><ol>
-<li>调用DefaultMQLitePushConsumer的start方法后，会依次启动Pull线程（消息拉取线程）、消费组线程池、消息处理队列与消费处理任务。这里的重点是，一个AbstractConsumerTask代表一个消费线程，一个AbstractConsumerTask关联一个任务队列，消息在按照Key路由后会放入指定的任务队列，从而被指定线程处理。</li>
-<li>Pull线程每拉取一批消息，就按照MessageQueue提交到对应的AbstractConsumeMessageService。</li>
-<li>AbstractConsumeMessageService会根据顺序消费、并发消费模式选择不同的路由算法。其中，顺序消费模型会将消息Key的哈希值与任务队列的总个数取模，将消息放入到对应的任务队列中。</li>
-<li>每一个任务队列对应一个消费线程，执行AbstractConsumerTask的run方法，将从对应的任务队列中按消息的到达顺序执行业务消费逻辑。</li>
-<li>AbstractConsumerTask每消费一条或一批消息，都会提交消费位点，提交处理队列中最小的位点。</li>
+调用DefaultMQLitePushConsumer的start方法后，会依次启动Pull线程（消息拉取线程）、消费组线程池、消息处理队列与消费处理任务。这里的重点是，一个AbstractConsumerTask代表一个消费线程，一个AbstractConsumerTask关联一个任务队列，消息在按照Key路由后会放入指定的任务队列，从而被指定线程处理。
+Pull线程每拉取一批消息，就按照MessageQueue提交到对应的AbstractConsumeMessageService。
+AbstractConsumeMessageService会根据顺序消费、并发消费模式选择不同的路由算法。其中，顺序消费模型会将消息Key的哈希值与任务队列的总个数取模，将消息放入到对应的任务队列中。
+每一个任务队列对应一个消费线程，执行AbstractConsumerTask的run方法，将从对应的任务队列中按消息的到达顺序执行业务消费逻辑。
+AbstractConsumerTask每消费一条或一批消息，都会提交消费位点，提交处理队列中最小的位点。
 </ol><h3>关键代码解读</h3><p>类图与时序图已经强调了顺序消费模型的几个关键点，接下来我们结合代码看看具体的实现技巧。</p><h4>创建消费线程池</h4><p>创建消费线程池部分是我们这个方案的点睛之笔，它对应的是第三小节顺序消费改进模型图中用虚线勾画出的线程池。为了方便你回顾，我把这个图粘贴在下面。</p><p><img src="https://static001.geekbang.org/resource/image/9a/82/9ae8ed21d5c0023c013ce98cd1fe8682.jpg?wh=1920x932" alt="图片"></p><p>代码实现如下所示：</p><pre><code class="language-java">// 启动消费组线程池
 private void startConsumerThreads() {
     //设置线程的名称
@@ -80,11 +80,11 @@ private void startConsumerThreads() {
         consumerThreadGroup.submit(task);
     }
 }
-</code></pre><p>这段代码有三个实现要点。</p><ul>
-<li>第7行：创建一个指定线程数量的线程池，消费线程数可以由consumerThreadCont指定。</li>
-<li>第12行：创建一个ArrayList &lt; LinkedBlockingQueue &gt; taskQueues的任务队列集合，其中taskQueues中包含consumerThreadCont个队列。</li>
-<li>第13行：创建consumerThreadCont个AbstractConsumerTask任务，每一个task关联一个LinkedBlockingQueue任务队列，然后将AbstractConsumerTask提交到线程池中执行。</li>
-</ul><p>以5个消费线程池为例，从运行视角来看，它对应的效果如下：</p><p><img src="https://static001.geekbang.org/resource/image/b6/96/b6ce902df7139dba23cfec955125f096.jpg?wh=1920x1049" alt="图片"></p><h4>消费线程内部执行流程</h4><p>将任务提交到提交到线程池后，异步运行任务，具体代码由AbstractConsumerTask的run方法来实现，其run方法定义如下：</p><pre><code class="language-java">public void run() {
+</code></pre><p>这段代码有三个实现要点。</p>
+第7行：创建一个指定线程数量的线程池，消费线程数可以由consumerThreadCont指定。
+第12行：创建一个ArrayList &lt; LinkedBlockingQueue &gt; taskQueues的任务队列集合，其中taskQueues中包含consumerThreadCont个队列。
+第13行：创建consumerThreadCont个AbstractConsumerTask任务，每一个task关联一个LinkedBlockingQueue任务队列，然后将AbstractConsumerTask提交到线程池中执行。
+<p>以5个消费线程池为例，从运行视角来看，它对应的效果如下：</p><p><img src="https://static001.geekbang.org/resource/image/b6/96/b6ce902df7139dba23cfec955125f096.jpg?wh=1920x1049" alt="图片"></p><h4>消费线程内部执行流程</h4><p>将任务提交到提交到线程池后，异步运行任务，具体代码由AbstractConsumerTask的run方法来实现，其run方法定义如下：</p><pre><code class="language-java">public void run() {
     try {
         while (isRunning) {
             try {
@@ -294,7 +294,7 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/26/31/4318a7fa.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -309,8 +309,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/20/69/ed/2ea74ecd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -325,8 +325,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/02/78/23c56bce.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -341,8 +341,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -357,8 +357,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/2b/bb/5cf70df8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/3c/fa/e2990931.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,8 +437,8 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/56/2f/4518f8e1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -453,5 +453,4 @@ public class ConsumeMessageQueueOrderlyService extends AbstractConsumeMessageSer
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -32,12 +32,12 @@ func (d *Dialer) DialContext(ctx context.Context, network, address string) (Conn
 	Err() error
 	Value(key interface{}) interface{}
 }
-</code></pre><p>这4种方法的功能如下。</p><ul>
-<li>Deadline 方法用于返回Context的过期时间。Deadline第一个返回值表示Context的过期时间，第二个返回值表示是否设置了过期时间，如果多次调用Deadline方法会返回相同的值。</li>
-<li>Done 是使用最频繁的方法，它会返回一个通道。一般的做法是调用者在select中监听该通道的信号，如果该通道关闭则表示服务超时或异常，需要执行后续退出逻辑。多次调用Done方法会返回相同的通道。</li>
-<li>通道关闭后，Err方法会返回退出的原因。</li>
-<li>Value方法返回指定key对应的value，这是Context 携带的值。key必须是可比较的，一般的用法key是一个全局变量，通过<code>context.WithValue</code> 将key存储到Context中，并通过<code>Context.Value</code> 方法取出。</li>
-</ul><p>Context接口中的这四个方法可以被多次调用，其返回的结果相同。同时，Context的接口是并发安全的，可以被多个协程同时使用。</p><h2>context.Value</h2><p>因为在实践中 Context 携带值的情况并不常见，所以这里我们单独讲一讲context.Value的适用场景。</p><p>context.Value一般在远程过程调用中使用，例如存储分布式链路跟踪的traceId或者鉴权相关的信息，并且该值的作用域在请求结束时终结。同时 key 必须是访问安全的，因为可能有多个协程同时访问它。</p><p>如下所示，withAuth函数是一个中间件，它可以让我们在完成实际的 HTTP 请求处理前进行hook。 在这个例子中，我们获取了 HTTP 请求 Header 头中的鉴权字段 Authorization，并将其存入了请求的上下文Context中。而实际的处理函数 Handle 会从Context中获取并验证用户的授权信息，以此判断用户是否已经登录。</p><pre><code class="language-plain">const TokenContextKey = "MyAppToken"
+</code></pre><p>这4种方法的功能如下。</p>
+Deadline 方法用于返回Context的过期时间。Deadline第一个返回值表示Context的过期时间，第二个返回值表示是否设置了过期时间，如果多次调用Deadline方法会返回相同的值。
+Done 是使用最频繁的方法，它会返回一个通道。一般的做法是调用者在select中监听该通道的信号，如果该通道关闭则表示服务超时或异常，需要执行后续退出逻辑。多次调用Done方法会返回相同的通道。
+通道关闭后，Err方法会返回退出的原因。
+Value方法返回指定key对应的value，这是Context 携带的值。key必须是可比较的，一般的用法key是一个全局变量，通过<code>context.WithValue</code> 将key存储到Context中，并通过<code>Context.Value</code> 方法取出。
+<p>Context接口中的这四个方法可以被多次调用，其返回的结果相同。同时，Context的接口是并发安全的，可以被多个协程同时使用。</p><h2>context.Value</h2><p>因为在实践中 Context 携带值的情况并不常见，所以这里我们单独讲一讲context.Value的适用场景。</p><p>context.Value一般在远程过程调用中使用，例如存储分布式链路跟踪的traceId或者鉴权相关的信息，并且该值的作用域在请求结束时终结。同时 key 必须是访问安全的，因为可能有多个协程同时访问它。</p><p>如下所示，withAuth函数是一个中间件，它可以让我们在完成实际的 HTTP 请求处理前进行hook。 在这个例子中，我们获取了 HTTP 请求 Header 头中的鉴权字段 Authorization，并将其存入了请求的上下文Context中。而实际的处理函数 Handle 会从Context中获取并验证用户的授权信息，以此判断用户是否已经登录。</p><pre><code class="language-plain">const TokenContextKey = "MyAppToken"
 
 // 中间件
 func WithAuth(a Authorizer, next http.Handler) http.Handler {
@@ -85,12 +85,12 @@ func (*emptyCtx) Value(key interface{}) interface{} {
 func WithTimeout(parent Context, timeout time.Duration) (Context, CancelFunc)
 func WithDeadline(parent Context, d time.Time) (Context, CancelFunc)
 func WithValue(parent Context, key, val interface{}) Context
-</code></pre><ul>
-<li>WithCancel 函数会返回一个子Context 和 cancel 方法。子Context 会在两种情况下触发退出：一种情况是调用者主动调用了返回的cancel方法；另一种情况是当参数中的父Context 退出时，子Context 将级联退出。</li>
-<li>WithTimeout 函数指定超时时间。当超时发生后，子Context 将退出。因此，子Context 的退出有三种时机，一种是父Context退出；一种是超时退出；最后一种是主动调用 cancel 函数退出。</li>
-<li>WithDeadline 和 WithTimeout 函数的处理方法相似，不过它们的参数指定的是最后到期的时间。</li>
-<li>WithValue 函数会返回带 key-value 的子Context。</li>
-</ul><p>举一个例子来说明一下Context中的级联退出。下面的代码中childCtx是preCtx 的子Context，其设置的超时时间为300ms。但是preCtx 的超时时间为100 ms，因此父Context 退出后，子Context 会立即退出，实际的等待时间只有100ms。</p><pre><code class="language-plain">func main() {
+</code></pre>
+WithCancel 函数会返回一个子Context 和 cancel 方法。子Context 会在两种情况下触发退出：一种情况是调用者主动调用了返回的cancel方法；另一种情况是当参数中的父Context 退出时，子Context 将级联退出。
+WithTimeout 函数指定超时时间。当超时发生后，子Context 将退出。因此，子Context 的退出有三种时机，一种是父Context退出；一种是超时退出；最后一种是主动调用 cancel 函数退出。
+WithDeadline 和 WithTimeout 函数的处理方法相似，不过它们的参数指定的是最后到期的时间。
+WithValue 函数会返回带 key-value 的子Context。
+<p>举一个例子来说明一下Context中的级联退出。下面的代码中childCtx是preCtx 的子Context，其设置的超时时间为300ms。但是preCtx 的超时时间为100 ms，因此父Context 退出后，子Context 会立即退出，实际的等待时间只有100ms。</p><pre><code class="language-plain">func main() {
 	ctx := context.Background()
 	before := time.Now()
 	preCtx, _ := context.WithTimeout(ctx, 100*time.Millisecond)
@@ -173,11 +173,11 @@ func (sd *sysDialer) dialSerial(ctx context.Context, ras addrList) (Conn, error)
 		c, err := sd.dialSingle(dialCtx, ra)
 		...
 }
-</code></pre><p>我们来看看dialSerial函数几个比较有代表性的Context用法。</p><ul>
-<li>首先，第3行代码遍历地址列表时，判断Context通道是否已经退出，如果没有退出，会进入到select的default分支。如果通道已经退出了，则直接返回，因为继续执行已经没有必要了。</li>
-<li>接下来，第14行代码通过ctx.Deadline()判断是否传递进来的Context有超时时间。如果有超时时间，我们需要协调好后面每一个连接的超时时间。例如，我们总的超时时间是600ms，一共有3个连接，那么每个连接分到的超时时间就是200ms，这是为了防止前面的连接过度占用了时间。partialDeadline会帮助我们计算好每一个连接的新的到期时间，如果该到期时间小于总到期时间，我们会派生出一个子Context传递给dialSingle函数，用于控制该连接的超时。</li>
-<li>dialSingle函数中调用了ctx.Value，用来获取一个特殊的接口nettrace.Trace。nettrace.Trace用于对网络包中一些特殊的地方进行hook。dialSingle函数作为网络连接的起点，如果上下文中注入了trace.ConnectStart函数，则会在dialSingle函数之前调用trace.ConnectStart函数，如果上下文中注入了trace.ConnectDone函数，则会在执行dialSingle函数之后调用trace.ConnectDone函数。</li>
-</ul><pre><code class="language-plain">func (sd *sysDialer) dialSingle(ctx context.Context, ra Addr) (c Conn, err error) {
+</code></pre><p>我们来看看dialSerial函数几个比较有代表性的Context用法。</p>
+首先，第3行代码遍历地址列表时，判断Context通道是否已经退出，如果没有退出，会进入到select的default分支。如果通道已经退出了，则直接返回，因为继续执行已经没有必要了。
+接下来，第14行代码通过ctx.Deadline()判断是否传递进来的Context有超时时间。如果有超时时间，我们需要协调好后面每一个连接的超时时间。例如，我们总的超时时间是600ms，一共有3个连接，那么每个连接分到的超时时间就是200ms，这是为了防止前面的连接过度占用了时间。partialDeadline会帮助我们计算好每一个连接的新的到期时间，如果该到期时间小于总到期时间，我们会派生出一个子Context传递给dialSingle函数，用于控制该连接的超时。
+dialSingle函数中调用了ctx.Value，用来获取一个特殊的接口nettrace.Trace。nettrace.Trace用于对网络包中一些特殊的地方进行hook。dialSingle函数作为网络连接的起点，如果上下文中注入了trace.ConnectStart函数，则会在dialSingle函数之前调用trace.ConnectStart函数，如果上下文中注入了trace.ConnectDone函数，则会在执行dialSingle函数之后调用trace.ConnectDone函数。
+<pre><code class="language-plain">func (sd *sysDialer) dialSingle(ctx context.Context, ra Addr) (c Conn, err error) {
 	trace, _ := ctx.Value(nettrace.TraceKey{}).(*nettrace.Trace)
 	if trace != nil {
 		raStr := ra.String()
@@ -358,7 +358,7 @@ type timerCtx struct {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJw1XoOvKHBmyvGpxyoWibq7FYj6blWe0cUKJCqUFPHF1jmkxdBe6icTVC0nTYYPIP2ggx3UodKsLibQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,5 +373,4 @@ type timerCtx struct {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

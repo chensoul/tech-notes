@@ -18,18 +18,18 @@
 
 到目前为止，Kubernetes支持的Projected Volume一共有四种：
 
-<li>
+
 Secret；
-</li>
-<li>
+
+
 ConfigMap；
-</li>
-<li>
+
+
 Downward API；
-</li>
-<li>
+
+
 ServiceAccountToken。
-</li>
+
 
 在今天这篇文章中，我首先和你分享的是Secret。它的作用，是帮你把Pod想要访问的加密数据，存放到Etcd中。然后，你就可以通过在Pod的容器里挂载Volume的方式，访问到这些Secret里保存的信息了。
 
@@ -424,12 +424,12 @@ liveness-exec   1/1       Running   1          1m
 
 值得一提的是，Kubernetes的官方文档，把restartPolicy和Pod里容器的状态，以及Pod状态的对应关系，[总结了非常复杂的一大堆情况](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#example-states)。实际上，你根本不需要死记硬背这些对应关系，只要记住如下两个基本的设计原理即可：
 
-<li>
+
 **只要Pod的restartPolicy指定的策略允许重启异常的容器（比如：Always），那么这个Pod就会保持Running状态，并进行容器重启**。否则，Pod就会进入Failed状态 。
-</li>
-<li>
+
+
 **对于包含多个容器的Pod，只有它里面所有的容器都进入异常状态后，Pod才会进入Failed状态**。在此之前，Pod都是Running状态。此时，Pod的READY字段会显示正常容器的个数，比如：
-</li>
+
 
 ```
 $ kubectl get pod test-liveness-exec

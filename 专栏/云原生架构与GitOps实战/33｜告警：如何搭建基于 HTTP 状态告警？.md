@@ -229,7 +229,7 @@ pod "alertmanager-prometheus-kube-prometheus-alertmanager-0" deleted
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/57/6e/b6795c44.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -244,5 +244,4 @@ pod "alertmanager-prometheus-kube-prometheus-alertmanager-0" deleted
   </div>
 </div>
 </div>
-</li>
-</ul>
+

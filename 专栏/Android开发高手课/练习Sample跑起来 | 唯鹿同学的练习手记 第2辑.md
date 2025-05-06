@@ -52,18 +52,18 @@
 
 操作步骤：
 
-<li>
+
 使用Android Studio打开工程Chapter07。
-</li>
-<li>
+
+
 运行Gradle Task `:systrace-gradle-plugin:buildAndPublishToLocalMaven`编译plugin插件。
-</li>
-<li>
+
+
 使用Android Studio单独打开工程systrace-sample-android。
-</li>
-<li>
+
+
 编译运行App（插桩后的class文件在目录`Chapter07/systrace-sample-android/app/build/systrace_output/classes`中查看）。
-</li>
+
 
 对比一下插桩效果，插桩前：
 

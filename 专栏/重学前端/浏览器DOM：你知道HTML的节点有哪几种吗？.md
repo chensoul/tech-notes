@@ -266,8 +266,8 @@ DOM API中还提供了NodeIterator 和 TreeWalker 来遍历树。比起直接用
 
 在HTML场景中，需要考虑命名空间的场景不多。最主要的场景是SVG。创建元素和属性相关的API都有带命名空间的版本：
 
-<li>document
-<ul>
+document
+
 - createElementNS
 - createAttributeNS
 

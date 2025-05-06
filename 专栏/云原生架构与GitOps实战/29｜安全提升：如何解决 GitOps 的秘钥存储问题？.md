@@ -1,13 +1,13 @@
 <audio title="29｜安全提升：如何解决 GitOps 的秘钥存储问题？" src="https://static001.geekbang.org/resource/audio/cf/80/cf2a53859247602f05074b3518538980.mp3" controls="controls"></audio> 
 <p>你好，我是王炜。</p><p>在上节课，我为你介绍了在 GitOps 工作流中需要特别关注的安全问题。其中，由于 Git 仓库是 GitOps 工作流的唯一可信源，同时也包含了 Kubernetes 对象以及机密信息，所以，我们首先需要关注它的安全问题。</p><p>在实际的业务场景下，出于安全需要，Git 仓库往往会包含下面这些机密信息。</p><ol>
-<li>镜像拉取凭据的 Secret 对象，它可以为集群提供拉取镜像的权限。</li>
-<li>外部数据库连接信息。</li>
-<li>外部中间件如 MQ 连接信息。</li>
-<li>第三方服务的 API KEY，例如云厂商和短信服务商。</li>
+镜像拉取凭据的 Secret 对象，它可以为集群提供拉取镜像的权限。
+外部数据库连接信息。
+外部中间件如 MQ 连接信息。
+第三方服务的 API KEY，例如云厂商和短信服务商。
 </ol><p>在 GitOps 工作流中，这些机密信息都会通过 Kubernetes 对象存放在 Git 仓库，在大部分情况下它们是 Configmap 或 Secret 对象。虽然 Secret 被设计为存储 Kubernetes 的机密信息，但它只是 Base64 编码后的结果，不具备加密性质，这也就意味着机密信息完全是以明文的方式暴露的，这是非常不安全的。所以，我们有必要对这些机密信息进行加密。</p><p>这节课，我们就来学习加密 Git 仓库中机密信息的方法，进一步提升 GitOps 的安全性。</p><p>在开始之前，你需要在本地的 Kind 集群安装好 ArgoCD，然后克隆<a href="https://github.com/lyzhang1999/kubernetes-example">示例仓库</a>，并将它推送到你的 Git 仓库中。</p><!-- [[[read_end]]] --><h2>GitOps 密钥管理方案</h2><p>在 GitOps 工作流中，常用的密钥管理方案有下面三种。</p><ol>
-<li><a href="https://github.com/bitnami-labs/sealed-secrets">Sealed-Secrets</a></li>
-<li><a href="https://github.com/external-secrets/external-secrets">External-Secrets</a></li>
-<li><a href="https://www.vaultproject.io/">Vault</a></li>
+<a href="https://github.com/bitnami-labs/sealed-secrets">Sealed-Secrets</a>
+<a href="https://github.com/external-secrets/external-secrets">External-Secrets</a>
+<a href="https://www.vaultproject.io/">Vault</a>
 </ol><p>其中，Sealed-Secrets 在易用性方面有比较大的优势，社区活跃度也比较高，也更容易和 GitOps 工作流结合，我会在这节课做重点介绍。它的工作原理也非常简单，它利用非对称加密算法对 Secret 对象进行加密，使用的时候在集群内自动进行解密，这样就可以将加密后的密钥安全地存储在 Git 仓库中。</p><p>External-Secrets 需要外部密钥管理服务的支持，例如 AWS Secrets Manager、Google Secrets Manager、Azure Key Vault 等，如果在你的项目里用到了这些密钥管理服务，可以考虑使用它。</p><p>Vault 是 HashiCorp 开源的一款密钥管理工具，要将它和 ArgoCD 结合使用需要额外的插件，配置起来比较繁琐。</p><h2>安装 Sealed-Secrets</h2><p>接下来，我们来看看如何把 Sealed-Secrets 集成到 GitOps 工作流中，并将它结合 ArgoCD 一起使用。</p><p>Sealed-Secrets 分为两部分，本地的 CLI 工具和运行在集群的控制器，在使用之前我们需要先安装它们。</p><h3>安装 CLI 工具</h3><p>kubeseal 命令行工具是本地和集群 Sealed-Secrets 服务交互的工具，我们需要用它来加密机密信息。</p><p>我们以MacOS 系统为例，你可以使用 Brew 进行安装。</p><pre><code class="language-yaml">$ brew install kubeseal
 </code></pre><p>如果你使用的是 Linux 或 Windows，可以在<a href="https://github.com/bitnami-labs/sealed-secrets/releases">这个链接</a>将可执行文件下载到本地。</p><h3>安装 Controller 控制器</h3><p>Sealed-Secrets 控制器负责对加密的信息进行解密，并生成 Kubernetes 原生的 Secret 对象。这里我推荐你以 Helm 的方式来安装它。</p><p>首先，添加 Sealed-Secrets 的 Helm 仓库。</p><pre><code class="language-yaml">$ helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets
 </code></pre><p>然后，通过 helm install 命令来安装它。</p><pre><code class="language-yaml">$ helm install sealed-secrets -n kube-system --set-string fullnameOverride=sealed-secrets-controller sealed-secrets/sealed-secrets
@@ -206,7 +206,7 @@ $ kubectl get secret mysecret -o yaml
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/9f/a1/d75219ee.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -221,8 +221,8 @@ $ kubectl get secret mysecret -o yaml
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -237,8 +237,8 @@ $ kubectl get secret mysecret -o yaml
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/a6/f4/a9f2f104.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -253,5 +253,4 @@ $ kubectl get secret mysecret -o yaml
   </div>
 </div>
 </div>
-</li>
-</ul>
+

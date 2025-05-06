@@ -25,159 +25,159 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;&#32;开篇：&#32;Kubernetes&#32;是什么以及为什么需要它.md">01  开篇： Kubernetes 是什么以及为什么需要它.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;初步认识：Kubernetes&#32;基础概念.md">02 初步认识：Kubernetes 基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;宏观认识：整体架构.md">03 宏观认识：整体架构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;搭建&#32;Kubernetes&#32;集群&#32;-&#32;本地快速搭建.md">04 搭建 Kubernetes 集群 - 本地快速搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;动手实践：搭建一个&#32;Kubernetes&#32;集群&#32;-&#32;生产可用.md">05 动手实践：搭建一个 Kubernetes 集群 - 生产可用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;集群管理：初识&#32;kubectl.md">06 集群管理：初识 kubectl.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;集群管理：以&#32;Redis&#32;为例-部署及访问.md">07 集群管理：以 Redis 为例-部署及访问.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;安全重点&#32;认证和授权.md">08 安全重点 认证和授权.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;应用发布：部署实际项目.md">09 应用发布：部署实际项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;应用管理：初识&#32;Helm.md">10 应用管理：初识 Helm.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;部署实践：以&#32;Helm&#32;部署项目.md">11 部署实践：以 Helm 部署项目.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;庖丁解牛：kube-apiserver.md">12 庖丁解牛：kube-apiserver.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;庖丁解牛：etcd.md">13 庖丁解牛：etcd.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;庖丁解牛：controller-manager.md">14 庖丁解牛：controller-manager.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;庖丁解牛：kube-scheduler.md">15 庖丁解牛：kube-scheduler.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="16&#32;庖丁解牛：kubelet.md">16 庖丁解牛：kubelet.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;庖丁解牛：kube-proxy.md">17 庖丁解牛：kube-proxy.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;庖丁解牛：Container&#32;Runtime&#32;（Docker）.md">18  庖丁解牛：Container Runtime （Docker）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;Troubleshoot.md">19 Troubleshoot.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;扩展增强：Dashboard.md">20 扩展增强：Dashboard.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;扩展增强：CoreDNS.md">21 扩展增强：CoreDNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;服务增强：Ingress.md">22 服务增强：Ingress.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;监控实践：对&#32;K8S&#32;集群进行监控.md">23 监控实践：对 K8S 集群进行监控.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;总结.md">24 总结.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -437,32 +437,32 @@ volumeStatsAggPeriod: 1m0s
 master $
 </code></pre>
 <p>这其中有一些需要关注的配置：</p>
-<ul>
-<li>
+
+
 <p><code>maxPods</code>：最大的 <code>Pod</code> 数</p>
-</li>
-<li>
+
+
 <p><code>healthzBindAddress</code> 和 <code>healthzPort</code>：配置了健康检查所监听的地址和端口</p>
 <p>我们可用以下方式进行验证：</p>
 <pre><code>master $ curl 127.0.0.1:10248/healthz
 ok 
 </code></pre>
-</li>
-<li>
+
+
 <p><code>authentication</code> 和 <code>authorization</code> ：认证授权相关</p>
-</li>
-<li>
+
+
 <p><code>evictionHard</code>：涉及到 <code>kubelet</code> 的驱逐策略，对 <code>Pod</code> 调度分配之类的影响很大</p>
-</li>
-</ul>
+
+
 <p>其余部分，可参考<a href="https://kubernetes.io/docs/tasks/administer-cluster/out-of-resource/">手册内容</a></p>
 <h3>Pod 管理</h3>
 <p>从上面的配置以及我们之前的介绍中，<code>kube-scheduler</code> 处理了 <code>Pod</code> 应该调度至哪个 <code>Node</code>，而 <code>kubelet</code> 则是保障该 <code>Pod</code> 能按照预期，在对应 <code>Node</code> 上启动并保持工作。</p>
 <p>同时，<code>kubelet</code> 在保障 <code>Pod</code> 能按预期工作，主要是做了两方面的事情：</p>
-<ul>
-<li>健康检查：通过 <code>LivenessProbe</code> 和 <code>ReadinessProbe</code> 探针进行检查，判断是否健康及是否已经准备好接受请求。</li>
-<li>资源监控：通过 <code>cAdvisor</code> 进行资源监。</li>
-</ul>
+
+健康检查：通过 <code>LivenessProbe</code> 和 <code>ReadinessProbe</code> 探针进行检查，判断是否健康及是否已经准备好接受请求。
+资源监控：通过 <code>cAdvisor</code> 进行资源监。
+
 <h2><code>kubelet</code> 是如何工作的</h2>
 <p>大致的功能已经介绍了，我们来看下它大体的实现。</p>
 <p>首先是在 <code>cmd/kubelet/app/server.go</code> 文件中的 <code>Run</code> 方法：</p>

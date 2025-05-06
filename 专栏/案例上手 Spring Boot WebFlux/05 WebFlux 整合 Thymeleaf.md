@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -156,29 +156,29 @@
                         <div><h1>05 WebFlux 整合 Thymeleaf</h1>
 <p>上一篇介绍的是用 MongoDB 来实现 WebFlux 对数据源的操作，那么有了数据需要渲染到前台给用户展示，这就是本文关心的 View 层，View 的表现形式有很多，比如 JSON 和 HTML。开发中常用模板语言很常见的有 Thymeleaf、Freemarker等，那什么是模板语言？</p>
 <p>常见的模板语言都包含以下几个概念：数据（Data）、模板（Template）、模板引擎（Template Engine）和结果文档（Result Documents）。</p>
-<ul>
-<li>数据</li>
-</ul>
+
+数据
+
 <p>数据是信息的表现形式和载体，可以是符号、文字、数字、语音、图像、视频等。数据和信息是不可分离的，数据是信息的表达，信息是数据的内涵。数据本身没有意义，数据只有对实体行为产生影响时才成为信息。</p>
-<ul>
-<li>模板</li>
-</ul>
+
+模板
+
 <p>模板，是一个蓝图，即一个与类型无关的类。编译器在使用模板时，会根据模板实参对模板进行实例化，得到一个与类型相关的类。</p>
-<ul>
-<li>模板引擎</li>
-</ul>
+
+模板引擎
+
 <p>模板引擎（这里特指用于 Web 开发的模板引擎）是为了使用户界面与业务数据（内容）分离而产生的，它可以生成特定格式的文档，用于网站的模板引擎就会生成一个标准的 HTML 文档。</p>
-<ul>
-<li>结果文档</li>
-</ul>
+
+结果文档
+
 <p>一种特定格式的文档，比如用于网站的模板引擎就会生成一个标准的 HTML 文档。</p>
 <p>模板语言用途广泛，常见的用途如下：</p>
-<ul>
-<li>页面渲染</li>
-<li>文档生成</li>
-<li>代码生成</li>
-<li>所有 “数据+模板=文本” 的应用场景</li>
-</ul>
+
+页面渲染
+文档生成
+代码生成
+所有 “数据+模板=文本” 的应用场景
+
 <p>Spring Boot 推荐使用的模板语言是 Thymeleaf，那什么是 Thymeleaf？</p>
 <p>官方的解释如下：</p>
 <pre><code>Thymeleaf is a modern server-side Java template engine for both web and standalone environments.
@@ -190,21 +190,21 @@
 <p>类似上面讲的工程搭建，新建一个工程编写此案例，工程图如图所示：</p>
 <p><img src="assets/3b8c0edab9491e422bef6003299895911524185.png" alt="img" /></p>
 <p>目录如下：</p>
-<ul>
-<li>org.spring.springboot.webflux.controller：Controller 层</li>
-<li>org.spring.springboot.dao：数据操作层 DAO</li>
-<li>org.spring.springboot.domain：实体类</li>
-<li>org.spring.springboot.handler：业务逻辑层</li>
-<li>Application：应用启动类</li>
-<li>application.properties：应用配置文件</li>
-<li>pom.xml maven 配置</li>
-<li>application.properties 配置文件</li>
-</ul>
+
+org.spring.springboot.webflux.controller：Controller 层
+org.spring.springboot.dao：数据操作层 DAO
+org.spring.springboot.domain：实体类
+org.spring.springboot.handler：业务逻辑层
+Application：应用启动类
+application.properties：应用配置文件
+pom.xml maven 配置
+application.properties 配置文件
+
 <p>模板是会用到下面两个目录：</p>
-<ul>
-<li>static 目录是存放 CSS、JS 等资源文件；</li>
-<li>templates 目录是存放视图。</li>
-</ul>
+
+static 目录是存放 CSS、JS 等资源文件；
+templates 目录是存放视图。
+
 <p>本文重点在 Controller 层 和 templates 视图的编写。</p>
 <h3>新增 POM 依赖与配置</h3>
 <p>在 pom.xml 配置新的依赖：</p>
@@ -278,12 +278,12 @@ spring.thymeleaf.view-names= # Comma-separated list of view names that can be re
 
 </code></pre>
 <p>解释下语法：</p>
-<ul>
-<li>返回值 Mono 或者 String 都行，但是 Mono 代表着我这个返回 View 也是回调的。</li>
-<li>return 字符串，该字符串对应的目录在 resources/templates 下的模板名字。</li>
-<li>Model 对象来进行数据绑定到视图。</li>
-<li>一般会集中用常量管理模板视图的路径。</li>
-</ul>
+
+返回值 Mono 或者 String 都行，但是 Mono 代表着我这个返回 View 也是回调的。
+return 字符串，该字符串对应的目录在 resources/templates 下的模板名字。
+Model 对象来进行数据绑定到视图。
+一般会集中用常量管理模板视图的路径。
+
 <h3>Tymeleaf 视图</h3>
 <p>然后编写两个视图 hello 和 cityList，代码分别如下。</p>
 <p>hello.html：</p>
@@ -343,11 +343,11 @@ spring.thymeleaf.view-names= # Comma-separated list of view names that can be re
 
 </code></pre>
 <p>常用语法糖如下：</p>
-<ul>
-<li>${...}：变量表达式；</li>
-<li>th:text：处理 Tymeleaf 表达式；</li>
-<li>th:each：遍历表达式，可遍历的对象有，实现 java.util.Iterable、java.util.Map（遍历时取 java.util.Map.Entry）、array 等。</li>
-</ul>
+
+${...}：变量表达式；
+th:text：处理 Tymeleaf 表达式；
+th:each：遍历表达式，可遍历的对象有，实现 java.util.Iterable、java.util.Map（遍历时取 java.util.Map.Entry）、array 等。
+
 <p>还有很多使用，可以参考<a href="http://www.thymeleaf.org/documentation.html">官方文档</a>。</p>
 <h3>运行工程</h3>
 <p>下面运行工程验证下，使用 IDEA 右侧工具栏，点击 Maven Project Tab ，点击使用下 Maven 插件的 install 命令；或者使用命令行的形式，在工程根目录下，执行 Maven 清理和安装工程的指令：</p>

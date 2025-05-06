@@ -57,21 +57,21 @@ odex是Android系统对于dex的进一步优化，目的是为了提升执行效
 
 下来我们来建立调试环境。
 
-<li>
+
 打开Genymotion，选择下载好Android 9.0的镜像文件，启动模拟器。
-</li>
-<li>
+
+
 找到模拟器对应的ActivityManagerService.java代码。 我是从[http://androidxref.com/](http://androidxref.com/)下载Android 9.0对应的代码。
-</li>
-<li>
+
+
 打开Android Studio，File -&gt; New -&gt; New Project然后直接Next直到完成就行。
-</li>
-<li>
+
+
 新建一个包名，从ActivityManagerService.java文件中找到它，这里为`com.android.server.am`，然后把ActivityManagerService.java放到里面即可。
-</li>
-<li>
+
+
 在ActivityManagerService.java的startActivity方法上面设置断点，然后找到菜单的Run -&gt; Attach debugger to Android process勾选Show all process，选中SystemServer进程确定。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/ba/f0/ba1eb6bded9167f26ae48b34a6d792f0.png" alt="">
 
@@ -143,21 +143,21 @@ efcd5000-efcd6000 r--s 00000000 08:06 684                                /system
 
 下来我们建立调试环境：
 
-<li>
+
 打开Genymotion，选择下载好Android 9.0的镜像文件，启动模拟器，然后在桌面上启动Gallery图库应用。
-</li>
-<li>
+
+
 找到模拟器对应的TextView.java代码。
-</li>
-<li>
+
+
 打开Android Studio，File -&gt; New -&gt; New Project然后直接Next直到完成就行。
-</li>
-<li>
+
+
 新建一个包名，从TextView.java文件中找到它的包名，这里为android.widget，然后把TextView.java放到里面即可。
-</li>
-<li>
+
+
 在TextView.java的onDraw方法上面设置断点，然后找到菜单的Run -&gt; Attach debugger to Android process勾选Show all process，选中com.android.gallery3d进程（我们已知这个主界面有TextView控件）确定。
-</li>
+
 
 然后我们点击下这个界面左上角的菜单，随便选择一个点击，发现断点已生效，具体如下图所示。
 

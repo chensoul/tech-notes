@@ -111,7 +111,7 @@
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/4f/c9/abb7bfe3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -126,8 +126,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/b8/01/247ae4a7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -142,8 +142,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/a9/2c/504238c7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -158,8 +158,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/85/b2/18f3a4ea.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -174,8 +174,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/5e/81/82709d6e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -190,8 +190,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/14/15/bf922e4f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -206,8 +206,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLmphicC0uibsr4fsbaZcjb7h4NmHLrpEFGibc1Jt7xv820ZQnAA79VgZRSK9jvL3dJgWMgVM1LkQQbw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -222,8 +222,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/8b/57/a3daeaae.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -238,8 +238,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83epgicWspzcNEVl081HY7SNAEWmj7L8mpv0OqkjXZjF3VBJppmEdhJ8wxp6QwH2wjCpytoia7e92nS3w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -254,8 +254,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2b/63/57/ff7440ee.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -270,5 +270,4 @@
   </div>
 </div>
 </div>
-</li>
-</ul>
+

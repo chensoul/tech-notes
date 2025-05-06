@@ -1,10 +1,10 @@
 <audio title="特别放送｜Go泛型：用法、原理与最佳实践" src="https://static001.geekbang.org/resource/audio/57/e2/57ff87d1359e3bab2bda979471259be2.mp3" controls="controls"></audio> 
-<p>你好，我是郑建勋。</p><p>泛型一直是自Go语言诞生以来讨论最热烈的话题之一，之前，Go语言因为没有泛型而被很多人吐槽过。<a href="https://go.googlesource.com/proposal/+/HEAD/design/43651-type-parameters.md">经过了多年的设计</a>，我们正式迎来了 Go1.18 泛型。这节课就让我们来看一看泛型的几个重要问题，你也可以先问一问自己下面几个问题。</p><ul>
-<li>什么是泛型？</li>
-<li>Go为什么需要泛型？</li>
-<li>Go之前为什么没有泛型？</li>
-<li>Go泛型的特性与使用方法是什么？</li>
-</ul><h2>什么是泛型？</h2><p>我们先来看看<a href="https://en.wikipedia.org/wiki/Generic_programming">维基百科</a>对泛型的定义。</p><blockquote>
+<p>你好，我是郑建勋。</p><p>泛型一直是自Go语言诞生以来讨论最热烈的话题之一，之前，Go语言因为没有泛型而被很多人吐槽过。<a href="https://go.googlesource.com/proposal/+/HEAD/design/43651-type-parameters.md">经过了多年的设计</a>，我们正式迎来了 Go1.18 泛型。这节课就让我们来看一看泛型的几个重要问题，你也可以先问一问自己下面几个问题。</p>
+什么是泛型？
+Go为什么需要泛型？
+Go之前为什么没有泛型？
+Go泛型的特性与使用方法是什么？
+<h2>什么是泛型？</h2><p>我们先来看看<a href="https://en.wikipedia.org/wiki/Generic_programming">维基百科</a>对泛型的定义。</p><blockquote>
 <p>Generic programming centers around the idea of abstracting from concrete, efficient algorithms to obtain generic algorithms that can be combined with different data representations to produce a wide variety of useful software.</p>
 </blockquote><p>泛型编程的核心思想是从具体的、高效的运算中抽象出通用的运算，这些运算可以适用于不同形式的数据，从而能够适用于各种各样的场景。</p><p>显然，泛型是高级语言为了让一段代码拥有更强的抽象能力和表现力而设计出来的。</p><p>许多语言都有对泛型的支持，我们可以看看其他语言是怎么实现泛型的。在Java中对函数进行泛型抽象的代码如下所示。</p><!-- [[[read_end]]] --><pre><code class="language-plain">public static  &lt;E&gt; boolean containsElement(E [] elements, E element){
     for (E e : elements){
@@ -95,38 +95,38 @@ func Sum[T Number](numbers []T) T {
 	}
 	return total
 }
-</code></pre><p>你可能会问，既然泛型有这么多好处，那为什么之前Go一直都没有实现泛型呢？我们可以从<a href="https://go.dev/doc/faq#generics">官方文档</a>FAQ中找到问题的答案。总结一下，主要有下面几个方面的原因。</p><ul>
-<li>Go语言专注于软件工程本身，其目的是设计出简单、可读、可扩展的语言。因此一开始为了确保其简单性，就没有将泛型作为语言的设计目标。</li>
-<li>泛型通常会带来额外的成本，这个成本可能来自编译时或者运行时的耗时，还有复杂度的上升。因此设计泛型时，需要做好成本与收益的平衡。Go团队一开始并没有想清楚泛型的最终形态，并且Go的空接口也给了和泛型类似的灵活性，这就降低了泛型的紧迫性。</li>
-</ul><h2>泛型的特性与使用方法</h2><p>Go1.18引入了泛型之后，一些之前重复的代码就可以用更简单的泛型代码来表示了。Go的泛型有下面这些特点。</p><ul>
-<li>只存在于编译时，并不会在运行时有任何的性能损耗。</li>
-<li>由于存在泛型，在编译时的编译速度会下降。但是由于Go对泛型的限制加上Go依赖管理禁止了循环依赖，Go没有代码膨胀问题，编译速度仍然一骑绝尘。</li>
-<li>与C++不同，Go中的泛型是有类型约束的，它可以限制参数的类型范围。Go中的这种约束是通过扩展接口的能力实现的。</li>
-<li>当前Go的泛型语法还有诸多限制，后续可能会放开。</li>
-</ul><p>要准确地理解泛型这个新概念，我们需要明确一些概念在中英文中的差异，这样才有进一步讨论的基础。我们以下面这个简单的泛型变量HashMap为例，HashMap声明了一个带泛型的哈希表。其中Key可以是int或者string，而Value必须是string或者float。</p><pre><code class="language-plain">type hashmap [KEY int|string, VALUE string| float64] map[KEY]VALUE
+</code></pre><p>你可能会问，既然泛型有这么多好处，那为什么之前Go一直都没有实现泛型呢？我们可以从<a href="https://go.dev/doc/faq#generics">官方文档</a>FAQ中找到问题的答案。总结一下，主要有下面几个方面的原因。</p>
+Go语言专注于软件工程本身，其目的是设计出简单、可读、可扩展的语言。因此一开始为了确保其简单性，就没有将泛型作为语言的设计目标。
+泛型通常会带来额外的成本，这个成本可能来自编译时或者运行时的耗时，还有复杂度的上升。因此设计泛型时，需要做好成本与收益的平衡。Go团队一开始并没有想清楚泛型的最终形态，并且Go的空接口也给了和泛型类似的灵活性，这就降低了泛型的紧迫性。
+<h2>泛型的特性与使用方法</h2><p>Go1.18引入了泛型之后，一些之前重复的代码就可以用更简单的泛型代码来表示了。Go的泛型有下面这些特点。</p>
+只存在于编译时，并不会在运行时有任何的性能损耗。
+由于存在泛型，在编译时的编译速度会下降。但是由于Go对泛型的限制加上Go依赖管理禁止了循环依赖，Go没有代码膨胀问题，编译速度仍然一骑绝尘。
+与C++不同，Go中的泛型是有类型约束的，它可以限制参数的类型范围。Go中的这种约束是通过扩展接口的能力实现的。
+当前Go的泛型语法还有诸多限制，后续可能会放开。
+<p>要准确地理解泛型这个新概念，我们需要明确一些概念在中英文中的差异，这样才有进一步讨论的基础。我们以下面这个简单的泛型变量HashMap为例，HashMap声明了一个带泛型的哈希表。其中Key可以是int或者string，而Value必须是string或者float。</p><pre><code class="language-plain">type hashmap [KEY int|string, VALUE string| float64] map[KEY]VALUE
 </code></pre><p>在这个例子中，[]括号中的这一串叫做类型参数列表（Type Parameter List），类型参数列表是由多个类型参数组成的，中间用逗号隔开。这个例子中的Key与Value被叫做类型参数（Type Parameter），可以取任意的名字。它们后方的 <code>int|string</code> 与 <code>string|float64</code> 叫做类型约束（Constraints）。</p><p><img src="https://static001.geekbang.org/resource/image/df/13/df08eaacfc1e0b33a611e4733b84f513.png?wh=1920x634" alt="图片"></p><p>此外，学习泛型时，还有几个重要知识点，分别是：</p><ol>
-<li>泛型的声明</li>
-<li>泛型的类型约束</li>
-<li>泛型的实例化</li>
-<li>泛型的自动类型推断</li>
-<li>泛型类型参数的操作与限制</li>
-<li>泛型类型的转换</li>
-</ol><p>下面我们挨个来介绍一下这些知识点。</p><h3>泛型的<strong>声明</strong></h3><p>我们先来看泛型的声明。泛型可以用在切片、哈希表、结构体、方法、函数、接口等类型中，我们先来看看泛型在各个类型中的表现，就能对泛型的声明方式有大体的了解。</p><ul>
-<li><strong>泛型切片的声明。</strong></li>
-</ul><pre><code class="language-plain">type Slice1 [T int|float64|string] []T
+泛型的声明
+泛型的类型约束
+泛型的实例化
+泛型的自动类型推断
+泛型类型参数的操作与限制
+泛型类型的转换
+</ol><p>下面我们挨个来介绍一下这些知识点。</p><h3>泛型的<strong>声明</strong></h3><p>我们先来看泛型的声明。泛型可以用在切片、哈希表、结构体、方法、函数、接口等类型中，我们先来看看泛型在各个类型中的表现，就能对泛型的声明方式有大体的了解。</p>
+<strong>泛型切片的声明。</strong>
+<pre><code class="language-plain">type Slice1 [T int|float64|string] []T
 </code></pre><p>该泛型切片可以指代下面的3种切片类型。</p><pre><code class="language-plain">type SliceInt []int
 type SliceFloat []float64
 type SliceInt []string
-</code></pre><ul>
-<li><strong>泛型哈希表的声明。</strong></li>
-</ul><pre><code class="language-plain">type Map1 [KEY int|string, VALUE string| float64] map[KEY]VALUE
+</code></pre>
+<strong>泛型哈希表的声明。</strong>
+<pre><code class="language-plain">type Map1 [KEY int|string, VALUE string| float64] map[KEY]VALUE
 </code></pre><p>该泛型哈希表可以指代下面的4种切片类型。</p><pre><code class="language-plain">type Map2 map[int]string
 type Map3 map[int]float64
 type Map4 map[string]string
 type Map5 map[string]float64
-</code></pre><ul>
-<li><strong>泛型结构体的声明。</strong></li>
-</ul><pre><code class="language-plain">type Struct1 [T string|int|float64] struct {
+</code></pre>
+<strong>泛型结构体的声明。</strong>
+<pre><code class="language-plain">type Struct1 [T string|int|float64] struct {
   Title string
   Content  T
 }
@@ -145,10 +145,10 @@ type Struct5 struct {
   Title string
   Content  float64
 }
-</code></pre><ul>
-<li><strong>泛型方法的声明。</strong><br>
-下面的泛型方法可以灵活地对任意类型的Data进行加锁，并执行f函数。</li>
-</ul><pre><code class="language-plain">type Lockable[T any] struct {
+</code></pre>
+<strong>泛型方法的声明。</strong><br>
+下面的泛型方法可以灵活地对任意类型的Data进行加锁，并执行f函数。
+<pre><code class="language-plain">type Lockable[T any] struct {
 	mu sync.Mutex
 	data T
 }
@@ -158,10 +158,10 @@ func (l *Lockable[T]) Do(f func(*T)) {
 	defer l.mu.Unlock()
 	f(&amp;l.data)
 }
-</code></pre><ul>
-<li><strong>泛型函数的声明。</strong><br>
-下面的函数NoDiff可以判断可变长度数组中的每一个元素是不是都是相同的。</li>
-</ul><pre><code class="language-plain">// 函数
+</code></pre>
+<strong>泛型函数的声明。</strong><br>
+下面的函数NoDiff可以判断可变长度数组中的每一个元素是不是都是相同的。
+<pre><code class="language-plain">// 函数
 func NoDiff[V comparable](vs ...V) bool {
 	if len(vs) == 0 {
 		return true
@@ -175,16 +175,16 @@ func NoDiff[V comparable](vs ...V) bool {
 	}
 	return true
 }
-</code></pre><ul>
-<li><strong>泛型接口的声明。</strong><br>
-下面的泛型接口可以指代不同类型的方法。</li>
-</ul><pre><code class="language-plain">type MyInterface[T int | string] interface {
+</code></pre>
+<strong>泛型接口的声明。</strong><br>
+下面的泛型接口可以指代不同类型的方法。
+<pre><code class="language-plain">type MyInterface[T int | string] interface {
   WriteOne(data T) T
   ReadOne() T
 }
-</code></pre><p>从上面的例子可以看出，不同的泛型声明都有相似的表示形式。无外乎在[]中添加类型参数，然后为类型参数加上类型约束，从而利用类型参数指代多种不同的类型。下面我们来看一看类型约束。</p><h3>泛型的类型约束</h3><p>正如之前看到的，Go可以为类型参数加上约束。其实我们可以将约束视为类型的类型，这种约束使类型参数成为了一种类型的集合，这个集合可能很大也可能很小。</p><p>Go引入了一些新的符号来表示类型的约束，我们具体来看一看。</p><ul>
-<li><code>~T</code> 表示一个类型集，它包括所有基础类型为 T 的类型。</li>
-</ul><pre><code class="language-plain">~int
+</code></pre><p>从上面的例子可以看出，不同的泛型声明都有相似的表示形式。无外乎在[]中添加类型参数，然后为类型参数加上类型约束，从而利用类型参数指代多种不同的类型。下面我们来看一看类型约束。</p><h3>泛型的类型约束</h3><p>正如之前看到的，Go可以为类型参数加上约束。其实我们可以将约束视为类型的类型，这种约束使类型参数成为了一种类型的集合，这个集合可能很大也可能很小。</p><p>Go引入了一些新的符号来表示类型的约束，我们具体来看一看。</p>
+<code>~T</code> 表示一个类型集，它包括所有基础类型为 T 的类型。
+<pre><code class="language-plain">~int
 ~[]byte
 ~map[int]string
 ~chan struct{}
@@ -192,11 +192,11 @@ func NoDiff[V comparable](vs ...V) bool {
 </code></pre><p>举一个例子，type flag int 中的 flag 是一个新的类型，但是它的基础类型仍然是int。<a href="http://golang.org/x/exp/constraints">golang.org/x/exp/constraints</a> 库也为我们预置了几个类型：Complex、Float、Integer、Ordered、Signed、Unsigned。以Ordered为例，它本身的定义如下，它约束了类型必须可以进行&lt;、&lt;=、&gt;=、&gt;等比较操作。</p><pre><code class="language-plain">type Ordered interface {
 	Integer | Float | ~string
 }
-</code></pre><ul>
-<li>Comparable为Go中的预定义类型，约束了类型可以进行等于和不等于的判断（==、!==）。</li>
-<li>Any也是Go中的预定义类型，它其实就是空接口的别名，在Go源码中，已经将所有的空接口都替换为了Any。</li>
-<li>T1 | T2 | … | Tn 表示集合类型，它指的是所有这些类型的并集，Tn可以是上方的 <code>~T</code> 类型、基础类型或者是类型名。</li>
-</ul><pre><code class="language-plain">uint8 | uint16 | uint32 | uint64
+</code></pre>
+Comparable为Go中的预定义类型，约束了类型可以进行等于和不等于的判断（==、!==）。
+Any也是Go中的预定义类型，它其实就是空接口的别名，在Go源码中，已经将所有的空接口都替换为了Any。
+T1 | T2 | … | Tn 表示集合类型，它指的是所有这些类型的并集，Tn可以是上方的 <code>~T</code> 类型、基础类型或者是类型名。
+<pre><code class="language-plain">uint8 | uint16 | uint32 | uint64
 ~[]byte | ~string
 map[int]int | []int | [16]int | any
 chan struct{} | ~struct{x int}
@@ -244,15 +244,15 @@ func main() {
 }
 </code></pre><p>另外，约束虽然靠的是扩展后的接口，但书写却可以简化，像下面两个类型参数列表就是等价的。</p><pre><code class="language-plain">[X interface{string|[]byte}, Y interface{~int}]
 [X string|[]byte, Y ~int]
-</code></pre><h3>泛型的实例化</h3><p>泛型类型必须被实例化才能够使用。和声明一样，让我们看看各个泛型类型是如何被实例化的。</p><ul>
-<li><strong>泛型切片实例化</strong></li>
-</ul><pre><code class="language-plain">type Slice1 [T int|float64|string] []T
+</code></pre><h3>泛型的实例化</h3><p>泛型类型必须被实例化才能够使用。和声明一样，让我们看看各个泛型类型是如何被实例化的。</p>
+<strong>泛型切片实例化</strong>
+<pre><code class="language-plain">type Slice1 [T int|float64|string] []T
 var MySlice1 Slice1[int] = []int{1,2,3}
 var MySlice3 Slice1[string] = []string{"hello", "small", "yang"}
 var MySlice5 Slice1[float64] = []float64{1.222, 3.444, 5.666}
-</code></pre><ul>
-<li><strong>泛型Map实例化</strong></li>
-</ul><pre><code class="language-plain">type Map1[KEY int | string, VALUE string | float64] map[KEY]VALUE
+</code></pre>
+<strong>泛型Map实例化</strong>
+<pre><code class="language-plain">type Map1[KEY int | string, VALUE string | float64] map[KEY]VALUE
 
 var MyMap1 Map1[int, string] = map[int]string{
   1: "hello",
@@ -263,9 +263,9 @@ var MyMap3 Map1[string, string] = map[string]string{
   "one": "hello",
   "two": "small",
 }
-</code></pre><ul>
-<li><strong>泛型结构体实例化</strong></li>
-</ul><pre><code class="language-plain">type Aticle [T string|int|float64] struct {
+</code></pre>
+<strong>泛型结构体实例化</strong>
+<pre><code class="language-plain">type Aticle [T string|int|float64] struct {
   Title string
   Content  T
 }
@@ -287,9 +287,9 @@ var MyStruct1 = MyStruct[int, map[int]string]{
   Content: 1,
   Job:     map[int]string{1: "ss"},
 	}
-</code></pre><ul>
-<li><strong>泛型函数实例化</strong></li>
-</ul><pre><code class="language-plain">// 函数实例化
+</code></pre>
+<strong>泛型函数实例化</strong>
+<pre><code class="language-plain">// 函数实例化
 package main
 func NoDiff[V comparable](vs ...V) bool {
 	if len(vs) == 0 {
@@ -343,9 +343,9 @@ func main() {
 	var maxStr = Max[[]string, string]
 	println(maxStr(langs)) // Go
 }
-</code></pre><ul>
-<li><strong>泛型方法实例化</strong></li>
-</ul><pre><code class="language-plain">package main
+</code></pre>
+<strong>泛型方法实例化</strong>
+<pre><code class="language-plain">package main
 
 import "sync"
 
@@ -422,9 +422,9 @@ fmt.Println(s1.size, s1.value)  // 3 [1 2 3]
 fmt.Println(s1.Pop())  //3
 fmt.Println(s1.Pop())  //2
 fmt.Println(s1.Pop())  //1
-</code></pre><ul>
-<li><strong>泛型接口实例化</strong></li>
-</ul><pre><code class="language-plain">type MyInterface[T int | string] interface {
+</code></pre>
+<strong>泛型接口实例化</strong>
+<pre><code class="language-plain">type MyInterface[T int | string] interface {
   WriteOne(data T) T
   ReadOne() T
 }
@@ -474,9 +474,9 @@ func main() {
 	println(NoDiff(new(int)))           // true,自动推断
 	println(NoDiff(new(int), new(int))) // false,自动推断
 }
-</code></pre><h3>泛型类型参数的操作与限制</h3><p>在使用泛型的过程中，我们还不可避免地会遇到一个问题，那就是在对类型参数进行操作时，哪些操作是有效的，哪些是无效的？下面我们来看一些类型参数允许的重要操作。</p><ul>
-<li><strong>类型断言</strong></li>
-</ul><p>类型参数本质是扩展了接口的能力实现的，因此它仍然可以进行类型的断言，判断实际的类型以给出不同的操作。</p><pre><code class="language-plain">import "fmt"
+</code></pre><h3>泛型类型参数的操作与限制</h3><p>在使用泛型的过程中，我们还不可避免地会遇到一个问题，那就是在对类型参数进行操作时，哪些操作是有效的，哪些是无效的？下面我们来看一些类型参数允许的重要操作。</p>
+<strong>类型断言</strong>
+<p>类型参数本质是扩展了接口的能力实现的，因此它仍然可以进行类型的断言，判断实际的类型以给出不同的操作。</p><pre><code class="language-plain">import "fmt"
 
 func nel[T int | string](x any) {
 	if v, ok := x.(T); ok {
@@ -496,9 +496,9 @@ func wua[T int | string](x any) {
 		fmt.Println("string")
 	}
 }
-</code></pre><ul>
-<li><strong>核心类型限制</strong></li>
-</ul><p>由于类型参数是类型的集合，原则上只有当类型参数中的所有类型都可以执行这个操作时，才被认为是有效的。下面这类操作在编译时就会直接报错，因为Any是所有类型的集合，但是并不是所有类型都可以进行加法操作。</p><pre><code class="language-plain">// invalid operation: operator + not defined on total (variable of type T constrained by any)
+</code></pre>
+<strong>核心类型限制</strong>
+<p>由于类型参数是类型的集合，原则上只有当类型参数中的所有类型都可以执行这个操作时，才被认为是有效的。下面这类操作在编译时就会直接报错，因为Any是所有类型的集合，但是并不是所有类型都可以进行加法操作。</p><pre><code class="language-plain">// invalid operation: operator + not defined on total (variable of type T constrained by any)
 func Sum[T any](numbers []T) T {
 	var total T
 	for _, x := range numbers {

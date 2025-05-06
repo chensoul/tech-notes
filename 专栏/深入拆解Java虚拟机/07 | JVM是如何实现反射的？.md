@@ -433,18 +433,18 @@ public class Test {
 
 一旦得到了Class对象，我们便可以正式地使用反射功能了。下面我列举了较为常用的几项。
 
-<li>
+
 使用newInstance()来生成一个该类的实例。它要求该类中拥有一个无参数的构造器。
-</li>
-<li>
+
+
 使用isInstance(Object)来判断一个对象是否该类的实例，语法上等同于instanceof关键字（JIT优化时会有差别，我会在本专栏的第二部分详细介绍）。
-</li>
-<li>
+
+
 使用Array.newInstance(Class,int)来构造该类型的数组。
-</li>
-<li>
+
+
 使用getFields()/getConstructors()/getMethods()来访问该类的成员。除了这三个之外，Class类还提供了许多其他方法，详见[4]。需要注意的是，方法名中带Declared的不会返回父类的成员，但是会返回私有成员；而不带Declared的则相反。
-</li>
+
 
 当获得了类成员之后，我们可以进一步做如下操作。
 

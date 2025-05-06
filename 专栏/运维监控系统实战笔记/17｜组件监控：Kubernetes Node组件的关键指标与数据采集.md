@@ -123,14 +123,14 @@ categraf-daemonset-xgwf5   1/1     Running   0          2m10s   10.206.0.16   10
 categraf-daemonset-z9rk5   1/1     Running   0          2m10s   10.206.16.8   10.206.16.8   &lt;none&gt;           &lt;none&gt;
 categraf-daemonset-zdp8v   1/1     Running   0          2m10s   10.206.0.17   10.206.0.17   &lt;none&gt;           &lt;none&gt;
 </code></pre><p>看起来一切正常，去监控服务端查询一下 kubeproxy 打头的指标，理论上就能看到采集到的数据了。Kube-Proxy 暴露了不少指标，下面我挑选一些关键指标稍作解释。</p><h3>Kube-Proxy 指标解释</h3><ol>
-<li><strong>通用的 Go 程序相关的指标</strong></li>
+<strong>通用的 Go 程序相关的指标</strong>
 </ol><p><img src="https://static001.geekbang.org/resource/image/50/1c/50c462b926b60257743242d6e425801c.png?wh=1920x1222" alt="图片"></p><p>以上指标，只要是通过 Prometheus Go SDK 埋点的程序都会有，除了 Kube-Proxy，后面介绍的 Kubelet、APIServer、Scheduler 等，也全部都有，这里你记住了，后面我就不会重复介绍了。</p><ol start="2">
-<li><strong>请求 APIServer 的指标</strong></li>
-</ol><p>Kubernetes 中多个组件都要调用 APIServer 的接口，每秒调用多少次、有多少成功多少失败、耗时情况如何，这些指标也比较关键。</p><p>比如：</p><ul>
-<li>rest_client_request_duration_seconds：请求 APIServer 的耗时统计</li>
-<li>rest_client_requests_total：请求 APIServer 的调用量统计</li>
-</ul><ol start="3">
-<li><strong>规则同步类指标</strong></li>
+<strong>请求 APIServer 的指标</strong>
+</ol><p>Kubernetes 中多个组件都要调用 APIServer 的接口，每秒调用多少次、有多少成功多少失败、耗时情况如何，这些指标也比较关键。</p><p>比如：</p>
+rest_client_request_duration_seconds：请求 APIServer 的耗时统计
+rest_client_requests_total：请求 APIServer 的调用量统计
+<ol start="3">
+<strong>规则同步类指标</strong>
 </ol><p>Kube-Proxy 的核心职能，就是去 APIServer 获取转发规则，修改本地的 iptables 或者 ipvs 的规则，所以这些规则同步相关的指标，就至关重要了。这里我给你列出几个核心指标。</p><p><img src="https://static001.geekbang.org/resource/image/d8/30/d8d8db1e76df059c540c67f6928bf030.png?wh=1920x795" alt="图片"></p><p>Categraf 内置了 Kube-Proxy 的<a href="https://github.com/flashcatcloud/categraf/blob/main/inputs/kube_proxy/dashboard-by-ident.json">监控大盘</a>，关键的核心指标都已经做到监控大盘里了，导入夜莺就能使用。</p><p>因为Kube-Proxy 是我们讲解的第一个组件，讲得啰嗦了一些，后面介绍其他组件的时候有些相同的逻辑就不重复了。下面我们继续看工作负载节点的第二个组件 Kubelet 应该如何监控。</p><h2>监控 Kubelet</h2><p>Kubelet 也是在所有 Kubernetes 节点上部署的，理论上可以采用和 Kube-Proxy 完全一样的监控方法，但是 Kubelet 的接口需要认证，我们来测试一下。</p><pre><code class="language-yaml">[root@tt-fc-dev01.nj ~]# ps aux|grep kubelet
 root      163490  0.0  0.0  12136  1064 pts/1    S+   13:34   0:00 grep --color=auto kubelet
 root      166673  3.2  1.0 3517060 81336 ?       Ssl  Aug16 4176:52 /usr/bin/kubelet --bootstrap-kubeconfig=/etc/kubernetes/bootstrap-kubelet.conf --kubeconfig=/etc/kubernetes/kubelet.conf --config=/var/lib/kubelet/config.yaml --hostname-override=10.206.0.16 --network-plugin=cni --pod-infra-container-image=registry.aliyuncs.com/google_containers/pause:3.6
@@ -395,7 +395,7 @@ irate(container_fs_writes_bytes_total[1m])
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -410,8 +410,8 @@ irate(container_fs_writes_bytes_total[1m])
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/7c/25/19cbcd56.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -426,8 +426,8 @@ irate(container_fs_writes_bytes_total[1m])
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -442,8 +442,8 @@ irate(container_fs_writes_bytes_total[1m])
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -458,8 +458,8 @@ irate(container_fs_writes_bytes_total[1m])
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/08/8b/1b7d0463.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -474,8 +474,8 @@ irate(container_fs_writes_bytes_total[1m])
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -490,5 +490,4 @@ irate(container_fs_writes_bytes_total[1m])
   </div>
 </div>
 </div>
-</li>
-</ul>
+

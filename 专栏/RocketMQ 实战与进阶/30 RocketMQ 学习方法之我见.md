@@ -25,195 +25,195 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;搭建学习环境准备篇.md">01 搭建学习环境准备篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;RocketMQ&#32;核心概念扫盲篇.md">02 RocketMQ 核心概念扫盲篇.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;消息发送&#32;API&#32;详解与版本变迁说明.md">03 消息发送 API 详解与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;结合实际应用场景谈消息发送.md">04 结合实际应用场景谈消息发送.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;消息发送核心参数与工作原理详解.md">05 消息发送核心参数与工作原理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;消息发送常见错误与解决方案.md">06 消息发送常见错误与解决方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;事务消息使用及方案选型思考.md">07 事务消息使用及方案选型思考.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;消息消费&#32;API&#32;与版本变迁说明.md">08 消息消费 API 与版本变迁说明.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;DefaultMQPushConsumer&#32;核心参数与工作原理.md">09 DefaultMQPushConsumer 核心参数与工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;DefaultMQPushConsumer&#32;使用示例与注意事项.md">10 DefaultMQPushConsumer 使用示例与注意事项.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;DefaultLitePullConsumer&#32;核心参数与实战.md">11 DefaultLitePullConsumer 核心参数与实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;结合实际场景再聊&#32;DefaultLitePullConsumer&#32;的使用.md">12 结合实际场景再聊 DefaultLitePullConsumer 的使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;结合实际场景顺序消费、消息过滤实战.md">13 结合实际场景顺序消费、消息过滤实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;消息消费积压问题排查实战.md">14 消息消费积压问题排查实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;RocketMQ&#32;常用命令实战.md">15 RocketMQ 常用命令实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;RocketMQ&#32;集群性能摸高.md">16 RocketMQ 集群性能摸高.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;RocketMQ&#32;集群性能调优.md">17 RocketMQ 集群性能调优.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;RocketMQ&#32;集群平滑运维.md">18 RocketMQ 集群平滑运维.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;RocketMQ&#32;集群监控（一）.md">19 RocketMQ 集群监控（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;RocketMQ&#32;集群监控（二）.md">20 RocketMQ 集群监控（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;RocketMQ&#32;集群告警.md">21 RocketMQ 集群告警.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;RocketMQ&#32;集群踩坑记.md">22 RocketMQ 集群踩坑记.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;消息轨迹、ACL&#32;与多副本搭建.md">23 消息轨迹、ACL 与多副本搭建.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;RocketMQ-Console&#32;常用页面指标获取逻辑.md">24 RocketMQ-Console 常用页面指标获取逻辑.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;RocketMQ&#32;Nameserver&#32;背后的设计理念.md">25 RocketMQ Nameserver 背后的设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;Java&#32;并发编程实战.md">26 Java 并发编程实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（一）.md">27 从 RocketMQ 学基于文件的编程模式（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;从&#32;RocketMQ&#32;学基于文件的编程模式（二）.md">28 从 RocketMQ 学基于文件的编程模式（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;从&#32;RocketMQ&#32;学&#32;Netty&#32;网络编程技巧.md">29 从 RocketMQ 学 Netty 网络编程技巧.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="30&#32;RocketMQ&#32;学习方法之我见.md">30 RocketMQ 学习方法之我见.md</a>
                     
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -276,24 +276,24 @@
 <p><strong>确定好目标后，该怎么学习 RocketMQ 呢？</strong></p>
 <p><strong>1. 通读 RocketMQ 官方设计手册</strong></p>
 <p>通常开始学习一个开源框架(产品)，建议大家首先去官网查看其用户手册、设计手册，从而对该框架能解决什么问题，基本的工作原理、涵盖了哪些知识点（后续可以对这些知识点一一突破），从全局上掌握这块中间件。我还清晰的记得我在看 RokcetMQ 设计手册时，我不仅将一些属于理解透彻，并且一些与性能方面的“高级”名词深深的吸引了我，例如：</p>
-<ul>
-<li>亿级消息堆积能力</li>
-<li>内存映射、pagecache</li>
-<li>零拷贝</li>
-<li>同步刷盘、异步刷盘</li>
-<li>同步复制、异步复制</li>
-<li>Hash 索引</li>
-</ul>
+
+亿级消息堆积能力
+内存映射、pagecache
+零拷贝
+同步刷盘、异步刷盘
+同步复制、异步复制
+Hash 索引
+
 <p>看过设计手册后，让我产生了极大的兴趣，下决心从源码角度对其进行深入研究，立下了不仅深入研究 RocketMQ 的工作原理与实现细节，更是想掌握基于文件编程的设计理念，如何在实践中使用内存映射。</p>
 <p><strong>2. 下载源码，跑通 Demo</strong></p>
 <p>每一个开源框架，都会提供完备的测试案例，RokcetMQ 也不例外，RokcetMQ 的源码中有一个单独的模块 example，里面放了很多使用 Demo，按需运行一些测试用例，能让你掌握 RokcetMQ 的基本使用，算是入了一个门。</p>
 <p><strong>3. 源码研究 RocketMQ</strong></p>
 <p>通过前面两个步骤，对设计原理有了一个全局的理解，同时掌握了 RocketMQ 的基本使用，接下来需要深入探究 RocketMQ，特别是如果大家认真阅读了本专栏的所有实战类文章，那是时候研究其源码了。</p>
 <p>阅读 RocketMQ 原理个人觉得有如下几个好处：</p>
-<ul>
-<li>深入研究其实现原理，成体系化的研读 RocketMQ，对 RocketMQ 更具掌控性。通常对应消息中间件，如果出现故障，通常会给公司业务造成较大损失，当出现问题时快速止血固然重要，更难能可贵的时预判风险，避免生产故障发生，要做到预判风险，成体系化研究 RocketMQ 显得非常必要。</li>
-<li>学习优秀的 RocketMQ 框架，提升编程技能，例如高并发、基于文件编程相关的技巧，我们都可以从中得到一些启发。</li>
-</ul>
+
+深入研究其实现原理，成体系化的研读 RocketMQ，对 RocketMQ 更具掌控性。通常对应消息中间件，如果出现故障，通常会给公司业务造成较大损失，当出现问题时快速止血固然重要，更难能可贵的时预判风险，避免生产故障发生，要做到预判风险，成体系化研究 RocketMQ 显得非常必要。
+学习优秀的 RocketMQ 框架，提升编程技能，例如高并发、基于文件编程相关的技巧，我们都可以从中得到一些启发。
+
 <p><strong>那如何阅读 RocketMQ 源码呢？</strong></p>
 <p>阅读源码之前还是需要具备一定的基础，建议在阅读 RokcetMQ 源码之前，先尝试阅读一下 Java 数据结构相关的源码，例如 HashMap、ArrayList，主要是培养自己阅读源码的方法，<strong>通常我阅读源码的方法：先主流程、后分支流程</strong>。</p>
 <p>我举一个简单的例子来说明先主流程、后分支流程。</p>

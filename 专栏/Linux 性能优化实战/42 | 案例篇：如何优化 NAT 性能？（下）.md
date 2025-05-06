@@ -14,12 +14,12 @@ Linux 中的NAT ，基于内核的连接跟踪模块实现。所以，它维护�
 
 下面的案例仍然基于 Ubuntu 18.04，同样适用于其他的 Linux 系统。我使用的案例环境是这样的：
 
-<li>
+
 机器配置：2 CPU，8GB 内存。
-</li>
-<li>
+
+
 预先安装 docker、tcpdump、curl、ab、SystemTap 等工具，比如
-</li>
+
 
 ```
   # Ubuntu
@@ -133,15 +133,15 @@ Total:          1  204 716.3     28    7349
 
 关于 ab 输出界面的含义，我已经在 [怎么评估系统的网络性能](https://time.geekbang.org/column/article/81497) 文章中介绍过，忘了的话自己先去复习。从这次的界面，你可以看出：
 
-<li>
+
 每秒请求数（Requests  per second）为 6576；
-</li>
-<li>
+
+
 每个请求的平均延迟（Time per request）为 760ms；
-</li>
-<li>
+
+
 建立连接的平均延迟（Connect）为 177ms。
-</li>
+
 
 记住这几个数值，这将是接下来案例的基准指标。
 
@@ -229,15 +229,15 @@ Total:          1 39216 58711.6   1021  130682
 
 再重新看看 ab 的输出，这次的结果显示：
 
-<li>
+
 每秒请求数（Requests per second）为 76；
-</li>
-<li>
+
+
 每个请求的延迟（Time per request）为 65s；
-</li>
-<li>
+
+
 建立连接的延迟（Connect）为 1300ms。
-</li>
+
 
 显然，每个指标都比前面差了很多。
 
@@ -247,12 +247,12 @@ Total:          1 39216 58711.6   1021  130682
 
 回忆一下Netfilter 中，网络包的流向以及 NAT 的原理，你会发现，要保证 NAT 正常工作，就至少需要两个步骤：
 
-<li>
+
 第一，利用 Netfilter 中的钩子函数（Hook），修改源地址或者目的地址。
-</li>
-<li>
+
+
 第二，利用连接跟踪模块 conntrack ，关联同一个连接的请求和响应。
-</li>
+
 
 是不是这两个地方出现了问题呢？我们用前面提到的动态追踪工具 SystemTap 来试试。
 
@@ -347,15 +347,15 @@ $ perf report -g graph,0
 
 从这个图我们可以看到，nf_hook_slow 调用最多的有三个地方，分别是 ipv4_conntrack_in、br_nf_pre_routing 以及 iptable_nat_ipv4_in。换言之，nf_hook_slow 主要在执行三个动作。
 
-<li>
+
 第一，接收网络包时，在连接跟踪表中查找连接，并为新的连接分配跟踪对象（Bucket）。
-</li>
-<li>
+
+
 第二，在 Linux 网桥中转发包。这是因为案例 Nginx 是一个 Docker 容器，而容器的网络通过网桥来实现；
-</li>
-<li>
+
+
 第三，接收网络包时，执行 DNAT，即把 8080 端口收到的包转发给容器。
-</li>
+
 
 到这里，我们其实就找到了性能下降的三个来源。这三个来源，都是 Linux 的内核机制，所以接下来的优化，自然也是要从内核入手。
 
@@ -379,15 +379,15 @@ net.netfilter.nf_conntrack_tcp_timeout_time_wait = 120
 
 你可以看到，这里最重要的三个指标：
 
-<li>
+
 net.netfilter.nf_conntrack_count，表示当前连接跟踪数；
-</li>
-<li>
+
+
 net.netfilter.nf_conntrack_max，表示最大连接跟踪数；
-</li>
-<li>
+
+
 net.netfilter.nf_conntrack_buckets，表示连接跟踪表的大小。
-</li>
+
 
 所以，这个输出告诉我们，当前连接跟踪数是 180，最大连接跟踪数是 1000，连接跟踪表的大小，则是 65536。
 
@@ -449,15 +449,15 @@ Total:         15  666 1216.3    148   14645
 
 果然，现在你可以看到：
 
-<li>
+
 每秒请求数（Requests per second）为 6315（不用NAT时为6576）；
-</li>
-<li>
+
+
 每个请求的延迟（Time per request）为 791ms（不用NAT时为760ms）；
-</li>
-<li>
+
+
 建立连接的延迟（Connect）为 355ms（不用NAT时为177ms）。
-</li>
+
 
 这个结果，已经比刚才的测试好了很多，也很接近最初不用 NAT 时的基准结果了。
 

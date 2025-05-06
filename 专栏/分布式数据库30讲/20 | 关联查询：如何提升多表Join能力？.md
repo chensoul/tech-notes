@@ -171,12 +171,12 @@ select A.C1,B.C2 from A,B where A.C1=B.C1;
 
 这个基于重分布的关联过程，其实和MapReduce、Spark等并行计算引擎的思路是一样的，基本等同于它们的Shuffle操作。我们可以用Spark的Shuffle Hash Join来对比学习一下。
 
-<li>
+
 shuffle阶段：分别将两个表按照连接键进行分区，将相同连接键的记录重分布到同一节点，数据就会被分配到尽量多的节点上，增大并行度。
-</li>
-<li>
+
+
 hash join阶段：每个分区节点上的数据单独执行单机hash join算法。
-</li>
+
 
 ## 小结
 

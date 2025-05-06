@@ -115,7 +115,7 @@ docker-compose up -d
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -130,8 +130,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/29/95/13893803.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -146,8 +146,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -162,8 +162,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -178,8 +178,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -194,8 +194,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -210,8 +210,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/a6/56/abb7bfe3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -226,8 +226,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/cd/4f/7d4d6fe4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -242,8 +242,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/23/75/2b599841.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -258,8 +258,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -274,8 +274,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1c/4e/88/791d0f5e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -290,8 +290,8 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -306,5 +306,4 @@ docker-compose up -d
   </div>
 </div>
 </div>
-</li>
-</ul>
+

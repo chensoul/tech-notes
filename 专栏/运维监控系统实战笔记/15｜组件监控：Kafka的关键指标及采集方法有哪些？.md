@@ -1,10 +1,10 @@
 <audio title="15｜组件监控：Kafka的关键指标及采集方法有哪些？" src="https://static001.geekbang.org/resource/audio/80/d8/80b30c7dcb1dbaf1e00d9277aaef43d8.mp3" controls="controls"></audio> 
-<p>你好，我是秦晓辉。</p><p>前面两讲我们介绍了 MySQL 和 Redis 的监控，核心原理就是连到实例上执行特定语句命令拉取数据，类似的还有 MongoDB，这算是一类监控场景。这一讲我们介绍现代分布式系统中非常常用的组件——Kafka，同时引出 JMX 监控场景，丰富你的数据采集工具箱。</p><p>要做好 Kafka 的监控，首先要了解 Kafka 的<a href="https://time.geekbang.org/column/article/99318">基础概念</a>，比如 Topic（主题）、Partition（分区）、Replica（副本）、AR（Assigned Replicas）、ISR（In-Sync Replicas）、OSR（Out-of-Sync Replicas）、HW（High Watermark）、LEO（Log End Offset）等等。其次是要了解 Kafka 的架构，通过架构才能知道要重点监控哪些组件，下面我们就先来看一下 Kafka 的架构图。</p><h2>Kafka 架构</h2><p><img src="https://static001.geekbang.org/resource/image/d6/84/d691yye35395bb878227c002dfcc7a84.png?wh=2306x1303" alt="" title="图片来自网络"></p><p>上面绿色部分 PRODUCER（生产者）和下面紫色部分 CONSUMER（消费者）是业务程序，通常由研发人员埋点解决监控问题，如果是 Java 客户端也会暴露 JMX 指标。组件运维监控层面着重关注蓝色部分的 BROKER（Kafka 节点）和红色部分的 ZOOKEEPER。</p><p>ZooKeeper 也是 Java 语言写的，监控相对简单，可以复用下面介绍的 JMX 监控方式，另外 ZooKeeper 支持 mntr 四字命令，可以获取 ZooKeeper 内部健康状况。新版 ZooKeeper 连四字命令都不需要了，直接内置暴露了 Prometheus 协议的 metrics 接口，直接抓取即可。</p><!-- [[[read_end]]] --><p>我们重点关注 Broker 节点的监控，也就是 Kafka 自身的监控，通常从四个方面着手。</p><ul>
-<li>Kafka 进程所在机器的监控，这个参考前面<a href="https://time.geekbang.org/column/article/625436">第 11 讲</a>的内容，重点关注CPU、硬盘I/O、网络I/O。</li>
-<li>JVM 监控，Kafka 是个 Java 进程，所以需要常规的 JVM 监控，通过 JMX 方式暴露。</li>
-<li>Kafka 自身的指标、也是通过 JMX 方式暴露，比如消息数量、流量、分区、副本的数量等。</li>
-<li>各个 consumer 的 lag 监控，即消息堆积量，是各类MQ都应该监控的指标。</li>
-</ul><p>JVM 和 Kafka 相关的指标，都通过 JMX 方式暴露，我们就先来看一下什么是 JMX，以及 Kafka 如何开启 JMX。</p><h2>JMX 简介</h2><p>JMX（Java Management Extensions）是一个为应用程序植入管理功能的框架。Java 程序接入 JMX 框架之后，可以把一些类的属性和方法暴露出来，用户就可以使用 JMX 相关工具来读取或操作这些类。</p><p>比如一个类是 Person，有 Name 和 Age 两个属性，如果把 Person 做成一个 MBean，我们就可以在 JConsole里直接查到 Person 属性的值，也可以修改这些属性。</p><p><span class="reference">注：MBean被管理的Java对象，JConsole是JMX的一个管理工具。</span></p><p>我们可以通过 JConsole 直接操作 JavaBean，那JConsole 对 JavaBean来说是什么？</p><p>打个比方吧，其实就像是PHPMyAdmin 之于 MySQL，我们可以通过 PHPMyAdmin 直接操作数据库，这样说你大概能理解了吧。如果你没有理解也没关系，从监控的角度，我们只要知道如何通过 JMX 读取 Kafka 的指标即可。下面我们就来看一下 Kafka 如何开启 JMX 端口。</p><h2>Kafka 开启 JMX</h2><p>Kafka 的配置文件在 config 目录，各种脚本在 bin 目录，要让 Kafka 开启 JMX，肯定是要修改某个配置项或者调整某个脚本的，具体调整哪里呢？我们在 Kafka 的部署目录搜索一下看看。</p><pre><code class="language-json">grep -i jmx -r config
+<p>你好，我是秦晓辉。</p><p>前面两讲我们介绍了 MySQL 和 Redis 的监控，核心原理就是连到实例上执行特定语句命令拉取数据，类似的还有 MongoDB，这算是一类监控场景。这一讲我们介绍现代分布式系统中非常常用的组件——Kafka，同时引出 JMX 监控场景，丰富你的数据采集工具箱。</p><p>要做好 Kafka 的监控，首先要了解 Kafka 的<a href="https://time.geekbang.org/column/article/99318">基础概念</a>，比如 Topic（主题）、Partition（分区）、Replica（副本）、AR（Assigned Replicas）、ISR（In-Sync Replicas）、OSR（Out-of-Sync Replicas）、HW（High Watermark）、LEO（Log End Offset）等等。其次是要了解 Kafka 的架构，通过架构才能知道要重点监控哪些组件，下面我们就先来看一下 Kafka 的架构图。</p><h2>Kafka 架构</h2><p><img src="https://static001.geekbang.org/resource/image/d6/84/d691yye35395bb878227c002dfcc7a84.png?wh=2306x1303" alt="" title="图片来自网络"></p><p>上面绿色部分 PRODUCER（生产者）和下面紫色部分 CONSUMER（消费者）是业务程序，通常由研发人员埋点解决监控问题，如果是 Java 客户端也会暴露 JMX 指标。组件运维监控层面着重关注蓝色部分的 BROKER（Kafka 节点）和红色部分的 ZOOKEEPER。</p><p>ZooKeeper 也是 Java 语言写的，监控相对简单，可以复用下面介绍的 JMX 监控方式，另外 ZooKeeper 支持 mntr 四字命令，可以获取 ZooKeeper 内部健康状况。新版 ZooKeeper 连四字命令都不需要了，直接内置暴露了 Prometheus 协议的 metrics 接口，直接抓取即可。</p><!-- [[[read_end]]] --><p>我们重点关注 Broker 节点的监控，也就是 Kafka 自身的监控，通常从四个方面着手。</p>
+Kafka 进程所在机器的监控，这个参考前面<a href="https://time.geekbang.org/column/article/625436">第 11 讲</a>的内容，重点关注CPU、硬盘I/O、网络I/O。
+JVM 监控，Kafka 是个 Java 进程，所以需要常规的 JVM 监控，通过 JMX 方式暴露。
+Kafka 自身的指标、也是通过 JMX 方式暴露，比如消息数量、流量、分区、副本的数量等。
+各个 consumer 的 lag 监控，即消息堆积量，是各类MQ都应该监控的指标。
+<p>JVM 和 Kafka 相关的指标，都通过 JMX 方式暴露，我们就先来看一下什么是 JMX，以及 Kafka 如何开启 JMX。</p><h2>JMX 简介</h2><p>JMX（Java Management Extensions）是一个为应用程序植入管理功能的框架。Java 程序接入 JMX 框架之后，可以把一些类的属性和方法暴露出来，用户就可以使用 JMX 相关工具来读取或操作这些类。</p><p>比如一个类是 Person，有 Name 和 Age 两个属性，如果把 Person 做成一个 MBean，我们就可以在 JConsole里直接查到 Person 属性的值，也可以修改这些属性。</p><p><span class="reference">注：MBean被管理的Java对象，JConsole是JMX的一个管理工具。</span></p><p>我们可以通过 JConsole 直接操作 JavaBean，那JConsole 对 JavaBean来说是什么？</p><p>打个比方吧，其实就像是PHPMyAdmin 之于 MySQL，我们可以通过 PHPMyAdmin 直接操作数据库，这样说你大概能理解了吧。如果你没有理解也没关系，从监控的角度，我们只要知道如何通过 JMX 读取 Kafka 的指标即可。下面我们就来看一下 Kafka 如何开启 JMX 端口。</p><h2>Kafka 开启 JMX</h2><p>Kafka 的配置文件在 config 目录，各种脚本在 bin 目录，要让 Kafka 开启 JMX，肯定是要修改某个配置项或者调整某个脚本的，具体调整哪里呢？我们在 Kafka 的部署目录搜索一下看看。</p><pre><code class="language-json">grep -i jmx -r config
 grep -i jmx -r bin
 </code></pre><p>在 config 目录搜索 jmx 发现什么都找不到，看来不是通过配置文件来处理的。在 bin 目录下搜索 jmx，可以看到有两个脚本出现了这个关键字，一个是 bin/kafka-run-class.sh，另一个是 bin/windows/kafka-run-class.bat。显然 bat 结尾的文件是 Windows 环境的批处理文件，sh 结尾的才是 Linux、Mac 下使用的脚本文件。我本地是 Mac 环境，打开 kafka-run-class.sh 看一下里边的关键配置。</p><pre><code class="language-json"># JMX settings
 if [ -z "$KAFKA_JMX_OPTS" ]; then
@@ -238,7 +238,7 @@ kafka_uris = ["10.206.16.3:9092"]
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/46/76/581cfe29.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -253,8 +253,8 @@ kafka_uris = ["10.206.16.3:9092"]
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -269,8 +269,8 @@ kafka_uris = ["10.206.16.3:9092"]
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/7c/25/19cbcd56.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -285,8 +285,8 @@ kafka_uris = ["10.206.16.3:9092"]
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -301,8 +301,8 @@ kafka_uris = ["10.206.16.3:9092"]
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/4b/20/8a289101.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -317,5 +317,4 @@ kafka_uris = ["10.206.16.3:9092"]
   </div>
 </div>
 </div>
-</li>
-</ul>
+

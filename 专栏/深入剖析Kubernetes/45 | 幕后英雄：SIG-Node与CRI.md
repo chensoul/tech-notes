@@ -17,18 +17,18 @@
 <img src="https://static001.geekbang.org/resource/image/91/03/914e097aed10b9ff39b509759f8b1d03.png" alt=""><br>
 可以看到，kubelet 的工作核心，就是一个控制循环，即：SyncLoop（图中的大圆圈）。而驱动这个控制循环运行的事件，包括四种：
 
-<li>
+
 Pod 更新事件；
-</li>
-<li>
+
+
 Pod 生命周期变化；
-</li>
-<li>
+
+
 kubelet 本身设置的执行周期；
-</li>
-<li>
+
+
 定时的清理事件。
-</li>
+
 
 所以，跟其他控制器类似，kubelet 启动的时候，要做的第一件事情，就是设置 Listers，也就是注册它所关心的各种事件的 Informer。这些 Informer，就是 SyncLoop 需要处理的数据的来源。
 

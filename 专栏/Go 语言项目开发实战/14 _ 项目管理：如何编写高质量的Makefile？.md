@@ -12,10 +12,10 @@ fmt:
 clean:
 	rm -rf dashboard
 </code></pre><p>上面这个Makefile存在不少问题。例如：功能简单，只能完成最基本的编译、格式化等操作，像构建镜像、自动生成代码等一些高阶的功能都没有；扩展性差，没法编译出可在Mac下运行的二进制文件；没有Help功能，使用难度高；单Makefile文件，结构单一，不适合添加一些复杂的管理功能。</p><p>所以，我们不光要编写Makefile，还要编写高质量的Makefile。那么如何编写一个高质量的Makefile呢？我觉得，可以通过以下4个方法来实现：</p><!-- [[[read_end]]] --><ol>
-<li>打好基础，也就是熟练掌握Makefile的语法。</li>
-<li>做好准备工作，也就是提前规划Makefile要实现的功能。</li>
-<li>进行规划，设计一个合理的Makefile结构。</li>
-<li>掌握方法，用好Makefile的编写技巧。</li>
+打好基础，也就是熟练掌握Makefile的语法。
+做好准备工作，也就是提前规划Makefile要实现的功能。
+进行规划，设计一个合理的Makefile结构。
+掌握方法，用好Makefile的编写技巧。
 </ol><p>那么接下来，我们就详细看看这些方法。</p><h2>熟练掌握Makefile语法</h2><p>工欲善其事，必先利其器。编写高质量Makefile的第一步，便是熟练掌握Makefile的核心语法。</p><p>因为Makefile的语法比较多，我把一些建议你重点掌握的语法放在了近期会更新的特别放送中，包括Makefile规则语法、伪目标、变量赋值、条件语句和Makefile常用函数等等。</p><p>如果你想更深入、全面地学习Makefile的语法，我推荐你学习陈皓老师编写的<a href="https://github.com/seisman/how-to-write-makefile">《跟我一起写 Makefile》 (PDF 重制版)</a>。</p><h2>规划Makefile要实现的功能</h2><p>接着，我们需要规划Makefile要实现的功能。提前规划好功能，有利于你设计Makefile的整体结构和实现方法。</p><p>不同项目拥有不同的Makefile功能，这些功能中一小部分是通过目标文件来实现的，但更多的功能是通过伪目标来实现的。对于Go项目来说，虽然不同项目集成的功能不一样，但绝大部分项目都需要实现一些通用的功能。接下来，我们就来看看，在一个大型Go项目中Makefile通常可以实现的功能。</p><p>下面是IAM项目的Makefile所集成的功能，希望会对你日后设计Makefile有一些帮助。</p><pre><code>$ make help
 
 Usage: make &lt;TARGETS&gt; &lt;OPTIONS&gt; ...
@@ -126,8 +126,8 @@ format: tools.verify.golines tools.verify.goimports
 install.golines:
   @$(GO) get -u github.com/segmentio/golines
 </code></pre><p>通过<code>tools.verify.%</code>规则定义，我们可以知道，<code>tools.verify.%</code>会先检查工具是否安装，如果没有安装，就会执行<code>tools.install.$*</code>来安装。如此一来，当我们执行<code>tools.verify.%</code>目标时，如果系统没有安装golines命令，就会自动调用<code>go get</code>安装，提高了Makefile的自动化程度。</p><h3>技巧4：把常用功能放在/Makefile中，不常用的放在分类Makefile中</h3><p>一个项目，尤其是大型项目，有很多需要管理的地方，其中大部分都可以通过Makefile实现自动化操作。不过，为了保持/Makefile文件的整洁性，我们不能把所有的命令都添加在/Makefile文件中。</p><p>一个比较好的建议是，将常用功能放在/Makefile中，不常用的放在分类Makefile中，并在/Makefile中include这些分类Makefile。</p><p>例如，IAM项目的/Makefile集成了<code>format</code>、<code>lint</code>、<code>test</code>、<code>build</code>等常用命令，而将<code>gen.errcode.code</code>、<code>gen.errcode.doc</code>这类不常用的功能放在scripts/make-rules/gen.mk文件中。当然，我们也可以直接执行 <code>make gen.errcode.code</code>来执行<code>gen.errcode.code</code>伪目标。通过这种方式，既可以保证/Makefile的简洁、易维护，又可以通过<code>make</code>命令来运行伪目标，更加灵活。</p><h3>技巧5：编写可扩展的Makefile</h3><p>什么叫可扩展的Makefile呢？在我看来，可扩展的Makefile包含两层含义：</p><ol>
-<li>可以在不改变Makefile结构的情况下添加新功能。</li>
-<li>扩展项目时，新功能可以自动纳入到Makefile现有逻辑中。</li>
+可以在不改变Makefile结构的情况下添加新功能。
+扩展项目时，新功能可以自动纳入到Makefile现有逻辑中。
 </ol><p>其中的第一点，我们可以通过设计合理的Makefile结构来实现。要实现第二点，就需要我们在编写Makefile时采用一定的技巧，例如多用通配符、自动变量、函数等。这里我们来看一个例子，可以让你更好地理解。</p><p>在我们IAM实战项目的<a href="https://github.com/marmotedu/iam/blob/v1.0.0/scripts/make-rules/golang.mk#L34">golang.mk</a>中，执行 <code>make go.build</code> 时能够构建cmd/目录下的所有组件，也就是说，当有新组件添加时， <code>make go.build</code> 仍然能够构建新增的组件，这就实现了上面说的第二点。</p><p>具体实现方法如下：</p><pre><code>COMMANDS ?= $(filter-out %.md, $(wildcard ${ROOT_DIR}/cmd/*))
 BINS ?= $(foreach cmd,${COMMANDS},$(notdir ${cmd}))
 
@@ -210,8 +210,8 @@ XARGS := xargs --no-run-if-empty
 make[1]: Entering directory `/home/colin/workspace/golang/src/github.com/marmotedu/iam'
 make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmotedu/iam'
 </code></pre><p>如果觉得<strong>Entering directory</strong>这类信息很烦人，可以通过设置 <code>MAKEFLAGS += --no-print-directory</code> 来禁止Makefile打印这些信息。</p><h2>总结</h2><p>如果你想要高效管理项目，使用Makefile来管理是目前的最佳实践。我们可以通过下面的几个方法，来编写一个高质量的Makefile。</p><p>首先，你需要熟练掌握Makefile的语法。我建议你重点掌握以下语法：Makefile规则语法、伪目标、变量赋值、特殊变量、自动化变量。</p><p>接着，我们需要提前规划Makefile要实现的功能。一个大型Go项目通常需要实现以下功能：代码生成类命令、格式化类命令、静态代码检查、 测试类命令、构建类命令、Docker镜像打包类命令、部署类命令、清理类命令，等等。</p><p>然后，我们还需要通过Makefile功能分类、文件分层、复杂命令脚本化等方式，来设计一个合理的Makefile结构。</p><p>最后，我们还需要掌握一些Makefile编写技巧，例如：善用通配符、自动变量和函数；编写可扩展的Makefile；使用带层级的命名方式，等等。通过这些技巧，可以进一步保证我们编写出一个高质量的Makefile。</p><h2>课后练习</h2><ol>
-<li>走读IAM项目的Makefile实现，看下IAM项目是如何通过 <code>make tools.install</code> 一键安装所有功能，通过 <code>make tools.install.xxx</code> 来指定安装 <code>xxx</code> 工具的。</li>
-<li>你编写Makefile的时候，还用到过哪些编写技巧呢？欢迎和我分享你的经验，或者你踩过的坑。</li>
+走读IAM项目的Makefile实现，看下IAM项目是如何通过 <code>make tools.install</code> 一键安装所有功能，通过 <code>make tools.install.xxx</code> 来指定安装 <code>xxx</code> 工具的。
+你编写Makefile的时候，还用到过哪些编写技巧呢？欢迎和我分享你的经验，或者你踩过的坑。
 </ol><p>期待在留言区看到你的思考和答案，也欢迎和我一起探讨关于Makefile的问题，我们下一讲见！</p>
 <style>
     ul {
@@ -322,7 +322,7 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -337,8 +337,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/ed/0a/18201290.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -353,8 +353,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/63/84/f45c4af9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -369,8 +369,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -385,8 +385,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -401,8 +401,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/5d/a7/1a6b74df.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -417,8 +417,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/16/6b/af7c7745.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -433,8 +433,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/16/6b/af7c7745.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -449,8 +449,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5b/66/ad35bc68.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -465,8 +465,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/b5/e6/c67f12bd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -481,8 +481,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -497,8 +497,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/e6/74/8b8097c1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -513,8 +513,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/cf/63/23db516f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -529,8 +529,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/66/04/1919d4b4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -545,8 +545,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/8e/62/5cb377fd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -561,8 +561,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5b/66/ad35bc68.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -577,8 +577,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/f5/0b/73628618.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -593,8 +593,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/ad/e6/bf43ee14.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -609,8 +609,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/60/4f/db0e62b3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -625,8 +625,8 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -641,5 +641,4 @@ make[1]: Leaving directory `/home/colin/workspace/golang/src/github.com/marmoted
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -1,13 +1,12 @@
+## Maven 插件使用
 
+https://github.com/OpenFeign/feign/blob/master/pom.xml：
 
-SonarQube
+- openrewrite：
 
-- [Dependency vulnerability checks with SonarQube](https://dimitri.codes/dependency-vulnerability-checks-sonarqube/)
-
-
-
-
-
-```
-${maven.multiModuleProjectDirectory}
-```
+- easy-jacoco-maven-plugin：合并 jacoco 报告，需要 java 17
+- maven-enforcer-plugin：限制不能使用快照版本
+- sundr-maven-plugin：使用 maven 插件创建 bom 模块
+- sortpom-maven-plugin：对  pom 排序
+- git-code-format-maven-plugin：使用 https://github.com/google/google-java-format 代码格式化
+- com.mycila:license-maven-plugin：添加 license

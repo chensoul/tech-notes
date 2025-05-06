@@ -10,30 +10,30 @@ Spring Bean生命周期比较复杂，可以分为创建和销毁两个过程。
 
 首先，创建Bean会经过一系列的步骤，主要包括：
 
-<li>
+
 实例化Bean对象。
-</li>
-<li>
+
+
 设置Bean属性。
-</li>
-<li>
+
+
 如果我们通过各种Aware接口声明了依赖关系，则会注入Bean对容器基础设施层面的依赖。具体包括BeanNameAware、BeanFactoryAware和ApplicationContextAware，分别会注入Bean ID、Bean Factory或者ApplicationContext。
-</li>
-<li>
+
+
 调用BeanPostProcessor的前置初始化方法postProcessBeforeInitialization。
-</li>
-<li>
+
+
 如果实现了InitializingBean接口，则会调用afterPropertiesSet方法。
-</li>
-<li>
+
+
 调用Bean自身定义的init方法。
-</li>
-<li>
+
+
 调用BeanPostProcessor的后置初始化方法postProcessAfterInitialization。
-</li>
-<li>
+
+
 创建过程完毕。
-</li>
+
 
 你可以参考下面示意图理解这个具体过程和先后顺序。<br />
 <img src="https://static001.geekbang.org/resource/image/3a/7e/3a51f06f56b905b8fbf1661359e1727e.png" alt="" />
@@ -42,26 +42,26 @@ Spring Bean生命周期比较复杂，可以分为创建和销毁两个过程。
 
 Spring Bean有五个作用域，其中最基础的有下面两种：
 
-<li>
+
 Singleton，这是Spring的默认作用域，也就是为每个IOC容器创建唯一的一个Bean实例。
-</li>
-<li>
+
+
 Prototype，针对每个getBean请求，容器都会单独创建一个Bean实例。
-</li>
+
 
 从Bean的特点来看，Prototype适合有状态的Bean，而Singleton则更适合无状态的情况。另外，使用Prototype作用域需要经过仔细思考，毕竟频繁创建和销毁Bean是有明显开销的。
 
 如果是Web容器，则支持另外三种作用域：
 
-<li>
+
 Request，为每个HTTP请求创建单独的Bean实例。
-</li>
-<li>
+
+
 Session，很显然Bean实例的作用域是Session范围。
-</li>
-<li>
+
+
 GlobalSession，用于Portlet容器，因为每个Portlet有单独的Session，GlobalSession提供一个全局性的HTTP Session。
-</li>
+
 
 ## 考点分析
 
@@ -73,15 +73,15 @@ GlobalSession，用于Portlet容器，因为每个Portlet有单独的Session，G
 
 言归正传，还是回到Spring的学习和面试。关于Spring，也许一整本书都无法完整涵盖其内容，专栏里我会有限地补充：
 
-<li>
+
 Spring的基础机制。
-</li>
-<li>
+
+
 Spring框架的涵盖范围。
-</li>
-<li>
+
+
 Spring AOP自身设计的一些细节，前面[第24讲](http://time.geekbang.org/column/article/10076)偏重于底层实现原理，这样还不够全面，毕竟不管是动态代理还是字节码操纵，都还只是基础，更需要Spring层面对切面编程的支持。
-</li>
+
 
 ## 知识扩展
 
@@ -99,15 +99,15 @@ Spring AOP自身设计的一些细节，前面[第24讲](http://time.geekbang.or
 
 广义上的Spring已经成为了一个庞大的生态系统，例如：
 
-<li>
+
 Spring Boot，通过整合通用实践，更加自动、智能的依赖管理等，Spring Boot提供了各种典型应用领域的快速开发基础，所以它是以应用为中心的一个框架集合。
-</li>
-<li>
+
+
 Spring Cloud，可以看作是在Spring Boot基础上发展出的更加高层次的框架，它提供了构建分布式系统的通用模式，包含服务发现和服务注册、分布式配置管理、负载均衡、分布式诊断等各种子系统，可以简化微服务系统的构建。
-</li>
-<li>
+
+
 当然，还有针对特定领域的Spring Security、Spring Data等。
-</li>
+
 
 上面的介绍比较笼统，针对这么多内容，如果将目标定得太过宽泛，可能就迷失在Spring生态之中，我建议还是深入你当前使用的模块，如Spring MVC。并且，从整体上把握主要前沿框架（如Spring Cloud）的应用范围和内部设计，至少要了解主要组件和具体用途，毕竟如何构建微服务等，已经逐渐成为Java应用开发面试的热点之一。
 
@@ -121,15 +121,15 @@ Spring Cloud，可以看作是在Spring Boot基础上发展出的更加高层次
 
 Spring AOP引入了其他几个关键概念：
 
-<li>
+
 Aspect，通常叫作方面，它是跨不同Java类层面的横切性逻辑。在实现形式上，既可以是XML文件中配置的普通类，也可以在类代码中用“@Aspect”注解去声明。在运行时，Spring框架会创建类似[Advisor](https://github.com/spring-projects/spring-framework/blob/master/spring-aop/src/main/java/org/springframework/aop/Advisor.java)来指代它，其内部会包括切入的时机（Pointcut）和切入的动作（Advice）。
-</li>
-<li>
+
+
 Join Point，它是Aspect可以切入的特定点，在Spring里面只有方法可以作为Join Point。
-</li>
-<li>
+
+
 [](https://github.com/spring-projects/spring-framework/blob/67ea4b3a050af3db5545f58ff85a0d132ee91c2a/spring-aop/src/main/java/org/aopalliance/aop/Advice.java)[Advice](https://github.com/spring-projects/spring-framework/blob/67ea4b3a050af3db5545f58ff85a0d132ee91c2a/spring-aop/src/main/java/org/aopalliance/aop/Advice.java)，它定义了切面中能够采取的动作。如果你去看Spring源码，就会发现Advice、Join Point并没有定义在Spring自己的命名空间里，这是因为他们是源自[AOP联盟](http://aopalliance.sourceforge.net/)，可以看作是Java工程师在AOP层面沟通的通用规范。
-</li>
+
 
 Java核心类库中同样存在类似代码，例如Java 9中引入的Flow API就是Reactive Stream规范的最小子集，通过这种方式，可以保证不同产品直接的无缝沟通，促进了良好实践的推广。
 
@@ -148,15 +148,15 @@ Java核心类库中同样存在类似代码，例如Java 9中引入的Flow API�
 
 <img src="https://static001.geekbang.org/resource/image/de/4a/dee96c33619d76d33281332bb3d2494a.png" alt="" />
 
-<li>
+
 Join Point仅仅是可利用的机会。
-</li>
-<li>
+
+
 Pointcut是解决了切面编程中的Where问题，让程序可以知道哪些机会点可以应用某个切面动作。
-</li>
-<li>
+
+
 而Advice则是明确了切面编程中的What，也就是做什么；同时通过指定Before、After或者Around，定义了When，也就是什么时候做。
-</li>
+
 
 在准备面试时，如果在实践中使用过AOP是最好的，否则你可以选择一个典型的AOP实例，理解具体的实现语法细节，因为在面试考察中也许会问到这些技术细节。
 

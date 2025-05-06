@@ -28,12 +28,12 @@
 
 对于我们来说，最常见的视频格式就是[MP4](https://zh.wikipedia.org/zh-cn/MP4)格式，这是一个通用的容器格式。所谓容器格式，就意味内部要有对应的数据流用来承载内容。而且既然是一个视频，那必然有音轨和视轨，而音轨、视轨本身也有对应的格式。常见的音轨、视轨格式包括：
 
-<li>
+
 视轨：[H.265(HEVC)](https://zh.wikipedia.org/wiki/%E9%AB%98%E6%95%88%E7%8E%87%E8%A7%86%E9%A2%91%E7%BC%96%E7%A0%81)、[H.264](https://zh.wikipedia.org/wiki/H.264/MPEG-4_AVC)。其中，目前大部分Android手机都支持H.264格式的直接硬件编码和解码；对于H.265来说，Android  5.0以上的机器就支持直接硬件解码了，但是对于硬件编码，目前只有一部分高端芯片可以支持，例如高通的8xx系列、华为的98x系列。对于视轨编码来说，分辨率越大性能消耗也就越大，编码所需的时间就越长。
-</li>
-<li>
+
+
 音轨：[AAC](https://zh.wikipedia.org/wiki/%E9%80%B2%E9%9A%8E%E9%9F%B3%E8%A8%8A%E7%B7%A8%E7%A2%BC)。这是一种历史悠久音频编码格式，Android手机基本可以直接硬件编解码，几乎很少遇到兼容性问题。可以说作为视频的音轨格式，AAC已经非常成熟了。
-</li>
+
 
 对于编码本身，上面提到的这些格式都是[有损编码](https://zh.wikipedia.org/zh-hans/%E6%9C%89%E6%8D%9F%E6%95%B0%E6%8D%AE%E5%8E%8B%E7%BC%A9)，因此压缩编码本身还需要一个衡量压缩之后，数据量多少的指标，这个标准就是[码率](https://zh.wikipedia.org/wiki/%E6%AF%94%E7%89%B9%E7%8E%87#%E5%A4%9A%E5%AA%92%E4%BD%93%E7%9A%84%E6%AF%94%E7%89%B9%E7%8E%87)。同一个压缩格式下，码率越高质量也就越好。更多Android本身支持的编解码格式，你可以参考[官方文档](https://developer.android.com/guide/topics/media/media-formats)。
 
@@ -81,12 +81,12 @@
 
 在当下视频类App中，你可以见到各种视频裁剪、视频编辑的功能，例如：
 
-<li>
+
 裁剪视频的一部分。
-</li>
-<li>
+
+
 多个视频进行拼接。
-</li>
+
 
 对于视频裁剪、拼接来说，Android直接提供了[MediaExtractor](https://developer.android.com/reference/android/media/MediaExtractor)的接口，结合seek以及对应读取帧数据readSampleData的接口，我们可以直接获取对应时间戳的帧的内容，这样读取出来的是已经编码好的数据，因此无需重新编码，直接可以输入合成器再次合成为MP4。
 
@@ -118,23 +118,23 @@
 
 任何视频类App都会涉及视频播放，从录制、剪辑再到播放，构成完整的视频体验。对于要播放一个MP4文件，最简单的方式莫过于直接使用系统的[MediaPlayer](https://developer.android.com/reference/android/media/MediaPlayer)，只需要简单几行代码，就能直接播放视频。对于本地视频播放来说，这是最简单的实现方式，但实际上我们可能会有更复杂的需求：
 
-<li>
+
 需要播放的视频可能本身并不在本地，很多可能都是网络视频，有边下边播的需求。
-</li>
-<li>
+
+
 播放的视频可能是作为视频编辑的一部分，在剪辑时需要实时预览视频特效。
-</li>
+
 
 对于第二种场景，我们可以简单配置播放视频的View为一个GLSurfaceView，有了OpenGL的环境，我们就可以在这上实现各种特效、滤镜的效果了。而对于视频编辑常见的快进、倒放之类的播放配置，MediaPlayer也有直接的接口可以设置。
 
 更为常见的是第一种场景，例如一个视频流界面，大部分视频都是在线视频，虽然MediaPlayer也能实现在线视频播放，但实际使用下来，会有两个问题：
 
-<li>
+
 通过设置MediaPlayer视频URL方式下载下来的视频，被放到了一个私有的位置，App不容易直接访问，这样会导致我们没法做视频预加载，而且之前已经播放完、缓冲完的视频，也不能重复利用原有缓冲内容。
-</li>
-<li>
+
+
 同视频剪辑直接使用MediaExtractor返回的数据问题一样，MediaPlayer同样无法精确seek，只能seek到有关键帧的地方。
-</li>
+
 
 对于第一个问题，我们可以通过视频URL代理下载的方式来解决，通过本地使用Local HTTP  Server的方式代理下载到一个指定的地方。现在开源社区已经有很成熟的项目实现，例如[AndroidVideoCache](http://AndroidVideoCache)。
 
@@ -167,30 +167,30 @@ ffmpeg -i input.mp4 -movflags faststart -acodec copy -vcodec copy output.mp4
 
 **语言**
 
-<li>
+
 C/C++：音视频开发经常需要跟底层代码打交道，掌握C/C++是必须的技能。这方面资料很多，相信我们都能找到。
-</li>
-<li>
+
+
 ARM NEON汇编：这是一项进阶技能，在视频编解码、各种帧处理低下时很多都是利用NEON汇编加速，例如FFmpeg/libyuv底层都大量利用了NEON汇编来加速处理过程。虽说它不是必备技能，但有兴趣也可以多多了解，具体资料可以参考ARM社区的[教程](https://community.arm.com/processors/b/blog/posts/coding-for-neon---part-1-load-and-stores)。
-</li>
+
 
 **框架**
 
-<li>
+
 [FFmpeg](https://ffmpeg.org/)：可以说是业界最出名的音视频处理框架了，几乎囊括音视频开发的所有流程，可以说是必备技能。
-</li>
-<li>
+
+
 [libyuv](https://chromium.googlesource.com/libyuv/libyuv/)：Google开源的YUV帧处理库，因为摄像头输出、编解码输入输出也是基于YUV格式，所以也经常需要这个库来操作数据（FFmpeg也有提供了这个库里面所有的功能，在[libswscale](https://www.ffmpeg.org/doxygen/2.7/swscale_8h.html)都可以找到类似的实现。不过这个库性能更好，也是基于NEON汇编加速）。
-</li>
-<li>
+
+
 [libx264](https://www.videolan.org/developers/x264.html)/[libx265](http://x265.org/)：目前业界最为广泛使用的H.264/H.265软编解码库。移动平台上虽然可以使用硬编码，但很多时候出于兼容性或画质的考虑，因为不少低端的Android机器，在低码率的场景下还是软编码的画质会更好，最终可能还是得考虑使用软编解码。
-</li>
-<li>
+
+
 [OpenGL ES](https://www.khronos.org/opengles/)：当今，大部分视频特效、美颜算法的处理，最终渲染都是基于GLES来实现的，因此想要深入音视频的开发，GLES是必备的知识。另外，除了GLES以外，[Vulkan](https://www.khronos.org/vulkan/)也是近几年开始发展起来的一个更高性能的图形API，但目前来看，使用还不是特别广泛。
-</li>
-<li>
+
+
 [ExoPlayer](https://github.com/google/ExoPlayer)/[ijkplayer](https://github.com/bilibili/ijkplayer)：一个完整的视频类App肯定会涉及视频播放的体验，这两个库可以说是当下业界最为常用的视频播放器了，支持众多格式、协议，如果你想要深入学习视频播放处理，它们几乎也算是必备技能。
-</li>
+
 
 从实际需求出发，基于上述技术栈，我们可以从下面两条路径来深入学习。
 

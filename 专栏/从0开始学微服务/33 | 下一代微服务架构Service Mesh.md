@@ -58,30 +58,30 @@ A service mesh is a dedicated infrastructure layer for handling service-to-servi
 
 既然SideCar能实现服务之间的调用拦截功能，那么服务之间的所有流量都可以通过SideCar来转发，这样的话所有的SideCar就组成了一个服务网格，再通过一个统一的地方与各个SideCar交互，就能控制网格中流量的运转了，这个统一的地方就在Sevice Mesh中就被称为Control Plane。如下图所示，Control Plane的主要作用包括以下几个方面：
 
-<li>
+
 服务发现。服务提供者会通过SideCar注册到Control Plane的注册中心，这样的话服务消费者把请求发送给SideCar后，SideCar就会查询Control Plane的注册中心来获取服务提供者节点列表。
-</li>
-<li>
+
+
 负载均衡。SideCar从Control Plane获取到服务提供者节点列表信息后，就需要按照一定的负载均衡算法从可用的节点列表中选取一个节点发起调用，可以通过Control Plane动态修改SideCar中的负载均衡配置。
-</li>
-<li>
+
+
 请求路由。SideCar从Control Plane获取的服务提供者节点列表，也可以通过Control Plane来动态改变，比如需要进行A/B测试、灰度发布或者流量切换时，就可以动态地改变请求路由。
-</li>
-<li>
+
+
 故障处理。服务之间的调用如果出现故障，就需要加以控制，通常的手段有超时重试、熔断等，这些都可以在SideCar转发请求时，通过Control Plane动态配置。
-</li>
-<li>
+
+
 安全认证。可以通过Control Plane控制一个服务可以被谁访问，以及访问哪些信息。
-</li>
-<li>
+
+
 监控上报。所有SideCar转发的请求信息，都会发送到Control Plane，再由Control Plane发送给监控系统，比如Prometheus等。
-</li>
-<li>
+
+
 日志记录。所有SideCar转发的日志信息，也会发送到Control Plane，再由Control Plane发送给日志系统，比如Stackdriver等。
-</li>
-<li>
+
+
 配额控制。可以在Control Plane里给服务的每个调用方配置最大调用次数，在SideCar转发请求给某个服务时，会审计调用是否超出服务对应的次数限制。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/74/62/746ba12fff2b184157b00ac44ec2e862.png" alt="">
 

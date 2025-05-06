@@ -46,12 +46,12 @@ SOAP 和 REST，由于概念层次上的不同，其实原本是无法放到一�
 
 2.这里的很多标签都带有“soap:”的前缀，其实，这里的“soap”就是 XML 的命名空间（其中“xmlns”就是指“xml namespace”），并且通过 XML schema 的方式预先定义好了如下两个 SOAP 消息必须要遵从的规则：
 
-<li>
+
 一个是代码片段第 3 行的 [soap-envelope](https://www.w3.org/2003/05/soap-envelope/)，它定义了基本的语法规则，比如标签的从属关系，比如同级某标签的个数限制等等，举例来说，你可以看到例子中有一个 Body 标签位于 Envelope 内部，这就是它定义的；
-</li>
-<li>
+
+
 另一个是代码片段第 4 行的 [soap-encoding](https://www.w3.org/2003/05/soap-encoding)，它定义了编码和数据类型等规则。
-</li>
+
 
 3.在 Body 标签内部，有一个 CreateBook 标签，这是我们的业务标签，命名空间 b 也是我们自己定义的。通过在内部封装姓名（Name）和作者（Author）等书本信息，实现了在图书馆中添加书本的需求。
 

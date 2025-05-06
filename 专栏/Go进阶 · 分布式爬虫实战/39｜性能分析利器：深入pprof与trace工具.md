@@ -41,18 +41,18 @@ func Run() {
 		}
 	}()
 }
-</code></pre><p>有了用于处理pprof请求的HTTP服务器之后，我们就可以调用相关的HTTP接口，获取性能相关的信息了。pprof的URL为debug/pprof/xxxx形式，最常用的 3 种 pprof 类型包括了堆内存分析（heap）、协程栈分析（goroutine）和 CPU 占用分析（profile）。</p><ul>
-<li>profile用于获取CPU相关信息，调用如下。</li>
-</ul><pre><code class="language-plain">curl -o cpu.out http://localhost:9981/debug/pprof/profile?seconds=30
-</code></pre><ul>
-<li>goroutine用于获取协程堆栈信息，调用如下。</li>
-</ul><pre><code class="language-plain">curl -o goroutine.out http://localhost:9981/debug/pprof/goroutine
-</code></pre><ul>
-<li>heap用于获取堆内存信息，调用如下。在实践中我们大多使用 heap 来分析内存分配情况。</li>
-</ul><pre><code class="language-plain">curl -o heap.out http://localhost:9981/debug/pprof/heap
-</code></pre><ul>
-<li>cmdline用于打印程序的启动命令，调用如下。</li>
-</ul><pre><code class="language-plain">» curl -o cmdline.out &lt;http://localhost:9981/debug/pprof/cmdline&gt;
+</code></pre><p>有了用于处理pprof请求的HTTP服务器之后，我们就可以调用相关的HTTP接口，获取性能相关的信息了。pprof的URL为debug/pprof/xxxx形式，最常用的 3 种 pprof 类型包括了堆内存分析（heap）、协程栈分析（goroutine）和 CPU 占用分析（profile）。</p>
+profile用于获取CPU相关信息，调用如下。
+<pre><code class="language-plain">curl -o cpu.out http://localhost:9981/debug/pprof/profile?seconds=30
+</code></pre>
+goroutine用于获取协程堆栈信息，调用如下。
+<pre><code class="language-plain">curl -o goroutine.out http://localhost:9981/debug/pprof/goroutine
+</code></pre>
+heap用于获取堆内存信息，调用如下。在实践中我们大多使用 heap 来分析内存分配情况。
+<pre><code class="language-plain">curl -o heap.out http://localhost:9981/debug/pprof/heap
+</code></pre>
+cmdline用于打印程序的启动命令，调用如下。
+<pre><code class="language-plain">» curl -o cmdline.out &lt;http://localhost:9981/debug/pprof/cmdline&gt;
 » cat  cmdline.out
 ./main master --id=2 --http=:8081 --grpc=:9091
 </code></pre><p>另外，block、threadcreate、mutex 这三种类型在实践中很少使用，一般只用于特定的场景分析。</p><p>获取到特征文件后，我们就可以开始具体地分析了。</p><p>一般我们使用 go tool pprof 来分析。</p><pre><code class="language-plain">» go tool pprof heap.out                                                                                                      jackson@bogon
@@ -170,13 +170,13 @@ Showing top 10 nodes out of 92
       4681  1.98% 91.79%       4681  1.98%  net/textproto.(*Reader).ReadMIMEHeader
       4096  1.73% 93.52%       4096  1.73%  crypto/sha256.New
 </code></pre><p>proof 工具还提供了强大的可视化功能，可以生成便于查看的图片或HTML文件。但实现这种功能需要先安装Graphviz（开源的可视化工具）。你可以在官网找到最新的下载方式，安装完成后，在pprof提示符中输入 Web 就可以在浏览器中看到资源分配的可视化结果了。</p><pre><code class="language-plain">(pprof) web
-</code></pre><p><img src="https://static001.geekbang.org/resource/image/af/42/afa1a9becb8446e0a952701e6fc61142.png?wh=1920x1275" alt="图片"></p><p>从图中，我们能够直观地看出当前函数的调用链、内存分配数量和比例，找出程序中内存分配的关键部分，越大的方框代表分配内存的次数更多。</p><p>我们来详细解读一下这张图片。</p><ul>
-<li>节点颜色： 红色代表累计值 cum 为正，并且很大； 绿色代表累计值 cum 为负，并且很大； 灰色代表累计值 cum 可以忽略不计。</li>
-<li>节点字体大小： 较大的字体代表当前值较大； 较小的字体代表当前值较小。</li>
-<li>边框颜色：当前值较大且为正数时为红色； 当前值较小且为负数时为绿色；当前值接近 0 时为灰色。</li>
-<li>箭头大小：箭头越粗代表当前的路径消耗的资源越多， 箭头越细代表当前的路径消耗的资源越小。</li>
-<li>箭头线型：虚线箭头表示两个节点之间的某些节点已被忽略，为间接调用；实线箭头表示两个节点之间为直接调用。</li>
-</ul><h3>pprof协程栈分析</h3><p>除了堆内存分析，协程栈分析使用得也比较多。分析协程栈有两个作用，一是查看协程的数量，判断协程是否泄漏；二是查看当前协程在重点执行哪些函数，判断当前协程是否健康。</p><p>下面这个例子，我们查看协程信息会发现，当前收集到了36个协程，程序总的协程数为37个。收集到的协程中，33个协程都位于runtime.gopark中，而runtime.gopark意味着协程陷入到了休眠状态。</p><pre><code class="language-plain">» go tool pprof &lt;http://localhost:9981/debug/pprof/goroutine&gt;                                                                   jackson@bogon
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/af/42/afa1a9becb8446e0a952701e6fc61142.png?wh=1920x1275" alt="图片"></p><p>从图中，我们能够直观地看出当前函数的调用链、内存分配数量和比例，找出程序中内存分配的关键部分，越大的方框代表分配内存的次数更多。</p><p>我们来详细解读一下这张图片。</p>
+节点颜色： 红色代表累计值 cum 为正，并且很大； 绿色代表累计值 cum 为负，并且很大； 灰色代表累计值 cum 可以忽略不计。
+节点字体大小： 较大的字体代表当前值较大； 较小的字体代表当前值较小。
+边框颜色：当前值较大且为正数时为红色； 当前值较小且为负数时为绿色；当前值接近 0 时为灰色。
+箭头大小：箭头越粗代表当前的路径消耗的资源越多， 箭头越细代表当前的路径消耗的资源越小。
+箭头线型：虚线箭头表示两个节点之间的某些节点已被忽略，为间接调用；实线箭头表示两个节点之间为直接调用。
+<h3>pprof协程栈分析</h3><p>除了堆内存分析，协程栈分析使用得也比较多。分析协程栈有两个作用，一是查看协程的数量，判断协程是否泄漏；二是查看当前协程在重点执行哪些函数，判断当前协程是否健康。</p><p>下面这个例子，我们查看协程信息会发现，当前收集到了36个协程，程序总的协程数为37个。收集到的协程中，33个协程都位于runtime.gopark中，而runtime.gopark意味着协程陷入到了休眠状态。</p><pre><code class="language-plain">» go tool pprof &lt;http://localhost:9981/debug/pprof/goroutine&gt;                                                                   jackson@bogon
 Fetching profile over HTTP from &lt;http://localhost:9981/debug/pprof/goroutine&gt;
 Saved profile in /Users/jackson/pprof/pprof.goroutine.015.pb.gz
 Type: goroutine
@@ -230,47 +230,47 @@ Showing nodes accounting for 2.46s, 100% of 2.46s total
 </code></pre><h3>pprof CPU占用分析</h3><p>在实践中，我们还会使用 pprof 来分析 CPU 的占用情况。它可以在不破坏原始程序的情况下估计出函数的执行时间，找出程序的瓶颈。</p><p>我们可以执行下面的指令进行 CPU 占用分析。其中，seconds 参数可以指定一共要分析的时间。下面的例子代表我们要花费60s收集CPU信息。</p><pre><code class="language-plain">curl -o cpu.out  &lt;http://localhost:9981/debug/pprof/profile?seconds=60&gt;
 </code></pre><p>收集到CPU信息后，我们一般会用下面的指令在Web页面里进行分析。</p><pre><code class="language-plain">go tool pprof -http=localhost:8000  cpu.out
 </code></pre><p>Worker的 CPU信息的可视化图像如下所示。<br>
-<img src="https://static001.geekbang.org/resource/image/bb/2b/bb7f872b046f0a6285668aef01aa372b.png?wh=1920x1485" alt="图片"></p><p>从图片中我们可以看出耗时最多的函数在哪里。例如，从第一列调用链可以看出，在我们探测的周期内，程序有14.29%的时间是在http.readLoop函数中工作，这个函数是http标准库中读取数据的协程。从整体上可以看出，我们的耗时主要是在网络数据处理上。用户协程的数据处理占用的CPU极少。</p><p>除此之外，我们还可以将上面的图像切换为火焰图。火焰图是用于分析CPU特征和性能的利器，因为它的形状和颜色像火焰而得名。火焰图可以快速准确地识别出使用最频繁的代码路径，让我们看到程序的瓶颈所在。</p><p>Go 1.11 之后，火焰图已经内置到了pprof 分析工具中，用于分析堆内存与CPU的使用情况。Web 页面的最上方为导航栏，可以查看之前提到的许多 pprof 分析指标，点击导航栏中VIEW 菜单下的Flame Graph 选项，可以切换到火焰图。如下所示，颜色最深的函数为HTTP请求的发送与接收。</p><p><img src="https://static001.geekbang.org/resource/image/96/72/9633c95b050f1ed5034d97c471723872.png?wh=1920x615" alt="图片"></p><p>我们以CPU 火焰图为例说明一下。</p><ul>
-<li>最上方的 root 框代表整个程序的开始，其他的框各代表一个函数。</li>
-<li>火焰图每一层的函数都是平级的，下层函数是它对应的上层函数的子函数。</li>
-<li>函数调用栈越长，火焰就越高。</li>
-<li>框越长、颜色越深，代表当前函数占用 CPU 的时间越久。</li>
-<li>可以单击任何框，查看该函数更详细的信息。</li>
-</ul><h2></h2><h2>trace及其使用方法</h2><p>通过 pprof 的分析，我们能够知道一段时间内的CPU 占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它并不能让我们了解整个周期内发生的具体事件，例如指定的 Goroutines 何时执行，执行了多长时间，什么时候陷入了堵塞，什么时候解除了堵塞，GC 是怎么影响单个 Goroutine 的执行的，STW 中断花费的时间是否太长等。而这正是 Go1.5 之后推出的trace 工具的强项，它提供了指定时间内程序中各事件的完整信息，具体如下。</p><ul>
-<li>协程的创建、开始和结束</li>
-<li>协程的堵塞，系统调用、通道和锁</li>
-<li>网络 I / O 相关事件</li>
-<li>系统调用事件</li>
-<li>垃圾回收相关事件</li>
-</ul><p>收集 trace 文件的方式和收集 pprof 特征文件也非常相似，主要有两种，一种是在程序中调用runtime/trace 包的接口。</p><pre><code class="language-plain">import "runtime/trace"
+<img src="https://static001.geekbang.org/resource/image/bb/2b/bb7f872b046f0a6285668aef01aa372b.png?wh=1920x1485" alt="图片"></p><p>从图片中我们可以看出耗时最多的函数在哪里。例如，从第一列调用链可以看出，在我们探测的周期内，程序有14.29%的时间是在http.readLoop函数中工作，这个函数是http标准库中读取数据的协程。从整体上可以看出，我们的耗时主要是在网络数据处理上。用户协程的数据处理占用的CPU极少。</p><p>除此之外，我们还可以将上面的图像切换为火焰图。火焰图是用于分析CPU特征和性能的利器，因为它的形状和颜色像火焰而得名。火焰图可以快速准确地识别出使用最频繁的代码路径，让我们看到程序的瓶颈所在。</p><p>Go 1.11 之后，火焰图已经内置到了pprof 分析工具中，用于分析堆内存与CPU的使用情况。Web 页面的最上方为导航栏，可以查看之前提到的许多 pprof 分析指标，点击导航栏中VIEW 菜单下的Flame Graph 选项，可以切换到火焰图。如下所示，颜色最深的函数为HTTP请求的发送与接收。</p><p><img src="https://static001.geekbang.org/resource/image/96/72/9633c95b050f1ed5034d97c471723872.png?wh=1920x615" alt="图片"></p><p>我们以CPU 火焰图为例说明一下。</p>
+最上方的 root 框代表整个程序的开始，其他的框各代表一个函数。
+火焰图每一层的函数都是平级的，下层函数是它对应的上层函数的子函数。
+函数调用栈越长，火焰就越高。
+框越长、颜色越深，代表当前函数占用 CPU 的时间越久。
+可以单击任何框，查看该函数更详细的信息。
+<h2></h2><h2>trace及其使用方法</h2><p>通过 pprof 的分析，我们能够知道一段时间内的CPU 占用、内存分配、协程堆栈信息。这些信息都是一段时间内数据的汇总，但是它并不能让我们了解整个周期内发生的具体事件，例如指定的 Goroutines 何时执行，执行了多长时间，什么时候陷入了堵塞，什么时候解除了堵塞，GC 是怎么影响单个 Goroutine 的执行的，STW 中断花费的时间是否太长等。而这正是 Go1.5 之后推出的trace 工具的强项，它提供了指定时间内程序中各事件的完整信息，具体如下。</p>
+协程的创建、开始和结束
+协程的堵塞，系统调用、通道和锁
+网络 I / O 相关事件
+系统调用事件
+垃圾回收相关事件
+<p>收集 trace 文件的方式和收集 pprof 特征文件也非常相似，主要有两种，一种是在程序中调用runtime/trace 包的接口。</p><pre><code class="language-plain">import "runtime/trace"
 
 trace.Start(f)
 defer trace.Stop()
 </code></pre><p>另一种方式仍然是使用pprof库。net/http/pprof 库中集成了 trace 的接口，下面这个例子，我们获取了 60s 内的trace 事件并存储到了trace.out 文件中。</p><pre><code class="language-plain">curl -o trace.out &lt;http://127.0.0.1:9981/debug/pprof/trace?seconds=60&gt;
 </code></pre><p>要对获取的文件进行分析，需要使用 trace 工具。</p><pre><code class="language-plain">go tool trace trace.out
 </code></pre><p>执行上面的命令会默认打开浏览器，显示出超链接信息。</p><p><img src="https://static001.geekbang.org/resource/image/7c/8f/7c757f55144d9f816ab01bfb959cc88f.png?wh=2200x1251" alt="图片"></p><p>这几个选项中最复杂、信息最丰富的当数第1 个 View trace 选项。点击它会出现一个交互式的可视化界面，它展示的是整个执行周期内的完整事件。</p><p><img src="https://static001.geekbang.org/resource/image/e3/0e/e36b1a931bd9d2782860170186726b0e.png?wh=1920x786" alt="图片"></p><p>我们来详细说明一下图中的信息。</p><ol>
-<li>时间线。显示的是执行的时间，时间单位可以放大或缩小，可以使用键盘快捷键（WASD） 浏览时间轴。</li>
-<li>堆内存。显示的是执行期间内存的分配情况，对于“查找内存泄漏”及“检查每次运行时 GC 释放的内存”非常有用。</li>
-<li>Goroutines。显示每个时间点正在运行的 Goroutine 的数量及可运行（等待调度）的Goroutine 的数量。如果存在大量可运行的 Goroutine，可能意味着调度器繁忙。</li>
-<li>操作系统线程。显示的是正在使用的操作系统线程数和被系统调用阻止的线程数。</li>
-<li>GC的情况。</li>
-<li>网络调用情况。</li>
-<li>系统调用情况。</li>
-<li>每个逻辑处理器的运行情况。</li>
-</ol><p>点击一个特定的协程，可以在下方信息框中看到许多协程的信息，具体包括下面几点。</p><p><img src="https://static001.geekbang.org/resource/image/91/d2/9125be1d1759613883637afa0335e4d2.png?wh=1920x1138" alt="图片"></p><ul>
-<li>Title：协程的名字。</li>
-<li>Start：协程开始的时间。</li>
-<li>Wall Duration：协程持续时间。</li>
-<li>Start Stack Trace：协程开始时的栈追踪。</li>
-<li>End Stack Trace：协程结束时的栈追踪。</li>
-<li>Event：协程产生的事件信息。</li>
-</ul><p>对上面的程序进行分析，我们可以得出下面几点结论。</p><ul>
-<li>程序每隔2秒钟进行一次网络调用，这是符合预期的，因为我们设置了任务的请求间隔。</li>
-<li>程序中有12个逻辑处理器P，每一个P中间都可以明显看到大量的间隙，这些间隙代表没有执行任何任务。</li>
-<li>查看Goroutines，会发现在任一时刻，当前存在的协程都并不多，表明当前程序并无太多需要执行的任务，还未达到系统的瓶颈。</li>
-<li>观察内存的使用情况，可以看到内存的占用很小，只有不到8MB。但内存的增长表现出了锯齿状。进一步观察，我们发现在60s内，执行了6次GC。点击触发GC的位置，会发现触发GC主要来自于ioutl.ReadAll函数。<br>
-<img src="https://static001.geekbang.org/resource/image/yy/1e/yyf0d321e6059bc4c57ea58c63a0b31e.png?wh=1920x1099" alt="图片"></li>
-</ul><p>接着查看函数堆栈信息，会发现我们在采集引擎中使用了ioutil.ReadAll读取数据。每一次HTTP请求都会新建一个切片，切片使用完毕后就变为了垃圾内存。因此我们可以考虑在此处复用内存，优化内存的分配，减少程序GC的频率。</p><pre><code class="language-plain">func (b BrowserFetch) Get(request *spider.Request) ([]byte, error) {
+时间线。显示的是执行的时间，时间单位可以放大或缩小，可以使用键盘快捷键（WASD） 浏览时间轴。
+堆内存。显示的是执行期间内存的分配情况，对于“查找内存泄漏”及“检查每次运行时 GC 释放的内存”非常有用。
+Goroutines。显示每个时间点正在运行的 Goroutine 的数量及可运行（等待调度）的Goroutine 的数量。如果存在大量可运行的 Goroutine，可能意味着调度器繁忙。
+操作系统线程。显示的是正在使用的操作系统线程数和被系统调用阻止的线程数。
+GC的情况。
+网络调用情况。
+系统调用情况。
+每个逻辑处理器的运行情况。
+</ol><p>点击一个特定的协程，可以在下方信息框中看到许多协程的信息，具体包括下面几点。</p><p><img src="https://static001.geekbang.org/resource/image/91/d2/9125be1d1759613883637afa0335e4d2.png?wh=1920x1138" alt="图片"></p>
+Title：协程的名字。
+Start：协程开始的时间。
+Wall Duration：协程持续时间。
+Start Stack Trace：协程开始时的栈追踪。
+End Stack Trace：协程结束时的栈追踪。
+Event：协程产生的事件信息。
+<p>对上面的程序进行分析，我们可以得出下面几点结论。</p>
+程序每隔2秒钟进行一次网络调用，这是符合预期的，因为我们设置了任务的请求间隔。
+程序中有12个逻辑处理器P，每一个P中间都可以明显看到大量的间隙，这些间隙代表没有执行任何任务。
+查看Goroutines，会发现在任一时刻，当前存在的协程都并不多，表明当前程序并无太多需要执行的任务，还未达到系统的瓶颈。
+观察内存的使用情况，可以看到内存的占用很小，只有不到8MB。但内存的增长表现出了锯齿状。进一步观察，我们发现在60s内，执行了6次GC。点击触发GC的位置，会发现触发GC主要来自于ioutl.ReadAll函数。<br>
+<img src="https://static001.geekbang.org/resource/image/yy/1e/yyf0d321e6059bc4c57ea58c63a0b31e.png?wh=1920x1099" alt="图片">
+<p>接着查看函数堆栈信息，会发现我们在采集引擎中使用了ioutil.ReadAll读取数据。每一次HTTP请求都会新建一个切片，切片使用完毕后就变为了垃圾内存。因此我们可以考虑在此处复用内存，优化内存的分配，减少程序GC的频率。</p><pre><code class="language-plain">func (b BrowserFetch) Get(request *spider.Request) ([]byte, error) {
 	...
 	bodyReader := bufio.NewReader(resp.Body)
 	e := DeterminEncoding(bodyReader)
@@ -406,7 +406,7 @@ pprof 的所有样本数据最后都会经过序列化被转为Protocol Buffers�
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ pprof 的所有样本数据最后都会经过序列化被转为Protocol Buffers�
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/75/00/618b20da.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,5 +437,4 @@ pprof 的所有样本数据最后都会经过序列化被转为Protocol Buffers�
   </div>
 </div>
 </div>
-</li>
-</ul>
+

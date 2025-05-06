@@ -259,9 +259,9 @@ func merge(cs []&lt;-chan int) &lt;-chan int {
 如果你还想了解更多类似的与并发相关的技术，我再给你推荐一些资源：
 
 - [Go Concurrency Patterns – Rob Pike – 2012 Google I/O presents the basics of Go‘s concurrency primitives and several ways to apply them.](https://www.youtube.com/watch?v=f6kdp27TYZs)
-<li>[Advanced Go Concurrency Patterns – Rob Pike – 2013 Google I/O](https://blog.golang.org/advanced-go-concurrency-patterns)<br>
-[covers more complex uses of Go’s primitives, especially select.](https://blog.golang.org/advanced-go-concurrency-patterns)</li>
-<li>[Squinting at Power Series – Douglas McIlroy's paper](https://swtch.com/~rsc/thread/squint.pdf)<br>
-[shows how Go-like concurrency provides elegant support for complex calculations.](https://swtch.com/~rsc/thread/squint.pdf)</li>
+- [Advanced Go Concurrency Patterns – Rob Pike – 2013 Google I/O](https://blog.golang.org/advanced-go-concurrency-patterns)
+- [covers more complex uses of Go’s primitives, especially select.](https://blog.golang.org/advanced-go-concurrency-patterns)
+- [Squinting at Power Series – Douglas McIlroy's paper](https://swtch.com/~rsc/thread/squint.pdf)
+- [shows how Go-like concurrency provides elegant support for complex calculations.](https://swtch.com/~rsc/thread/squint.pdf)
 
 好了，这节课就到这里。如果你觉得今天的内容对你有所帮助，欢迎你帮我分享给更多人。

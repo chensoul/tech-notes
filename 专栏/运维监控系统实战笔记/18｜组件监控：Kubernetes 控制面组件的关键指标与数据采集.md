@@ -162,10 +162,10 @@ spec:
 &nbsp; &nbsp; &nbsp; &nbsp; - name: prometheus-storage-volume
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; emptyDir: {}
 </code></pre><p>这里要注意的关键点，一个是 serviceAccountName，配置是 categraf，和前面创建的 ServiceAccount 对应，另一个是 args 部分，给出了相关的启动参数，<code>--enable-feature=agent</code> 就是作为 agent mode 模式运行。</p><p>最后，执行 <code>kubectl apply -f prometheus-agent-deployment.yaml</code>，让 Kubernetes 把 Deployment 拉起来就可以了。稍等片刻，去页面上查询一下 APIServer 的监控数据，理论上是可以查到的，但是其他组件的监控数据，大概率是没有的，下面我们来一一修复。</p><h3>修复Controller-manager和Scheduler</h3><p>上面的抓取规则走的都是 Kubernetes 服务发现机制，发现 endpoint，然后过滤。我们先通过下面的命令查看一下 kube-system 这个 namespace 下有哪些 endpoint。</p><pre><code class="language-yaml">kubectl get endpoints -n kube-system
-</code></pre><p>如果有 kube-controller-manager、kube-scheduler 这两个 endpoint，理论上通过上面的抓取规则就可以抓到数据，如果没有的话，我们可以创建相关的 service。</p><p>你可以参考我给出的这两个 YAML 文件来创建 service。</p><ul>
-<li><a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/controller-service.yaml">https://github.com/flashcatcloud/categraf/blob/main/k8s/controller-service.yaml</a></li>
-<li><a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/scheduler-service.yaml">https://github.com/flashcatcloud/categraf/blob/main/k8s/scheduler-service.yaml</a></li>
-</ul><p>另外就是得确保 Controller-manager 和 Scheduler 没有监听在 127.0.0.1，否则采集器落在其他机器上就访问不通了。具体怎么做呢？</p><p>在这两个组件的启动参数里加上 <code>--bind-address=0.0.0.0</code> 就可以了。如果是 Kubeadm 安装的，可以在 /etc/kubernetes/manifests/kube-controller-manager.yaml 和 /etc/kubernetes/manifests/kube-scheduler.yaml 里调整参数。调整完之后，理论上就可以抓到数据了。</p><h3>修复 etcd</h3><p>etcd 默认端口是 2379，如果从这个端口获取监控数据，就需要有比较复杂的认证鉴权。但其实etcd的监控数据也不是什么太关键的信息，而且是内网，直接开放就可以了。etcd提供了一个启动参数，可以为暴露监控指标单独监听一个地址。</p><p>具体参数是：</p><pre><code class="language-yaml">--listen-metrics-urls=http://0.0.0.0:2381
+</code></pre><p>如果有 kube-controller-manager、kube-scheduler 这两个 endpoint，理论上通过上面的抓取规则就可以抓到数据，如果没有的话，我们可以创建相关的 service。</p><p>你可以参考我给出的这两个 YAML 文件来创建 service。</p>
+<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/controller-service.yaml">https://github.com/flashcatcloud/categraf/blob/main/k8s/controller-service.yaml</a>
+<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/scheduler-service.yaml">https://github.com/flashcatcloud/categraf/blob/main/k8s/scheduler-service.yaml</a>
+<p>另外就是得确保 Controller-manager 和 Scheduler 没有监听在 127.0.0.1，否则采集器落在其他机器上就访问不通了。具体怎么做呢？</p><p>在这两个组件的启动参数里加上 <code>--bind-address=0.0.0.0</code> 就可以了。如果是 Kubeadm 安装的，可以在 /etc/kubernetes/manifests/kube-controller-manager.yaml 和 /etc/kubernetes/manifests/kube-scheduler.yaml 里调整参数。调整完之后，理论上就可以抓到数据了。</p><h3>修复 etcd</h3><p>etcd 默认端口是 2379，如果从这个端口获取监控数据，就需要有比较复杂的认证鉴权。但其实etcd的监控数据也不是什么太关键的信息，而且是内网，直接开放就可以了。etcd提供了一个启动参数，可以为暴露监控指标单独监听一个地址。</p><p>具体参数是：</p><pre><code class="language-yaml">--listen-metrics-urls=http://0.0.0.0:2381
 </code></pre><p>之后创建相关的 <a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/etcd-service-http.yaml">service</a> ，prometheus agent 就可以发现这个 HTTP 的 endpoint 了。</p><h3>修复 KSM</h3><p>KSM 是监控各类 Kubernetes 对象的组件，通过 KSM 我们可以知道 Service、Deployment、Statefulset、Node 等组件的各类元信息，比如某个 Deployment 期望有几个副本、实际有几个 Pod 在运行这种问题，就是靠 KSM 来回答的。KSM 是如何知道这些信息的呢？它需要跟 APIServer 通信，订阅各类资源对象的变更。下面我们安装一下 KSM，相关指标就有了。</p><pre><code class="language-yaml">git clone https://github.com/kubernetes/kube-state-metrics
 kubectl apply -f kube-state-metrics/examples/standard/
 </code></pre><p>KSM 在代码仓库里提供了相关的 YAML 文件，我们 clone 下来直接 apply 就可以。KSM 默认暴露了两个端口，8080 用于返回各类 Kubernetes 对象信息，8081 用于返回 KSM 自身的指标，我们在抓取规则里重点抓取的是 8080 的数据。</p><p>KSM 要返回所有 Kubernetes 对象的指标，数据量比较大，从 8080 拉取监控数据可能会拉取十几秒甚至几十秒，KSM 为此支持了分片逻辑，examples/standard 下面提供的 YAML 文件是把 KSM 部署为单副本的 Deployment，分片的话使用 Daemonset，每个 Node 上都跑一个 KSM，这个 KSM 只同步与自身节点相关的数据，KSM 的官方 README 里说得很清楚了，你可以看一下Daemonset 样例。</p><pre><code class="language-yaml">apiVersion: apps/v1
@@ -185,40 +185,40 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: spec.nodeName
-</code></pre><p>另外，KSM 提供了两种方式来过滤要 watch 的对象类型，一个是通过白名单的方式指定具体要 watch 哪类对象，通过命令行启动参数中的 <code>--resources=daemonsets,deployments</code>，表示只 watch daemonsets 和 deployments。虽然已经限制了对象资源类型，但如果采集的某些指标仍然不想要，可以采用黑名单的方式来过滤指标：<code>--metric-denylist=kube_deployment_spec_.*</code>。这个过滤规则支持正则写法，多个正则之间可以使用逗号分隔。</p><p>做完这些操作之后，我们就可以采集到这些组件的监控数据了，下面我们继续看哪些指标更为关键。</p><h2>关键指标</h2><p>Categraf 的代码仓库里已经内置了 Kubernetes 各个组件的监控大盘，只要是出现在监控大盘上的指标，理论上就是相对比较重要的，要不然也没有必要放到大盘上了。你可以看一下 <a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/apiserver-dash.json">APIServer</a>、<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/cm-dash.json">Controller-manager</a>、<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/scheduler-dash.json">Scheduler</a>、<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/etcd-dash.json">etcd</a>、<a href="https://github.com/flashcatcloud/categraf/tree/main/inputs/kube_state_metrics">KSM</a> 的大盘。</p><p>如果你使用 Grafana 来做可视化，可以参考下面两个项目中提供的 Dashboard。</p><ul>
-<li><a href="https://github.com/kubernetes-monitoring/kubernetes-mixin">https://github.com/kubernetes-monitoring/kubernetes-mixin</a></li>
-<li><a href="https://github.com/dotdc/grafana-dashboards-kubernetes">https://github.com/dotdc/grafana-dashboards-kubernetes</a></li>
-</ul><p>因为所有组件都是 Go 实现的，都暴露了 Go 程序通用的那些 CPU、内存、Goroutine、句柄等指标，这一部分内容我们在上一讲已经介绍过，这里不再赘述。下面我们分别看一下这几个组件一些其他类型的关键指标。</p><h3>APIServer</h3><p>APIServer 的核心职能是 Kubernetes 集群的 API 总入口，Kube-Proxy、Kubelet、Controller-Manager、Scheduler 等都需要调用 APIServer，所以 APIServer 的监控，完全按照 RED 方法论来梳理即可，最核心的就是请求吞吐和延迟。</p><ul>
-<li>apiserver_request_total：请求量的指标，可以统计每秒请求数、成功率。</li>
-<li>apiserver_request_duration_seconds：请求耗时的指标。</li>
-<li>apiserver_current_inflight_requests：APIServer 当前处理的请求数，分为 mutating（非 get、list、watch的请求）和 readOnly（get、list、watch请求）两种，请求量过大就会被限流，所以这个指标对我们观察容量水位很有帮助。</li>
-</ul><h3>Controller-manager</h3><p>Controller-manager 负责监听对象状态，并与期望状态做对比。如果状态不一致则进行调谐，重点关注的是<strong>任务数量、队列深度</strong>等。</p><ul>
-<li>workqueue_adds_total：各个 controller 接收到的任务总数。</li>
-<li>workqueue_depth：各个 controller 的队列深度，表示各个 controller 中的任务的数量，数量越大表示越繁忙。</li>
-<li>workqueue_queue_duration_seconds：任务在队列中的等待耗时，按照控制器分别统计。</li>
-<li>workqueue_work_duration_seconds：任务出队到被处理完成的时间，按照控制器分别统计。</li>
-<li>workqueue_retries_total：任务进入队列的重试次数。</li>
-</ul><h3>Scheduler</h3><p>Scheduler 在 Kubernetes 架构中负责把对象调度到合适的 Node 上，在这个过程中会有一系列的规则计算和筛选，重点关注<strong>调度</strong>这个动作的相关指标。</p><ul>
-<li>leader_election_master_status：调度器的选主状态，1表示master，0表示backup。</li>
-<li>scheduler_queue_incoming_pods_total：进入调度队列的 Pod 数量。</li>
-<li>scheduler_pending_pods：Pending 的 Pod 数量。</li>
-<li>scheduler_pod_scheduling_attempts：Pod 调度成功前，调度重试的次数分布。</li>
-<li>scheduler_framework_extension_point_duration_seconds：调度框架的扩展点延迟分布，按 extension_point 统计。</li>
-<li>scheduler_schedule_attempts_total：按照调度结果统计的尝试次数，“unschedulable”表示无法调度，“error”表示调度器内部错误。</li>
-</ul><h3>etcd</h3><p>etcd在 Kubernetes 的架构中作用巨大，相对也比较稳定，不过 etcd对硬盘 IO 要求较高，因此需要着重关注 IO 相关的指标，生产环境建议至少使用 SSD 的盘做存储。</p><ul>
-<li>etcd_server_has_leader ：etcd是否有 leader。</li>
-<li>etcd_server_leader_changes_seen_total：偶尔切主问题不大，频繁切主就要关注了。</li>
-<li>etcd_server_proposals_failed_total：提案失败次数。</li>
-<li>etcd_disk_backend_commit_duration_seconds：提交花费的耗时。</li>
-<li>etcd_disk_wal_fsync_duration_seconds  ：wal日志同步耗时。</li>
-</ul><h3>KSM</h3><p>Kube-state-metrics 这个组件，采集的很多指标都只是充当元信息，单独拿出来未必那么有用，但是和其他指标做 group_left、group_right 连接的时候可能又会很有用，还记得<a href="https://time.geekbang.org/column/article/623851">第 6 讲</a>介绍的那个按照 version 绘制饼图的例子吗？那就是个典型用法。下面我挑选一些相对常用的指标解释一下。</p><ul>
-<li>kube_node_status_condition：Node 节点状态，状态不正常、有磁盘压力等都可以通过这个指标发现。</li>
-<li>kube_pod_container_status_last_terminated_reason：容器停止原因。</li>
-<li>kube_pod_container_status_waiting_reason：容器处于 waiting 状态的原因。</li>
-<li>kube_pod_container_status_restarts_total：容器重启次数。</li>
-<li>kube_deployment_spec_replicas：deployment配置期望的副本数。</li>
-<li>kube_deployment_status_replicas_available：deployment 实际可用的副本数。</li>
-</ul><p>基于 KSM 数据的比较典型的告警规则，我也举个例子，让你有一个直观的认识。</p><pre><code class="language-yaml"># 长时间版本不一致需要告警
+</code></pre><p>另外，KSM 提供了两种方式来过滤要 watch 的对象类型，一个是通过白名单的方式指定具体要 watch 哪类对象，通过命令行启动参数中的 <code>--resources=daemonsets,deployments</code>，表示只 watch daemonsets 和 deployments。虽然已经限制了对象资源类型，但如果采集的某些指标仍然不想要，可以采用黑名单的方式来过滤指标：<code>--metric-denylist=kube_deployment_spec_.*</code>。这个过滤规则支持正则写法，多个正则之间可以使用逗号分隔。</p><p>做完这些操作之后，我们就可以采集到这些组件的监控数据了，下面我们继续看哪些指标更为关键。</p><h2>关键指标</h2><p>Categraf 的代码仓库里已经内置了 Kubernetes 各个组件的监控大盘，只要是出现在监控大盘上的指标，理论上就是相对比较重要的，要不然也没有必要放到大盘上了。你可以看一下 <a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/apiserver-dash.json">APIServer</a>、<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/cm-dash.json">Controller-manager</a>、<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/scheduler-dash.json">Scheduler</a>、<a href="https://github.com/flashcatcloud/categraf/blob/main/k8s/etcd-dash.json">etcd</a>、<a href="https://github.com/flashcatcloud/categraf/tree/main/inputs/kube_state_metrics">KSM</a> 的大盘。</p><p>如果你使用 Grafana 来做可视化，可以参考下面两个项目中提供的 Dashboard。</p>
+<a href="https://github.com/kubernetes-monitoring/kubernetes-mixin">https://github.com/kubernetes-monitoring/kubernetes-mixin</a>
+<a href="https://github.com/dotdc/grafana-dashboards-kubernetes">https://github.com/dotdc/grafana-dashboards-kubernetes</a>
+<p>因为所有组件都是 Go 实现的，都暴露了 Go 程序通用的那些 CPU、内存、Goroutine、句柄等指标，这一部分内容我们在上一讲已经介绍过，这里不再赘述。下面我们分别看一下这几个组件一些其他类型的关键指标。</p><h3>APIServer</h3><p>APIServer 的核心职能是 Kubernetes 集群的 API 总入口，Kube-Proxy、Kubelet、Controller-Manager、Scheduler 等都需要调用 APIServer，所以 APIServer 的监控，完全按照 RED 方法论来梳理即可，最核心的就是请求吞吐和延迟。</p>
+apiserver_request_total：请求量的指标，可以统计每秒请求数、成功率。
+apiserver_request_duration_seconds：请求耗时的指标。
+apiserver_current_inflight_requests：APIServer 当前处理的请求数，分为 mutating（非 get、list、watch的请求）和 readOnly（get、list、watch请求）两种，请求量过大就会被限流，所以这个指标对我们观察容量水位很有帮助。
+<h3>Controller-manager</h3><p>Controller-manager 负责监听对象状态，并与期望状态做对比。如果状态不一致则进行调谐，重点关注的是<strong>任务数量、队列深度</strong>等。</p>
+workqueue_adds_total：各个 controller 接收到的任务总数。
+workqueue_depth：各个 controller 的队列深度，表示各个 controller 中的任务的数量，数量越大表示越繁忙。
+workqueue_queue_duration_seconds：任务在队列中的等待耗时，按照控制器分别统计。
+workqueue_work_duration_seconds：任务出队到被处理完成的时间，按照控制器分别统计。
+workqueue_retries_total：任务进入队列的重试次数。
+<h3>Scheduler</h3><p>Scheduler 在 Kubernetes 架构中负责把对象调度到合适的 Node 上，在这个过程中会有一系列的规则计算和筛选，重点关注<strong>调度</strong>这个动作的相关指标。</p>
+leader_election_master_status：调度器的选主状态，1表示master，0表示backup。
+scheduler_queue_incoming_pods_total：进入调度队列的 Pod 数量。
+scheduler_pending_pods：Pending 的 Pod 数量。
+scheduler_pod_scheduling_attempts：Pod 调度成功前，调度重试的次数分布。
+scheduler_framework_extension_point_duration_seconds：调度框架的扩展点延迟分布，按 extension_point 统计。
+scheduler_schedule_attempts_total：按照调度结果统计的尝试次数，“unschedulable”表示无法调度，“error”表示调度器内部错误。
+<h3>etcd</h3><p>etcd在 Kubernetes 的架构中作用巨大，相对也比较稳定，不过 etcd对硬盘 IO 要求较高，因此需要着重关注 IO 相关的指标，生产环境建议至少使用 SSD 的盘做存储。</p>
+etcd_server_has_leader ：etcd是否有 leader。
+etcd_server_leader_changes_seen_total：偶尔切主问题不大，频繁切主就要关注了。
+etcd_server_proposals_failed_total：提案失败次数。
+etcd_disk_backend_commit_duration_seconds：提交花费的耗时。
+etcd_disk_wal_fsync_duration_seconds  ：wal日志同步耗时。
+<h3>KSM</h3><p>Kube-state-metrics 这个组件，采集的很多指标都只是充当元信息，单独拿出来未必那么有用，但是和其他指标做 group_left、group_right 连接的时候可能又会很有用，还记得<a href="https://time.geekbang.org/column/article/623851">第 6 讲</a>介绍的那个按照 version 绘制饼图的例子吗？那就是个典型用法。下面我挑选一些相对常用的指标解释一下。</p>
+kube_node_status_condition：Node 节点状态，状态不正常、有磁盘压力等都可以通过这个指标发现。
+kube_pod_container_status_last_terminated_reason：容器停止原因。
+kube_pod_container_status_waiting_reason：容器处于 waiting 状态的原因。
+kube_pod_container_status_restarts_total：容器重启次数。
+kube_deployment_spec_replicas：deployment配置期望的副本数。
+kube_deployment_status_replicas_available：deployment 实际可用的副本数。
+<p>基于 KSM 数据的比较典型的告警规则，我也举个例子，让你有一个直观的认识。</p><pre><code class="language-yaml"># 长时间版本不一致需要告警
 kube_deployment_status_observed_generation{job="kube-state-metrics"}
 !=
 kube_deployment_metadata_generation{job="kube-state-metrics"}
@@ -348,7 +348,7 @@ sum(increase(kube_pod_container_status_restarts_total[10m]) &gt; 0) by(namespace
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -363,8 +363,8 @@ sum(increase(kube_pod_container_status_restarts_total[10m]) &gt; 0) by(namespace
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/30/ff/ed/791d0f5e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -379,8 +379,8 @@ sum(increase(kube_pod_container_status_restarts_total[10m]) &gt; 0) by(namespace
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/08/8b/1b7d0463.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -395,8 +395,8 @@ sum(increase(kube_pod_container_status_restarts_total[10m]) &gt; 0) by(namespace
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/06/ff/e4828765.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -411,8 +411,8 @@ sum(increase(kube_pod_container_status_restarts_total[10m]) &gt; 0) by(namespace
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -427,5 +427,4 @@ sum(increase(kube_pod_container_status_restarts_total[10m]) &gt; 0) by(namespace
   </div>
 </div>
 </div>
-</li>
-</ul>
+

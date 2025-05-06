@@ -1,18 +1,18 @@
 <audio title="36｜打稳根基：怎么实现一个TCP服务器？（上）" src="https://static001.geekbang.org/resource/audio/43/eb/439c83ba1cabd54f31ca81b9e089a3eb.mp3" controls="controls"></audio> 
-<p>你好，我是Tony Bai。欢迎来到这门课的最后一个部分：实战篇。</p><p>在进入正文之前，我先来说点题外话。去年我读过一本名为<a href="https://book.douban.com/subject/26935989/">《陪孩子走过初中三年》</a>的书，书中作者女儿的初中班主任有一句“名言”：“跟上了！”作者对这句名言的解读是：学习上，她强调孩子们学习的时候不要掉队，意思是一要跟上老师的步子，上课认真听讲，课后老师留的作业要不打折扣地去完成；二也要跟上年级和班级的进度。只要能紧紧地跟上，学习就不会有太大的问题。</p><p>在前面课程的留言区，我也经常用“<strong>跟上了</strong>”作为学习这门课的建议，和我一起同步走到这里的同学，都是践行“跟上了”这句“名言”的典范，从开篇词到现在，你是不是已经感受到了自己在Go语言方面的进步了呢？</p><p>好了，我们言归正传。关于最后一篇写啥，我也想了许久。开篇词中提过，实战篇的职责是带着你走完Go语言学习的“最后一公里”，那究竟什么是“最后一公里呢？该如何理解这最后一公里呢？</p><p>我的理解是，在掌握了前面的Go语言语法的前提下，这“最后一公里”就是<strong>面对一个实际问题的解决思路</strong>。很多语言初学者都有这样一个问题，即便学完了语法，面对一个实际问题时，还是也不知道该从何处着手。</p><p>其实这个事并没有那么难，尤其是程序员这一行，遇到一个实际问题，我们通常使用这个思路：</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/2e/94/2e9979276111eac4e55689dfb4de0a94.jpg?wh=1126x586" alt="图片"></p><p>我们简单解释一下这张图。</p><p>首先是要理解问题。解决实际问题的过程起始于对问题的理解。我们要搞清楚为什么会有这个问题，问题究竟是什么。对于技术人员来说，最终目的是识别出可能要用到的技术点。</p><p>然后我们要对识别出的技术点，做相应的技术预研与储备。怎么做技术预研呢？我们至少要了解技术诞生的背景、技术的原理、技术能解决哪些问题以及不能解决哪些问题，还有技术的优点与不足，等等。当然，如果没有新技术点，可以忽略这一步。</p><p>最后，我们要基于技术预研和储备的结果，进行解决方案的设计与实现，这个是技术人最擅长的。</p><p>那为什么这个解决实际问题的步骤是一个循环呢？这是由问题的难易程度，以及人的认知能力有差别所决定的。如果问题简单或人的认知能力很强，我们可以一次性解决这个实际问题；如果问题复杂或人的认知能力稍弱，那么一个循环可能无法彻底解决这个问题，我们就会再一次进入该循环，直到问题得到完美解决。</p><p>你也看到了，这事儿说起来有些枯燥，那我们就来实践一下。在实战篇的这三讲中，我们就来“走一遍”这个过程。</p><p>那我们选一个什么例子呢？我们还是从<a href="https://go.dev/blog/survey2020-results">Go官方用户2020调查报告</a>中寻找答案，看看“我用Go在哪些领域开展工作”的调查结果：</p><p><img src="https://static001.geekbang.org/resource/image/1d/a4/1dd60015a47425a050142859c14c61a4.png?wh=1048x1242" alt="图片"></p><p>我们看到，“<strong>Web编程</strong>”和“<strong>网络编程</strong>”分别位列第一名和第四名，我们在09讲的小实战项目中曾接触过简单的Web编程，因此这里，我们选择一个不同于Web编程的网络编程的例子，做为实战篇的实战项目。在实战篇的三讲中，我们就参照这个实际问题解决过程循环，逐步来解决一个网络编程类的实际问题。</p><h3>什么是网络编程</h3><p>什么是网络编程呢？网络编程的范围很大，因为我们熟知的网络是分层的，OSI规定了七层参考模型，而实际上我们使用的主流网络模型实现，是TCP/IP模型，它只有四层：</p><p><img src="https://static001.geekbang.org/resource/image/13/26/1339ef73cbd62791byy28821fd5ed926.jpg?wh=1920x1047" alt="图片"></p><p>通常来说，我们更多关注OSI网络模型中的传输层（四层）与应用层（七层），也就是TCP/IP网络模型中的最上面两层。</p><p>TCP/IP网络模型，实现了两种传输层协议：TCP和UDP。TCP是面向连接的流协议，为通信的两端提供稳定可靠的数据传输服务；而UDP则提供了一种无需建立连接就可以发送数据包的方法。两种协议各有擅长的应用场景。</p><p>我们日常开发中使用最多的是TCP协议。基于TCP协议，我们实现了各种各样的满足用户需求的应用层协议。比如，我们常用的HTTP协议就是应用层协议的一种，而且是使用得最广泛的一种。而基于HTTP的Web编程就是一种针对应用层的网络编程。我们还可以<strong>基于传输层暴露给开发者的编程接口，实现应用层的自定义应用协议</strong>。</p><p>这个传输层暴露给开发者的编程接口，究竟是什么呢？目前各大主流操作系统平台中，最常用的传输层暴露给用户的网络编程接口，就是套接字（socket）。<strong>直接基于socket编程实现应用层通信业务，也是最常见的一种网络编程形式</strong>。</p><p>所以，这一节课，我们就使用一个基于socket网络编程的例子，我们先来看看这个例子对应的实际问题是什么。</p><h2>问题描述</h2><p>我们面临的实际问题是这样的：<strong>实现一个基于TCP的自定义应用层协议的通信服务端</strong>。仅仅这一句话，你可能还不是很清楚，我们展开说明一下。</p><p>我们的输入，是一个基于传输层自定义的应用层协议规范。由于TCP是面向连接的流协议传输机制，数据流本身没有明显的边界，这样定义协议时，就需要自行定义确定边界的方法，因此，基于TCP的自定义应用层协议通常有两种常见的定义模式：</p><ul>
-<li>
+<p>你好，我是Tony Bai。欢迎来到这门课的最后一个部分：实战篇。</p><p>在进入正文之前，我先来说点题外话。去年我读过一本名为<a href="https://book.douban.com/subject/26935989/">《陪孩子走过初中三年》</a>的书，书中作者女儿的初中班主任有一句“名言”：“跟上了！”作者对这句名言的解读是：学习上，她强调孩子们学习的时候不要掉队，意思是一要跟上老师的步子，上课认真听讲，课后老师留的作业要不打折扣地去完成；二也要跟上年级和班级的进度。只要能紧紧地跟上，学习就不会有太大的问题。</p><p>在前面课程的留言区，我也经常用“<strong>跟上了</strong>”作为学习这门课的建议，和我一起同步走到这里的同学，都是践行“跟上了”这句“名言”的典范，从开篇词到现在，你是不是已经感受到了自己在Go语言方面的进步了呢？</p><p>好了，我们言归正传。关于最后一篇写啥，我也想了许久。开篇词中提过，实战篇的职责是带着你走完Go语言学习的“最后一公里”，那究竟什么是“最后一公里呢？该如何理解这最后一公里呢？</p><p>我的理解是，在掌握了前面的Go语言语法的前提下，这“最后一公里”就是<strong>面对一个实际问题的解决思路</strong>。很多语言初学者都有这样一个问题，即便学完了语法，面对一个实际问题时，还是也不知道该从何处着手。</p><p>其实这个事并没有那么难，尤其是程序员这一行，遇到一个实际问题，我们通常使用这个思路：</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/2e/94/2e9979276111eac4e55689dfb4de0a94.jpg?wh=1126x586" alt="图片"></p><p>我们简单解释一下这张图。</p><p>首先是要理解问题。解决实际问题的过程起始于对问题的理解。我们要搞清楚为什么会有这个问题，问题究竟是什么。对于技术人员来说，最终目的是识别出可能要用到的技术点。</p><p>然后我们要对识别出的技术点，做相应的技术预研与储备。怎么做技术预研呢？我们至少要了解技术诞生的背景、技术的原理、技术能解决哪些问题以及不能解决哪些问题，还有技术的优点与不足，等等。当然，如果没有新技术点，可以忽略这一步。</p><p>最后，我们要基于技术预研和储备的结果，进行解决方案的设计与实现，这个是技术人最擅长的。</p><p>那为什么这个解决实际问题的步骤是一个循环呢？这是由问题的难易程度，以及人的认知能力有差别所决定的。如果问题简单或人的认知能力很强，我们可以一次性解决这个实际问题；如果问题复杂或人的认知能力稍弱，那么一个循环可能无法彻底解决这个问题，我们就会再一次进入该循环，直到问题得到完美解决。</p><p>你也看到了，这事儿说起来有些枯燥，那我们就来实践一下。在实战篇的这三讲中，我们就来“走一遍”这个过程。</p><p>那我们选一个什么例子呢？我们还是从<a href="https://go.dev/blog/survey2020-results">Go官方用户2020调查报告</a>中寻找答案，看看“我用Go在哪些领域开展工作”的调查结果：</p><p><img src="https://static001.geekbang.org/resource/image/1d/a4/1dd60015a47425a050142859c14c61a4.png?wh=1048x1242" alt="图片"></p><p>我们看到，“<strong>Web编程</strong>”和“<strong>网络编程</strong>”分别位列第一名和第四名，我们在09讲的小实战项目中曾接触过简单的Web编程，因此这里，我们选择一个不同于Web编程的网络编程的例子，做为实战篇的实战项目。在实战篇的三讲中，我们就参照这个实际问题解决过程循环，逐步来解决一个网络编程类的实际问题。</p><h3>什么是网络编程</h3><p>什么是网络编程呢？网络编程的范围很大，因为我们熟知的网络是分层的，OSI规定了七层参考模型，而实际上我们使用的主流网络模型实现，是TCP/IP模型，它只有四层：</p><p><img src="https://static001.geekbang.org/resource/image/13/26/1339ef73cbd62791byy28821fd5ed926.jpg?wh=1920x1047" alt="图片"></p><p>通常来说，我们更多关注OSI网络模型中的传输层（四层）与应用层（七层），也就是TCP/IP网络模型中的最上面两层。</p><p>TCP/IP网络模型，实现了两种传输层协议：TCP和UDP。TCP是面向连接的流协议，为通信的两端提供稳定可靠的数据传输服务；而UDP则提供了一种无需建立连接就可以发送数据包的方法。两种协议各有擅长的应用场景。</p><p>我们日常开发中使用最多的是TCP协议。基于TCP协议，我们实现了各种各样的满足用户需求的应用层协议。比如，我们常用的HTTP协议就是应用层协议的一种，而且是使用得最广泛的一种。而基于HTTP的Web编程就是一种针对应用层的网络编程。我们还可以<strong>基于传输层暴露给开发者的编程接口，实现应用层的自定义应用协议</strong>。</p><p>这个传输层暴露给开发者的编程接口，究竟是什么呢？目前各大主流操作系统平台中，最常用的传输层暴露给用户的网络编程接口，就是套接字（socket）。<strong>直接基于socket编程实现应用层通信业务，也是最常见的一种网络编程形式</strong>。</p><p>所以，这一节课，我们就使用一个基于socket网络编程的例子，我们先来看看这个例子对应的实际问题是什么。</p><h2>问题描述</h2><p>我们面临的实际问题是这样的：<strong>实现一个基于TCP的自定义应用层协议的通信服务端</strong>。仅仅这一句话，你可能还不是很清楚，我们展开说明一下。</p><p>我们的输入，是一个基于传输层自定义的应用层协议规范。由于TCP是面向连接的流协议传输机制，数据流本身没有明显的边界，这样定义协议时，就需要自行定义确定边界的方法，因此，基于TCP的自定义应用层协议通常有两种常见的定义模式：</p>
+
 <p><strong>二进制模式：</strong>采用长度字段标识独立数据包的边界。采用这种方式定义的常见协议包括MQTT（物联网最常用的应用层协议之一）、SMPP（短信网关点对点接口协议）等；</p>
-</li>
-<li>
+
+
 <p><strong>文本模式</strong>：采用特定分隔符标识流中的数据包的边界，常见的包括HTTP协议等。</p>
-</li>
-</ul><p>相比之下，二进制模式要比文本模式编码更紧凑也更高效，所以我们这个问题中的自定义协议也采用了<strong>二进制模式</strong>，协议规范内容如下图：</p><p><img src="https://static001.geekbang.org/resource/image/70/21/70b43197100a790f3a78db50997c1d21.jpg?wh=1980x1080" alt=""></p><p>关于协议内容的分析，我们放到设计与实现的那一讲中再细说，这里我们再看一下使用这个协议的通信两端的通信流程：</p><p><img src="https://static001.geekbang.org/resource/image/bb/1e/bbf6078436ff91207cf6232ce7a66b1e.jpg?wh=1920x1047" alt="图片"></p><p>我们看到，这是一个典型的“请求/响应”通信模型。连接由客户端发起，建立连接后，客户端发起请求，服务端收到请求后处理并返回响应，就这样一个请求一个响应的进行下去，直到客户端主动断开连接为止。</p><p><strong>而我们的任务，就是实现支持这个协议通信的服务端。</strong></p><p>我们先假设各位小伙伴都没有亲自开发过类似的通信服务器，所以当理解完这个问题后，我们需要识别出解决这一问题可能使用到的技术点。不过这个问题并不复杂，我们可以很容易地识别出其中的技术点。</p><p>首先，前面说过socket是传输层给用户提供的编程接口，我们要进行的网络通信绕不开socket，因此我们首先需要了解socket编程模型。</p><p>其次，一旦通过socket将双方的连接建立后，剩下的就是通过网络I/O操作在两端收发数据了，学习基本网络I/O操作的方法与注意事项也必不可少。</p><p>最后，任何一端准备发送数据或收到数据后都要对数据进行操作，由于TCP是流协议，我们需要了解针对字节的操作。</p><p>按照问题解决循环，一旦识别出技术点，接下来我们要做的就是技术预研与储备。在Go中，字节操作基本上就是byte切片的操作，这些用法我们在第15讲中已经学过了。所以，这一讲，我们就来学习一下<strong>socket编程模型以及网络I/O操作</strong>，为后两讲的设计与实现打稳根基，做好铺垫。</p><h2>TCP Socket编程模型</h2><p>TCP Socket诞生以来，它的编程模型，也就是网络I/O模型已几经演化。网络I/O模型定义的是应用线程与操作系统内核之间的交互行为模式。我们通常用<strong>阻塞（Blocking）</strong>/<strong>非阻塞（Non-Blocking）</strong>来描述网络I/O模型。</p><p>阻塞/非阻塞，是以内核是否等数据全部就绪后，才返回（给发起系统调用的应用线程）来区分的。如果内核一直等到全部数据就绪才返回，这种行为模式就称为<strong>阻塞</strong>。如果内核查看数据就绪状态后，即便没有就绪也立即返回错误（给发起系统调用的应用线程），那么这种行为模式则称为<strong>非阻塞</strong>。</p><p>常用的网络I/O模型包括下面这几种：</p><ul>
-<li><strong>阻塞I/O(Blocking I/O)</strong></li>
-</ul><p>阻塞I/O是最常用的模型，这个模型下应用线程与内核之间的交互行为模式是这样的：</p><p><img src="https://static001.geekbang.org/resource/image/66/70/66e154f76d647a51b45fcfddf4697c70.jpg?wh=1920x1047" alt="图片"></p><p>我们看到，在<strong>阻塞I/O模型</strong>下，当用户空间应用线程，向操作系统内核发起I/O请求后（一般为操作系统提供的I/O系列系统调用），内核会尝试执行这个I/O操作，并等所有数据就绪后，将数据从内核空间拷贝到用户空间，最后系统调用从内核空间返回。而在这个期间内，用户空间应用线程将阻塞在这个I/O系统调用上，无法进行后续处理，只能等待。</p><p>因此，在这样的模型下，一个线程仅能处理一个网络连接上的数据通信。即便连接上没有数据，线程也只能阻塞在对Socket的读操作上（以等待对端的数据）。虽然这个模型对应用整体来说是低效的，但对开发人员来说，这个模型却是最容易实现和使用的，所以，各大平台在默认情况下都将Socket设置为阻塞的。</p><ul>
-<li><strong>非阻塞I/O（Non-Blocking I/O）</strong></li>
-</ul><p>非阻塞I/O模型下，应用线程与内核之间的交互行为模式是这样的：</p><p><img src="https://static001.geekbang.org/resource/image/4c/b3/4c5e3980f756e03b9ca023185b91b5b3.jpg?wh=1920x1047" alt="图片"></p><p>和阻塞I/O模型正相反，在<strong>非阻塞模型</strong>下，当用户空间线程向操作系统内核发起I/O请求后，内核会执行这个I/O操作，如果这个时候数据尚未就绪，就会立即将“未就绪”的状态以错误码形式（比如：EAGAIN/EWOULDBLOCK），返回给这次I/O系统调用的发起者。而后者就会根据系统调用的返回状态来决定下一步该怎么做。</p><p>在非阻塞模型下，位于用户空间的I/O请求发起者通常会通过轮询的方式，去一次次发起I/O请求，直到读到所需的数据为止。不过，这样的轮询是对CPU计算资源的极大浪费，因此，非阻塞I/O模型单独应用于实际生产的比例并不高。</p><ul>
-<li><strong>I/O多路复用（I/O Multiplexing）</strong></li>
-</ul><p>为了避免非阻塞I/O模型轮询对计算资源的浪费，同时也考虑到阻塞I/O模型的低效，开发人员首选的网络I/O模型，逐渐变成了建立在内核提供的多路复用函数select/poll等（以及性能更好的epoll等函数）基础上的<strong>I/O多路复用模型</strong>。</p><p>这个模型下，应用线程与内核之间的交互行为模式如下图：</p><p><img src="https://static001.geekbang.org/resource/image/93/b9/9389908c507b5efea24bf961b1d594b9.jpg?wh=1920x1047" alt="图片"></p><p>从图中我们看到，在这种模型下，应用线程首先将需要进行I/O操作的Socket，都添加到多路复用函数中（这里以select为例），然后阻塞，等待select系统调用返回。当内核发现有数据到达时，对应的Socket具备了通信条件，这时select函数返回。然后用户线程会针对这个Socket再次发起网络I/O请求，比如一个read操作。由于数据已就绪，这次网络I/O操作将得到预期的操作结果。</p><p>我们看到，相比于阻塞模型一个线程只能处理一个Socket的低效，I/O多路复用模型中，一个应用线程可以同时处理多个Socket。同时，I/O多路复用模型由内核实现可读/可写事件的通知，避免了非阻塞模型中轮询，带来的CPU计算资源浪费的问题。</p><p>目前，主流网络服务器采用的都是“I/O多路复用”模型，有的也结合了多线程。不过，<strong>I/O多路复用</strong>模型在支持更多连接、提升I/O操作效率的同时，也给使用者带来了不小的复杂度，以至于后面出现了许多高性能的I/O多路复用框架，比如：<a href="http://libevent.org/">libevent</a>、<a href="http://software.schmorp.de/pkg/libev.html">libev</a>、<a href="https://github.com/libuv/libuv">libuv</a>等，以帮助开发者简化开发复杂性，降低心智负担。</p><p>那么，在这三种socket编程模型中，Go语言使用的是哪一种呢？我们继续往下看。</p><h2>Go语言socket编程模型</h2><p>Go语言设计者考虑得更多的是Gopher的开发体验。前面我们也说过，阻塞I/O模型是对开发人员最友好的，也是心智负担最低的模型，而<strong>I/O多路复用</strong>的这种<strong>通过回调割裂执行流</strong>的模型，对开发人员来说还是过于复杂了，于是Go选择了为开发人员提供<strong>阻塞I/O模型</strong>，Gopher只需在Goroutine中以最简单、最易用的<strong>“阻塞I/O模型”</strong>的方式，进行Socket操作就可以了。</p><p>再加上，Go没有使用基于线程的并发模型，而是使用了开销更小的Goroutine作为基本执行单元，这让每个Goroutine处理一个TCP连接成为可能，并且在高并发下依旧表现出色。</p><p>不过，网络I/O操作都是系统调用，Goroutine执行I/O操作的话，一旦阻塞在系统调用上，就会导致M也被阻塞，为了解决这个问题，Go设计者将这个“复杂性”隐藏在Go运行时中，他们在运行时中实现了网络轮询器（netpoller)，netpoller的作用，就是只阻塞执行网络I/O操作的Goroutine，但不阻塞执行Goroutine的线程（也就是M）。</p><p>这样一来，对于Go程序的用户层（相对于Go运行时层）来说，它眼中看到的goroutine采用了“阻塞I/O模型”进行网络I/O操作，Socket都是“阻塞”的。</p><p>但实际上，这样的“假象”，是通过Go运行时中的netpoller <strong>I/O多路复用机制</strong>，“模拟”出来的，对应的、真实的底层操作系统Socket，实际上是非阻塞的。只是运行时拦截了针对底层Socket的系统调用返回的错误码，并通过<strong>netpoller</strong>和Goroutine调度，让Goroutine“阻塞”在用户层所看到的Socket描述符上。</p><p>比如：当用户层针对某个Socket描述符发起<code>read</code>操作时，如果这个Socket对应的连接上还没有数据，运行时就会将这个Socket描述符加入到netpoller中监听，同时发起此次读操作的Goroutine会被挂起。</p><p>直到Go运行时收到这个Socket数据可读的通知，Go运行时才会重新唤醒等待在这个Socket上准备读数据的那个Goroutine。而这个过程，从Goroutine的视角来看，就像是read操作一直阻塞在那个Socket描述符上一样。</p><p>而且，Go语言在网络轮询器（netpoller）中采用了I/O多路复用的模型。考虑到最常见的多路复用系统调用select有比较多的限制，比如：监听Socket的数量有上限（1024）、时间复杂度高，等等，Go运行时选择了在不同操作系统上，使用操作系统各自实现的高性能多路复用函数，比如：Linux上的epoll、Windows上的iocp、FreeBSD/MacOS上的kqueue、Solaris上的event port等，这样可以最大程度提高netpoller的调度和执行性能。</p><p>了解完Go socket编程模型后，接下来，我们就深入到几个常用的基于socket的网络I/O操作中，逐一了解一下这些操作的机制与注意事项。</p><h2>socket监听（listen）与接收连接（accept）</h2><p>socket编程的核心在于服务端，而服务端有着自己一套相对固定的套路：Listen+Accept。在这套固定套路的基础上，我们的服务端程序通常采用一个Goroutine处理一个连接，它的大致结构如下：</p><pre><code class="language-plain"> func handleConn(c net.Conn) {
+
+<p>相比之下，二进制模式要比文本模式编码更紧凑也更高效，所以我们这个问题中的自定义协议也采用了<strong>二进制模式</strong>，协议规范内容如下图：</p><p><img src="https://static001.geekbang.org/resource/image/70/21/70b43197100a790f3a78db50997c1d21.jpg?wh=1980x1080" alt=""></p><p>关于协议内容的分析，我们放到设计与实现的那一讲中再细说，这里我们再看一下使用这个协议的通信两端的通信流程：</p><p><img src="https://static001.geekbang.org/resource/image/bb/1e/bbf6078436ff91207cf6232ce7a66b1e.jpg?wh=1920x1047" alt="图片"></p><p>我们看到，这是一个典型的“请求/响应”通信模型。连接由客户端发起，建立连接后，客户端发起请求，服务端收到请求后处理并返回响应，就这样一个请求一个响应的进行下去，直到客户端主动断开连接为止。</p><p><strong>而我们的任务，就是实现支持这个协议通信的服务端。</strong></p><p>我们先假设各位小伙伴都没有亲自开发过类似的通信服务器，所以当理解完这个问题后，我们需要识别出解决这一问题可能使用到的技术点。不过这个问题并不复杂，我们可以很容易地识别出其中的技术点。</p><p>首先，前面说过socket是传输层给用户提供的编程接口，我们要进行的网络通信绕不开socket，因此我们首先需要了解socket编程模型。</p><p>其次，一旦通过socket将双方的连接建立后，剩下的就是通过网络I/O操作在两端收发数据了，学习基本网络I/O操作的方法与注意事项也必不可少。</p><p>最后，任何一端准备发送数据或收到数据后都要对数据进行操作，由于TCP是流协议，我们需要了解针对字节的操作。</p><p>按照问题解决循环，一旦识别出技术点，接下来我们要做的就是技术预研与储备。在Go中，字节操作基本上就是byte切片的操作，这些用法我们在第15讲中已经学过了。所以，这一讲，我们就来学习一下<strong>socket编程模型以及网络I/O操作</strong>，为后两讲的设计与实现打稳根基，做好铺垫。</p><h2>TCP Socket编程模型</h2><p>TCP Socket诞生以来，它的编程模型，也就是网络I/O模型已几经演化。网络I/O模型定义的是应用线程与操作系统内核之间的交互行为模式。我们通常用<strong>阻塞（Blocking）</strong>/<strong>非阻塞（Non-Blocking）</strong>来描述网络I/O模型。</p><p>阻塞/非阻塞，是以内核是否等数据全部就绪后，才返回（给发起系统调用的应用线程）来区分的。如果内核一直等到全部数据就绪才返回，这种行为模式就称为<strong>阻塞</strong>。如果内核查看数据就绪状态后，即便没有就绪也立即返回错误（给发起系统调用的应用线程），那么这种行为模式则称为<strong>非阻塞</strong>。</p><p>常用的网络I/O模型包括下面这几种：</p>
+<strong>阻塞I/O(Blocking I/O)</strong>
+<p>阻塞I/O是最常用的模型，这个模型下应用线程与内核之间的交互行为模式是这样的：</p><p><img src="https://static001.geekbang.org/resource/image/66/70/66e154f76d647a51b45fcfddf4697c70.jpg?wh=1920x1047" alt="图片"></p><p>我们看到，在<strong>阻塞I/O模型</strong>下，当用户空间应用线程，向操作系统内核发起I/O请求后（一般为操作系统提供的I/O系列系统调用），内核会尝试执行这个I/O操作，并等所有数据就绪后，将数据从内核空间拷贝到用户空间，最后系统调用从内核空间返回。而在这个期间内，用户空间应用线程将阻塞在这个I/O系统调用上，无法进行后续处理，只能等待。</p><p>因此，在这样的模型下，一个线程仅能处理一个网络连接上的数据通信。即便连接上没有数据，线程也只能阻塞在对Socket的读操作上（以等待对端的数据）。虽然这个模型对应用整体来说是低效的，但对开发人员来说，这个模型却是最容易实现和使用的，所以，各大平台在默认情况下都将Socket设置为阻塞的。</p>
+<strong>非阻塞I/O（Non-Blocking I/O）</strong>
+<p>非阻塞I/O模型下，应用线程与内核之间的交互行为模式是这样的：</p><p><img src="https://static001.geekbang.org/resource/image/4c/b3/4c5e3980f756e03b9ca023185b91b5b3.jpg?wh=1920x1047" alt="图片"></p><p>和阻塞I/O模型正相反，在<strong>非阻塞模型</strong>下，当用户空间线程向操作系统内核发起I/O请求后，内核会执行这个I/O操作，如果这个时候数据尚未就绪，就会立即将“未就绪”的状态以错误码形式（比如：EAGAIN/EWOULDBLOCK），返回给这次I/O系统调用的发起者。而后者就会根据系统调用的返回状态来决定下一步该怎么做。</p><p>在非阻塞模型下，位于用户空间的I/O请求发起者通常会通过轮询的方式，去一次次发起I/O请求，直到读到所需的数据为止。不过，这样的轮询是对CPU计算资源的极大浪费，因此，非阻塞I/O模型单独应用于实际生产的比例并不高。</p>
+<strong>I/O多路复用（I/O Multiplexing）</strong>
+<p>为了避免非阻塞I/O模型轮询对计算资源的浪费，同时也考虑到阻塞I/O模型的低效，开发人员首选的网络I/O模型，逐渐变成了建立在内核提供的多路复用函数select/poll等（以及性能更好的epoll等函数）基础上的<strong>I/O多路复用模型</strong>。</p><p>这个模型下，应用线程与内核之间的交互行为模式如下图：</p><p><img src="https://static001.geekbang.org/resource/image/93/b9/9389908c507b5efea24bf961b1d594b9.jpg?wh=1920x1047" alt="图片"></p><p>从图中我们看到，在这种模型下，应用线程首先将需要进行I/O操作的Socket，都添加到多路复用函数中（这里以select为例），然后阻塞，等待select系统调用返回。当内核发现有数据到达时，对应的Socket具备了通信条件，这时select函数返回。然后用户线程会针对这个Socket再次发起网络I/O请求，比如一个read操作。由于数据已就绪，这次网络I/O操作将得到预期的操作结果。</p><p>我们看到，相比于阻塞模型一个线程只能处理一个Socket的低效，I/O多路复用模型中，一个应用线程可以同时处理多个Socket。同时，I/O多路复用模型由内核实现可读/可写事件的通知，避免了非阻塞模型中轮询，带来的CPU计算资源浪费的问题。</p><p>目前，主流网络服务器采用的都是“I/O多路复用”模型，有的也结合了多线程。不过，<strong>I/O多路复用</strong>模型在支持更多连接、提升I/O操作效率的同时，也给使用者带来了不小的复杂度，以至于后面出现了许多高性能的I/O多路复用框架，比如：<a href="http://libevent.org/">libevent</a>、<a href="http://software.schmorp.de/pkg/libev.html">libev</a>、<a href="https://github.com/libuv/libuv">libuv</a>等，以帮助开发者简化开发复杂性，降低心智负担。</p><p>那么，在这三种socket编程模型中，Go语言使用的是哪一种呢？我们继续往下看。</p><h2>Go语言socket编程模型</h2><p>Go语言设计者考虑得更多的是Gopher的开发体验。前面我们也说过，阻塞I/O模型是对开发人员最友好的，也是心智负担最低的模型，而<strong>I/O多路复用</strong>的这种<strong>通过回调割裂执行流</strong>的模型，对开发人员来说还是过于复杂了，于是Go选择了为开发人员提供<strong>阻塞I/O模型</strong>，Gopher只需在Goroutine中以最简单、最易用的<strong>“阻塞I/O模型”</strong>的方式，进行Socket操作就可以了。</p><p>再加上，Go没有使用基于线程的并发模型，而是使用了开销更小的Goroutine作为基本执行单元，这让每个Goroutine处理一个TCP连接成为可能，并且在高并发下依旧表现出色。</p><p>不过，网络I/O操作都是系统调用，Goroutine执行I/O操作的话，一旦阻塞在系统调用上，就会导致M也被阻塞，为了解决这个问题，Go设计者将这个“复杂性”隐藏在Go运行时中，他们在运行时中实现了网络轮询器（netpoller)，netpoller的作用，就是只阻塞执行网络I/O操作的Goroutine，但不阻塞执行Goroutine的线程（也就是M）。</p><p>这样一来，对于Go程序的用户层（相对于Go运行时层）来说，它眼中看到的goroutine采用了“阻塞I/O模型”进行网络I/O操作，Socket都是“阻塞”的。</p><p>但实际上，这样的“假象”，是通过Go运行时中的netpoller <strong>I/O多路复用机制</strong>，“模拟”出来的，对应的、真实的底层操作系统Socket，实际上是非阻塞的。只是运行时拦截了针对底层Socket的系统调用返回的错误码，并通过<strong>netpoller</strong>和Goroutine调度，让Goroutine“阻塞”在用户层所看到的Socket描述符上。</p><p>比如：当用户层针对某个Socket描述符发起<code>read</code>操作时，如果这个Socket对应的连接上还没有数据，运行时就会将这个Socket描述符加入到netpoller中监听，同时发起此次读操作的Goroutine会被挂起。</p><p>直到Go运行时收到这个Socket数据可读的通知，Go运行时才会重新唤醒等待在这个Socket上准备读数据的那个Goroutine。而这个过程，从Goroutine的视角来看，就像是read操作一直阻塞在那个Socket描述符上一样。</p><p>而且，Go语言在网络轮询器（netpoller）中采用了I/O多路复用的模型。考虑到最常见的多路复用系统调用select有比较多的限制，比如：监听Socket的数量有上限（1024）、时间复杂度高，等等，Go运行时选择了在不同操作系统上，使用操作系统各自实现的高性能多路复用函数，比如：Linux上的epoll、Windows上的iocp、FreeBSD/MacOS上的kqueue、Solaris上的event port等，这样可以最大程度提高netpoller的调度和执行性能。</p><p>了解完Go socket编程模型后，接下来，我们就深入到几个常用的基于socket的网络I/O操作中，逐一了解一下这些操作的机制与注意事项。</p><h2>socket监听（listen）与接收连接（accept）</h2><p>socket编程的核心在于服务端，而服务端有着自己一套相对固定的套路：Listen+Accept。在这套固定套路的基础上，我们的服务端程序通常采用一个Goroutine处理一个连接，它的大致结构如下：</p><pre><code class="language-plain"> func handleConn(c net.Conn) {
      defer c.Close()
      for {
          // read from the connection
@@ -378,7 +378,7 @@ func (fd *FD) Write(p []byte) (int, error) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/1d/de/62bfa83f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -393,8 +393,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b0/6e/921cb700.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -409,8 +409,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ba/ce/fd45714f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -425,8 +425,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/3a/68/373b90c8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -441,8 +441,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ba/ce/fd45714f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -457,8 +457,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/31/2a/4e/a3f53cae.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -473,8 +473,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/f5/96/0cf9f3c7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -489,8 +489,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -505,8 +505,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/33/27/e5a74107.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -521,8 +521,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKEDxLO0wLibic5WkVl1x7TIL0fsxX1zl2GbRjutYQ89fGRrv2VKJtNmmJb32iarbcHROlmW8SOQsHag/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -537,8 +537,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/4a/d9/75dd7cf9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -553,8 +553,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/47/00/3202bdf0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -569,8 +569,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/2e/ca/469f7266.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -585,8 +585,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eo5vic8QksE4b8ricXxKrEWJyOX9pwiadhk3kvHYoLXoKRTWvbFCxibFTbExNQWDG4nvNfpic9t1umibKww/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -601,8 +601,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0a/da/dcf8f2b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -617,8 +617,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0a/da/dcf8f2b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -633,8 +633,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLBFkSq1oiaEMRjtyyv4ZpCI0OuaSsqs04ODm0OkZF6QhsAh3SvqhxibS2n7PLAVZE3QRSn5Hic0DyXg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -649,8 +649,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -665,8 +665,8 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -681,5 +681,4 @@ func (fd *FD) Write(p []byte) (int, error) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

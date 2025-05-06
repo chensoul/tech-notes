@@ -6,12 +6,12 @@
 
 这次我们的主要目标是使用AdaBoost预测房价，这是一个回归问题。除了对项目进行编码实战外，我希望你能掌握：
 
-<li>
+
 AdaBoost工具的使用，包括使用AdaBoost进行分类，以及回归分析。
-</li>
-<li>
+
+
 使用其他的回归工具，比如决策树回归，对比AdaBoost回归和决策树回归的结果。
-</li>
+
 
 ## 如何使用AdaBoost工具
 
@@ -33,21 +33,21 @@ from sklearn.ensemble import AdaBoostRegressor
 
 我们需要使用AdaBoostClassifier(base_estimator=None, n_estimators=50, learning_rate=1.0, algorithm=’SAMME.R’, random_state=None)这个函数，其中有几个比较主要的参数，我分别来讲解下：
 
-<li>
+
 base_estimator：代表的是弱分类器。在AdaBoost的分类器和回归器中都有这个参数，在AdaBoost中默认使用的是决策树，一般我们不需要修改这个参数，当然你也可以指定具体的分类器。
-</li>
-<li>
+
+
 n_estimators：算法的最大迭代次数，也是分类器的个数，每一次迭代都会引入一个新的弱分类器来增加原有的分类器的组合能力。默认是50。
-</li>
-<li>
+
+
 learning_rate：代表学习率，取值在0-1之间，默认是1.0。如果学习率较小，就需要比较多的迭代次数才能收敛，也就是说学习率和迭代次数是有相关性的。当你调整learning_rate的时候，往往也需要调整n_estimators这个参数。
-</li>
-<li>
+
+
 algorithm：代表我们要采用哪种boosting算法，一共有两种选择：SAMME 和SAMME.R。默认是SAMME.R。这两者之间的区别在于对弱分类权重的计算方式不同。
-</li>
-<li>
+
+
 random_state：代表随机数种子的设置，默认是None。随机种子是用来控制随机模式的，当随机种子取了一个值，也就确定了一种随机规则，其他人取这个值可以得到同样的结果。如果不设置随机种子，每次得到的随机数也就不同。
-</li>
+
 
 那么如何创建AdaBoost回归呢？
 

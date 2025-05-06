@@ -25,177 +25,177 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;溯本求源，吃透&#32;Docker！.md">00 溯本求源，吃透 Docker！.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Docker&#32;安装：入门案例带你了解容器技术原理.md">01  Docker 安装：入门案例带你了解容器技术原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;核心概念：镜像、容器、仓库，彻底掌握&#32;Docker&#32;架构核心设计理念.md">02  核心概念：镜像、容器、仓库，彻底掌握 Docker 架构核心设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;&#32;镜像使用：Docker&#32;环境下如何配置你的镜像？.md">03  镜像使用：Docker 环境下如何配置你的镜像？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;容器操作：得心应手掌握&#32;Docker&#32;容器基本操作.md">04  容器操作：得心应手掌握 Docker 容器基本操作.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;仓库访问：怎样搭建属于你的私有仓库？.md">05  仓库访问：怎样搭建属于你的私有仓库？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;最佳实践：如何在生产中编写最优&#32;Dockerfile？.md">06  最佳实践：如何在生产中编写最优 Dockerfile？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;Docker&#32;安全：基于内核的弱隔离系统如何保障安全性？.md">07  Docker 安全：基于内核的弱隔离系统如何保障安全性？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;容器监控：容器监控原理及&#32;cAdvisor&#32;的安装与使用.md">08  容器监控：容器监控原理及 cAdvisor 的安装与使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;资源隔离：为什么构建容器需要&#32;Namespace&#32;？.md">09  资源隔离：为什么构建容器需要 Namespace ？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;资源限制：如何通过&#32;Cgroups&#32;机制实现资源限制？.md">10  资源限制：如何通过 Cgroups 机制实现资源限制？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;组件组成：剖析&#32;Docker&#32;组件作用及其底层工作原理.md">11  组件组成：剖析 Docker 组件作用及其底层工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;网络模型：剖析&#32;Docker&#32;网络实现及&#32;Libnetwork&#32;底层原理.md">12  网络模型：剖析 Docker 网络实现及 Libnetwork 底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;数据存储：剖析&#32;Docker&#32;卷与持久化数据存储的底层原理.md">13  数据存储：剖析 Docker 卷与持久化数据存储的底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;文件存储驱动：AUFS&#32;文件系统原理及生产环境的最佳配置.md">14  文件存储驱动：AUFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;文件存储驱动：Devicemapper&#32;文件系统原理及生产环境的最佳配置.md">15  文件存储驱动：Devicemapper 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;文件存储驱动：OverlayFS&#32;文件系统原理及生产环境的最佳配置.md">16  文件存储驱动：OverlayFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（上）.md">17  原理实践：自己动手使用 Golang 开发 Docker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="18&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（下）.md">18  原理实践：自己动手使用 Golang 开发 Docker（下）.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;如何使用&#32;Docker&#32;Compose&#32;解决开发环境的依赖？.md">19  如何使用 Docker Compose 解决开发环境的依赖？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;如何在生产环境中使用&#32;Docker&#32;Swarm&#32;调度容器？.md">20  如何在生产环境中使用 Docker Swarm 调度容器？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;如何使&#32;Docker&#32;和&#32;Kubernetes&#32;结合发挥容器的最大价值？.md">21  如何使 Docker 和 Kubernetes 结合发挥容器的最大价值？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;多阶级构建：Docker&#32;下如何实现镜像多阶级构建？.md">22  多阶级构建：Docker 下如何实现镜像多阶级构建？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;DevOps：容器化后如何通过&#32;DevOps&#32;提高协作效能？.md">23  DevOps：容器化后如何通过 DevOps 提高协作效能？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;CICD：容器化后如何实现持续集成与交付？（上）.md">24  CICD：容器化后如何实现持续集成与交付？（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;CICD：容器化后如何实现持续集成与交付？（下）.md">25  CICD：容器化后如何实现持续集成与交付？（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;结束语&#32;&#32;展望未来：Docker&#32;的称霸之路.md">26 结束语  展望未来：Docker 的称霸之路.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -581,10 +581,10 @@ func readCommandArray() []string {
 </code></pre>
 <p>看到这么多代码你是不是有点懵？别担心，我帮你一一解读。</p>
 <p>上面文件中有两个比较重要的变量 InitCommand 和 RunCommand，它们的作用如下：</p>
-<ul>
-<li>RunCommand 是当我们执行 gocker run 命令时调用的函数，是实现 gocker run 的入口；</li>
-<li>InitCommand 是当我们执行 gocker run 时自动调用 gocker init 来初始化容器的一些环境。</li>
-</ul>
+
+RunCommand 是当我们执行 gocker run 命令时调用的函数，是实现 gocker run 的入口；
+InitCommand 是当我们执行 gocker run 时自动调用 gocker init 来初始化容器的一些环境。
+
 <h4>RunCommand （容器启动的入口）</h4>
 <p>我们先从 RunCommand 来分析：</p>
 <pre><code>var RunCommand = &amp;cli.Command{
@@ -707,18 +707,18 @@ func readCommandArray() []string {
 </code></pre>
 <p>RunCommand 变量实际上是一个 Command 结构体，这个结构体包含了四个变量。</p>
 <ol>
-<li>Name：定义一个启动命令，这里定义的是 run 命令，当执行 gocker run 时会调用该函数。</li>
-<li>Usage：<code>gocker run</code>命令的使用说明。</li>
-<li>Flags：执行<code>gocker run</code>命令可以传递的参数。</li>
-<li>Action： 该变量是真正的 gocker run 命令的入口， 主要做了以下事情：
-<ul>
-<li>校验 gocker run 传递的参数；</li>
-<li>构造一个 Pipe，把 gocker 的启动参数写入，方便在 init 进程中获取；</li>
-<li>定义 /proc/self/exe init 调用，相当于调用 gocker init ；</li>
-<li>创建五种命名空间用于资源隔离，分别为 Mount Namespace、UTS Namespace、IPC Namespace、PID Namespace 和 Net Namespace；</li>
-<li>调用 cmd.Start 函数，开始执行容器启动步骤，首先创建出来一个 namespace （上一步定义的五种namespace）隔离的进程，然后调用 /proc/self/exe，也就是调用 gocker init，执行 InitCommand 中定义的容器初始化步骤。</li>
-</ul>
-</li>
+Name：定义一个启动命令，这里定义的是 run 命令，当执行 gocker run 时会调用该函数。
+Usage：<code>gocker run</code>命令的使用说明。
+Flags：执行<code>gocker run</code>命令可以传递的参数。
+Action： 该变量是真正的 gocker run 命令的入口， 主要做了以下事情：
+
+校验 gocker run 传递的参数；
+构造一个 Pipe，把 gocker 的启动参数写入，方便在 init 进程中获取；
+定义 /proc/self/exe init 调用，相当于调用 gocker init ；
+创建五种命名空间用于资源隔离，分别为 Mount Namespace、UTS Namespace、IPC Namespace、PID Namespace 和 Net Namespace；
+调用 cmd.Start 函数，开始执行容器启动步骤，首先创建出来一个 namespace （上一步定义的五种namespace）隔离的进程，然后调用 /proc/self/exe，也就是调用 gocker init，执行 InitCommand 中定义的容器初始化步骤。
+
+
 </ol>
 <p>那么 InitCommand 究竟做了什么呢？</p>
 <h4>InitCommand（准备容器环境）</h4>
@@ -812,18 +812,18 @@ func readCommandArray() []string {
 <p>通过代码你能看出 InitCommand 都做了哪些容器启动前的准备工作吗？</p>
 <p>InitCommand 主要做了以下几件事情：</p>
 <ol>
-<li>获取当前运行目录；</li>
-<li>从 RunCommand 中获取用户传递的容器启动参数；</li>
-<li>修改当前进程运行的根目录为用户传递的 rootfs 目录；</li>
-<li>挂载容器自己的 proc 目录，使得容器中执行 ps 命令只能看到自己命名空间下的进程；</li>
-<li>设置容器的主机名称为 lagoudocker；</li>
-<li>执行 syscall.Exec 实现使用用户传递的启动命令替换当前 init 进程。</li>
+获取当前运行目录；
+从 RunCommand 中获取用户传递的容器启动参数；
+修改当前进程运行的根目录为用户传递的 rootfs 目录；
+挂载容器自己的 proc 目录，使得容器中执行 ps 命令只能看到自己命名空间下的进程；
+设置容器的主机名称为 lagoudocker；
+执行 syscall.Exec 实现使用用户传递的启动命令替换当前 init 进程。
 </ol>
 <p>这里有两个比较关键的技术点 pivotRoot 和 syscall.Exec。</p>
-<ul>
-<li>pivotRoot：pivotRoot 是一个系统调用，主要功能是改变当前进程的根目录，它可以把当前进程的根目录移动到我们传递的 rootfs 目录下，从而使得我们不仅能够看到指定目录，还可以看到它的子目录信息。</li>
-<li>syscall.Exec：syscall.Exec 是一个系统调用，这个系统调用可以实现执行指定的命令，但是并不创建新的进程，而是在当前的进程空间执行，替换掉正在执行的进程，复用同一个进程号。通过这种机制，才实现了我们在容器中看到的 1 号进程是我们传递的命令，而不是 init 进程。</li>
-</ul>
+
+pivotRoot：pivotRoot 是一个系统调用，主要功能是改变当前进程的根目录，它可以把当前进程的根目录移动到我们传递的 rootfs 目录下，从而使得我们不仅能够看到指定目录，还可以看到它的子目录信息。
+syscall.Exec：syscall.Exec 是一个系统调用，这个系统调用可以实现执行指定的命令，但是并不创建新的进程，而是在当前的进程空间执行，替换掉正在执行的进程，复用同一个进程号。通过这种机制，才实现了我们在容器中看到的 1 号进程是我们传递的命令，而不是 init 进程。
+
 <p>最后，总结下容器的完整创建流程:</p>
 <p>1.使用以下命令创建容器</p>
 <pre><code>gocker run -it -rootfs=/tmp/busybox /bin/sh
@@ -855,12 +855,12 @@ const cgroupsRoot = &quot;/sys/fs/cgroup&quot;
 }
 </code></pre>
 <p>接着定义 Cgroups 对象的一些操作方法，这样方便我们对当前容器的 cgroups 进程操作。方法定义如下。</p>
-<ul>
-<li>Apply：把容器的 pid 写入到对应子系统下的 tasks 文件中，使得 cgroups 限制对容器进程生效。</li>
-<li>Destroy：容器退出时删除对应的 cgroups 文件。</li>
-<li>SetCPULimit：将 CPU 限制值写入到 cpu.cfs_quota_us 文件中。</li>
-<li>SetMemoryLimit：将内存限制值写入 memory.limit_in_bytes 文件中。</li>
-</ul>
+
+Apply：把容器的 pid 写入到对应子系统下的 tasks 文件中，使得 cgroups 限制对容器进程生效。
+Destroy：容器退出时删除对应的 cgroups 文件。
+SetCPULimit：将 CPU 限制值写入到 cpu.cfs_quota_us 文件中。
+SetMemoryLimit：将内存限制值写入 memory.limit_in_bytes 文件中。
+
 <pre><code>func (c *Cgroups) Apply(pid int) error {
 
     if c.CPU != 0 {
@@ -1132,10 +1132,10 @@ KiB Swap:        0 total,        0 free,        0 used.  3141076 avail Mem
 <p>上一课时和本课时，我们一起安装了 golang，并且使用 golang 实现了一个精简版的 Docker，它具有基本的 namespace 隔离，并且还使用 cgroups 对容器进行了资源限制。</p>
 <p>这两个课时的关键技术我帮你总结如下。</p>
 <ol>
-<li>Linux 的 /proc 目录是一种“文件系统”，它存放于内存中，是一个虚拟的文件系统，/proc 目录存放了当前内核运行状态的一系列特殊的文件，你可以通过这些文件查看当前的进程信息。</li>
-<li>/proc/self/exe 是一个特殊的连接，执行该文件等同于执行当前程序的二进制文件</li>
-<li>pivotRoot 是一个系统调用，主要功能是改变当前进程的根目录，它可以把当前进程的根目录移动到我们传递的 rootfs 目录下</li>
-<li>syscall.Exec 是一个系统调用，这个系统调用可以实现新的进程直接替换正在执行的老的进程，并且复用老进程的 ID。</li>
+Linux 的 /proc 目录是一种“文件系统”，它存放于内存中，是一个虚拟的文件系统，/proc 目录存放了当前内核运行状态的一系列特殊的文件，你可以通过这些文件查看当前的进程信息。
+/proc/self/exe 是一个特殊的连接，执行该文件等同于执行当前程序的二进制文件
+pivotRoot 是一个系统调用，主要功能是改变当前进程的根目录，它可以把当前进程的根目录移动到我们传递的 rootfs 目录下
+syscall.Exec 是一个系统调用，这个系统调用可以实现新的进程直接替换正在执行的老的进程，并且复用老进程的 ID。
 </ol>
 <p>另外，容器的实现当然离不开 Linux 的 namespace 和 cgroups 这两项关键技术，有了 Linux 的这些关键技术才使得我们的容器可以顺利实现，可以说 Linux 是容器技术的基石。而容器的编写，我们不仅可以使用 Go 语言，也可以使用其他编程语言，甚至只使用 shell 命令也可以实现一个容器。</p>
 <p>那么，你可以使用 shell 命令实现一个精简版的 Docker 吗？思考后，不妨试着写一下。</p>

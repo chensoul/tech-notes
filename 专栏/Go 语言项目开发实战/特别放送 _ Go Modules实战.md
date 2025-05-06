@@ -1,9 +1,9 @@
 <audio title="特别放送 _ Go Modules实战" src="https://static001.geekbang.org/resource/audio/1d/b2/1d6ea9b5c08894349d423ce7ef3402b2.mp3" controls="controls"></audio> 
 <p>你好，我是孔令飞。</p><p>今天我们更新一期特别放送作为加餐。在 <a href="https://time.geekbang.org/column/article/416397">特别放送 | Go Modules依赖包管理全讲</a>中，我介绍了Go Modules的知识，里面内容比较多，你可能还不知道具体怎么使用Go Modules来为你的项目管理Go依赖包。</p><p>这一讲，我就通过一个具体的案例，带你一步步学习Go Modules的常见用法以及操作方法，具体包含以下内容：</p><ol>
-<li>准备一个演示项目。</li>
-<li>配置Go Modules。</li>
-<li>初始化Go包为Go模块。</li>
-<li>Go包依赖管理。</li>
+准备一个演示项目。
+配置Go Modules。
+初始化Go包为Go模块。
+Go包依赖管理。
 </ol><h2>准备一个演示项目</h2><p>为了演示Go Modules的用法，我们首先需要一个Demo项目。假设我们有一个hello的项目，里面有两个文件，分别是hello.go和hello_test.go，所在目录为<code>/home/lk/workspace/golang/src/github.com/marmotedu/gopractise-demo/modules/hello</code>。</p><p>hello.go文件内容为：</p><pre><code class="language-go">package hello
 
 func Hello() string {
@@ -20,22 +20,22 @@ func TestHello(t *testing.T) {
 	}
 }
 </code></pre><!-- [[[read_end]]] --><p>这时候，该目录包含了一个Go包，但还不是Go模块，因为没有go.mod件。接下来，我就给你演示下，如何将这个包变成一个Go模块，并执行Go依赖包的管理操作。这些操作共有10个步骤，下面我们来一步步看下。</p><h2>配置Go Modules</h2><ol>
-<li>打开Go Modules</li>
+打开Go Modules
 </ol><p>确保Go版本<code>&gt;=go1.11</code>，并开启Go Modules，可以通过设置环境变量<code>export GO111MODULE=on</code>开启。如果你觉得每次都设置比较繁琐，可以将<code>export GO111MODULE=on</code>追加到文件<code>$HOME/.bashrc</code>中，并执行 <code>bash</code> 命令加载到当前shell环境中。</p><ol start="2">
-<li>设置环境变量</li>
+设置环境变量
 </ol><p>对于国内的开发者来说，需要设置<code>export GOPROXY=https://goproxy.cn,direct</code>，这样一些被墙的包可以通过国内的镜像源安装。如果我们有一些模块存放在私有仓库中，也需要设置GOPRIVATE环境变量。</p><p>因为Go Modules会请求Go Checksum Database，Checksum Database国内也可能会访问失败，可以设置<code>export GOSUMDB=off</code>来关闭Checksum校验。对于一些模块，如果你希望不通过代理服务器，或者不校验<code>checksum</code>，也可以根据需要设置GONOPROXY和GONOSUMDB。</p><h2>初始化Go包为Go模块</h2><ol start="3">
-<li>创建一个新模块</li>
-</ol><p>你可以通过<code>go mod init</code>命令，初始化项目为Go Modules。 <code>init</code> 命令会在当前目录初始化并创建一个新的go.mod文件，也代表着创建了一个以项目根目录为根的Go Modules。如果当前目录已经存在go.mod文件，则会初始化失败。</p><p>在初始化Go Modules时，需要告知<code>go mod init</code>要初始化的模块名，可以指定模块名，例如<code>go mod init github.com/marmotedu/gopractise-demo/modules/hello</code>。也可以不指定模块名，让<code>init</code>自己推导。下面我来介绍下推导规则。</p><ul>
-<li>如果有导入路径注释，则使用注释作为模块名，比如：</li>
-</ul><pre><code class="language-bash">package hello // import "github.com/marmotedu/gopractise-demo/modules/hello"
-</code></pre><p>则模块名为<code>github.com/marmotedu/gopractise-demo/modules/hello</code>。</p><ul>
-<li>如果没有导入路径注释，并且项目位于GOPATH路径下，则模块名为绝对路径去掉<code>$GOPATH/src</code>后的路径名，例如<code>GOPATH=/home/lk/workspace/golang</code>，项目绝对路径为<code>/home/colin/workspace/golang/src/github.com/marmotedu/gopractise-demo/modules/hello</code>，则模块名为<code>github.com/marmotedu/gopractise-demo/modules/hello</code>。</li>
-</ul><p>初始化完成之后，会在当前目录生成一个go.mod文件：</p><pre><code class="language-bash">$ cat go.mod
+创建一个新模块
+</ol><p>你可以通过<code>go mod init</code>命令，初始化项目为Go Modules。 <code>init</code> 命令会在当前目录初始化并创建一个新的go.mod文件，也代表着创建了一个以项目根目录为根的Go Modules。如果当前目录已经存在go.mod文件，则会初始化失败。</p><p>在初始化Go Modules时，需要告知<code>go mod init</code>要初始化的模块名，可以指定模块名，例如<code>go mod init github.com/marmotedu/gopractise-demo/modules/hello</code>。也可以不指定模块名，让<code>init</code>自己推导。下面我来介绍下推导规则。</p>
+如果有导入路径注释，则使用注释作为模块名，比如：
+<pre><code class="language-bash">package hello // import "github.com/marmotedu/gopractise-demo/modules/hello"
+</code></pre><p>则模块名为<code>github.com/marmotedu/gopractise-demo/modules/hello</code>。</p>
+如果没有导入路径注释，并且项目位于GOPATH路径下，则模块名为绝对路径去掉<code>$GOPATH/src</code>后的路径名，例如<code>GOPATH=/home/lk/workspace/golang</code>，项目绝对路径为<code>/home/colin/workspace/golang/src/github.com/marmotedu/gopractise-demo/modules/hello</code>，则模块名为<code>github.com/marmotedu/gopractise-demo/modules/hello</code>。
+<p>初始化完成之后，会在当前目录生成一个go.mod文件：</p><pre><code class="language-bash">$ cat go.mod
 module github.com/marmotedu/gopractise-demo/modules/hello
 
 go 1.14
 </code></pre><p>文件内容表明，当前模块的导入路径为<code>github.com/marmotedu/gopractise-demo/modules/hello</code>，使用的Go版本是<code>go 1.14</code>。</p><p>如果要新增子目录创建新的package，则package的导入路径自动为 <code>模块名/子目录名</code> ：<code>github.com/marmotedu/gopractise-demo/modules/hello/&lt;sub-package-name&gt;</code>，不需要在子目录中再次执行<code>go mod init</code>。</p><p>比如，我们在hello目录下又创建了一个world包<code>world/world.go</code>，则world包的导入路径为<code>github.com/marmotedu/gopractise-demo/modules/hello/world</code>。</p><h2>Go包依赖管理</h2><ol start="4">
-<li>增加一个依赖</li>
+增加一个依赖
 </ol><p>Go Modules主要是用来对包依赖进行管理的，所以这里我们来给hello包增加一个依赖<code>rsc.io/quote</code>：</p><pre><code class="language-go">package hello
 
 import "rsc.io/quote"
@@ -65,19 +65,19 @@ rsc.io/quote v1.5.2 h1:w5fcysjrx7yqtD/aO+QwRjYZOKnaM9Uh2b40tElTs3Y=
 rsc.io/quote v1.5.2/go.mod h1:LzX7hefJvL54yjefDEDHNONDjII0t9xZLPXsUe+TKr0=
 rsc.io/sampler v1.3.0 h1:7uVkIFmeBqHfdjD+gZwtXXI+RODJ2Wc4O7MPEh/QiW4=
 rsc.io/sampler v1.3.0/go.mod h1:T1hPZKmBbMNahiBKFy5HrXp6adAjACjK9JXDnKaTXpA=
-</code></pre><p><code>go test</code>在执行时，还可以添加<code>-mod</code>选项，比如<code>go test -mod=vendor</code>。<code>-mod</code>有3个值，我来分别介绍下。</p><ul>
-<li>readonly：不更新go.mod，任何可能会导致go.mod变更的操作都会失败。通常用来检查go.mod文件是否需要更新，例如用在CI或者测试场景。</li>
-<li>vendor：从项目顶层目录下的vendor中导入包，而不是从模块缓存中导入包，需要确保vendor包完整准确。</li>
-<li>mod：从模块缓存中导入包，即使项目根目录下有vendor目录。</li>
-</ul><p>如果<code>go test</code>执行时没有<code>-mod</code>选项，并且项目根目录存在vendor目录，go.mod中记录的go版本大于等于<code>1.14</code>，此时<code>go test</code>执行效果等效于<code>go test -mod=vendor</code>。<code>-mod</code>标志同样适用于go build、go install、go run、go test、go list、go vet命令。</p><ol start="5">
-<li>查看所有依赖模块</li>
+</code></pre><p><code>go test</code>在执行时，还可以添加<code>-mod</code>选项，比如<code>go test -mod=vendor</code>。<code>-mod</code>有3个值，我来分别介绍下。</p>
+readonly：不更新go.mod，任何可能会导致go.mod变更的操作都会失败。通常用来检查go.mod文件是否需要更新，例如用在CI或者测试场景。
+vendor：从项目顶层目录下的vendor中导入包，而不是从模块缓存中导入包，需要确保vendor包完整准确。
+mod：从模块缓存中导入包，即使项目根目录下有vendor目录。
+<p>如果<code>go test</code>执行时没有<code>-mod</code>选项，并且项目根目录存在vendor目录，go.mod中记录的go版本大于等于<code>1.14</code>，此时<code>go test</code>执行效果等效于<code>go test -mod=vendor</code>。<code>-mod</code>标志同样适用于go build、go install、go run、go test、go list、go vet命令。</p><ol start="5">
+查看所有依赖模块
 </ol><p>我们可以通过<code>go list -m all</code>命令查看所有依赖模块：</p><pre><code class="language-bash">$ go list -m all
 github.com/marmotedu/gopractise-demo/modules/hello
 golang.org/x/text v0.0.0-20170915032832-14c0d48ead0c
 rsc.io/quote v1.5.2
 rsc.io/sampler v1.3.0
 </code></pre><p>可以看出，除了<code>rsc.io/quote v1.5.2</code>外，还间接依赖了其他模块。</p><ol start="6">
-<li>更新依赖</li>
+更新依赖
 </ol><p>通过<code>go list -m all</code>，我们可以看到模块依赖的<code>golang.org/x/text</code>模块版本是<code>v0.0.0</code>，我们可以通过<code>go get</code>命令，将其更新到最新版本，并观察测试是否通过：</p><pre><code class="language-bash">$ go get golang.org/x/text
 go: golang.org/x/text upgrade =&gt; v0.3.3
 $ go test
@@ -117,7 +117,7 @@ $ go test
 PASS
 ok  	github.com/marmotedu/gopractise-demo/modules/hello	0.004s
 </code></pre><p>可以看到，更新到<code>v1.3.1</code>版本，测试是通过的。<code>go get</code>还支持多种参数，如下表所示：</p><p><img src="https://static001.geekbang.org/resource/image/2b/f6/2b80e94c1e91bb18dea9c20695b25bf6.jpg?wh=2248x1496" alt=""></p><ol start="7">
-<li>添加一个新的major版本依赖</li>
+添加一个新的major版本依赖
 </ol><p>我们尝试添加一个新的函数<code>func Proverb</code>，该函数通过调用<code>rsc.io/quote/v3</code>的<code>quote.Concurrency</code>函数实现。</p><p>首先，我们在hello.go文件中添加新函数：</p><pre><code class="language-go">package hello
 
 import (
@@ -147,7 +147,7 @@ ok  	github.com/marmotedu/gopractise-demo/modules/hello	0.003s
 rsc.io/quote v1.5.2
 rsc.io/quote/v3 v3.1.0
 </code></pre><ol start="8">
-<li>升级到不兼容的版本</li>
+升级到不兼容的版本
 </ol><p>在上一步中，我们使用<code>rsc.io/quote v1</code>版本的<code>Hello()</code>函数。按照语义化版本规则，如果我们想升级<code>major</code>版本，可能面临接口不兼容的问题，需要我们变更代码。我们来看下<code>rsc.io/quote/v3</code>的函数：</p><pre><code class="language-bash">$ go doc rsc.io/quote/v3
 package quote // import "github.com/google/addlicense/golang/pkg/mod/rsc.io/quote/v3@v3.1.0"
 
@@ -175,7 +175,7 @@ func Proverb() string {
 PASS
 ok  	github.com/marmotedu/gopractise-demo/modules/hello	0.003s
 </code></pre><p>可以看到测试成功。</p><ol start="9">
-<li>删除不使用的依赖</li>
+删除不使用的依赖
 </ol><p>在上一步中，我们移除了<code>rsc.io/quote</code>包，但是它仍然存在于<code>go list -m all</code>和go.mod中，这时候我们要执行<code>go mod tidy</code>清理不再使用的依赖：</p><pre><code class="language-bash">$ go mod tidy
 [colin@dev hello]$ cat go.mod
 module github.com/marmotedu/gopractise-demo/modules/hello
@@ -188,28 +188,28 @@ require (
 	rsc.io/sampler v1.3.1 // indirect
 )
 </code></pre><ol start="10">
-<li>使用vendor</li>
+使用vendor
 </ol><p>如果我们想把所有依赖都保存起来，在Go命令执行时不再下载，可以执行<code>go mod vendor</code>，该命令会把当前项目的所有依赖都保存在项目根目录的vendor目录下，也会创建<code>vendor/modules.txt</code>文件，来记录包和模块的版本信息：</p><pre><code class="language-bash">$ go mod vendor
 $ ls
 go.mod  go.sum  hello.go  hello_test.go  vendor  world
 </code></pre><p>到这里，我就讲完了Go依赖包管理常用的10个操作。</p><h2>总结</h2><p>这一讲中，我详细介绍了如何使用Go Modules来管理依赖，它包括以下Go Modules操作：</p><ol>
-<li>打开Go Modules；</li>
-<li>设置环境变量；</li>
-<li>创建一个新模块；</li>
-<li>增加一个依赖；</li>
-<li>查看所有依赖模块；</li>
-<li>更新依赖；</li>
-<li>添加一个新的major版本依赖；</li>
-<li>升级到不兼容的版本；</li>
-<li>删除不使用的依赖。</li>
-<li>使用vendor。</li>
+打开Go Modules；
+设置环境变量；
+创建一个新模块；
+增加一个依赖；
+查看所有依赖模块；
+更新依赖；
+添加一个新的major版本依赖；
+升级到不兼容的版本；
+删除不使用的依赖。
+使用vendor。
 </ol><h2>课后练习</h2><ol>
-<li>
+
 <p>思考下，如何更新项目的所有依赖到最新的版本？</p>
-</li>
-<li>
+
+
 <p>思考下，如果我们的编译机器访问不了外网，如何通过Go Modules下载Go依赖包？</p>
-</li>
+
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -320,7 +320,7 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/25/06/13/e4f9f79b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -335,8 +335,8 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/45/be/a4182df4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -351,8 +351,8 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -367,8 +367,8 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Ge7uhlEVxicQT73YuomDPrVKI8UmhqxKWrhtO5GMNlFjrHWfd3HAjgaSribR4Pzorw8yalYGYqJI4VPvUyPzicSKg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -383,8 +383,8 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/b0/d3/200e82ff.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -399,8 +399,8 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJkOj8VUxLjDKp6jRWJrABnnsg7U1sMSkM8FO6ULPwrqNpicZvTQ7kwctmu38iaJYHybXrmbusd8trg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -415,5 +415,4 @@ go.mod  go.sum  hello.go  hello_test.go  vendor  world
   </div>
 </div>
 </div>
-</li>
-</ul>
+

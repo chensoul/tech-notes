@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -160,10 +160,10 @@
 <p>回到这个工程中，使用 springboot-webflux-3-mongodb 工程，工程如图：</p>
 <p><img src="assets/015e1df4d8af293c1ee69c79446b00271525498.png" alt="img" /></p>
 <p>目录核心如下：</p>
-<ul>
-<li>pom.xml 添加 Test 相关依赖；</li>
-<li>test / CityWebFluxControllerTest WebFlux API 测试类；</li>
-</ul>
+
+pom.xml 添加 Test 相关依赖；
+test / CityWebFluxControllerTest WebFlux API 测试类；
+
 <p><a href="https://github.com/JeffLi1993/springboot-learning-example">代码 GiHub 详见这里</a>。</p>
 <h3>POM 依赖</h3>
 <p>pom.xml 添加对应的测试依赖：</p>
@@ -222,13 +222,13 @@ public class CityWebFluxControllerTest {
 
 </code></pre>
 <p>代码详解：</p>
-<ul>
-<li>@WebFluxTest 注入了 WebTestClient 对象，用于测试 WebFlux 控制器，好处是快速，并无需启动完整 HTTP 容器。</li>
-<li>WebTestClient.post() 方法构造了 POST 测试请求，并使用 uri 指定路由。</li>
-<li>expectStatus() 用于验证返回状态是否为 ok()，即 200 返回码。</li>
-<li>expectBody(City.class) 用于验证返回对象体是为 City 对象，并利用 returnResult 获取对象。</li>
-<li>Assert 是以前我们常用的断言方法验证测试结果。</li>
-</ul>
+
+@WebFluxTest 注入了 WebTestClient 对象，用于测试 WebFlux 控制器，好处是快速，并无需启动完整 HTTP 容器。
+WebTestClient.post() 方法构造了 POST 测试请求，并使用 uri 指定路由。
+expectStatus() 用于验证返回状态是否为 ok()，即 200 返回码。
+expectBody(City.class) 用于验证返回对象体是为 City 对象，并利用 returnResult 获取对象。
+Assert 是以前我们常用的断言方法验证测试结果。
+
 <p>运行 Test，得到如图验证结果：</p>
 <p><img src="assets/da3ec656da4450f7042ecd20238735401525498.png" alt="file" /></p>
 <h3>工程运行方式</h3>

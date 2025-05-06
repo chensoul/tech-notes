@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -218,17 +218,17 @@
 <blockquote>
 <p>ElasticSearch 是基于Java平台的，所以先要安装Java</p>
 </blockquote>
-<ul>
-<li><strong>平台确认</strong></li>
-</ul>
+
+<strong>平台确认</strong>
+
 <p>这里我准备了一台Centos7虚拟机, 为方便选择后续安装的版本，所以需要看下系统版本信息。</p>
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="65170a0a1125332848554854514806000b110a16">[email&#160;protected]</a> ~]# uname -a
 Linux VM-0-14-centos 3.10.0-862.el7.x86_64 #1 SMP Fri Apr 20 16:44:24 UTC 2018 x86_64 x86_64 x86_64 GNU/Linux
     
 </code></pre>
-<ul>
-<li><strong>安装Java</strong></li>
-</ul>
+
+<strong>安装Java</strong>
+
 <p>安装 Elasticsearch 之前，你需要先安装一个较新的版本的 Java，最好的选择是，你可以从 <a href="https://www.java.com">www.java.com  </a> 获得官方提供的最新版本的 Java。安装以后，确认是否安装成功：</p>
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="067469697246504b2b362b37322b656368726975">[email&#160;protected]</a> ~]# java --version
 openjdk 14.0.2 2020-07-14
@@ -236,9 +236,9 @@ OpenJDK Runtime Environment 20.3 (slowdebug build 14.0.2+12)
 OpenJDK 64-Bit Server VM 20.3 (slowdebug build 14.0.2+12, mixed mode, sharing)
     
 </code></pre>
-<ul>
-<li><strong>下载ElasticSearch</strong></li>
-</ul>
+
+<strong>下载ElasticSearch</strong>
+
 <p>从<a href="https://www.elastic.co/cn/downloads/elasticsearch">这里  </a>下载ElasticSearch</p>
 <p>比如可以通过curl下载</p>
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="10627f7f6450465d3d203d21243d73757e647f63">[email&#160;protected]</a> opt]# curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.12.0-linux-x86_64.tar.gz
@@ -246,9 +246,9 @@ OpenJDK 64-Bit Server VM 20.3 (slowdebug build 14.0.2+12, mixed mode, sharing)
                                  Dload  Upload   Total   Spent    Left  Speed
     
 </code></pre>
-<ul>
-<li><strong>解压</strong></li>
-</ul>
+
+<strong>解压</strong>
+
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e1938e8e95a1b7acccd1ccd0d5cc82848f958e92">[email&#160;protected]</a> opt]# tar zxvf /opt/elasticsearch-7.12.0-linux-x86_64.tar.gz 
 ...
 [<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="067469697246504b2b362b37322b656368726975">[email&#160;protected]</a> opt]# ll | grep elasticsearch
@@ -256,9 +256,9 @@ drwxr-xr-x  9 root root      4096 Mar 18 14:21 elasticsearch-7.12.0
 -rw-r--r--  1 root root 327497331 Apr  5 21:05 elasticsearch-7.12.0-linux-x86_64.tar.gz
     
 </code></pre>
-<ul>
-<li><strong>增加elasticSearch用户</strong></li>
-</ul>
+
+<strong>增加elasticSearch用户</strong>
+
 <p>必须创建一个非root用户来运行ElasticSearch(ElasticSearch5及以上版本，基于安全考虑，强制规定不能以root身份运行。)</p>
 <p>如果你使用root用户来启动ElasticSearch，则会有如下错误信息：</p>
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="275548485367716a0a170a16130a444249534854">[email&#160;protected]</a> opt]# cd elasticsearch-7.12.0/
@@ -326,13 +326,13 @@ path.data: /data/es
 path.logs: /var/log/es
     
 </code></pre>
-<ul>
-<li><strong>修改Linux系统的限制配置</strong></li>
-</ul>
+
+<strong>修改Linux系统的限制配置</strong>
+
 <ol>
-<li>修改系统中允许应用最多创建多少文件等的限制权限。Linux默认来说，一般限制应用最多创建的文件是65535个。但是ES至少需要65536的文件创建权限。</li>
-<li>修改系统中允许用户启动的进程开启多少个线程。默认的Linux限制root用户开启的进程可以开启任意数量的线程，其他用户开启的进程可以开启1024个线程。必须修改限制数为4096+。因为ES至少需要4096的线程池预备。ES在5.x版本之后，强制要求在linux中不能使用root用户启动ES进程。所以必须使用其他用户启动ES进程才可以。</li>
-<li>Linux低版本内核为线程分配的内存是128K。4.x版本的内核分配的内存更大。如果虚拟机的内存是1G，最多只能开启3000+个线程数。至少为虚拟机分配1.5G以上的内存。</li>
+修改系统中允许应用最多创建多少文件等的限制权限。Linux默认来说，一般限制应用最多创建的文件是65535个。但是ES至少需要65536的文件创建权限。
+修改系统中允许用户启动的进程开启多少个线程。默认的Linux限制root用户开启的进程可以开启任意数量的线程，其他用户开启的进程可以开启1024个线程。必须修改限制数为4096+。因为ES至少需要4096的线程池预备。ES在5.x版本之后，强制要求在linux中不能使用root用户启动ES进程。所以必须使用其他用户启动ES进程才可以。
+Linux低版本内核为线程分配的内存是128K。4.x版本的内核分配的内存更大。如果虚拟机的内存是1G，最多只能开启3000+个线程数。至少为虚拟机分配1.5G以上的内存。
 </ol>
 <p>修改如下配置</p>
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c6e7373685c4a51312c312d28317f797268736f">[email&#160;protected]</a> elasticsearch-7.12.0]# vi /etc/security/limits.conf
@@ -343,9 +343,9 @@ elasticsearch soft nproc 4096
 elasticsearch hard nproc 4096
     
 </code></pre>
-<ul>
-<li><strong>启动ElasticSearch</strong></li>
-</ul>
+
+<strong>启动ElasticSearch</strong>
+
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="85f7eaeaf1c5d3c8a8b5a8b4b1a8e6e0ebf1eaf6">[email&#160;protected]</a> elasticsearch-7.12.0]# su elasticsearch
 [<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="06636a6775726f6575636774656e46504b2b362b37322b656368726975">[email&#160;protected]</a> elasticsearch-7.12.0]$ ./bin/elasticsearch -d
 [2021-04-05T22:03:38,332][INFO ][o.e.n.Node               ] [VM-0-14-centos] version[7.12.0], pid[13197], build[default/tar/78722783c38caa25a70982b5b042074cde5d3b3a/2021-03-18T06:17:15.410153305Z], OS[Linux/3.10.0-862.el7.x86_64/amd64], JVM[AdoptOpenJDK/OpenJDK 64-Bit Server VM/15.0.1/15.0.1+9]
@@ -353,9 +353,9 @@ elasticsearch hard nproc 4096
 [2021-04-05T22:03:38,348][INFO ][o.e.n.Node               ] [VM-0-14-centos] JVM arguments [-Xshare:auto, -Des.networkaddress.cache.ttl=60, -Des.networkaddress.cache.negative.ttl=10, -XX:+AlwaysPreTouch, -Xss1m, -Djava.awt.headless=true, -Dfile.encoding=UTF-8, -Djna.nosys=true, -XX:-OmitStackTraceInFastThrow, -XX:+ShowCodeDetailsInExceptionMessages, -Dio.netty.noUnsafe=true, -Dio.netty.noKeySetOptimization=true, -Dio.netty.recycler.maxCapacityPerThread=0, -Dio.netty.allocator.numDirectArenas=0, -Dlog4j.shutdownHookEnabled=false, -Dlog4j2.disable.jmx=true, -Djava.locale.providers=SPI,COMPAT, --add-opens=java.base/java.io=ALL-UNNAMED, -XX:+UseG1GC, -Djava.io.tmpdir=/tmp/elasticsearch-17264135248464897093, -XX:+HeapDumpOnOutOfMemoryError, -XX:HeapDumpPath=data, -XX:ErrorFile=logs/hs_err_pid%p.log, -Xlog:gc*,gc+age=trace,safepoint:file=logs/gc.log:utctime,pid,tags:filecount=32,filesize=64m, -Xms1894m, -Xmx1894m, -XX:MaxDirectMemorySize=993001472, -XX:G1HeapRegionSize=4m, -XX:InitiatingHeapOccupancyPercent=30, -XX:G1ReservePercent=15, -Des.path.home=/opt/elasticsearch-7.12.0, -Des.path.conf=/opt/elasticsearch-7.12.0/config, -Des.distribution.flavor=default, -Des.distribution.type=tar, -Des.bundled_jdk=true]
     
 </code></pre>
-<ul>
-<li><strong>查看安装是否成功</strong></li>
-</ul>
+
+<strong>查看安装是否成功</strong>
+
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c0b2afafb480968dedf0edf1f4eda3a5aeb4afb3">[email&#160;protected]</a> ~]# netstat -ntlp | grep 9200
 tcp6       0      0 127.0.0.1:9200          :::*                    LISTEN      13549/java          
 tcp6       0      0 ::1:9200                :::*                    LISTEN      13549/java          
@@ -383,28 +383,28 @@ tcp6       0      0 ::1:9200                :::*                    LISTEN      
 <blockquote>
 <p>Kibana是界面化的查询数据的工具，下载时尽量下载与ElasicSearch一致的版本。</p>
 </blockquote>
-<ul>
-<li><strong>下载Kibana</strong></li>
-</ul>
+
+<strong>下载Kibana</strong>
+
 <p>从<a href="https://www.elastic.co/cn/downloads/kibana">这里  </a>下载Kibana</p>
-<ul>
-<li><strong>解压</strong></li>
-</ul>
+
+<strong>解压</strong>
+
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b5944445f6b7d66061b061a1f06484e455f4458">[email&#160;protected]</a> opt]# tar -vxzf kibana-7.12.0-linux-x86_64.tar.gz
     
 </code></pre>
-<ul>
-<li><strong>使用elasticsearch用户权限</strong></li>
-</ul>
+
+<strong>使用elasticsearch用户权限</strong>
+
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d7a5b8b8a397819afae7fae6e3fab4b2b9a3b8a4">[email&#160;protected]</a> opt]# chown -R elasticsearch /opt/kibana-7.12.0-linux-x86_64
 #配置Kibana的远程访问
 [<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0a2bfbfa490869dfde0fde1e4fdb3b5bea4bfa3">[email&#160;protected]</a> opt]# vi /opt/kibana-7.12.0-linux-x86_64/config/kibana.yml
 server.host: 0.0.0.0
     
 </code></pre>
-<ul>
-<li><strong>启动</strong></li>
-</ul>
+
+<strong>启动</strong>
+
 <p>需要切换至elasticsearch用户</p>
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3a4855554e7a6c77170a170b0e17595f544e5549">[email&#160;protected]</a> opt]# su elasticsearch
 [<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dbbeb7baa8afb2b8a8bebaa9b8b39b8d96f6ebf6eaeff6b8beb5afb4a8">[email&#160;protected]</a> opt]$ cd /opt/kibana-7.12.0-linux-x86_64/
@@ -420,9 +420,9 @@ server.host: 0.0.0.0
 <pre><code class="language-bash">[<a href="../../cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7e1b121f0d0a171d0d1b1f0c1d163e2833534e534f4a531d1b100a110d">[email&#160;protected]</a> kibana-7.12.0-linux-x86_64]$ nohup ./bin/kibana &amp;
     
 </code></pre>
-<ul>
-<li><strong>界面访问</strong></li>
-</ul>
+
+<strong>界面访问</strong>
+
 <p><img src="assets/es-install-1.png" alt="img" /></p>
 <p>可以导入simple data</p>
 <p><img src="assets/es-install-2.png" alt="img" /></p>
@@ -433,14 +433,14 @@ server.host: 0.0.0.0
 <p>使用基本许可证时，默认情况下禁用Elasticsearch安全功能。由于我测试环境是放在公网上的，所以需要设置下密码访问。相关文档可以参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.12/security-minimal-setup.html">这里  </a></p>
 </blockquote>
 <ol>
-<li>停止kibana和elasticsearch服务</li>
-<li>将<code>xpack.security.enabled</code>设置添加到ES_PATH_CONF/elasticsearch.yml文件并将值设置为true</li>
-<li>启动elasticsearch (<code>./bin/elasticsearch -d</code>)</li>
-<li>执行如下密码设置器，<code>./bin/elasticsearch-setup-passwords interactive</code>来设置各个组件的密码</li>
-<li>将elasticsearch.username设置添加到KIB_PATH_CONF/kibana.yml 文件并将值设置给elastic用户： <code>elasticsearch.username: &quot;elastic&quot;</code></li>
-<li>创建kibana keystore, <code>./bin/kibana-keystore create</code></li>
-<li>在kibana keystore 中添加密码 <code>./bin/kibana-keystore add elasticsearch.password</code></li>
-<li>重启kibana 服务即可 <code>nohup ./bin/kibana &amp;</code></li>
+停止kibana和elasticsearch服务
+将<code>xpack.security.enabled</code>设置添加到ES_PATH_CONF/elasticsearch.yml文件并将值设置为true
+启动elasticsearch (<code>./bin/elasticsearch -d</code>)
+执行如下密码设置器，<code>./bin/elasticsearch-setup-passwords interactive</code>来设置各个组件的密码
+将elasticsearch.username设置添加到KIB_PATH_CONF/kibana.yml 文件并将值设置给elastic用户： <code>elasticsearch.username: &quot;elastic&quot;</code>
+创建kibana keystore, <code>./bin/kibana-keystore create</code>
+在kibana keystore 中添加密码 <code>./bin/kibana-keystore add elasticsearch.password</code>
+重启kibana 服务即可 <code>nohup ./bin/kibana &amp;</code>
 </ol>
 <p>然后就可以使用密码登录了：</p>
 <p><img src="assets/es-install-4.png" alt="img" /></p>

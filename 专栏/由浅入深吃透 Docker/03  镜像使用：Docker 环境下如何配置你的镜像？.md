@@ -25,177 +25,177 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;溯本求源，吃透&#32;Docker！.md">00 溯本求源，吃透 Docker！.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;&#32;Docker&#32;安装：入门案例带你了解容器技术原理.md">01  Docker 安装：入门案例带你了解容器技术原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;&#32;核心概念：镜像、容器、仓库，彻底掌握&#32;Docker&#32;架构核心设计理念.md">02  核心概念：镜像、容器、仓库，彻底掌握 Docker 架构核心设计理念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="03&#32;&#32;镜像使用：Docker&#32;环境下如何配置你的镜像？.md">03  镜像使用：Docker 环境下如何配置你的镜像？.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;&#32;容器操作：得心应手掌握&#32;Docker&#32;容器基本操作.md">04  容器操作：得心应手掌握 Docker 容器基本操作.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;&#32;仓库访问：怎样搭建属于你的私有仓库？.md">05  仓库访问：怎样搭建属于你的私有仓库？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;&#32;最佳实践：如何在生产中编写最优&#32;Dockerfile？.md">06  最佳实践：如何在生产中编写最优 Dockerfile？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;&#32;Docker&#32;安全：基于内核的弱隔离系统如何保障安全性？.md">07  Docker 安全：基于内核的弱隔离系统如何保障安全性？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;&#32;容器监控：容器监控原理及&#32;cAdvisor&#32;的安装与使用.md">08  容器监控：容器监控原理及 cAdvisor 的安装与使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;&#32;资源隔离：为什么构建容器需要&#32;Namespace&#32;？.md">09  资源隔离：为什么构建容器需要 Namespace ？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;&#32;资源限制：如何通过&#32;Cgroups&#32;机制实现资源限制？.md">10  资源限制：如何通过 Cgroups 机制实现资源限制？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;&#32;组件组成：剖析&#32;Docker&#32;组件作用及其底层工作原理.md">11  组件组成：剖析 Docker 组件作用及其底层工作原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;&#32;网络模型：剖析&#32;Docker&#32;网络实现及&#32;Libnetwork&#32;底层原理.md">12  网络模型：剖析 Docker 网络实现及 Libnetwork 底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;&#32;数据存储：剖析&#32;Docker&#32;卷与持久化数据存储的底层原理.md">13  数据存储：剖析 Docker 卷与持久化数据存储的底层原理.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;&#32;文件存储驱动：AUFS&#32;文件系统原理及生产环境的最佳配置.md">14  文件存储驱动：AUFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;&#32;文件存储驱动：Devicemapper&#32;文件系统原理及生产环境的最佳配置.md">15  文件存储驱动：Devicemapper 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;&#32;文件存储驱动：OverlayFS&#32;文件系统原理及生产环境的最佳配置.md">16  文件存储驱动：OverlayFS 文件系统原理及生产环境的最佳配置.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（上）.md">17  原理实践：自己动手使用 Golang 开发 Docker（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;&#32;原理实践：自己动手使用&#32;Golang&#32;开发&#32;Docker（下）.md">18  原理实践：自己动手使用 Golang 开发 Docker（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;&#32;如何使用&#32;Docker&#32;Compose&#32;解决开发环境的依赖？.md">19  如何使用 Docker Compose 解决开发环境的依赖？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;&#32;如何在生产环境中使用&#32;Docker&#32;Swarm&#32;调度容器？.md">20  如何在生产环境中使用 Docker Swarm 调度容器？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;&#32;如何使&#32;Docker&#32;和&#32;Kubernetes&#32;结合发挥容器的最大价值？.md">21  如何使 Docker 和 Kubernetes 结合发挥容器的最大价值？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;&#32;多阶级构建：Docker&#32;下如何实现镜像多阶级构建？.md">22  多阶级构建：Docker 下如何实现镜像多阶级构建？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;&#32;DevOps：容器化后如何通过&#32;DevOps&#32;提高协作效能？.md">23  DevOps：容器化后如何通过 DevOps 提高协作效能？.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;&#32;CICD：容器化后如何实现持续集成与交付？（上）.md">24  CICD：容器化后如何实现持续集成与交付？（上）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;&#32;CICD：容器化后如何实现持续集成与交付？（下）.md">25  CICD：容器化后如何实现持续集成与交付？（下）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;结束语&#32;&#32;展望未来：Docker&#32;的称霸之路.md">26 结束语  展望未来：Docker 的称霸之路.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -258,22 +258,22 @@
 <p><img src="assets/CgqCHl9SDkWAaxh7AAFaMgWI7cI029.png" alt="Lark20200904-175130.png" /></p>
 <p>图 1 镜像操作</p>
 <p>从图中可知，镜像的操作可分为：</p>
-<ul>
-<li>拉取镜像，使用<code>docker pull</code>命令拉取远程仓库的镜像到本地 ；</li>
-<li>重命名镜像，使用<code>docker tag</code>命令“重命名”镜像 ；</li>
-<li>查看镜像，使用<code>docker image ls</code>或<code>docker images</code>命令查看本地已经存在的镜像 ；</li>
-<li>删除镜像，使用<code>docker rmi</code>命令删除无用镜像 ；</li>
-<li>构建镜像，构建镜像有两种方式。第一种方式是使用<code>docker build</code>命令基于 Dockerfile 构建镜像，也是我比较推荐的镜像构建方式；第二种方式是使用<code>docker commit</code>命令基于已经运行的容器提交为镜像。</li>
-</ul>
+
+拉取镜像，使用<code>docker pull</code>命令拉取远程仓库的镜像到本地 ；
+重命名镜像，使用<code>docker tag</code>命令“重命名”镜像 ；
+查看镜像，使用<code>docker image ls</code>或<code>docker images</code>命令查看本地已经存在的镜像 ；
+删除镜像，使用<code>docker rmi</code>命令删除无用镜像 ；
+构建镜像，构建镜像有两种方式。第一种方式是使用<code>docker build</code>命令基于 Dockerfile 构建镜像，也是我比较推荐的镜像构建方式；第二种方式是使用<code>docker commit</code>命令基于已经运行的容器提交为镜像。
+
 <p>下面，我们逐一详细介绍。</p>
 <h4>拉取镜像</h4>
 <p>Docker 镜像的拉取使用<code>docker pull</code>命令， 命令格式一般为 docker pull [Registry]/[Repository]/[Image]:[Tag]。</p>
-<ul>
-<li>Registry 为注册服务器，Docker 默认会从 docker.io 拉取镜像，如果你有自己的镜像仓库，可以把 Registry 替换为自己的注册服务器。</li>
-<li>Repository 为镜像仓库，通常把一组相关联的镜像归为一个镜像仓库，<code>library</code>为 Docker 默认的镜像仓库。</li>
-<li>Image 为镜像名称。</li>
-<li>Tag 为镜像的标签，如果你不指定拉取镜像的标签，默认为<code>latest</code>。</li>
-</ul>
+
+Registry 为注册服务器，Docker 默认会从 docker.io 拉取镜像，如果你有自己的镜像仓库，可以把 Registry 替换为自己的注册服务器。
+Repository 为镜像仓库，通常把一组相关联的镜像归为一个镜像仓库，<code>library</code>为 Docker 默认的镜像仓库。
+Image 为镜像名称。
+Tag 为镜像的标签，如果你不指定拉取镜像的标签，默认为<code>latest</code>。
+
 <p>例如，我们需要获取一个 busybox 镜像，可以执行以下命令：</p>
 <blockquote>
 <p>busybox 是一个集成了数百个 Linux 命令（例如 curl、grep、mount、telnet 等）的精简工具箱，只有几兆大小，被誉为 Linux 系统的瑞士军刀。我经常会使用 busybox 做调试来查找生产环境中遇到的问题。</p>
@@ -335,8 +335,8 @@ busybox             latest              018c9d7b792b        3 weeks ago         
 <h4>构建镜像</h4>
 <p>构建镜像主要有两种方式：</p>
 <ol>
-<li>使用<code>docker commit</code>命令从运行中的容器提交为镜像；</li>
-<li>使用<code>docker build</code>命令从 Dockerfile 构建镜像。</li>
+使用<code>docker commit</code>命令从运行中的容器提交为镜像；
+使用<code>docker build</code>命令从 Dockerfile 构建镜像。
 </ol>
 <p>首先介绍下如何从运行中的容器提交为镜像。我依旧使用 busybox 镜像举例，使用以下命令创建一个名为 busybox 的容器并进入 busybox 容器。</p>
 <pre><code>$ docker run --rm --name=busybox -it busybox sh
@@ -359,11 +359,11 @@ busybox             latest              018c9d7b792b        4 weeks ago         
 <p>此时我们可以看到主机上新生成了 busybox:hello 这个镜像。</p>
 <p>第二种方式是最重要也是最常用的镜像构建方式：Dockerfile。Dockerfile 是一个包含了用户所有构建命令的文本。通过<code>docker build</code>命令可以从 Dockerfile 生成镜像。</p>
 <p>使用 Dockerfile 构建镜像具有以下特性：</p>
-<ul>
-<li>Dockerfile 的每一行命令都会生成一个独立的镜像层，并且拥有唯一的 ID；</li>
-<li>Dockerfile 的命令是完全透明的，通过查看 Dockerfile 的内容，就可以知道镜像是如何一步步构建的；</li>
-<li>Dockerfile 是纯文本的，方便跟随代码一起存放在代码仓库并做版本管理。</li>
-</ul>
+
+Dockerfile 的每一行命令都会生成一个独立的镜像层，并且拥有唯一的 ID；
+Dockerfile 的命令是完全透明的，通过查看 Dockerfile 的内容，就可以知道镜像是如何一步步构建的；
+Dockerfile 是纯文本的，方便跟随代码一起存放在代码仓库并做版本管理。
+
 <p>看到使用 Dockerfile 的方式构建镜像有这么多好的特性，你是不是已经迫不及待想知道如何使用了。别着急，我们先学习下 Dockerfile 常用的指令。</p>
 <table>
 <thead>
@@ -428,14 +428,14 @@ ENV HOST=mynginx
 CMD [&quot;nginx&quot;,&quot;-g&quot;,&quot;daemon off;&quot;]
 </code></pre>
 <p>好，我来逐行分析一下上述的 Dockerfile。</p>
-<ul>
-<li>第一行表示我要基于 centos:7 这个镜像来构建自定义镜像。这里需要注意，每个 Dockerfile 的第一行除了注释都必须以 FROM 开头。</li>
-<li>第二行表示拷贝本地文件 nginx.repo 文件到容器内的 /etc/yum.repos.d 目录下。这里拷贝 nginx.repo 文件是为了添加 nginx 的安装源。</li>
-<li>第三行表示在容器内运行<code>yum install -y nginx</code>命令，安装 nginx 服务到容器内，执行完第三行命令，容器内的 nginx 已经安装完成。</li>
-<li>第四行声明容器内业务（nginx）使用 80 端口对外提供服务。</li>
-<li>第五行定义容器启动时的环境变量 HOST=mynginx，容器启动后可以获取到环境变量 HOST 的值为 mynginx。</li>
-<li>第六行定义容器的启动命令，命令格式为 json 数组。这里设置了容器的启动命令为 nginx ，并且添加了 nginx 的启动参数 -g 'daemon off;' ，使得 nginx 以前台的方式启动。</li>
-</ul>
+
+第一行表示我要基于 centos:7 这个镜像来构建自定义镜像。这里需要注意，每个 Dockerfile 的第一行除了注释都必须以 FROM 开头。
+第二行表示拷贝本地文件 nginx.repo 文件到容器内的 /etc/yum.repos.d 目录下。这里拷贝 nginx.repo 文件是为了添加 nginx 的安装源。
+第三行表示在容器内运行<code>yum install -y nginx</code>命令，安装 nginx 服务到容器内，执行完第三行命令，容器内的 nginx 已经安装完成。
+第四行声明容器内业务（nginx）使用 80 端口对外提供服务。
+第五行定义容器启动时的环境变量 HOST=mynginx，容器启动后可以获取到环境变量 HOST 的值为 mynginx。
+第六行定义容器的启动命令，命令格式为 json 数组。这里设置了容器的启动命令为 nginx ，并且添加了 nginx 的启动参数 -g 'daemon off;' ，使得 nginx 以前台的方式启动。
+
 <p>上面这个 Dockerfile 的例子基本涵盖了常用的镜像构建指令，代码我已经放在 <a href="https://github.com/wilhelmguo/docker-demo/tree/master/dockerfiles">GitHub</a>上，如果你感兴趣可以到 <a href="https://github.com/wilhelmguo/docker-demo/tree/master/dockerfiles">GitHub 下载源码</a>并尝试构建这个镜像。</p>
 <p>学习了镜像的各种操作，下面我们深入了解一下镜像的实现原理。</p>
 <h3>镜像的实现原理</h3>
@@ -486,11 +486,11 @@ RUN mkdir /tmp/testdir
 <blockquote>
 <p>镜像操作命令：</p>
 <ol>
-<li>拉取镜像，使用 docker pull 命令拉取远程仓库的镜像到本地 ；</li>
-<li>重命名镜像，使用 docker tag 命令“重命名”镜像 ；</li>
-<li>查看镜像，使用 docker image ls 或 docker images 命令查看本地已经存在的镜像；</li>
-<li>删除镜像，使用 docker rmi 命令删除无用镜像 ；</li>
-<li>构建镜像，构建镜像有两种方式。第一种方式是使用 docker build 命令基于 Dockerfile 构建镜像，也是我比较推荐的镜像构建方式；第二种方式是使用 docker commit 命令基于已经运行的容器提交为镜像。</li>
+拉取镜像，使用 docker pull 命令拉取远程仓库的镜像到本地 ；
+重命名镜像，使用 docker tag 命令“重命名”镜像 ；
+查看镜像，使用 docker image ls 或 docker images 命令查看本地已经存在的镜像；
+删除镜像，使用 docker rmi 命令删除无用镜像 ；
+构建镜像，构建镜像有两种方式。第一种方式是使用 docker build 命令基于 Dockerfile 构建镜像，也是我比较推荐的镜像构建方式；第二种方式是使用 docker commit 命令基于已经运行的容器提交为镜像。
 </ol>
 <p>镜像的实现原理：
 镜像是由一系列的镜像层（layer ）组成，每一层代表了镜像构建过程中的一次提交，当我们需要修改镜像内的某个文件时，只需要在当前镜像层的基础上新建一个镜像层，并且只存放修改过的文件内容。分层结构使得镜像间共享镜像层变得非常简单和方便。</p>

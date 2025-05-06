@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -188,23 +188,23 @@ public class CityWebFluxReactiveController {
 }
 
 </code></pre>
-<ul>
-<li>写法和以前保持一致，@Autowired 注入 ReactiveRedisTemplate 对象。</li>
-<li>ReactiveValueOperations 是 String（或 value）的操作视图，操作视图还有 ReactiveHashOperations、ReactiveListOperations、ReactiveSetOperations 和 ReactiveZSetOperations 等。</li>
-<li>不一样的是，操作视图 set 方法是操作 City 对象，但可以 get 回 Mono 或者 Flux 对象。</li>
-</ul>
+
+写法和以前保持一致，@Autowired 注入 ReactiveRedisTemplate 对象。
+ReactiveValueOperations 是 String（或 value）的操作视图，操作视图还有 ReactiveHashOperations、ReactiveListOperations、ReactiveSetOperations 和 ReactiveZSetOperations 等。
+不一样的是，操作视图 set 方法是操作 City 对象，但可以 get 回 Mono 或者 Flux 对象。
+
 <h3>结构</h3>
 <p>回到这个工程，新建一个工程编写整合 Redis 实现缓存案例，工程如图：</p>
 <p><img src="assets/3b4f95fda4771ca70c5bbc644f82a0c01525318.png" alt="file" /></p>
 <p>目录核心如下：</p>
-<ul>
-<li>pom.xml maven 配置</li>
-<li>application.properties 配置文件</li>
-<li>domain 实体类</li>
-<li>dao mongodb数据操作层</li>
-<li>handler 业务层，本文要点</li>
-<li>controller 控制层</li>
-</ul>
+
+pom.xml maven 配置
+application.properties 配置文件
+domain 实体类
+dao mongodb数据操作层
+handler 业务层，本文要点
+controller 控制层
+
 <p><a href="https://github.com/JeffLi1993/springboot-learning-example">单击这里查看源代码</a>。</p>
 <h3>控制层 CityWebFluxController</h3>
 <p>代码如下：</p>
@@ -246,11 +246,11 @@ public class CityWebFluxController {
 <p>目前，@Cacheable 等注解形式实现缓存没有很好的集成，二者 Mono / Flux 对象没有实现 Serializable，无法通过默认序列化器，解决方式是需要自定义序列化，这里通过手动方式与 Redis 手动集成，并实现缓存策略。</p>
 <p><a href="http://coolshell.cn/articles/17416.html">参考《缓存更新的套路》</a>，缓存更新的模式有四种：Cache aside、Read through、Write through、Write behind caching。</p>
 <p>这里使用的是 Cache Aside 策略，从三个维度（摘自耗子叔叔博客）：</p>
-<ul>
-<li>失效：应用程序先从 Cache 取数据，没有得到，则从数据库中取数据，成功后，放到缓存中。</li>
-<li>命中：应用程序从 Cache 中取数据，取到后返回。</li>
-<li>更新：先把数据存到数据库中，成功后，再让缓存失效。</li>
-</ul>
+
+失效：应用程序先从 Cache 取数据，没有得到，则从数据库中取数据，成功后，放到缓存中。
+命中：应用程序从 Cache 中取数据，取到后返回。
+更新：先把数据存到数据库中，成功后，再让缓存失效。
+
 <p>代码如下：</p>
 <pre><code>@Component
 public class CityHandler {
@@ -342,15 +342,15 @@ public class CityHandler {
 <p>首先这里注入了 RedisTemplate 对象，联想到 Spring 的 JdbcTemplate ，RedisTemplate 封装了 RedisConnection，具有连接管理，序列化和 Redis 操作等功能，还有针对 String 的支持对象 StringRedisTemplate。</p>
 <p>回到更新缓存的逻辑。</p>
 <p>a. findCityById 获取城市逻辑：</p>
-<ul>
-<li>如果缓存存在，从缓存中获取城市信息；</li>
-<li>如果缓存不存在，从 DB 中获取城市信息，然后插入缓存。</li>
-</ul>
+
+如果缓存存在，从缓存中获取城市信息；
+如果缓存不存在，从 DB 中获取城市信息，然后插入缓存。
+
 <p>b. deleteCity 删除 / modifyCity 更新城市逻辑：</p>
-<ul>
-<li>如果缓存存在，删除；</li>
-<li>如果缓存不存在，不操作。</li>
-</ul>
+
+如果缓存存在，删除；
+如果缓存不存在，不操作。
+
 <h3>运行工程</h3>
 <p>一个操作 Redis 工程就开发完毕了，下面运行工程验证下。使用 IDEA 右侧工具栏，点击 Maven Project Tab，点击使用下 Maven 插件的 install 命令；或者使用命令行的形式，在工程根目录下，执行 Maven 清理和安装工程的指令：</p>
 <pre><code>cd springboot-webflux-7-redis-cache

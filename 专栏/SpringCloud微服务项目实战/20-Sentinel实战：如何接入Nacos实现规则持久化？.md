@@ -161,7 +161,7 @@ public final class NacosConfigUtil {
 <li ui-sref-active="active">
   <a ui-sref="dashboard.flow({app: entry.app})">
     <i class="glyphicon glyphicon-filter"></i>&nbsp;&nbsp;流控规则 极客时间改造</a>
-</li>
+
 
 ```
 

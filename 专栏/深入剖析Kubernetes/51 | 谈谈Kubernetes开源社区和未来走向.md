@@ -49,21 +49,21 @@ labels:
 
 当然，当你想要将你的想法以代码的形式提交给 Kubernetes项目时，除非你的改动是 bugfix 或者很简单的改动，否则，你直接提交一个 PR 上去，是大概率不会被 Approve 的。**这里的流程，**一定要按照我下面的讲解来进行：
 
-<li>
+
 在 Kubernetes 主库里创建 Issue，详细地描述你希望解决的问题、方案，以及开发计划。而如果社区里已经有相关的Issue存在，那你就必须要在这里把它们引用过来。而如果社区里已经存在相同的 Issue 了，你就需要确认一下，是不是应该直接转到原有 issue 上进行讨论。
-</li>
-<li>
+
+
 给 Issue 加上与它相关的 SIG 的标签。比如，你可以直接 Comment /sig node，那么这个 Issue 就会被加上 sig-node 的标签，这样 SIG-Node的成员就会特别留意这个 Issue。
-</li>
-<li>
+
+
 收集社区对这个 Issue 的信息，回复 Comment，与 SIG 成员达成一致。必要的时候，你还需要参加 SIG 的周会，更好地阐述你的想法和计划。
-</li>
-<li>
+
+
 在与 SIG 的大多数成员达成一致后，你就可以开始进行详细的设计了。
-</li>
-<li>
+
+
 如果设计比较复杂的话，你还需要在 Kubernetes 的[设计提议目录](https://github.com/kubernetes/community/tree/master/contributors/design-proposals)（在Kubernetes Community 库里）下提交一个 PR，把你的设计文档加进去。这时候，所有关心这个设计的社区成员，都会来对你的设计进行讨论。不过最后，在整个 Kubernetes 社区只有很少一部分成员才有权限来 Review 和 Approve 你的设计文档。他们当然也被定义在了这个目录下面的 OWNERS 文件里，如下所示：
-</li>
+
 
 ```
 reviewers:
@@ -91,12 +91,12 @@ labels:
 
 这几位成员，就可以称为社区里的“大佬”了。不过我在这里要提醒你的是，“大佬”并不一定代表水平高，所以你还是要擦亮眼睛。此外，Kubernetes 项目的几位创始成员，被称作 Elders（元老），分别是jbeda、bgrant0607、brendandburns、dchen1107和thockin。你可以查看一下这个列表与上述“大佬”名单有什么不同。
 
-<li>
+
 上述 Design Proposal被合并后，你就可以开始按照设计文档的内容编写代码了。这个流程，才是正常大家所熟知的编写代码、提交 PR、通过 CI 测试、进行Code Review，然后等待合并的流程。
-</li>
-<li>
+
+
 如果你的 feature 是需要要在 Kubernetes 的正式 Release 里发布上线的，那么你还需要在[Kubernetes Enhancements](https://github.com/kubernetes/enhancements/blob/master/keps)这个库里面提交一个 KEP（即Kubernetes Enhancement Proposal）。这个 KEP 的主要内容，是详细地描述你的编码计划、测试计划、发布计划，以及向后兼容计划等软件工程相关的信息，供全社区进行监督和指导。
-</li>
+
 
 以上内容，就是 Kubernetes 社区运作的主要方式了。
 

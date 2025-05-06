@@ -32,12 +32,12 @@ ndk.dir=/Users/sample/Library/Android/sdk/ndk-bundle
 
 之后需要安装CMake和LLDB。
 
-<li>
+
 [CMake](http://cmake.org/)：一款外部构建工具，可与Gradle搭配使用来构建原生库。
-</li>
-<li>
+
+
 [LLDB](http://lldb.llvm.org/)：一种调试程序，Android Studio使用它来[调试原生代码](http://developer.android.com/studio/debug/index.html?hl=zh-cn)。
-</li>
+
 
 **这两项都可以在Tools &gt; Android &gt; SDK Manager里进行安装**。
 

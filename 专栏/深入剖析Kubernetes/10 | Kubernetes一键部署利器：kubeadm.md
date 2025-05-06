@@ -189,18 +189,18 @@ spec:
 
 关于一个Pod的YAML文件怎么写、里面的字段如何解读，我会在后续专门的文章中为你详细分析。在这里，你只需要关注这样几个信息：
 
-<li>
+
 这个Pod里只定义了一个容器，它使用的镜像是：`k8s.gcr.io/kube-apiserver-amd64:v1.11.1` 。这个镜像是Kubernetes官方维护的一个组件镜像。
-</li>
-<li>
+
+
 这个容器的启动命令（commands）是kube-apiserver --authorization-mode=Node,RBAC …，这样一句非常长的命令。其实，它就是容器里kube-apiserver这个二进制文件再加上指定的配置参数而已。
-</li>
-<li>
+
+
 如果你要修改一个已有集群的kube-apiserver的配置，需要修改这个YAML文件。
-</li>
-<li>
+
+
 这些组件的参数也可以在部署时指定，我很快就会讲到。
-</li>
+
 
 在这一步完成后，kubeadm还会再生成一个Etcd的Pod YAML文件，用来通过同样的Static Pod的方式启动Etcd。所以，最后Master组件的Pod YAML文件如下所示：
 
@@ -329,11 +329,11 @@ apiServerExtraArgs:
 
 ## 思考题
 
-<li>
+
 在Linux上为一个类似kube-apiserver的Web Server制作证书，你知道可以用哪些工具实现吗？
-</li>
-<li>
+
+
 回忆一下我在前面文章中分享的Kubernetes架构，你能够说出Kubernetes各个功能组件之间（包含Etcd），都有哪些建立连接或者调用的方式吗？（比如：HTTP/HTTPS，远程调用等等）
-</li>
+
 
 感谢你的收听，欢迎你给我留言，也欢迎分享给更多的朋友一起阅读。

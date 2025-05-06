@@ -24,30 +24,30 @@ Redis 是最常用的键值存储系统之一，常用作数据库、高速缓�
 
 本次案例还是基于 Ubuntu 18.04，同样适用于其他的 Linux 系统。我使用的案例环境如下所示：
 
-<li>
+
 机器配置：2 CPU，8GB 内存
-</li>
-<li>
+
+
 预先安装 docker、sysstat 、git、make 等工具，如 apt install [docker.io](http://docker.io) sysstat
-</li>
+
 
 今天的案例由 Python应用+Redis 两部分组成。其中，Python 应用是一个基于 Flask 的应用，它会利用 Redis ，来管理应用程序的缓存，并对外提供三个 HTTP 接口：
 
-<li>
+
 /：返回 hello redis；
-</li>
-<li>
+
+
 /init/<num>：插入指定数量的缓存数据，如果不指定数量，默认的是 5000 条；</num>
-</li>
-<li>
+
+
 缓存的键格式为 uuid:<uuid></uuid>
-</li>
-<li>
+
+
 缓存的值为 good、bad 或 normal 三者之一
-</li>
-<li>
+
+
 /get_cache/&lt;type_name&gt;：查询指定值的缓存数据，并返回处理时间。其中，type_name 参数只支持 good, bad 和 normal（也就是找出具有相同 value 的 key 列表）。
-</li>
+
 
 由于应用比较多，为了方便你运行，我把它们打包成了两个 Docker 镜像，并推送到了 [Github](https://github.com/feiskyer/linux-perf-examples/tree/master/redis-slow) 上。这样你就只需要运行几条命令，就可以启动了。
 
@@ -257,15 +257,15 @@ Redis 提供了两种数据持久化的方式，分别是快照和追加文件�
 
 此外，它还提供了一个用 appendfsync 选项设置 fsync 的策略，确保写入的数据都落到磁盘中，具体选项包括 always、everysec、no 等。
 
-<li>
+
 always表示，每个操作都会执行一次 fsync，是最为安全的方式；
-</li>
-<li>
+
+
 everysec表示，每秒钟调用一次 fsync ，这样可以保证即使是最坏情况下，也只丢失1秒的数据；
-</li>
-<li>
+
+
 而 no 表示交给操作系统来处理。
-</li>
+
 
 回忆一下我们刚刚看到的配置，appendfsync 配置的是 always，意味着每次写数据时，都会调用一次 fsync，从而造成比较大的磁盘 I/O 压力。
 
@@ -299,12 +299,12 @@ write(8, &quot;:1\r\n&quot;, 4)
 
 细心的你应该记得，根据 lsof 的分析，文件描述符编号为 7 的是一个普通文件 /data/appendonly.aof，而编号为 8 的是 TCP socket。而观察上面的内容，8 号对应的 TCP 读写，是一个标准的“请求-响应”格式，即：
 
-<li>
+
 从 socket 读取 GET uuid:53522908-… 后，响应 good；
-</li>
-<li>
+
+
 再从 socket 读取 SADD good 535… 后，响应 1。
-</li>
+
 
 对 Redis 来说，SADD是一个写操作，所以 Redis 还会把它保存到用于持久化的 appendonly.aof 文件中。
 

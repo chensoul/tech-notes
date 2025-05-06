@@ -117,15 +117,15 @@ iptables -t nat -A ISTIO_INBOUND -p tcp --dport &quot;${port}&quot; -j ISTIO_IN_
 
 与此同时，我也建议你了解目前业界一些开源的Service Mesh框架，这样在选择方案时可以多一些选择。目前在开源领域比较成熟的Service Mesh框架有下面几个，你可以通过阅读它们的文档来深入了解，作为本节课的引申阅读。
 
-<li>
+
 [Istio](https://istio.io/) 这个框架在业界最为著名，它提出了数据平面和控制平面的概念，是Service Mesh的先驱，缺陷就是刚才提到的Mixer的性能问题。
-</li>
-<li>
+
+
 [Linkerd](https://linkerd.io/) 是第一代的Service Mesh，使用Scala语言编写，其劣势就是内存的占用。
-</li>
-<li>
+
+
 [SOFAMesh](https://github.com/sofastack/sofa-mesh) 是蚂蚁金服开源的Service Mesh组件，在蚂蚁金服已经有大规模落地的经验。
-</li>
+
 
 ## 课程小结
 

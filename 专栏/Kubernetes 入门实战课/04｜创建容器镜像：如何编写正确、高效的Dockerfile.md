@@ -48,11 +48,11 @@ EXPOSE 53/udp        # 可以指定udp协议
 *.swp
 *.sh
 </code></pre><p>另外关于Dockerfile，一般应该在命令行里使用 <code>-f</code> 来显式指定。但如果省略这个参数，<code>docker build</code> 就会在当前目录下找名字是 <code>Dockerfile</code> 的文件。所以，如果只有一个构建目标的话，文件直接叫“Dockerfile”是最省事的。</p><p>现在我们使用 <code>docker build</code> 应该就没什么难点了，不过构建出来的镜像只有“IMAGE ID”没有名字，不是很方便。</p><p>为此你可以加上一个 <code>-t</code> 参数，也就是指定镜像的标签（tag），这样Docker就会在构建完成后自动给镜像添加名字。当然，名字必须要符合上节课里的命名规范，用 <code>:</code> 分隔名字和标签，如果不提供标签默认就是“latest”。</p><h2>小结</h2><p>好了，今天我们一起学习了容器镜像的内部结构，重点理解<strong>容器镜像是由多个只读的Layer构成的，同一个Layer可以被不同的镜像共享</strong>，减少了存储和传输的成本。</p><p>如何编写Dockerfile内容稍微多一点，我再简单做个小结：</p><ol>
-<li>创建镜像需要编写Dockerfile，写清楚创建镜像的步骤，每个指令都会生成一个Layer。</li>
-<li>Dockerfile里，第一个指令必须是 <code>FROM</code>，用来选择基础镜像，常用的有Alpine、Ubuntu等。其他常用的指令有：<code>COPY</code>、<code>RUN</code>、<code>EXPOSE</code>，分别是拷贝文件，运行Shell命令，声明服务端口号。</li>
-<li><code>docker build</code> 需要用 <code>-f</code> 来指定Dockerfile，如果不指定就使用当前目录下名字是“Dockerfile”的文件。</li>
-<li><code>docker build</code> 需要指定“构建上下文”，其中的文件会打包上传到Docker daemon，所以尽量不要在“构建上下文”中存放多余的文件。</li>
-<li>创建镜像的时候应当尽量使用 <code>-t</code> 参数，为镜像起一个有意义的名字，方便管理。</li>
+创建镜像需要编写Dockerfile，写清楚创建镜像的步骤，每个指令都会生成一个Layer。
+Dockerfile里，第一个指令必须是 <code>FROM</code>，用来选择基础镜像，常用的有Alpine、Ubuntu等。其他常用的指令有：<code>COPY</code>、<code>RUN</code>、<code>EXPOSE</code>，分别是拷贝文件，运行Shell命令，声明服务端口号。
+<code>docker build</code> 需要用 <code>-f</code> 来指定Dockerfile，如果不指定就使用当前目录下名字是“Dockerfile”的文件。
+<code>docker build</code> 需要指定“构建上下文”，其中的文件会打包上传到Docker daemon，所以尽量不要在“构建上下文”中存放多余的文件。
+创建镜像的时候应当尽量使用 <code>-t</code> 参数，为镜像起一个有意义的名字，方便管理。
 </ol><p>今天讲了不少，但关于创建镜像还有很多高级技巧等待你去探索，比如使用缓存、多阶段构建等等，你可以再参考Docker官方文档（<a href="https://docs.docker.com/engine/reference/builder/">https://docs.docker.com/engine/reference/builder/</a>），或者一些知名应用的镜像（如Nginx、Redis、Node.js等）进一步学习。</p><h2>课下作业</h2><p>最后是课下作业时间，这里有一个完整的Dockerfile示例，你可以尝试着去解释一下它的含义，然后再自己构建一下：</p><pre><code class="language-plain"># Dockerfile
 # docker build -t ngx-app .
 # docker build -t ngx-app:1.0 .
@@ -69,8 +69,8 @@ RUN cd /usr/share/nginx/html \
 
 EXPOSE 8081 8082 8083
 </code></pre><p>当然还有两个思考题：</p><ol>
-<li>镜像里的层都是只读不可修改的，但容器运行的时候经常会写入数据，这个冲突应该怎么解决呢？（答案在本期找）</li>
-<li>你能再列举一下镜像的分层结构带来了哪些好处吗？</li>
+镜像里的层都是只读不可修改的，但容器运行的时候经常会写入数据，这个冲突应该怎么解决呢？（答案在本期找）
+你能再列举一下镜像的分层结构带来了哪些好处吗？
 </ol><p>欢迎积极留言。如果你觉得有收获，也欢迎分享给身边的朋友同事一起讨论学习。</p><p><img src="https://static001.geekbang.org/resource/image/17/24/1705133103a8aaf6c7fed770afa6dc24.jpg?wh=1920x2805" alt=""></p>
 <style>
     ul {
@@ -181,7 +181,7 @@ EXPOSE 8081 8082 8083
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/52/66/3e4d4846.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -196,8 +196,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/9c/fb/7fe6df5b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -212,8 +212,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/42/18/edc1b373.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -228,8 +228,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/82/ec/99b480e8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -244,8 +244,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/9b/0f/ef415e32.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -260,8 +260,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -276,8 +276,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTL6RvdCzKZCGibZqanPxlib453uP5oXvMTjR6uJsjfMZsib5ShMicDdgBUr6yHSibSKSKgiazqR6tNibDibibQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -292,8 +292,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/1e/db/921367d6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -308,8 +308,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83er3Ey0Uq2w4wLhVNGGReZKLd06PCDU4ZeefZWFMNvf3LibtibDqzBBpzkYW5n5AkYuJGPa4KEdQ5qgA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -324,8 +324,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -340,8 +340,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -356,8 +356,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/4e/35/d5d1aec8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -372,8 +372,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/b8/6a/d37ed9ab.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -388,8 +388,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -404,8 +404,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/83/af/1cb42cd3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -420,8 +420,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/WrANpwBMr6DsGAE207QVs0YgfthMXy3MuEKJxR8icYibpGDCI1YX4DcpDq1EsTvlP8ffK1ibJDvmkX9LUU4yE8X0w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -436,8 +436,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/64/4c/abb7bfe3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -452,8 +452,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7e/25/3932dafd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -468,8 +468,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/20/27/a6932fbe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -484,8 +484,8 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -500,5 +500,4 @@ EXPOSE 8081 8082 8083
   </div>
 </div>
 </div>
-</li>
-</ul>
+

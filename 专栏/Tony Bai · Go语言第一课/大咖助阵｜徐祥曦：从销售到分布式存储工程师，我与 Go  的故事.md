@@ -116,7 +116,7 @@
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/59/28/62ee741f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -131,8 +131,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/62/1a/eef8b99d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -147,8 +147,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/d4/07/095234c4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -163,8 +163,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/1d/3a/cdf9c55f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -179,8 +179,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/f2/86/d689f77e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -195,8 +195,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/8b/06/fb3be14a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -211,8 +211,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/65/da/29fe3dde.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -227,8 +227,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -243,5 +243,4 @@
   </div>
 </div>
 </div>
-</li>
-</ul>
+

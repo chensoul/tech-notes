@@ -1,8 +1,8 @@
 <audio title="14｜ConfigMapSecret：怎样配置、定制我的应用" src="https://static001.geekbang.org/resource/audio/8d/8a/8d985ac77fcae2a1de910917e32f768a.mp3" controls="controls"></audio> 
-<p>你好，我是Chrono。</p><p>前两节课里我们学习了Kubernetes里的三种API对象：Pod、Job和CronJob，虽然还没有讲到更高级的其他对象，但使用它们也可以在集群里编排运行一些实际的业务了。</p><p>不过想让业务更顺利地运行，有一个问题不容忽视，那就是应用的配置管理。</p><p>配置文件，你应该有所了解吧，通常来说应用程序都会有一个，它把运行时需要的一些参数从代码中分离出来，让我们在实际运行的时候能更方便地调整优化，比如说Nginx有nginx.conf、Redis有redis.conf、MySQL有my.cnf等等。</p><p>我们在“入门篇”里学习容器技术的时候讲过，可以选择两种管理配置文件的方式。第一种是编写Dockerfile，用 <code>COPY</code> 指令把配置文件打包到镜像里；第二种是在运行时使用 <code>docker cp</code> 或者 <code>docker run -v</code>，把本机的文件拷贝进容器。</p><p>但这两种方式都存在缺陷。第一种方法相当于是在镜像里固定了配置文件，不好修改，不灵活，第二种方法则显得有点“笨拙”，不适合在集群中自动化运维管理。</p><p>对于这个问题Kubernetes有它自己的解决方案，你也应该能够猜得到，当然还是使用YAML语言来定义API对象，再组合起来实现动态配置。</p><!-- [[[read_end]]] --><p>今天我就来讲解Kubernetes里专门用来管理配置信息的两种对象：<strong>ConfigMap</strong>和<strong>Secret</strong>，使用它们来灵活地配置、定制我们的应用。</p><h2>ConfigMap/Secret</h2><p>首先你要知道，应用程序有很多类别的配置信息，但从数据安全的角度来看可以分成两类：</p><ul>
-<li>一类是明文配置，也就是不保密，可以任意查询修改，比如服务端口、运行参数、文件路径等等。</li>
-<li>另一类则是机密配置，由于涉及敏感信息需要保密，不能随便查看，比如密码、密钥、证书等等。</li>
-</ul><p>这两类配置信息本质上都是字符串，只是由于安全性的原因，在存放和使用方面有些差异，所以Kubernetes也就定义了两个API对象，<strong>ConfigMap</strong>用来保存明文配置，<strong>Secret</strong>用来保存秘密配置。</p><h3>什么是ConfigMap</h3><p>先来看ConfigMap，我们仍然可以用命令 <code>kubectl create</code> 来创建一个它的YAML样板。注意，它有简写名字“<strong>cm</strong>”，所以命令行里没必要写出它的全称：</p><pre><code class="language-bash">export out="--dry-run=client -o yaml"        # 定义Shell变量
+<p>你好，我是Chrono。</p><p>前两节课里我们学习了Kubernetes里的三种API对象：Pod、Job和CronJob，虽然还没有讲到更高级的其他对象，但使用它们也可以在集群里编排运行一些实际的业务了。</p><p>不过想让业务更顺利地运行，有一个问题不容忽视，那就是应用的配置管理。</p><p>配置文件，你应该有所了解吧，通常来说应用程序都会有一个，它把运行时需要的一些参数从代码中分离出来，让我们在实际运行的时候能更方便地调整优化，比如说Nginx有nginx.conf、Redis有redis.conf、MySQL有my.cnf等等。</p><p>我们在“入门篇”里学习容器技术的时候讲过，可以选择两种管理配置文件的方式。第一种是编写Dockerfile，用 <code>COPY</code> 指令把配置文件打包到镜像里；第二种是在运行时使用 <code>docker cp</code> 或者 <code>docker run -v</code>，把本机的文件拷贝进容器。</p><p>但这两种方式都存在缺陷。第一种方法相当于是在镜像里固定了配置文件，不好修改，不灵活，第二种方法则显得有点“笨拙”，不适合在集群中自动化运维管理。</p><p>对于这个问题Kubernetes有它自己的解决方案，你也应该能够猜得到，当然还是使用YAML语言来定义API对象，再组合起来实现动态配置。</p><!-- [[[read_end]]] --><p>今天我就来讲解Kubernetes里专门用来管理配置信息的两种对象：<strong>ConfigMap</strong>和<strong>Secret</strong>，使用它们来灵活地配置、定制我们的应用。</p><h2>ConfigMap/Secret</h2><p>首先你要知道，应用程序有很多类别的配置信息，但从数据安全的角度来看可以分成两类：</p>
+一类是明文配置，也就是不保密，可以任意查询修改，比如服务端口、运行参数、文件路径等等。
+另一类则是机密配置，由于涉及敏感信息需要保密，不能随便查看，比如密码、密钥、证书等等。
+<p>这两类配置信息本质上都是字符串，只是由于安全性的原因，在存放和使用方面有些差异，所以Kubernetes也就定义了两个API对象，<strong>ConfigMap</strong>用来保存明文配置，<strong>Secret</strong>用来保存秘密配置。</p><h3>什么是ConfigMap</h3><p>先来看ConfigMap，我们仍然可以用命令 <code>kubectl create</code> 来创建一个它的YAML样板。注意，它有简写名字“<strong>cm</strong>”，所以命令行里没必要写出它的全称：</p><pre><code class="language-bash">export out="--dry-run=client -o yaml"        # 定义Shell变量
 kubectl create cm info $out
 </code></pre><p>得到的样板文件大概是这个样子：</p><pre><code class="language-yaml">apiVersion: v1
 kind: ConfigMap
@@ -23,12 +23,12 @@ data:
 </code></pre><p>现在就可以使用 <code>kubectl apply</code> 把这个YAML交给Kubernetes，让它创建ConfigMap对象了：</p><pre><code class="language-bash">kubectl apply&nbsp;-f cm.yml
 </code></pre><p>创建成功后，我们还是可以用 <code>kubectl get</code>、<code>kubectl describe</code> 来查看ConfigMap的状态：</p><pre><code class="language-bash">kubectl get cm
 kubectl describe cm info
-</code></pre><p><img src="https://static001.geekbang.org/resource/image/a6/78/a61239d55a93a5cd9da7148297d22878.png?wh=782x184" alt="图片"></p><p><img src="https://static001.geekbang.org/resource/image/34/48/343c94dacb9f872721597e99b346b148.png?wh=1042x1272" alt="图片"></p><p>你可以看到，现在ConfigMap的Key-Value信息就已经存入了etcd数据库，后续就可以被其他API对象使用。</p><h3>什么是Secret</h3><p>了解了ConfigMap对象，我们再来看Secret对象就会容易很多，它和ConfigMap的结构和用法很类似，不过在Kubernetes里Secret对象又细分出很多类，比如：</p><ul>
-<li>访问私有镜像仓库的认证信息</li>
-<li>身份识别的凭证信息</li>
-<li>HTTPS通信的证书和私钥</li>
-<li>一般的机密信息（格式由用户自行解释）</li>
-</ul><p>前几种我们现在暂时用不到，所以就只使用最后一种，创建YAML样板的命令是 <code>kubectl create secret generic</code> ，同样，也要使用参数 <code>--from-literal</code> 给出Key-Value值：</p><pre><code class="language-bash">kubectl create secret generic user --from-literal=name=root $out
+</code></pre><p><img src="https://static001.geekbang.org/resource/image/a6/78/a61239d55a93a5cd9da7148297d22878.png?wh=782x184" alt="图片"></p><p><img src="https://static001.geekbang.org/resource/image/34/48/343c94dacb9f872721597e99b346b148.png?wh=1042x1272" alt="图片"></p><p>你可以看到，现在ConfigMap的Key-Value信息就已经存入了etcd数据库，后续就可以被其他API对象使用。</p><h3>什么是Secret</h3><p>了解了ConfigMap对象，我们再来看Secret对象就会容易很多，它和ConfigMap的结构和用法很类似，不过在Kubernetes里Secret对象又细分出很多类，比如：</p>
+访问私有镜像仓库的认证信息
+身份识别的凭证信息
+HTTPS通信的证书和私钥
+一般的机密信息（格式由用户自行解释）
+<p>前几种我们现在暂时用不到，所以就只使用最后一种，创建YAML样板的命令是 <code>kubectl create secret generic</code> ，同样，也要使用参数 <code>--from-literal</code> 给出Key-Value值：</p><pre><code class="language-bash">kubectl create secret generic user --from-literal=name=root $out
 </code></pre><p>得到的Secret对象大概是这个样子：</p><pre><code class="language-yaml">apiVersion: v1
 kind: Secret
 metadata:
@@ -133,14 +133,14 @@ spec:
 kubectl get pod
 kubectl exec -it vol-pod -- sh
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/9f/67/9fdc3a7bafcfa0fa277b7c7bed891967.png?wh=1192x728" alt="图片"></p><p>你会看到，ConfigMap和Secret都变成了目录的形式，而它们里面的Key-Value变成了一个个的文件，而文件名就是Key。</p><p>因为这种形式上的差异，以Volume的方式来使用ConfigMap/Secret，就和环境变量不太一样。环境变量用法简单，更适合存放简短的字符串，而Volume更适合存放大数据量的配置文件，在Pod里加载成文件后让应用直接读取使用。</p><h2>小结</h2><p>好了，今天我们学习了两种在Kubernetes里管理配置信息的API对象ConfigMap和Secret，它们分别代表了明文信息和机密敏感信息，存储在etcd里，在需要的时候可以注入Pod供Pod使用。</p><p>简单小结一下今天的要点：</p><ol>
-<li>ConfigMap记录了一些Key-Value格式的字符串数据，描述字段是“data”，不是“spec”。</li>
-<li>Secret与ConfigMap很类似，也使用“data”保存字符串数据，但它要求数据必须是Base64编码，起到一定的保密效果。</li>
-<li>在Pod的“env.valueFrom”字段中可以引用ConfigMap和Secret，把它们变成应用可以访问的环境变量。</li>
-<li>在Pod的“spec.volumes”字段中可以引用ConfigMap和Secret，把它们变成存储卷，然后在“spec.containers.volumeMounts”字段中加载成文件的形式。</li>
-<li>ConfigMap和Secret对存储数据的大小没有限制，但小数据用环境变量比较适合，大数据应该用存储卷，可根据具体场景灵活应用。</li>
+ConfigMap记录了一些Key-Value格式的字符串数据，描述字段是“data”，不是“spec”。
+Secret与ConfigMap很类似，也使用“data”保存字符串数据，但它要求数据必须是Base64编码，起到一定的保密效果。
+在Pod的“env.valueFrom”字段中可以引用ConfigMap和Secret，把它们变成应用可以访问的环境变量。
+在Pod的“spec.volumes”字段中可以引用ConfigMap和Secret，把它们变成存储卷，然后在“spec.containers.volumeMounts”字段中加载成文件的形式。
+ConfigMap和Secret对存储数据的大小没有限制，但小数据用环境变量比较适合，大数据应该用存储卷，可根据具体场景灵活应用。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>说一说你对ConfigMap和Secret这两个对象的理解，它们有什么异同点？</li>
-<li>如果我们修改了ConfigMap/Secret的YAML，然后使用 <code>kubectl apply</code> 命令更新对象，那么Pod里关联的信息是否会同步更新呢？你可以自己验证看看。</li>
+说一说你对ConfigMap和Secret这两个对象的理解，它们有什么异同点？
+如果我们修改了ConfigMap/Secret的YAML，然后使用 <code>kubectl apply</code> 命令更新对象，那么Pod里关联的信息是否会同步更新呢？你可以自己验证看看。
 </ol><p>欢迎在留言区分享你的学习所得，下节课是这个章节的实战课，我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/0f/47/0f4c7f7d64d6a08885353459ed99eb47.jpg?wh=1920x2402" alt="图片"></p>
 <style>
     ul {
@@ -251,7 +251,7 @@ kubectl exec -it vol-pod -- sh
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/cd/dc/75ca619d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -266,8 +266,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/ed/3a/ab8faba0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -282,8 +282,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -298,8 +298,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/WrANpwBMr6DsGAE207QVs0YgfthMXy3MuEKJxR8icYibpGDCI1YX4DcpDq1EsTvlP8ffK1ibJDvmkX9LUU4yE8X0w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -314,8 +314,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/14/b9/47377590.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -330,8 +330,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/1b/f8/01e7fc0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -346,8 +346,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -362,8 +362,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -378,8 +378,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/42/df/a034455d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -394,8 +394,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/0c/86/8e52afb8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -410,8 +410,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -426,8 +426,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/82/ec/99b480e8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -442,8 +442,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/82/ec/99b480e8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -458,8 +458,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/85/ac/10d68f01.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -474,8 +474,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -490,8 +490,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ce/58/71ed845f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -506,8 +506,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/89/ba/009ee13c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -522,8 +522,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/c7/89/16437396.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -538,8 +538,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2e/de/7e/549a899d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -554,8 +554,8 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/c4/51/5bca1604.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -570,5 +570,4 @@ kubectl exec -it vol-pod -- sh
   </div>
 </div>
 </div>
-</li>
-</ul>
+

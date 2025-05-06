@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -222,26 +222,26 @@ GROUP BY color
 </code></pre>
 <p>ElasticSearch中<strong>桶</strong>在概念上类似于 SQL 的分组（<code>GROUP BY</code>），而<strong>指标</strong>则类似于 <code>COUNT()</code> 、 <code>SUM()</code> 、 <code>MAX()</code> 等统计方法。</p>
 <p>进而引入了两个概念：</p>
-<ul>
-<li><strong>桶（Buckets）</strong> 满足特定条件的文档的集合</li>
-<li><strong>指标（Metrics）</strong> 对桶内的文档进行统计计算</li>
-</ul>
+
+<strong>桶（Buckets）</strong> 满足特定条件的文档的集合
+<strong>指标（Metrics）</strong> 对桶内的文档进行统计计算
+
 <p>所以ElasticSearch包含3种聚合（Aggregation)方式</p>
-<ul>
-<li>
+
+
 <p><strong>桶聚合（Bucket Aggregration)</strong> - 本文中详解</p>
-</li>
-<li>
+
+
 <p><strong>指标聚合（Metric Aggregration)</strong> - 下文中讲解</p>
-</li>
-<li>
+
+
 <p>管道聚合（Pipline Aggregration)</p>
 <p>- 再下一篇讲解</p>
-<ul>
-<li>聚合管道化，简单而言就是上一个聚合的结果成为下个聚合的输入；</li>
-</ul>
-</li>
-</ul>
+
+聚合管道化，简单而言就是上一个聚合的结果成为下个聚合的输入；
+
+
+
 <p>（PS:指标聚合和桶聚合很多情况下是组合在一起使用的，其实你也可以看到，桶聚合本质上是一种特殊的指标聚合，它的聚合指标就是数据的条数count)</p>
 <h2>如何理解Bucket聚合</h2>
 <blockquote>
@@ -292,17 +292,17 @@ GROUP BY color
 }
 </code></pre>
 <ol>
-<li>聚合操作被置于顶层参数 aggs 之下（如果你愿意，完整形式 aggregations 同样有效）。</li>
-<li>然后，可以为聚合指定一个我们想要名称，本例中是： popular_colors 。</li>
-<li>最后，定义单个桶的类型 terms 。</li>
+聚合操作被置于顶层参数 aggs 之下（如果你愿意，完整形式 aggregations 同样有效）。
+然后，可以为聚合指定一个我们想要名称，本例中是： popular_colors 。
+最后，定义单个桶的类型 terms 。
 </ol>
 <p>结果如下：</p>
 <p><img src="assets/es-agg-bucket-3.png" alt="img" /></p>
 <ol>
-<li>因为我们设置了 size 参数，所以不会有 hits 搜索结果返回。</li>
-<li>popular_colors 聚合是作为 aggregations 字段的一部分被返回的。</li>
-<li>每个桶的 key 都与 color 字段里找到的唯一词对应。它总会包含 doc_count 字段，告诉我们包含该词项的文档数量。</li>
-<li>每个桶的数量代表该颜色的文档数量。</li>
+因为我们设置了 size 参数，所以不会有 hits 搜索结果返回。
+popular_colors 聚合是作为 aggregations 字段的一部分被返回的。
+每个桶的 key 都与 color 字段里找到的唯一词对应。它总会包含 doc_count 字段，告诉我们包含该词项的文档数量。
+每个桶的数量代表该颜色的文档数量。
 </ol>
 <h3>多个聚合</h3>
 <p>同时计算两种桶的结果：对color和对make。</p>
@@ -486,9 +486,9 @@ GROUP BY color
   }
 }
 </code></pre>
-<ul>
-<li><strong>CIDR Mask分组</strong></li>
-</ul>
+
+<strong>CIDR Mask分组</strong>
+
 <p>此外还可以用CIDR Mask分组</p>
 <pre><code class="language-bash">GET /ip_addresses/_search
 {
@@ -530,9 +530,9 @@ GROUP BY color
   }
 }
 </code></pre>
-<ul>
-<li><strong>增加key显示</strong></li>
-</ul>
+
+<strong>增加key显示</strong>
+
 <pre><code class="language-bash">GET /ip_addresses/_search
 {
   &quot;size&quot;: 0,
@@ -570,9 +570,9 @@ GROUP BY color
   }
 }
 </code></pre>
-<ul>
-<li><strong>自定义key显示</strong></li>
-</ul>
+
+<strong>自定义key显示</strong>
+
 <pre><code class="language-bash">GET /ip_addresses/_search
 {
   &quot;size&quot;: 0,
@@ -658,8 +658,8 @@ GROUP BY color
 }
 </code></pre>
 <ol>
-<li>histogram 桶要求两个参数：一个数值字段以及一个定义桶大小间隔。</li>
-<li>sum 度量嵌套在每个售价区间内，用来显示每个区间内的总收入。</li>
+histogram 桶要求两个参数：一个数值字段以及一个定义桶大小间隔。
+sum 度量嵌套在每个售价区间内，用来显示每个区间内的总收入。
 </ol>
 <p>如我们所见，查询是围绕 price 聚合构建的，它包含一个 histogram 桶。它要求字段的类型必须是数值型的同时需要设定分组的间隔范围。 间隔设置为 20,000 意味着我们将会得到如 [0-19999, 20000-39999, ...] 这样的区间。</p>
 <p>接着，我们在直方图内定义嵌套的度量，这个 sum 度量，它会对落入某一具体售价区间的文档中 price 字段的值进行求和。 这可以为我们提供每个售价区间的收入，从而可以发现到底是普通家用车赚钱还是奢侈车赚钱。</p>

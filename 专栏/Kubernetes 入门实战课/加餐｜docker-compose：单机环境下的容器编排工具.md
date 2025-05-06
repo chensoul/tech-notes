@@ -97,10 +97,10 @@ docker push 127.0.0.1:5000/nginx:v1
 </code></pre><p>到这里三个“service”就都定义好了，我们用 <code>docker-compose up -d</code> 启动网站，记得还是要用 <code>-f</code> 参数指定YAML文件：</p><pre><code class="language-plain">docker-compose -f wp-compose.yml up -d
 </code></pre><p>启动之后，用 <code>docker-compose ps</code> 来查看状态：</p><p><img src="https://static001.geekbang.org/resource/image/e2/b9/e23953ca3dd05a79a660c7be9509c1b9.png?wh=1426x782" alt="图片"></p><p>我们也可以用 <code>docker-compose exec</code> 来进入容器内部，验证一下这几个容器的网络标识是否工作正常：</p><pre><code class="language-plain">docker-compose -f wp-compose.yml exec -it nginx sh
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/60/cb/6019120aa14369ce6cb83e880382c1cb.png?wh=1714x1204" alt="图片"></p><p>从截图里你可以看到，我们分别ping了 <code>mariadb</code> 和 <code>wordpress</code> 这两个服务，网络都是通的，不过它的IP地址段用的是“172.22.0.0/16”，和Docker默认的“172.17.0.0/16”不一样。</p><p>再打开浏览器，输入本机的“127.0.0.1”或者是虚拟机的IP地址（我这里是“<a href="http://192.168.10.208">http://192.168.10.208</a>”），就又可以看到熟悉的WordPress界面了：</p><p><img src="https://static001.geekbang.org/resource/image/db/7d/db87232f578ea8556c452c2557db437d.png?wh=1920x1411" alt="图片"></p><h2>小结</h2><p>好了，今天我们暂时离开了Kubernetes，回头看了一下Docker世界里的容器编排工具docker-compose。</p><p>和Kubernetes比起来，docker-compose有它自己的局限性，比如只能用于单机，编排功能比较简单，缺乏运维监控手段等等。但它也有优点：小巧轻便，对软硬件的要求不高，只要有Docker就能够运行。</p><p>所以虽然Kubernetes已经成为了容器编排领域的霸主，但docker-compose还是有一定的生存空间，像GitHub上就有很多项目提供了docker-compose YAML来快速搭建原型或者测试环境，其中的一个典型就是CNCF Harbor。</p><p>对于我们日常工作来说，docker-compose也是很有用的。如果是只有几个容器的简单应用，用Kubernetes来运行实在是有种“杀鸡用牛刀”的感觉，而用Docker命令、Shell脚本又很不方便，这就是docker-compose出场的时候了，它能够让我们彻底摆脱“命令式”，全面使用“声明式”来操作容器。</p><p>我再简单小结一下今天的内容：</p><ol>
-<li>docker-compose源自Fig，是专门用来编排Docker容器的工具。</li>
-<li>docker-compose也使用YAML来描述容器，但语法语义更接近Docker命令行。</li>
-<li>docker-compose YAML里的关键概念是“service”，它是一个容器化的应用。</li>
-<li>docker-compose的命令与Docker类似，比较常用的有 <code>up</code>、<code>ps</code>、<code>down</code>，用来启动、查看和停止应用。</li>
+docker-compose源自Fig，是专门用来编排Docker容器的工具。
+docker-compose也使用YAML来描述容器，但语法语义更接近Docker命令行。
+docker-compose YAML里的关键概念是“service”，它是一个容器化的应用。
+docker-compose的命令与Docker类似，比较常用的有 <code>up</code>、<code>ps</code>、<code>down</code>，用来启动、查看和停止应用。
 </ol><p>另外，docker-compose里还有不少有用的功能，比如存储卷、自定义网络、特权进程等等，感兴趣的话可以再去看看官网资料。</p><p>欢迎留言交流你的学习想法，我们下节课回归正课，下节课见。</p><p><img src="https://static001.geekbang.org/resource/image/24/47/2477f804c387b66d1f6188a2d7530947.jpg?wh=1920x2225" alt="图片"></p>
 <style>
     ul {
@@ -211,7 +211,7 @@ docker push 127.0.0.1:5000/nginx:v1
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIaexL1b8o76RqM4F2PZhWYGxsic2EuFSWWh5IhibqfdjcDzJbhlcag1z0rECfUo0vZREbMyiaW7P8XA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -226,8 +226,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -242,8 +242,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/8f/52/3eebca1e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -258,8 +258,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/cd/db/7467ad23.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -274,8 +274,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/rURvBicplInVqwb9rX21a4IkcKkITIGIo7GE1Tcp3WWU49QtwV53qY8qCKAIpS6x68UmH4STfEcFDJddffGC7lw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -290,8 +290,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -306,8 +306,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -322,8 +322,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/d0/51/f1c9ae2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -338,8 +338,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/e5/42/a994666a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -354,8 +354,8 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/10/bb/f1061601.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -370,5 +370,4 @@ docker push 127.0.0.1:5000/nginx:v1
   </div>
 </div>
 </div>
-</li>
-</ul>
+

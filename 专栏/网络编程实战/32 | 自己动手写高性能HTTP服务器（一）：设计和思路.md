@@ -24,35 +24,35 @@
 
 反应堆模式，按照性能篇的讲解，主要是设计一个基于事件分发和回调的反应堆框架。这个框架里面的主要对象包括：
 
-<li>
+
 <h3>event_loop</h3>
-</li>
+
 
 你可以把event_loop这个对象理解成和一个线程绑定的无限事件循环，你会在各种语言里看到event_loop这个抽象。这是什么意思呢？简单来说，它就是一个无限循环着的事件分发器，一旦有事件发生，它就会回调预先定义好的回调函数，完成事件的处理。
 
 具体来说，event_loop使用poll或者epoll方法将一个线程阻塞，等待各种I/O事件的发生。
 
-<li>
+
 <h3>channel</h3>
-</li>
+
 
 对各种注册到event_loop上的对象，我们抽象成channel来表示，例如注册到event_loop上的监听事件，注册到event_loop上的套接字读写事件等。在各种语言的API里，你都会看到channel这个对象，大体上它们表达的意思跟我们这里的设计思路是比较一致的。
 
-<li>
+
 <h3>acceptor</h3>
-</li>
+
 
 acceptor对象表示的是服务器端监听器，acceptor对象最终会作为一个channel对象，注册到event_loop上，以便进行连接完成的事件分发和检测。
 
-<li>
+
 <h3>event_dispatcher</h3>
-</li>
+
 
 event_dispatcher是对事件分发机制的一种抽象，也就是说，可以实现一个基于poll的poll_dispatcher，也可以实现一个基于epoll的epoll_dispatcher。在这里，我们统一设计一个event_dispatcher结构体，来抽象这些行为。
 
-<li>
+
 <h3>channel_map</h3>
-</li>
+
 
 channel_map保存了描述字到channel的映射，这样就可以在事件发生时，根据事件类型对应的套接字快速找到channel对象里的事件处理函数。
 
@@ -60,29 +60,29 @@ channel_map保存了描述字到channel的映射，这样就可以在事件发�
 
 I/O线程和多线程模型，主要解决event_loop的线程运行问题，以及事件分发和回调的线程执行问题。
 
-<li>
+
 <h3>thread_pool</h3>
-</li>
+
 
 thread_pool维护了一个sub-reactor的线程列表，它可以提供给主reactor线程使用，每次当有新的连接建立时，可以从thread_pool里获取一个线程，以便用它来完成对新连接套接字的read/write事件注册，将I/O线程和主reactor线程分离。
 
-<li>
+
 <h3>event_loop_thread</h3>
-</li>
+
 
 event_loop_thread是reactor的线程实现，连接套接字的read/write事件检测都是在这个线程里完成的。
 
 ### Buffer和数据读写
 
-<li>
+
 <h3>buffer</h3>
-</li>
+
 
 buffer对象屏蔽了对套接字进行的写和读的操作，如果没有buffer对象，连接套接字的read/write事件都需要和字节流直接打交道，这显然是不友好的。所以，我们也提供了一个基本的buffer对象，用来表示从连接套接字收取的数据，以及应用程序即将需要发送出去的数据。
 
-<li>
+
 <h3>tcp_connection</h3>
-</li>
+
 
 tcp_connection这个对象描述的是已建立的TCP连接。它的属性包括接收缓冲区、发送缓冲区、channel对象等。这些都是一个TCP连接的天然属性。
 

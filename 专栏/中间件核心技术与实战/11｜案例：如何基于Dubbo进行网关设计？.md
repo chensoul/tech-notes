@@ -32,8 +32,8 @@
  &nbsp;&lt;/order_items&gt;
 &lt;/order&gt;
 </code></pre><p>当电商的快递件占据快递公司总业务量的大半时，电商平台的话语权是高于快递公司的。也就是说，电商平台不管下游对接哪家物流公司，都会下发自己公司内部定义的订单派发接口，适配工作需要由物流公司自己来承担。</p><p>那站在物流公司的角度，应该怎么做呢？总不能每接入一个电商平台就为它们开发一套下单服务吧？那样的话，随着越来越多的电商平台接入，系统的复杂度会越来越高，可维护性将越来越差。</p><h2>设计方案</h2><p>正是在这样的背景下，网关平台被立项开发出来了。这个网关平台是怎么设计的呢？在设计的过程中需要解决哪些常见的问题？</p><p>我认为，网关的设计至少需要包括三个方面，分别是签名验证、服务配置和限流。</p><p>先说签名验证。保证请求的安全是系统设计需要优先考虑的。业界有一种非常经典的通信安全校验机制：<strong>验证签名。</strong></p><p>这种机制的做法是，客户端与服务端会首先采用HTTPS进行通信，确保传输过程的私密性。</p><p>客户端在发送请求时，先将请求参数按参数名称进行排序，然后按顺序拼接成字符串，格式为key1=a &amp; key2=b。接下来，客户端使用一个约定的密钥对拼接出来的参数字符串进行签名，生成签名字符串（我们用sign表示签名字符串）并追加到URL。通常，还会在URL中追加一个发送时间戳（时间戳不参与签名验证）。</p><p>服务端在接收到客户端的请求后，先从请求中解析出所有的参数，同样按照参数名对参数进行排序，然后使用同样的密钥对参数进行签名。得到的签名字符串需要与客户端计算的签名字符串进行对比，如果两者不同，则请求无效。与此同时，通常我们还需要将服务端当前的时间戳与客户端时间戳进行对比，如果相差超过一定的时间，同样认为请求无效，这个操作主要是为了避免使用同一个连接对网络进行连续攻击。</p><p>这整个过程里有一个非常重要的点，就是密钥自始至终并没有在网络上进行过传播，它的安全性可以得到十足的保证。签名验证的流程大概可以用下面这张图表示：</p><p><img src="https://static001.geekbang.org/resource/image/cb/7d/cb6c980fabc1afd0e76c4fe6627ce87d.jpg?wh=1920x1367" alt="图片"></p><p>如果要对验证签名进行产品化设计，我们通常需要：</p><ol>
-<li>为不同的接入端（电商平台）创建不同的密钥，并通过安全的方式告知他们；</li>
-<li>为不同的接入端（电商平台）配置签名算法。</li>
+为不同的接入端（电商平台）创建不同的密钥，并通过安全的方式告知他们；
+为不同的接入端（电商平台）配置签名算法。
 </ol><p>在确保能够安全通信后，接下来就是网关设计最核心的部分了：<strong>服务接口配置化。</strong>它主要包括两个要点：微服务调用协议（Dubbo服务描述）和接口定义与参数映射。</p><p>我们先来看一下微服务调用协议的配置，设计的原型界面如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/6e/59/6eed0bd5cbe4891082bb3e0678cb7b59.jpg?wh=1920x668" alt="图片"></p><p>将所有的微服务（细化到方法级名称）维护到网关系统中，网关应用就可以使用Dubbo提供的编程API，根据这些元信息动态构建一个个消费者（服务调用者），进而通过创建的服务调用客户端发起RPC远程调用，最终实现网关应用的Dubbo服务调用。</p><p>基于这些元信息构建消费者对象的关键代码如下：</p><pre><code class="language-plain">public static GenericService getInvoker(String serviceInterface, String version, List&lt;String&gt; methods, int retry, String registryAddr ) {
  &nbsp; &nbsp; &nbsp; &nbsp;ReferenceConfig referenceConfig = new ReferenceConfig();
  &nbsp; &nbsp; &nbsp; &nbsp;// 关于消费者通用参数，可以从配置文件中获取，本示例取消
@@ -69,14 +69,14 @@ GenericService oldInvoker = invokerCache.get(key);
 invokerCache.put(newInvoker);//先缓存新的invoker
 // 然后再销毁旧的invoker对象
 oldInvoker.destory();
-</code></pre><p>如果已经存在对应的Invoker对象，为了不影响现有调用，应该先用新的Invoker对象去更新缓存，然后再销毁旧的Invoker对象。</p><p>上面的方法解决了网关调用公司内部的Dubbo微服务问题，但还有另外一个非常重要的问题，怎么配置服务接口相关参数呢？</p><p>联系这节课前面的场景，我们需要在页面上配置公司内部Dubbo服务与外部电商的接口映射。</p><p><img src="https://static001.geekbang.org/resource/image/23/79/233fc90464a70ab461d91766789df579.png?wh=1920x596" alt="图片"></p><p>为此，我们专门建立了一条参数映射协议：</p><p><img src="https://static001.geekbang.org/resource/image/51/af/51f750f5cb40a27a69e49a186b028faf.jpg?wh=1920x774" alt="图片"></p><p>参数映射设计的说明如下。</p><ul>
-<li>请求类型：主要分为请求参数与响应参数；</li>
-<li>字段名称：Dubbo服务对应的字段名称；</li>
-<li>字段类型：Dubbo服务对应字段的属性；</li>
-<li>字段所属类：Dubbo服务对应字段所属类型；</li>
-<li>节点名称：外部请求接口对应的字段名称；</li>
-<li>显示顺序：排序字段。</li>
-</ul><p>由于网关采取了泛化调用，在编写转换代码时，主要是遍历传入的参数，根据每一个字段查询对应的转换规则，然后转换为Map，返回值则刚好相反，是将Map转换为XML或者JSON。</p><p>在真正请求调用时，根据映射规则构建出请求参数Map后，通过Dubbo的泛化调用执行真正的调用：</p><pre><code class="language-plain">GenericService genericService = (GenericService) invokeBean;
+</code></pre><p>如果已经存在对应的Invoker对象，为了不影响现有调用，应该先用新的Invoker对象去更新缓存，然后再销毁旧的Invoker对象。</p><p>上面的方法解决了网关调用公司内部的Dubbo微服务问题，但还有另外一个非常重要的问题，怎么配置服务接口相关参数呢？</p><p>联系这节课前面的场景，我们需要在页面上配置公司内部Dubbo服务与外部电商的接口映射。</p><p><img src="https://static001.geekbang.org/resource/image/23/79/233fc90464a70ab461d91766789df579.png?wh=1920x596" alt="图片"></p><p>为此，我们专门建立了一条参数映射协议：</p><p><img src="https://static001.geekbang.org/resource/image/51/af/51f750f5cb40a27a69e49a186b028faf.jpg?wh=1920x774" alt="图片"></p><p>参数映射设计的说明如下。</p>
+请求类型：主要分为请求参数与响应参数；
+字段名称：Dubbo服务对应的字段名称；
+字段类型：Dubbo服务对应字段的属性；
+字段所属类：Dubbo服务对应字段所属类型；
+节点名称：外部请求接口对应的字段名称；
+显示顺序：排序字段。
+<p>由于网关采取了泛化调用，在编写转换代码时，主要是遍历传入的参数，根据每一个字段查询对应的转换规则，然后转换为Map，返回值则刚好相反，是将Map转换为XML或者JSON。</p><p>在真正请求调用时，根据映射规则构建出请求参数Map后，通过Dubbo的泛化调用执行真正的调用：</p><pre><code class="language-plain">GenericService genericService = (GenericService) invokeBean;
 Map invokerPams;//省略转换过程
 // 参数类型数组
 String[] paramTypes = new String[1];
@@ -198,7 +198,7 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/56/2f/4518f8e1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -213,8 +213,8 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/78/b9/d8bb4c45.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -229,8 +229,8 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/0d/eb/c3ff1e85.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -245,8 +245,8 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/7c/89/93a4019e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -261,8 +261,8 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/77/b3/991f3f9b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -277,8 +277,8 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/6b/e9/7620ae7e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,5 +293,4 @@ Object result = genericService.$invoke(this.getInvokeMethod(), paramTypes, param
   </div>
 </div>
 </div>
-</li>
-</ul>
+

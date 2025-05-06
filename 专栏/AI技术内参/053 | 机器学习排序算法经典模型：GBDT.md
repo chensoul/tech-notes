@@ -59,23 +59,23 @@ AdaBoost提出后不久，机器学习学者和统计学家杰罗姆⋅弗赖德
 
 **论文链接**
 
-<li>
+
 [A Decision-Theoretic Generalization of On-Line Learning and an Application to Boosting](http://www.face-rec.org/algorithms/Boosting-Ensemble/decision-theoretic_generalization.pdf)
-</li>
-<li>
+
+
 [Additive logistic regression: a statistical view of boosting](https://web.stanford.edu/~hastie/Papers/AdditiveLogisticRegression/alr.pdf)
-</li>
-<li>
+
+
 [Greedy function approximation: a gradient boosting machine](https://statweb.stanford.edu/~jhf/ftp/trebst.pdf)
-</li>
-<li>
+
+
 [A general boosting method and its application to learning ranking functions for web search](https://corescholar.libraries.wright.edu/cgi/viewcontent.cgi?referer=https://www.google.com.hk/&amp;httpsredir=1&amp;article=1314&amp;context=knoesis)
-</li>
-<li>
+
+
 [A regression framework for learning ranking functions using relative relevance judgments](https://www.cc.gatech.edu/~zha/papers/fp086-zheng.pdf)
-</li>
-<li>
+
+
 [Practical Lessons from Predicting Clicks on Ads at Facebook](http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=A54CCA7D4A8F05B6636C9D64316BCF96?doi=10.1.1.718.9050&amp;rep=rep1&amp;type=pdf)
-</li>
+
 
 

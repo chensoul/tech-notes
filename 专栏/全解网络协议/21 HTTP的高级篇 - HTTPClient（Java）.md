@@ -25,213 +25,213 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;我应该站在谁的肩膀上&#32;-&#32;OSI&#32;vs&#32;TCPIP模型.md">01 我应该站在谁的肩膀上 - OSI vs TCPIP模型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/02%20%E4%B8%87%E4%B8%88%E9%AB%98%E6%A5%BC%E5%B9%B3%E5%9C%B0%E8%B5%B7-%20%E7%89%A9%E7%90%86%E5%B1%82%20+%20%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.md">02 万丈高楼平地起- 物理层 + 数据链路层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;OSI的灵魂就是我&#32;-&#32;网络层.md">03 OSI的灵魂就是我 - 网络层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;要快还是要稳你说好了&#32;-&#32;传输层.md">04 要快还是要稳你说好了 - 传输层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;是时候展现真正的技术了&#32;-&#32;应用层.md">05 是时候展现真正的技术了 - 应用层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;重回小学课堂&#32;-&#32;二进制101.md">06 重回小学课堂 - 二进制101.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/07%201+1%20=%202%E5%90%97%EF%BC%9F%20-%20%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E8%AE%A1%E7%AE%97.md">07 1+1 = 2吗？ - 二进制的计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;16进制又是个什么鬼？&#32;-&#32;16进制的讲解.md">08 16进制又是个什么鬼？ - 16进制的讲解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;我想有个家&#32;-&#32;什么是IP地址.md">09 我想有个家 - 什么是IP地址.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;我可是住二环的人&#32;-&#32;IP地址的组成和分类.md">10 我可是住二环的人 - IP地址的组成和分类.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;我已经没地方住了吗&#32;-&#32;IPv6.md">11 我已经没地方住了吗 - IPv6.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;向左还是向右&#32;-&#32;IP路由.md">12 向左还是向右 - IP路由.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;我能给你安全感&#32;-&#32;TCP（一）.md">13 我能给你安全感 - TCP（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;我那不为人知的秘密是什么&#32;-&#32;TCP（二）.md">14 我那不为人知的秘密是什么 - TCP（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;不问收没收到，就问快不快&#32;-&#32;UDP.md">15 不问收没收到，就问快不快 - UDP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;我为什么与众不同&#32;-&#32;TCP高级篇（拥塞模型）.md">16 我为什么与众不同 - TCP高级篇（拥塞模型）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;来，先看看我的家谱&#32;-&#32;HTTP的身世.md">17 来，先看看我的家谱 - HTTP的身世.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;我都这么成功了，你却说我不行&#32;-&#32;HTTP&#32;的特点和缺点.md">18 我都这么成功了，你却说我不行 - HTTP 的特点和缺点.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;我老了，让我儿子来吧&#32;-&#32;HTTP2.md">19 我老了，让我儿子来吧 - HTTP2.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;稳重的大外甥&#32;-&#32;HTTPS.md">20 稳重的大外甥 - HTTPS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="21&#32;HTTP的高级篇&#32;-&#32;HTTPClient（Java）.md">21 HTTP的高级篇 - HTTPClient（Java）.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;想来我家，你自己查呀&#32;-&#32;DNS.md">22 想来我家，你自己查呀 - DNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;来的早，不如来得巧&#32;-&#32;NAT.md">23 来的早，不如来得巧 - NAT.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;辛苦的邮政&#32;-&#32;SMTP.md">24 辛苦的邮政 - SMTP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;你就是看不见我&#32;-&#32;VPN.md">25 你就是看不见我 - VPN.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;黑客的好帮手&#32;-&#32;SSH.md">26 黑客的好帮手 - SSH.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;你可以得到我的心，却得不到我的人&#32;-&#32;物理安全设备.md">27 你可以得到我的心，却得不到我的人 - 物理安全设备.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;你怎么证明你就是你&#32;-&#32;身份验证和访问控制.md">28 你怎么证明你就是你 - 身份验证和访问控制.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（一）.md">29 我要怎么藏好我的考研资料 - 网络攻击（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（二）.md">30 我要怎么藏好我的考研资料 - 网络攻击（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;如何保护我的考研资料&#32;-&#32;网络攻击防范.md">31 如何保护我的考研资料 - 网络攻击防范.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;Linux网络安全&#32;-&#32;安全实战.md">32 Linux网络安全 - 安全实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;结语.md">33 结语.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -290,10 +290,10 @@
 <p>HttpClient API是在2018年9月发布的Java 11中引入的。但是，它早在Java 9的前一年就已经可以作为预览功能使用。因为API需要一段时间的打磨才能变得成熟和完善。所以，从Java 11开始，HttpClient API是Java标准库的一部分。这意味着你不需要再向应用程序添加任何外部依赖关系即可使用此API。 HttpClient API替代了在Java标准库中存在了很长时间的HttpURLConnection API。稍后，看我心情要不要说一下为什么需要替换此API。与HttpURLConnection一样，新的HttpClient API支持HTTP 2和WebSocket通信。而且它还支持HTTP的早期版本。 HttpClient API的另一个重要功能是，它提供了同步阻塞和异步非阻塞的方法来执行HTTP请求。HttpClient API的设计目标是在常见情况下易于使用，但是在复杂情况下也具有足够的功能。</p>
 <h5>HttpClient</h5>
 <p>HttpClient API提供了三个重要的类型。所有这些类型都存在于java.net.http包中。首先，有HttpClient类本身。其中包含两个重要的方法：</p>
-<ul>
-<li>send-&gt;send方法执行对服务器的同步和阻塞调用。</li>
-<li>sendAsync-&gt;sendAsync方法执行异步的非阻塞调用。</li>
-</ul>
+
+send-&gt;send方法执行对服务器的同步和阻塞调用。
+sendAsync-&gt;sendAsync方法执行异步的非阻塞调用。
+
 <p>你不能直接实例化HttpClient类。有一个newBuilder方法为你提供了一个构建器类。HttpClient API中的大多数类型都使用了这种构建器模式。</p>
 <h5>HttpRequest</h5>
 <p>发送方法的参数之一是HttpRequest。 HttpRequest包含你希望获得的所有信息，例如请求所针对的URI，可能需要与请求一起发送的HTTP headers，以及指示它是GET，PUT，POST还是其他HTTP的方法。与HttpClient相同，你不能直接构造HttpRequest。但是可以通过构建器来做（HttpRequest.Builder）。Builder总是返回不可变的对象。所以，一旦创建，无论是HttpRequest还是HttpClient 都无法更改了。有请求那就必然也会有响应。</p>
@@ -334,20 +334,20 @@ HttpResponse&lt;String&gt; response = httpClient.send(httpRequest, HttpResponse.
 <p>我们不可能在一篇文章中，把一个API完全讲透，但是我们还是尽量的把一些关键点讲出来。现在来更深入地研究一下HttpClient API，包括诸如处理headers，接受cookie以及执行具有请求主体的HTTP请求的功能，这些请求与到目前为止所看到的HTTP GET请求不同。但是在继续使用这些功能之前，让我们更深入地了解一下HttpClient本身的配置选项。我们之前使用了新的HttpClient方法，该方法为我们提供了所有默认设置的HttpClient。作为HelloWorld来说，还不错。但是通常你要自己调整一些配置选项。所以，使用构建器API创建HttpClient时，有几个选项可以影响使用此HttpClient完成的请求的行为。这些配置选项中的大多数不能在请求级别覆盖。如果针对不同类型的请求则需要不同的配置，也就是说需要创建多个适当配置的HttpClient实例。我们将重点关注与安全性无关的配置。</p>
 <h5>HTTP Version版本</h5>
 <p>第一个配置是HTTP版本。使用HttpClient.newBuilder创建构建器后，可以使用version方法配置将使用的HTTP版本。版本枚举本身嵌套在HttpClient类的内部，一共有两个选项</p>
-<ul>
-<li>HttpClient.Version.HTTP<em>1</em>1</li>
-<li>HttpClient.Version.HTTP_2</li>
-</ul>
+
+HttpClient.Version.HTTP<em>1</em>1
+HttpClient.Version.HTTP_2
+
 <p>HTTP 2是默认选项，如果HttpClient配置为HTTP 2，但是服务器不支持HTTP 2的话，它将自动回退到HTTP 1.1。 HTTP / 2流量看起来与HTTP / 1.1流量完全不同。您也可以根据个人要求配置版本。</p>
 <h5>Priority 优先级</h5>
 <p>第二个配置是优先级。由于仅在HTTP 2协议中指定了优先级，所以这个配置选项仅影响HTTP 2的请求。优先级设置采用1-256范围内的整数，包括这种情况下的边界值。较高的数字表示较高的优先级。</p>
 <h5>Redirection 重定向</h5>
 <p>另一个设置与重定向策略有关。默认情况下，HttpClient配置为从不重定向。这意味着，当对要重定向到另一个URI的服务器执行请求时，HttpClient将不会遵循此重定向。你还可以将HttpClient配置为在服务器响应重定向状态代码时始终遵循重定向。最后，有一个正常的重定向策略，它与始终重定向相同，只是从安全资源重定向到非安全资源的情况除外。从安全位置重定向到非安全位置通常是安全问题。这就是为什么建议使用常规重定向策略而不是使用Always策略的原因。</p>
-<ul>
-<li>HttpClient.Redirect.NEVER</li>
-<li>HttpClient.Redirect.ALWAYS</li>
-<li>HttpClient.Redirect.NORMAL</li>
-</ul>
+
+HttpClient.Redirect.NEVER
+HttpClient.Redirect.ALWAYS
+HttpClient.Redirect.NORMAL
+
 <h5>Connection Timeout超时</h5>
 <p>它需要一个java.time.Duration，并且这是HttpClient等待建立与HTTP服务器连接的时间。如果未配置connectTimeout，则默认设置为无限期等待，这肯定不会是你想要的。connectTimeout与建立与服务器的TCP连接有关。如果花费的时间比配置的connectTimeout长，则将引发异常。</p>
 <h5>Custom Executor自定义执行器</h5>
@@ -368,25 +368,25 @@ HttpClient.newBuilder().executor(exec);
 <h3>请求的有效负载</h3>
 <p>我们一直都在使用简单的GET请求作为案例，这些请求不会将负载传输到HTTP服务器。我们现在来看一下如何创建包含有效负载的请求。此有效负载可以是纯文本，可以是JSON，也可以是任何任意二进制有效负载。通常，HTTP POST的请求主体中包含有效负载。</p>
 <p>除了HttpRequest.Builder上的GET方法外，还有一个POST方法。与GET方法一样，POST方法也带有一个参数，即所谓的BodyPublisher。此BodyPublisher负责产生与POST请求一起发送的有效负载。从这个意义上讲，BodyPublisher与我们之前看到的用于处理响应有效负载的BodyHandler类似。 它告诉HttpClient如何在给定Java对象的情况下构造HTTP请求的主体。你可以在BodyPublisher的类上找到现有的预定义BodyPublisher。比如，HttpRequest.Builder上还有PUT方法，这将使BodyPublisher提供的主体有效负载创建一个HTTP PUT请求。</p>
-<ul>
-<li>POST(BodyPublisher publisher)</li>
-<li>PUT(BodyPublisher publisher)</li>
-</ul>
+
+POST(BodyPublisher publisher)
+PUT(BodyPublisher publisher)
+
 <p>除了POST和PUT之外还有其他HTTP方法，例如PATCH。但是，并非每个HTTP方法在HttpRequest.Builder上都有其自己的方法。如果要创建除GET，POST或PUT之外的请求，则必须在HttpRequest.Builder上使用method方法。</p>
-<ul>
-<li>method(String method, BodyPublisher publisher)</li>
-</ul>
+
+method(String method, BodyPublisher publisher)
+
 <p>方法采用两个参数，其中第一个是表示要请求执行的HTTP方法的字符串，以及一个BodyPublisher。</p>
 <h3>Headers and Cookies</h3>
 <p>你已经了解了如何使用主体创建HTTP请求。客户端向服务器执行HTTP请求时，它必须定义要使用的HTTP方法（比如GET）和要获取的资源比如 /index.html。但是，HTTP请求还有更多的要素。它还包括headers。</p>
 <p>headers是简单的键/值对，其中可能包含有关请求的其他元数据。一个示例是主机头。比如</p>
-<ul>
-<li>Host：www.csdn.net</li>
-</ul>
+
+Host：www.csdn.net
+
 <p>如你看到的，它显示为Host ：值是www.csdn.net。主机标头是HTTP 1.1和更高版本的必需标头之一，它由HttpClient根据创建请求时传递的URI由HttpClient自动为我们管理。除了这些强制性和自动管理的标头之外，有时你还希望向请求中添加其他标头。例如，您可能想添加一个accept标头。</p>
-<ul>
-<li>Accept: text/html</li>
-</ul>
+
+Accept: text/html
+
 <p>accept标头告诉服务器我们想要的首选响应类型，此处表明我们想取回HTML文档。诸如accept之类的标题是HTTP规范的一部分，但它们是可选的。因此，如果你想添加这样的标头来执行请求，则必须为此做一些工作。也可以向HTTP请求中添加任意的，未指定的标头。在API中的写法就是这样</p>
 <pre><code>HttpRequest.newBuilder(URI.create(&quot;https://csdn.net&quot;))
             .header(&quot;Accept&quot;, &quot;text/html&quot;)

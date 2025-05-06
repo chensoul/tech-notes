@@ -120,15 +120,15 @@ PlayBook是Ansible的脚本文件，使用YAML语言编写，包含需要远程�
 
 这段代码的最主要功能是，使用yum完成了Apache服务器和PostgreSQL的安装。其中，包含了编写Ansible PlayBook的三个常用模块。
 
-<li>
+
 yum 调用目标机器上的包管理工具完成软件安装 。Ansible对于不同的Linux操作系统包管理进行了封装，在CentOS上相当于yum， 在Ubuntu上相当于APT。
-</li>
-<li>
+
+
 Template 远程文件渲染，可以把本地机器的文件模板渲染后放到远程主机上。
-</li>
-<li>
+
+
 Service 服务管理，同样封装了不同Linux操作系统实际执行的Service命令。
-</li>
+
 
 **通常情况下，我们用脚本的方式使用Ansible，只要使用好Inventory和PlayBook这两个组件就可以了，即：使用PlayBook编写Ansible脚本，然后用Inventory维护好需要管理的机器列表**。这样，就能解决90%以上使用Ansible的需求。
 
@@ -194,15 +194,15 @@ Service 服务管理，同样封装了不同Linux操作系统实际执行的Serv
 
 这样的持续交付工作流，虽然可以工作，但依然存在两个问题。
 
-<li>
+
 <p>用户体验问题。<br />
 我们一起回顾下第21篇文章[《发布系统一定要注意用户体验》](https://time.geekbang.org/column/article/13552)中的相关内容，用户体验对发布系统来说是相当重要的。<br />
 在上面使用Ansible进行部署Java应用的方案中，我们采用的Jenkins Pipeline和Ansible命令行直接集成的方式，就所有的信息都集中到了Jenkins的console log下面，从而缺少了对发布状态、异常日志的直观展示，整个发布体验很糟糕。</p>
-</li>
-<li>
+
+
 <p>统一管理问题。<br />
 Ansible缺乏集中式管理，需要在每个Jenkins节点上进行Ansible的初始化，增加了管理成本。</p>
-</li>
+
 
 而这两个问题，我们都可以通过Ansible Tower解决。
 
@@ -255,15 +255,15 @@ Ansible Tower是Ansible的中心化管理节点，既提供了Web页面以达到
 
 Spinnaker 是 Netflix 的开源项目，致力于解除持续交付平台和云平台之间的耦合。这个持续交付平台的优点，主要包括：
 
-<li>
+
 发布支持多个云平台，比如AWS EC2、Microsoft Azure、Kubernetes等。如果你未来有在多数据中心使用混合云的打算，Spinnaker可以给你提供很多帮助。
-</li>
-<li>
+
+
 支持集成多个持续集成平台，包括Jenkins、Travis CI等。
-</li>
-<li>
+
+
 Netflix 是金丝雀发布的早期实践者，Spinnaker中已经天然集成了蓝绿发布和金丝雀发布这两种发布策略，减少了开发发布系统的工作量。 在此，你可以回顾一下我在第19篇文章[《发布是持续交付的最后一公里](https://time.geekbang.org/column/article/13380)》中，和你分享的蓝绿发布和金丝雀发布。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/1b/d4/1b7002b9c0c85bb87075a3a7531ea2d4.png" alt="" />
 
@@ -275,12 +275,12 @@ Netflix 是金丝雀发布的早期实践者，Spinnaker中已经天然集成了
 
 在今天这篇文章中，我主要基于Ansible系统的能力，和你分享了搭建一套部署系统的过程。在搭建过程中，你最需要关注的两部分内容是：
 
-<li>
+
 利用Inventory做好部署目标的管理；
-</li>
-<li>
+
+
 利用PlayBook编写部署过程的具体逻辑。
-</li>
+
 
 同时，我还介绍了Ansible Tower这样一个可视化工具，可以帮助你更好地管理整个部署过程。
 

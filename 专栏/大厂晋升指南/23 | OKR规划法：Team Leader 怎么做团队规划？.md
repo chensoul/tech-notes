@@ -277,8 +277,8 @@ KR1：用户量增长1000万（合格）；用户量增长2000万（良好）；
 
 1. OKR规划的第一个阶段是P9/P10级别的业务负责人针对整条业务线做业务规划，先聚焦业务目标（O），在分解关键成果（KR）。
 1. OKR规划的第二个阶段是P7/P8级别的Team Leader针对专业团队做团队规划，先对齐业务OKR，再补充专业OKR。
-<li>聚焦是OKR的第一核心理念，对齐是OKR的第二核心理念，它们也是OKR和KPI在做法上的核心区别。<br>
-<img src="https://static001.geekbang.org/resource/image/50/96/501f22b96e0377c20edb7a96fb18dd96.jpg" alt=""></li>
+聚焦是OKR的第一核心理念，对齐是OKR的第二核心理念，它们也是OKR和KPI在做法上的核心区别。<br>
+<img src="https://static001.geekbang.org/resource/image/50/96/501f22b96e0377c20edb7a96fb18dd96.jpg" alt="">
 
 ## 思考题
 

@@ -418,7 +418,7 @@ counter is  3
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/59/21/d2efde18.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -433,8 +433,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/lfMbV8RibrhFxjILg4550cZiaay64mTh5Zibon64TiaicC8jDMEK7VaXOkllHSpS582Jl1SUHm6Jib2AticVlHibiaBvUOA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -449,8 +449,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -465,8 +465,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/96/f0/a612a08e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -481,8 +481,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -497,8 +497,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIfQFSpQJNKeqTicbpr3Rjo4VYdjE85QMWicMkoTCrGljg6GZcTjXFib1hSt8X9QuUfEuhMQCrdP15Aw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -513,8 +513,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -529,8 +529,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/7b/bd/ccb37425.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -545,8 +545,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/22/5a/873ac981.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -561,8 +561,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/pESfAX6YVRnVg3HpOX44bTa64bHTbhsnlHJqqDjicBeELxCs5rwwIXibFibd0fua3VyVExypnqnfgTSUp8WoYmc9g/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -577,8 +577,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/4b/d7/f46c6dfd.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -593,8 +593,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -609,8 +609,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -625,8 +625,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/6b/17/0c73f775.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -641,8 +641,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/c6/20/124ae6d4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -657,8 +657,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -673,8 +673,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/15/c9/511297c1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -689,8 +689,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/d0/3f/08316343.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -705,8 +705,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/91/d0/35bc62b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -721,8 +721,8 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/df/43/1aa8708a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -737,5 +737,4 @@ counter is  3
   </div>
 </div>
 </div>
-</li>
-</ul>
+

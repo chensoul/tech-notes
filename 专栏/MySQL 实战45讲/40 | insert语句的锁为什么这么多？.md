@@ -113,15 +113,15 @@ insert into t(c,d)  (select c+1, d from t force index(c) order by c desc limit 1
 
 这样，我们就把整个执行过程理清楚了：
 
-<li>
+
 创建临时表，表里有两个字段c和d。
-</li>
-<li>
+
+
 按照索引c扫描表t，依次取c=4、3、2、1，然后回表，读到c和d的值写入临时表。这时，Rows_examined=4。
-</li>
-<li>
+
+
 由于语义里面有limit 1，所以只取了临时表的第一行，再插入到表t中。这时，Rows_examined的值加1，变成了5。
-</li>
+
 
 也就是说，这个语句会导致在表t上做全表扫描，并且会给索引c上的所有间隙都加上共享的next-key lock。所以，这个语句执行期间，其他事务不能在这个表上插入数据。
 
@@ -169,15 +169,15 @@ drop table temp_t;
 
 这个死锁产生的逻辑是这样的：
 
-<li>
+
 在T1时刻，启动session A，并执行insert语句，此时在索引c的c=5上加了记录锁。注意，这个索引是唯一索引，因此退化为记录锁（如果你的印象模糊了，可以回顾下[第21篇文章](https://time.geekbang.org/column/article/75659)介绍的加锁规则）。
-</li>
-<li>
+
+
 在T2时刻，session B要执行相同的insert语句，发现了唯一键冲突，加上读锁；同样地，session C也在索引c上，c=5这一个记录上，加了读锁。
-</li>
-<li>
+
+
 T3时刻，session A回滚。这时候，session B和session C都试图继续执行插入操作，都要加上写锁。两个session都要等待对方的行锁，所以就出现了死锁。
-</li>
+
 
 这个流程的状态变化图如下所示。
 

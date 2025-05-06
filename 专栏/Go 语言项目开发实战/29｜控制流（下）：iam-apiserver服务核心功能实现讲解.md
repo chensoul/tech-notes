@@ -1,11 +1,11 @@
 <audio title="29｜控制流（下）：iam-apiserver服务核心功能实现讲解" src="https://static001.geekbang.org/resource/audio/2c/cd/2c7cc7b9889a6c415630ee03df02decd.mp3" controls="controls"></audio> 
-<p>你好，我是孔令飞。</p><p><a href="https://time.geekbang.org/column/article/401190">上一讲</a>，我介绍了 iam-apiserver 是如何构建 Web 服务的。这一讲，我们再来看下 iam-apiserver 中的核心功能实现。在对这些核心功能的讲解中，我会向你传达我的程序设计思路。</p><p>iam-apiserver 中包含了很多优秀的设计思想和实现，这些点可能比较零碎，但我觉得很值得分享给你。我将这些关键代码设计分为 3 类，分别是应用框架相关的特性、编程规范相关的特性和其他特性。接下来，我们就来详细看看这些设计点，以及它们背后的设计思想。</p><h2>应用框架相关的特性</h2><p>应用框架相关的特性包括三个，分别是优雅关停、健康检查和插件化加载中间件。</p><h3>优雅关停</h3><p>在讲优雅关停之前，先来看看不优雅的停止服务方式是什么样的。</p><p>当我们需要重启服务时，首先需要停止服务，这时可以通过两种方式来停止我们的服务：</p><ul>
-<li>在 Linux 终端键入 Ctrl + C（其实是发送 SIGINT 信号）。</li>
-<li>发送 SIGTERM 信号，例如 <code>kill</code> 或者 <code>systemctl stop</code> 等。</li>
-</ul><p>当我们使用以上两种方式停止服务时，都会产生下面两个问题：</p><ul>
-<li>有些请求正在处理，如果服务端直接退出，会造成客户端连接中断，请求失败。</li>
-<li>我们的程序可能需要做一些清理工作，比如等待进程内任务队列的任务执行完成，或者拒绝接受新的消息等。</li>
-</ul><!-- [[[read_end]]] --><p>这些问题都会对业务造成影响，所以我们需要一种优雅的方式来关停我们的应用。在 Go 开发中，通常通过拦截 <code>SIGINT</code> 和 <code>SIGTERM</code> 信号，来实现优雅关停。当收到这两个信号时，应用进程会做一些清理工作，然后结束阻塞状态，继续执行余下的代码，最后自然退出进程。</p><p>先来看一个简单的优雅关停的示例代码：</p><pre><code class="language-go">package main
+<p>你好，我是孔令飞。</p><p><a href="https://time.geekbang.org/column/article/401190">上一讲</a>，我介绍了 iam-apiserver 是如何构建 Web 服务的。这一讲，我们再来看下 iam-apiserver 中的核心功能实现。在对这些核心功能的讲解中，我会向你传达我的程序设计思路。</p><p>iam-apiserver 中包含了很多优秀的设计思想和实现，这些点可能比较零碎，但我觉得很值得分享给你。我将这些关键代码设计分为 3 类，分别是应用框架相关的特性、编程规范相关的特性和其他特性。接下来，我们就来详细看看这些设计点，以及它们背后的设计思想。</p><h2>应用框架相关的特性</h2><p>应用框架相关的特性包括三个，分别是优雅关停、健康检查和插件化加载中间件。</p><h3>优雅关停</h3><p>在讲优雅关停之前，先来看看不优雅的停止服务方式是什么样的。</p><p>当我们需要重启服务时，首先需要停止服务，这时可以通过两种方式来停止我们的服务：</p>
+在 Linux 终端键入 Ctrl + C（其实是发送 SIGINT 信号）。
+发送 SIGTERM 信号，例如 <code>kill</code> 或者 <code>systemctl stop</code> 等。
+<p>当我们使用以上两种方式停止服务时，都会产生下面两个问题：</p>
+有些请求正在处理，如果服务端直接退出，会造成客户端连接中断，请求失败。
+我们的程序可能需要做一些清理工作，比如等待进程内任务队列的任务执行完成，或者拒绝接受新的消息等。
+<!-- [[[read_end]]] --><p>这些问题都会对业务造成影响，所以我们需要一种优雅的方式来关停我们的应用。在 Go 开发中，通常通过拦截 <code>SIGINT</code> 和 <code>SIGTERM</code> 信号，来实现优雅关停。当收到这两个信号时，应用进程会做一些清理工作，然后结束阻塞状态，继续执行余下的代码，最后自然退出进程。</p><p>先来看一个简单的优雅关停的示例代码：</p><pre><code class="language-go">package main
 
 import (
     "context"
@@ -50,12 +50,12 @@ func main() {
     log.Println("Server exiting")
 }
 </code></pre><p>上面的代码实现优雅关停的思路如下：</p><ol>
-<li>将 HTTP 服务放在 goroutine 中运行，程序不阻塞，继续执行。</li>
-<li>创建一个无缓冲的 channel  <code>quit</code>，调用 <code>signal.Notify(quit, os.Interrupt)</code>。通过 signal.Notify 函数调用，可以将进程收到的 os.Interrupt（SIGINT）信号，发送给 channel <code>quit</code>。</li>
-<li><code>&lt;-quit</code> 阻塞当前 goroutine（也就是 main 函数所在的 goroutine），等待从 channel <code>quit</code> 接收关停信号。通过以上步骤，我们成功启动了 HTTP 服务，并且 main 函数阻塞，防止启动 HTTP 服务的 goroutine 退出。当我们键入 <code>Ctrl + C</code>时，进程会收到 SIGINT 信号，并将该信号发送到 channel <code>quit</code> 中，这时候<code>&lt;-quit</code>收到了 channel 另一端传来的数据，结束阻塞状态，程序继续执行。这里，<code>&lt;-quit</code>唯一目的是阻塞当前的 goroutine，所以对收到的数据直接丢弃。</li>
-<li>打印退出消息，提示准备退出当前服务。</li>
-<li>调用 <code>net/http</code> 包提供的 Shutdown 方法，Shutdown 方法会在指定的时间内处理完现有请求，并返回。</li>
-<li>最后，程序执行完 <code>log.Println("Server exiting")</code> 代码后，退出 main 函数。</li>
+将 HTTP 服务放在 goroutine 中运行，程序不阻塞，继续执行。
+创建一个无缓冲的 channel  <code>quit</code>，调用 <code>signal.Notify(quit, os.Interrupt)</code>。通过 signal.Notify 函数调用，可以将进程收到的 os.Interrupt（SIGINT）信号，发送给 channel <code>quit</code>。
+<code>&lt;-quit</code> 阻塞当前 goroutine（也就是 main 函数所在的 goroutine），等待从 channel <code>quit</code> 接收关停信号。通过以上步骤，我们成功启动了 HTTP 服务，并且 main 函数阻塞，防止启动 HTTP 服务的 goroutine 退出。当我们键入 <code>Ctrl + C</code>时，进程会收到 SIGINT 信号，并将该信号发送到 channel <code>quit</code> 中，这时候<code>&lt;-quit</code>收到了 channel 另一端传来的数据，结束阻塞状态，程序继续执行。这里，<code>&lt;-quit</code>唯一目的是阻塞当前的 goroutine，所以对收到的数据直接丢弃。
+打印退出消息，提示准备退出当前服务。
+调用 <code>net/http</code> 包提供的 Shutdown 方法，Shutdown 方法会在指定的时间内处理完现有请求，并返回。
+最后，程序执行完 <code>log.Println("Server exiting")</code> 代码后，退出 main 函数。
 </ol><p><strong>iam-apiserver 也实现了优雅关停，优雅关停思路跟上面的代码类似。</strong>具体可以分为三个步骤，流程如下：</p><p><strong>第一步</strong>，创建 channel 用来接收 os.Interrupt（SIGINT）和 syscall.SIGTERM（SIGKILL）信号。</p><p>代码见 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/pkg/server/signal.go#L19">internal/pkg/server/signal.go</a> 。</p><pre><code class="language-go">var onlyOneSignalHandler = make(chan struct{})
 
 var shutdownHandler chan os.Signal
@@ -154,13 +154,13 @@ if strings.Contains(s.InsecureServingInfo.Address, "0.0.0.0") {
 }
 </code></pre><p>可以看到，安装中间件时，我们不仅安装了一些必备的中间件，还安装了一些可配置的中间件。</p><p>上述代码安装了两个默认的中间件： <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/pkg/middleware/requestid.go#L22">RequestID</a> 和 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/pkg/middleware/context.go#L17">Context</a> 。</p><p>RequestID 中间件，主要用来在 HTTP 请求头和返回头中设置 <code>X-Request-ID</code> Header。如果 HTTP 请求头中没有 <code>X-Request-ID</code> HTTP 头，则创建 64 位的 UUID，如果有就复用。UUID 是调用 <code>github.com/satori/go.uuid</code>包提供的 <code>NewV4().String()</code>方法来生成的：</p><pre><code class="language-go">rid = uuid.NewV4().String()
 </code></pre><p>另外，这里有个 Go 常量的设计规范需要你注意：常量要跟该常量相关的功能包放在一起，不要将一个项目的常量都集中放在 const 这类包中。例如， <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/pkg/middleware/requestid.go">requestid.go</a> 文件中，我们定义了 <code>XRequestIDKey = "X-Request-ID"</code>常量，其他地方如果需要使用 <code>XRequestIDKey</code>，只需要引入 <code>XRequestIDKey</code>所在的包，并使用即可。</p><p>Context 中间件，用来在 gin.Context 中设置 <code>requestID</code>和 <code>username</code>键，在打印日志时，将 gin.Context 类型的变量传递给 <code>log.L()</code> 函数，<code>log.L()</code> 函数会在日志输出中输出 <code>requestID</code>和 <code>username</code>域：</p><pre><code class="language-bash">2021-07-09 13:33:21.362 DEBUG   apiserver       v1/user.go:106  get 2 users from backend storage.       {"requestID": "f8477cf5-4592-4e47-bdcf-82f7bde2e2d0", "username": "admin"}
-</code></pre><p><code>requestID</code>和 <code>username</code>字段可以方便我们后期过滤并查看日志。</p><p>除了默认的中间件，iam-apiserver 还支持一些可配置的中间件，我们可以通过配置 iam-apiserver 配置文件中的 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/configs/iam-apiserver.yaml#L11">server.middlewares</a> 配置项，来配置这些这些中间件。</p><p>可配置以下中间件：</p><ul>
-<li>recovery：捕获任何 panic，并恢复。</li>
-<li>secure：添加一些安全和资源访问相关的 HTTP 头。</li>
-<li>nocache：禁止客户端缓存 HTTP 请求的返回结果。</li>
-<li>cors：HTTP 请求跨域中间件。</li>
-<li>dump：打印出 HTTP 请求包和返回包的内容，方便 debug。注意，生产环境禁止加载该中间件。</li>
-</ul><p>当然，你还可以根据需要，添加更多的中间件。方法很简单，只需要编写中间件，并将中间件添加到一个 <code>map[string]gin.HandlerFunc</code> 类型的变量中即可：</p><pre><code class="language-go">func defaultMiddlewares() map[string]gin.HandlerFunc {&nbsp; &nbsp; &nbsp;&nbsp;
+</code></pre><p><code>requestID</code>和 <code>username</code>字段可以方便我们后期过滤并查看日志。</p><p>除了默认的中间件，iam-apiserver 还支持一些可配置的中间件，我们可以通过配置 iam-apiserver 配置文件中的 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/configs/iam-apiserver.yaml#L11">server.middlewares</a> 配置项，来配置这些这些中间件。</p><p>可配置以下中间件：</p>
+recovery：捕获任何 panic，并恢复。
+secure：添加一些安全和资源访问相关的 HTTP 头。
+nocache：禁止客户端缓存 HTTP 请求的返回结果。
+cors：HTTP 请求跨域中间件。
+dump：打印出 HTTP 请求包和返回包的内容，方便 debug。注意，生产环境禁止加载该中间件。
+<p>当然，你还可以根据需要，添加更多的中间件。方法很简单，只需要编写中间件，并将中间件添加到一个 <code>map[string]gin.HandlerFunc</code> 类型的变量中即可：</p><pre><code class="language-go">func defaultMiddlewares() map[string]gin.HandlerFunc {&nbsp; &nbsp; &nbsp;&nbsp;
 &nbsp; &nbsp; return map[string]gin.HandlerFunc{&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; "recovery":&nbsp; gin.Recovery(),&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
 &nbsp; &nbsp; &nbsp; &nbsp; "secure":&nbsp; &nbsp; Secure,&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
@@ -175,22 +175,22 @@ if strings.Contains(s.InsecureServingInfo.Address, "0.0.0.0") {
 </code></pre><p>上述代码位于 <a href="https://github.com/marmotedu/iam/blob/v1.0.4/internal/pkg/middleware/middleware.go#L56">internal/pkg/middleware/middleware.go</a> 文件中。</p><h2>编程规范相关的特性</h2><p>编程规范相关的特性有四个，分别是 API 版本、统一的资源元数据、统一的返回、并发处理模板。</p><h3>API 版本</h3><p>RESTful API 为了方便以后扩展，都需要支持 API 版本。在<a href="https://time.geekbang.org/column/article/386970"> 12 讲</a> 中，我们介绍了 API 版本号的 3 种标识方法，iam-apiserver 选择了将 API 版本号放在 URL 中，例如<code>/v1/secrets</code>。放在 URL 中的好处是很直观，看 API 路径就知道版本号。另外，API 的路径也可以很好地跟控制层、业务层、模型层的代码路径相映射。例如，密钥资源相关的代码存放位置如下：</p><pre><code class="language-bash">internal/apiserver/controller/v1/secret/  # 控制几层代码存放位置
 internal/apiserver/service/v1/secret.go # 业务层代码存放位置
 github.com/marmotedu/api/apiserver/v1/secret.go # 模型层代码存放位置
-</code></pre><p>关于代码存放路径，我还有一些地方想跟你分享。对于 Secret 资源，通常我们需要提供 CRUD 接口。</p><ul>
-<li>C：Create（创建 Secret）。</li>
-<li>R：Get（获取详情）、List（获取 Secret 资源列表）。</li>
-<li>U：Update（更新 Secret）。</li>
-<li>D：Delete（删除指定的 Secret）、DeleteCollection（批量删除 Secret）。</li>
-</ul><p>每个接口相互独立，为了减少更新 A 接口代码时因为误操作影响到 B 接口代码的情况，这里建议 CRUD 接口每个接口一个文件，从物理上将不同接口的代码隔离开。这种接口还可以方便我们查找 A 接口的代码所在位置。例如，Secret 控制层相关代码的存放方式如下：</p><pre><code class="language-bash">$ ls internal/apiserver/controller/v1/secret/
+</code></pre><p>关于代码存放路径，我还有一些地方想跟你分享。对于 Secret 资源，通常我们需要提供 CRUD 接口。</p>
+C：Create（创建 Secret）。
+R：Get（获取详情）、List（获取 Secret 资源列表）。
+U：Update（更新 Secret）。
+D：Delete（删除指定的 Secret）、DeleteCollection（批量删除 Secret）。
+<p>每个接口相互独立，为了减少更新 A 接口代码时因为误操作影响到 B 接口代码的情况，这里建议 CRUD 接口每个接口一个文件，从物理上将不同接口的代码隔离开。这种接口还可以方便我们查找 A 接口的代码所在位置。例如，Secret 控制层相关代码的存放方式如下：</p><pre><code class="language-bash">$ ls internal/apiserver/controller/v1/secret/
 create.go  delete_collection.go  delete.go  doc.go  get.go  list.go  secret.go  update.go
 </code></pre><p>业务层和模型层的代码也可以这么组织。iam-apiserver 中，因为 Secret 的业务层和模型层代码比较少，所以我放在了 <code>internal/apiserver/service/v1/secret.go</code>和 <code>github.com/marmotedu/api/apiserver/v1/secret.go</code>文件中。如果后期 Secret 业务代码增多，我们也可以修改成下面这种方式：</p><pre><code class="language-bash"> $ ls internal/apiserver/service/v1/secret/
  create.go  delete_collection.go  delete.go  doc.go  get.go  list.go  secret.go  update.go
 </code></pre><p>这里再说个题外话：<code>/v1/secret/</code>和<code>/secret/v1/</code>这两种目录组织方式都可以，你选择一个自己喜欢的就行。</p><p>当我们需要升级 API 版本时，相关代码可以直接放在 <code>v2</code> 目录下，例如：</p><pre><code class="language-go">internal/apiserver/controller/v2/secret/ # v2 版本控制几层代码存放位置
 internal/apiserver/service/v2/secret.go # v2 版本业务层代码存放位置
 github.com/marmotedu/api/apiserver/v2/secret.go # v2 版本模型层代码存放位置
-</code></pre><p>这样既能够跟 v1 版本的代码物理隔离开，互不影响，又方便查找 v2 版本的代码。</p><h3>统一的资源元数据</h3><p>iam-apiserver 设计的一大亮点是，<strong>像Kubernetes REST 资源一样，支持统一的资源元数据。</strong></p><p>iam-apiserver 中所有的资源都是 REST 资源，iam-apiserver 将 REST 资源的属性也进一步规范化了，这里的规范化是指所有的 REST 资源均支持两种属性：</p><ul>
-<li>公共属性。</li>
-<li>资源自有的属性。</li>
-</ul><p>例如，Secret 资源的定义方式如下：</p><pre><code class="language-go">type Secret struct {
+</code></pre><p>这样既能够跟 v1 版本的代码物理隔离开，互不影响，又方便查找 v2 版本的代码。</p><h3>统一的资源元数据</h3><p>iam-apiserver 设计的一大亮点是，<strong>像Kubernetes REST 资源一样，支持统一的资源元数据。</strong></p><p>iam-apiserver 中所有的资源都是 REST 资源，iam-apiserver 将 REST 资源的属性也进一步规范化了，这里的规范化是指所有的 REST 资源均支持两种属性：</p>
+公共属性。
+资源自有的属性。
+<p>例如，Secret 资源的定义方式如下：</p><pre><code class="language-go">type Secret struct {
     // May add TypeMeta in the future.
     // metav1.TypeMeta `json:",inline"`
 
@@ -214,25 +214,25 @@ github.com/marmotedu/api/apiserver/v2/secret.go # v2 版本模型层代码存放
 	UpdatedAt time.Time `json:&quot;updatedAt,omitempty&quot; gorm:&quot;column:updatedAt&quot;`
 }
 </code></pre><p>接下来，我来详细介绍公共属性中每个字段的含义及作用。</p><ol>
-<li>ID</li>
+ID
 </ol><p>这里的 ID，映射为 MariaDB 数据库中的 <code>id</code> 字段。<code>id</code> 字段在一些应用中，会作为资源的唯一标识。但 iam-apiserver 中没有使用 ID 作为资源的唯一标识，而是使用了 InstanceID。iam-apiserver 中 ID 唯一的作用是跟数据库 <code>id</code> 字段进行映射，代码中并没有使用到 <code>ID</code>。</p><ol start="2">
-<li>InstanceID</li>
+InstanceID
 </ol><p>InstanceID 是资源的唯一标识，格式为<code>&lt;resource identifier&gt;-xxxxxx</code>。其中，<code>&lt;resource identifier&gt;</code>是资源的英文标识符号，<code>xxxxxx</code>是随机字符串。字符集合为 <code>abcdefghijklmnopqrstuvwxyz1234567890</code>，长度&gt;=6，例如 <code>secret-yj8m30</code>、<code>user-j4lz3g</code>、<code>policy-3v18jq</code>。</p><p>腾讯云、阿里云、华为云也都是采用这种格式的字符串作为资源唯一标识的。</p><p>InstanceID 的生成和更新都是自动化的，通过 gorm 提供的 <code>AfterCreate</code> Hooks 在记录插入数据库之后，生成并更新到数据库的 <code>instanceID</code>字段：</p><pre><code class="language-go">func (s *Secret) AfterCreate(tx *gorm.DB) (err error) {
     s.InstanceID = idutil.GetInstanceID(s.ID, "secret-")
 
     return tx.Save(s).Error
 }
-</code></pre><p>上面的代码，在 Secret 记录插入到 iam 数据库的 secret 表之后，调用 <code>idutil.GetInstanceID</code>生成 InstanceID，并通过 <code>tx.Save(s)</code>更新到数据库 secret 表的 <code>instanceID</code>字段。</p><p>因为通常情况下，应用中的 REST 资源只会保存到数据库中的一张表里，这样就能保证应用中每个资源的数据库 ID 是唯一的。所以 <code>GetInstanceID(uid uint64, prefix string) string</code>函数使用 <code>github.com/speps/go-hashids</code>包提供的方法，对这个数据库 ID 进行哈希，最终得到一个数据库级别的唯一的字符串（例如：<code>3v18jq</code>），并根据传入的 prefix，得到资源的 InstanceID。</p><p>使用这种方式生成资源的唯一标识，有下面这两个优点：</p><ul>
-<li>数据库级别唯一。</li>
-<li>InstanceID 是长度可控的字符串，长度最小是 6 个字符，但会根据表中的记录个数动态变长。根据我的测试，2176782336 条记录以内生成的 InstanceID 长度都在 6 个字符以内。长度可控的另外一个好处是方便记忆和传播。</li>
-</ul><p>这里需要你注意：如果同一个资源分别存放在不同的表中，那在使用这种方式时，生成的 InstanceID 可能相同，不过概率很小，几乎为零。这时候，我们就需要使用分布式 ID 生成技术。这又是另外一个话题了，这里不再扩展讲解。</p><p>在实际的开发中，不少开发者会使用数据库数字段 ID（例如 <code>121</code>）和 36/64 位的 UUID（例如 <code>20cd59d4-08c6-4e86-a9d4-a0e51c420a04</code> ）来作为资源的唯一标识。相较于这两种资源标识方式，使用<code>&lt;resource identifier&gt;-xxxxxx</code>这种标识方式具有以下优点：</p><ul>
-<li>看标识名就知道是什么类型的资源，例如：<code>secret-yj8m30</code>说明该资源是 secret 类型的资源。在实际的排障过程中，能够有效减少误操作。</li>
-<li>长度可控，占用数据库空间小。iam-apiserver 的资源标识长度基本可以认为是 12 个字符（secret/policy 是 6 个字符，再加 6 位随机字符）。</li>
-<li>如果使用 <code>121</code> 这类数值作为资源唯一标识，相当于间接向友商透漏系统的规模，是一定要禁止的。</li>
-</ul><p>另外，还有一些系统如 Kubernetes 中，使用资源名作为资源唯一标识。这种方式有个弊端，就是当系统中同类资源太多时，创建资源很容易重名，你自己想要的名字往往填不了，所以 iam-apiserver 不采用这种设计方式。</p><p>我们使用 instanceID 来作为资源的唯一标识，在代码中，就经常需要根据 instanceID 来查询资源。所以，在数据库中要设置该字段为唯一索引，一方面可以防止 instanceID 不唯一，另一方面也能加快查询速度。</p><ol start="3">
-<li>Name</li>
+</code></pre><p>上面的代码，在 Secret 记录插入到 iam 数据库的 secret 表之后，调用 <code>idutil.GetInstanceID</code>生成 InstanceID，并通过 <code>tx.Save(s)</code>更新到数据库 secret 表的 <code>instanceID</code>字段。</p><p>因为通常情况下，应用中的 REST 资源只会保存到数据库中的一张表里，这样就能保证应用中每个资源的数据库 ID 是唯一的。所以 <code>GetInstanceID(uid uint64, prefix string) string</code>函数使用 <code>github.com/speps/go-hashids</code>包提供的方法，对这个数据库 ID 进行哈希，最终得到一个数据库级别的唯一的字符串（例如：<code>3v18jq</code>），并根据传入的 prefix，得到资源的 InstanceID。</p><p>使用这种方式生成资源的唯一标识，有下面这两个优点：</p>
+数据库级别唯一。
+InstanceID 是长度可控的字符串，长度最小是 6 个字符，但会根据表中的记录个数动态变长。根据我的测试，2176782336 条记录以内生成的 InstanceID 长度都在 6 个字符以内。长度可控的另外一个好处是方便记忆和传播。
+<p>这里需要你注意：如果同一个资源分别存放在不同的表中，那在使用这种方式时，生成的 InstanceID 可能相同，不过概率很小，几乎为零。这时候，我们就需要使用分布式 ID 生成技术。这又是另外一个话题了，这里不再扩展讲解。</p><p>在实际的开发中，不少开发者会使用数据库数字段 ID（例如 <code>121</code>）和 36/64 位的 UUID（例如 <code>20cd59d4-08c6-4e86-a9d4-a0e51c420a04</code> ）来作为资源的唯一标识。相较于这两种资源标识方式，使用<code>&lt;resource identifier&gt;-xxxxxx</code>这种标识方式具有以下优点：</p>
+看标识名就知道是什么类型的资源，例如：<code>secret-yj8m30</code>说明该资源是 secret 类型的资源。在实际的排障过程中，能够有效减少误操作。
+长度可控，占用数据库空间小。iam-apiserver 的资源标识长度基本可以认为是 12 个字符（secret/policy 是 6 个字符，再加 6 位随机字符）。
+如果使用 <code>121</code> 这类数值作为资源唯一标识，相当于间接向友商透漏系统的规模，是一定要禁止的。
+<p>另外，还有一些系统如 Kubernetes 中，使用资源名作为资源唯一标识。这种方式有个弊端，就是当系统中同类资源太多时，创建资源很容易重名，你自己想要的名字往往填不了，所以 iam-apiserver 不采用这种设计方式。</p><p>我们使用 instanceID 来作为资源的唯一标识，在代码中，就经常需要根据 instanceID 来查询资源。所以，在数据库中要设置该字段为唯一索引，一方面可以防止 instanceID 不唯一，另一方面也能加快查询速度。</p><ol start="3">
+Name
 </ol><p>Name 即资源的名字，我们可以通过名字很容易地辨别一个资源。</p><ol start="4">
-<li>Extend、ExtendShadow</li>
+Extend、ExtendShadow
 </ol><p>Extend 和 ExtendShadow 是 iam-apiserver 设计的又一大亮点。</p><p>在实际开发中，我们经常会遇到这个问题：随着业务发展，某个资源需要增加一些属性，这时，我们可能会选择在数据库中新增一个数据库字段。但是，随着业务系统的演进，数据库中的字段越来越多，我们的 Code 也要做适配，最后就会越来越难维护。</p><p>我们还可能遇到这种情况：我们将上面说的字段保存在数据库中叫 <code>meta</code>的字段中，数据库中 <code>meta</code>字段的数据格式是<code>{"disable":true,"tag":"colin"}</code>。但是，我们如果想在代码中使用这些字段，需要 Unmarshal 到一个结构体中，例如：</p><pre><code class="language-go">metaData := `{"disable":true,"tag":"colin"}`
 meta := make(map[string]interface{})
 if err := json.Unmarshal([]byte(metaData), &amp;meta); err != nil {
@@ -243,13 +243,13 @@ data, err := json.Marshal(meta)
 if err != nil {
     return err
 }
-</code></pre><p>你可以看到，这种 Unmarshal 和 Marshal 操作有点繁琐。</p><p>因为每个资源都可能需要用到扩展字段，那么有没有一种通用的解决方案呢？iam-apiserver 就通过 Extend 和 ExtendShadow 解决了这个问题。</p><p>Extend 是 Extend 类型的字段，Extend 类型其实是 <code>map[string]interface{}</code>的类型别名。在程序中，我们可以很方便地引用 Extend 包含的属性，也就是 map 的 key。Extend 字段在保存到数据库中时，会自动 Marshal 成字符串，保存在 ExtendShadow 字段中。</p><p>ExtendShadow 是 Extend 在数据库中的影子。同样，当从数据库查询数据时，ExtendShadow 的值会自动 Unmarshal 到 Extend 类型的变量中，供程序使用。</p><p>具体实现方式如下：</p><ul>
-<li>借助 gorm 提供的 <code>BeforeCreate</code>、<code>BeforeUpdate</code>  Hooks，在插入记录、更新记录时，将 Extend 的值转换成字符串，保存在 ExtendShadow 字段中，并最终保存在数据库的 ExtendShadow 字段中。</li>
-<li>借助 gorm 提供的 <code>AfterFind</code>  Hooks，在查询数据后，将 ExtendShadow 的值 Unmarshal 到 Extend 字段中，之后程序就可以通过 Extend 字段来使用其中的属性。</li>
-</ul><ol start="5">
-<li>CreatedAt</li>
+</code></pre><p>你可以看到，这种 Unmarshal 和 Marshal 操作有点繁琐。</p><p>因为每个资源都可能需要用到扩展字段，那么有没有一种通用的解决方案呢？iam-apiserver 就通过 Extend 和 ExtendShadow 解决了这个问题。</p><p>Extend 是 Extend 类型的字段，Extend 类型其实是 <code>map[string]interface{}</code>的类型别名。在程序中，我们可以很方便地引用 Extend 包含的属性，也就是 map 的 key。Extend 字段在保存到数据库中时，会自动 Marshal 成字符串，保存在 ExtendShadow 字段中。</p><p>ExtendShadow 是 Extend 在数据库中的影子。同样，当从数据库查询数据时，ExtendShadow 的值会自动 Unmarshal 到 Extend 类型的变量中，供程序使用。</p><p>具体实现方式如下：</p>
+借助 gorm 提供的 <code>BeforeCreate</code>、<code>BeforeUpdate</code>  Hooks，在插入记录、更新记录时，将 Extend 的值转换成字符串，保存在 ExtendShadow 字段中，并最终保存在数据库的 ExtendShadow 字段中。
+借助 gorm 提供的 <code>AfterFind</code>  Hooks，在查询数据后，将 ExtendShadow 的值 Unmarshal 到 Extend 字段中，之后程序就可以通过 Extend 字段来使用其中的属性。
+<ol start="5">
+CreatedAt
 </ol><p>资源的创建时间。每个资源在创建时，我们都应该记录资源的创建时间，可以帮助后期进行排障、分析等。</p><ol start="6">
-<li>UpdatedAt</li>
+UpdatedAt
 </ol><p>资源的更新时间。每个资源在更新时，我们都应该记录资源的更新时间。资源更新时，该字段由 gorm 自动更新。</p><p>可以看到，ObjectMeta 结构体包含了很多字段，每个字段都完成了很酷的功能。那么，如果把 ObjectMeta 作为所有资源的公共属性，这些资源就会自带这些能力。</p><p>当然，有些开发者可能会说，User 资源其实是不需要 <code>user-xxxxxx</code>这种资源标识的，所以 InstanceID 这个字段其实是无用的字段。但是在我看来，和功能冗余相比，功能规范化、不重复造轮子，以及 ObjectMeta 的其他功能更加重要。所以，也建议所有的 REST 资源都使用统一的资源元数据。</p><h3>统一的返回</h3><p>在<a href="https://time.geekbang.org/column/article/391895">18 讲</a> 中，我们介绍过 API 的接口返回格式应该是统一的。要想返回一个固定格式的消息，最好的方式就是使用同一个返回函数。因为 API 接口都是通过同一个函数来返回的，其返回格式自然是统一的。</p><p>IAM 项目通过 <a href="https://github.com/marmotedu/component-base/tree/master/pkg/core">github.com/marmotedu/component-base/pkg/core</a> 包提供的 <a href="https://github.com/marmotedu/component-base/blob/master/pkg/core/core.go#L33">WriteResponse</a> 函数来返回结果。WriteResponse 函数定义如下：</p><pre><code class="language-go">func WriteResponse(c *gin.Context, err error, data interface{}) {
     if err != nil {
         log.Errorf("%#+v", err)
@@ -358,10 +358,10 @@ package json
 import jsoniter "github.com/json-iterator/go"
 </code></pre><p><code>+build jsoniter</code>就是编译标签。这里要注意，一个源文件可以有多个编译标签，多个编译标签之间是逻辑“与”的关系；一个编译标签可以包括由空格分割的多个标签，这些标签是逻辑“或”的关系。例如：</p><pre><code class="language-go">// +build linux darwin
 // +build 386
-</code></pre><p>这里要注意，编译标签和包的声明之间应该使用空行隔开，否则编译标签会被当作包声明的注释，而不是编译标签。</p><p>那具体来说，我们是如何实现插件化选择 JSON 库的呢？</p><p>首先，我自定义了一个 <a href="https://github.com/marmotedu/component-base/tree/master/pkg/json">github.com/marmotedu/component-base/pkg/json</a> json 包，来适配 encoding/json 和 json-iterator。<code>github.com/marmotedu/component-base/pkg/json</code> 包中有两个文件：</p><ul>
-<li><strong>json.go：</strong>映射了 encoding/json 包的 Marshal、Unmarshal、MarshalIndent、NewDecoder、NewEncoder 方法。</li>
-<li><strong>jsoniter.go：</strong>映射了 github.com/json-iterator/go 包的 Marshal、Unmarshal、MarshalIndent、NewDecoder、NewEncoder。</li>
-</ul><p>json.go 和 jsoniter.go 通过编译标签，让 Go 编译器在构建代码时选择使用哪一个 json 文件。</p><p>接着，通过在执行 <code>go build</code>时指定 <a href="https://github.com/marmotedu/iam/blob/master/scripts/make-rules/golang.mk#L19">-tags</a> 参数，来选择编译哪个 json 文件。</p><p>json/json.go、json/jsoniter.go 这两个 Go 文件的顶部，都有一行注释：</p><pre><code class="language-go">// +build !jsoniter
+</code></pre><p>这里要注意，编译标签和包的声明之间应该使用空行隔开，否则编译标签会被当作包声明的注释，而不是编译标签。</p><p>那具体来说，我们是如何实现插件化选择 JSON 库的呢？</p><p>首先，我自定义了一个 <a href="https://github.com/marmotedu/component-base/tree/master/pkg/json">github.com/marmotedu/component-base/pkg/json</a> json 包，来适配 encoding/json 和 json-iterator。<code>github.com/marmotedu/component-base/pkg/json</code> 包中有两个文件：</p>
+<strong>json.go：</strong>映射了 encoding/json 包的 Marshal、Unmarshal、MarshalIndent、NewDecoder、NewEncoder 方法。
+<strong>jsoniter.go：</strong>映射了 github.com/json-iterator/go 包的 Marshal、Unmarshal、MarshalIndent、NewDecoder、NewEncoder。
+<p>json.go 和 jsoniter.go 通过编译标签，让 Go 编译器在构建代码时选择使用哪一个 json 文件。</p><p>接着，通过在执行 <code>go build</code>时指定 <a href="https://github.com/marmotedu/iam/blob/master/scripts/make-rules/golang.mk#L19">-tags</a> 参数，来选择编译哪个 json 文件。</p><p>json/json.go、json/jsoniter.go 这两个 Go 文件的顶部，都有一行注释：</p><pre><code class="language-go">// +build !jsoniter
 
 // +build jsoniter
 </code></pre><p><code>// +build !jsoniter</code>表示，tags 不是 jsoniter 的时候编译这个 Go 文件。<code>// +build jsoniter</code>表示，tags 是 jsoniter 的时候编译这个 Go 文件。也就是说，这两种条件是互斥的，只有当 tags=jsoniter 的时候，才会使用 json-iterator，其他情况使用 encoding/json。</p><p>例如，如果我们想使用包，可以这么编译项目：</p><pre><code class="language-go">$ go build -tags=jsoniter
@@ -414,20 +414,20 @@ func main() {
 }
 </code></pre><p>这样，我们下次需要新增参数的话，只需要调用 context 的 WithValue 方法：</p><pre><code class="language-go">ctx = context.WithValue(ctx, "sex", "male")
 </code></pre><p>在 B 函数中，通过 <code>context.Context</code> 类型的变量提供的 <code>Value</code> 方法，从 context 中获取 <code>sex</code> key 即可：</p><pre><code class="language-go">return fmt.Sprintf("name: %s, address: %s, phone: %v, sex: %v", name, address, ctx.Value("phone"), ctx.Value("sex"))
-</code></pre><h3>数据一致性</h3><p>为了提高 iam-authz-server 的响应性能，我将密钥和授权策略信息缓存在 iam-authz-server 部署机器的内存中。同时，为了实现高可用，我们需要保证 iam-authz-server 启动的实例个数至少为两个。这时候，我们会面临数据一致性的问题：所有 iam-authz-server 缓存的数据要一致，并且跟 iam-apiserver 数据库中保存的一致。iam-apiserver 通过如下方式来实现数据一致性：</p><p><img src="https://static001.geekbang.org/resource/image/4c/b7/4ce0ff51e4cecb12f7234241137c20b7.jpg?wh=2248x798" alt=""></p><p>具体流程如下：</p><p>第一步，iam-authz-server 启动时，会通过 grpc 调用 iam-apiserver 的 GetSecrets 和 GetPolicies 接口，获取所有的密钥和授权策略信息。</p><p>第二步，当我们通过控制台调用 iam-apiserver 密钥/授权策略的写接口（POST、PUT、DELETE）时，会向 Redis 的 <code>iam.cluster.notifications</code>通道发送 SecretChanged/PolicyChanged 消息。</p><p>第三步，iam-authz-server 会订阅 <code>iam.cluster.notifications</code>通道，当监听到有 SecretChanged/PolicyChanged 消息时，会请求 iam-apiserver 拉取所有的密钥/授权策略。</p><p>通过 Redis 的 Sub/Pub 机制，保证每个 iam-authz-server 节点的缓存数据跟 iam-apiserver 数据库中保存的数据一致。所有节点都调用 iam-apiserver 的同一个接口来拉取数据，通过这种方式保证所有 iam-authz-server 节点的数据是一致的。</p><h2>总结</h2><p>今天，我和你分享了 iam-apiserver 的一些关键功能实现，并介绍了我的设计思路。这里我再简要梳理下。</p><ul>
-<li>为了保证进程关停时，HTTP 请求执行完后再断开连接，进程中的任务正常完成，iam-apiserver 实现了优雅关停功能。</li>
-<li>为了避免进程存在，但服务没成功启动的异常场景，iam-apiserver 实现了健康检查机制。</li>
-<li>Gin 中间件可通过配置文件配置，从而实现按需加载的特性。</li>
-<li>为了能够直接辨别出 API 的版本，iam-apiserver 将 API 的版本标识放在 URL 路径中，例如 <code>/v1/secrets</code>。</li>
-<li>为了能够最大化地共享功能代码，iam-apiserver 抽象出了统一的元数据，每个 REST 资源都具有这些元数据。</li>
-<li>因为 API 接口都是通过同一个函数来返回的，其返回格式自然是统一的。</li>
-<li>因为程序中经常需要处理并发逻辑，iam-apiserver 抽象出了一个通用的并发模板。</li>
-<li>为了方便根据需要切换 JSON 库，我们实现了插件化选择 JSON 库的功能。</li>
-<li>为了实现调用链功能，iam-apiserver 不同函数之间通过 <code>ctx context.Context</code> 来传递 RequestID。</li>
-<li>iam-apiserver 通过 Redis 的 Sub/Pub 机制来保证数据一致性。</li>
-</ul><h2>课后练习</h2><ol>
-<li>思考一下，在你的项目开发中，使用过哪些更好的并发处理方式，欢迎你在留言区分享。</li>
-<li>试着给 iam-apiserver 增加一个新的、可配置的 Gin 中间件，用来实现 API 限流的效果。</li>
+</code></pre><h3>数据一致性</h3><p>为了提高 iam-authz-server 的响应性能，我将密钥和授权策略信息缓存在 iam-authz-server 部署机器的内存中。同时，为了实现高可用，我们需要保证 iam-authz-server 启动的实例个数至少为两个。这时候，我们会面临数据一致性的问题：所有 iam-authz-server 缓存的数据要一致，并且跟 iam-apiserver 数据库中保存的一致。iam-apiserver 通过如下方式来实现数据一致性：</p><p><img src="https://static001.geekbang.org/resource/image/4c/b7/4ce0ff51e4cecb12f7234241137c20b7.jpg?wh=2248x798" alt=""></p><p>具体流程如下：</p><p>第一步，iam-authz-server 启动时，会通过 grpc 调用 iam-apiserver 的 GetSecrets 和 GetPolicies 接口，获取所有的密钥和授权策略信息。</p><p>第二步，当我们通过控制台调用 iam-apiserver 密钥/授权策略的写接口（POST、PUT、DELETE）时，会向 Redis 的 <code>iam.cluster.notifications</code>通道发送 SecretChanged/PolicyChanged 消息。</p><p>第三步，iam-authz-server 会订阅 <code>iam.cluster.notifications</code>通道，当监听到有 SecretChanged/PolicyChanged 消息时，会请求 iam-apiserver 拉取所有的密钥/授权策略。</p><p>通过 Redis 的 Sub/Pub 机制，保证每个 iam-authz-server 节点的缓存数据跟 iam-apiserver 数据库中保存的数据一致。所有节点都调用 iam-apiserver 的同一个接口来拉取数据，通过这种方式保证所有 iam-authz-server 节点的数据是一致的。</p><h2>总结</h2><p>今天，我和你分享了 iam-apiserver 的一些关键功能实现，并介绍了我的设计思路。这里我再简要梳理下。</p>
+为了保证进程关停时，HTTP 请求执行完后再断开连接，进程中的任务正常完成，iam-apiserver 实现了优雅关停功能。
+为了避免进程存在，但服务没成功启动的异常场景，iam-apiserver 实现了健康检查机制。
+Gin 中间件可通过配置文件配置，从而实现按需加载的特性。
+为了能够直接辨别出 API 的版本，iam-apiserver 将 API 的版本标识放在 URL 路径中，例如 <code>/v1/secrets</code>。
+为了能够最大化地共享功能代码，iam-apiserver 抽象出了统一的元数据，每个 REST 资源都具有这些元数据。
+因为 API 接口都是通过同一个函数来返回的，其返回格式自然是统一的。
+因为程序中经常需要处理并发逻辑，iam-apiserver 抽象出了一个通用的并发模板。
+为了方便根据需要切换 JSON 库，我们实现了插件化选择 JSON 库的功能。
+为了实现调用链功能，iam-apiserver 不同函数之间通过 <code>ctx context.Context</code> 来传递 RequestID。
+iam-apiserver 通过 Redis 的 Sub/Pub 机制来保证数据一致性。
+<h2>课后练习</h2><ol>
+思考一下，在你的项目开发中，使用过哪些更好的并发处理方式，欢迎你在留言区分享。
+试着给 iam-apiserver 增加一个新的、可配置的 Gin 中间件，用来实现 API 限流的效果。
 </ol><p>欢迎你在留言区与我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -538,7 +538,7 @@ func main() {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -553,8 +553,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/83/17/df99b53d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -569,8 +569,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -585,8 +585,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/26/34/891dd45b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -601,8 +601,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -617,8 +617,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/57/2a/a00a3ce7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -633,8 +633,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKXjfJWVQGDHmDEI73VQO4dgTzaK5LLz2ax9XUF4FCPy1Oib8aQLibFzpcsiavVVbAQlG4pbrfibdwaYA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -649,8 +649,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -665,8 +665,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKotsBr2icbYNYlRSlicGUD1H7lulSTQUAiclsEz9gnG5kCW9qeDwdYtlRMXic3V6sj9UrfKLPJnQojag/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -681,8 +681,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/5f/e2/e6d3d9bf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -697,8 +697,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/18/4f/9e4d5591.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -713,8 +713,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/26/34/891dd45b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -729,8 +729,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -745,8 +745,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -761,8 +761,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/00/de/5819440a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -777,8 +777,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/02/03/3cc4c2f4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -793,8 +793,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/kjRVmAlqxNubRKh4ZWYiceTd9LfiahZQgyHr1pank8Pd41dxftFfRtlcHsB4cechPzHNy9SaG5R36ml8eBdK6mgA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -809,8 +809,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/16/6b/af7c7745.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -825,8 +825,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/4e/ee/582ffaef.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -841,8 +841,8 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/1f/f3/791d0f5e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -857,5 +857,4 @@ func main() {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

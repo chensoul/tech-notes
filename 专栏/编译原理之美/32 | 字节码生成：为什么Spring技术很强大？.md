@@ -138,12 +138,12 @@ mv.visitEnd();
 
 从这个示例代码中，你会看到两个特点：
 
-<li>
+
 ClassWriter有visitClass、visitMethod这样的方法，以及ClassVisitor、MethodVistor这样的类。这是因为ClassWriter用了visitor模式来编程。你每一次调用visitXXX方法，就会创建相应的字节码对象，就像LLVM形成内存中的IR对象一样。
-</li>
-<li>
+
+
 foo()方法里的指令，跟我们前面看到的字节码指令是一样的。
-</li>
+
 
 执行这个程序，就会生成MyClass2.class文件。
 
@@ -157,18 +157,18 @@ foo()方法里的指令，跟我们前面看到的字节码指令是一样的。
 
 基于AST生成JVM的字节码的逻辑还是比较简单的，比生成针对物理机器的目标代码要简单得多，为什么这么说呢？**主要有以下几个原因：**
 
-<li>
+
 首先，你不用太关心指令选择的问题。针对AST中的每个运算，基本上都有唯一的字节码指令对应，你直白地翻译就可以了，不需要用到树覆盖这样的算法。
-</li>
-<li>
+
+
 你也不需要关心寄存器的分配，因为JVM是使用操作数栈的；
-</li>
-<li>
+
+
 指令重排序也不用考虑，因为指令的顺序是确定的，按照逆波兰表达式的顺序就可以了；
-</li>
-<li>
+
+
 优化算法，你暂时也不用考虑。
-</li>
+
 
 按照这个思路，你可以在playscript-java中增加一个[ByteCodeGen](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/main/play/ByteCodeGen.java)的类，针对少量的语言特性做一下字节码的生成。最后，我们再增加一点代码，能够加载并执行所生成的字节码。运行下面的命令，可以把[bytecode.play](https://github.com/RichardGong/PlayWithCompiler/blob/master/playscript-java/src/examples/bytecode.play)示例代码编译并运行。
 
@@ -201,12 +201,12 @@ Java的动态代理技术，只支持某个类所实现的接口中的方法。�
 
 基于栈的虚拟机不用显式地管理操作数的地址，因此指令会比较短，指令生成也比较容易。而基于寄存器的虚拟机，则能更好地利用寄存器资源，也能对代码进行更多的优化。
 
-<li>
+
 你要能够在大脑中图形化地想象出栈机运行的过程，从而对它的原理理解得更清晰。
-</li>
-<li>
+
+
 ASM是一个字节码操纵框架，它能帮你修改和生成字节码，如果你有这方面的需求，可以采用这样的工具。
-</li>
+
 
 相信有了前几课的基础，你再接触一种新的后端技术时，学习速度会变得很快。学完这节课之后，你可能会觉得：字节码就是另一种IR，而且比LLVM的IR简单多了。如果你有这个感受，那么你已经在脑海里，建立了相关的知识体系，达到了举一反三的效果。
 

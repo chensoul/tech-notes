@@ -29,13 +29,13 @@ spec:
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; name: ngx-svc
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; port:
 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; number: 80
-</code></pre><p>最后，我们要从 <code>all-in-one-dbless.yaml</code> 这个文件中分离出Ingress Controller的定义。其实也很简单，只要搜索“Deployment”就可以了，然后把它以及相关的Service代码复制一份，另存成“kic.yml”。</p><p>当然了，刚复制的代码和默认的Kong Ingress Controller是完全相同的，所以我们必须要参考帮助文档做一些修改，要点我列在了这里：</p><ul>
-<li>Deployment、Service里metadata的 name 都要重命名，比如改成 ingress-kong-dep、ingress-kong-svc。</li>
-<li>spec.selector 和 template.metadata.labels 也要修改成自己的名字，一般来说和Deployment的名字一样，也就是ingress-kong-dep。</li>
-<li>第一个容器是流量代理Proxy，它里面的镜像可以根据需要，改成任意支持的版本，比如Kong:2.7、Kong:2.8或者Kong:3.1。</li>
-<li>第二个容器是规则管理Controller，要用环境变量“CONTROLLER_INGRESS_CLASS”指定新的Ingress Class名字 <code>kong-ink</code>，同时用“CONTROLLER_PUBLISH_SERVICE”指定Service的名字 <code>ingress-kong-svc</code>。</li>
-<li>Service对象可以把类型改成NodePort，方便后续的测试。</li>
-</ul><p>改了这些之后，一个新的Kong Ingress Controller就完成了，大概是这样，修改点我也加注释了你可以对照着看：</p><pre><code class="language-yaml">apiVersion: apps/v1
+</code></pre><p>最后，我们要从 <code>all-in-one-dbless.yaml</code> 这个文件中分离出Ingress Controller的定义。其实也很简单，只要搜索“Deployment”就可以了，然后把它以及相关的Service代码复制一份，另存成“kic.yml”。</p><p>当然了，刚复制的代码和默认的Kong Ingress Controller是完全相同的，所以我们必须要参考帮助文档做一些修改，要点我列在了这里：</p>
+Deployment、Service里metadata的 name 都要重命名，比如改成 ingress-kong-dep、ingress-kong-svc。
+spec.selector 和 template.metadata.labels 也要修改成自己的名字，一般来说和Deployment的名字一样，也就是ingress-kong-dep。
+第一个容器是流量代理Proxy，它里面的镜像可以根据需要，改成任意支持的版本，比如Kong:2.7、Kong:2.8或者Kong:3.1。
+第二个容器是规则管理Controller，要用环境变量“CONTROLLER_INGRESS_CLASS”指定新的Ingress Class名字 <code>kong-ink</code>，同时用“CONTROLLER_PUBLISH_SERVICE”指定Service的名字 <code>ingress-kong-svc</code>。
+Service对象可以把类型改成NodePort，方便后续的测试。
+<p>改了这些之后，一个新的Kong Ingress Controller就完成了，大概是这样，修改点我也加注释了你可以对照着看：</p><pre><code class="language-yaml">apiVersion: apps/v1
 kind: Deployment
 metadata:
 &nbsp; name: ingress-kong-dep            # 重命名
@@ -118,12 +118,12 @@ metadata:
 </code></pre><p>现在让我们应用这些插件对象，并且更新Ingress：</p><pre><code class="language-plain">kubectl apply -f crd.yml
 </code></pre><p>再发送curl请求：</p><pre><code class="language-plain">curl $(minikube ip):32521 -H 'host: kong.test' -i
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/a6/15/a6cc78271975de082c140a83e581b615.png?wh=1756x1200" alt="图片"></p><p>你就会发现响应头里多出了几个字段，其中的 <code>RateLimit-*</code> 是限速信息，而 <code>Resp-New-Header</code> 就是新加的响应头字段。</p><p>把curl连续执行几次，就可以看到限速插件生效了：</p><p><img src="https://static001.geekbang.org/resource/image/b2/82/b2b321c8f7597c9ed151c2783af76282.png?wh=1756x1144" alt="图片"></p><p>Kong Ingress Controller会返回429错误，告诉你访问受限，而且会用“Retry-After”等字段来告诉你多少秒之后才能重新发请求。</p><h2>小结</h2><p>好了，今天我们学习了另一种在Kubernetes管理集群进出流量的工具：Kong Ingress Controller，小结一下要点内容：</p><ol>
-<li>Kong Ingress Controller的底层内核仍然是Nginx，但基于OpenResty和LuaJIT，实现了对路由的完全动态管理，不需要reload。</li>
-<li>使用“无数据库”的方式可以非常简单地安装Kong Ingress Controller，它是一个由两个容器组成的Pod。</li>
-<li>Kong Ingress Controller支持标准的Ingress资源，但还使用了annotation和CRD提供更多的扩展增强功能，特别是插件，可以灵活地加载或者拆卸，实现复杂的流量管理策略。</li>
+Kong Ingress Controller的底层内核仍然是Nginx，但基于OpenResty和LuaJIT，实现了对路由的完全动态管理，不需要reload。
+使用“无数据库”的方式可以非常简单地安装Kong Ingress Controller，它是一个由两个容器组成的Pod。
+Kong Ingress Controller支持标准的Ingress资源，但还使用了annotation和CRD提供更多的扩展增强功能，特别是插件，可以灵活地加载或者拆卸，实现复杂的流量管理策略。
 </ol><p>作为一个CNCF云原生项目，Kong Ingress Controller已经得到了广泛的应用和认可，而且在近年的发展过程中，它也开始支持新的Gateway API，等下次有机会我们再细聊吧。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>你能否对比一下Kong Ingress Controller和Nginx Ingress Controller这两个产品，你看重的是它哪方面的表现呢？</li>
-<li>你觉得插件这种机制有什么好处，能否列举一些其他领域里的类似项目？</li>
+你能否对比一下Kong Ingress Controller和Nginx Ingress Controller这两个产品，你看重的是它哪方面的表现呢？
+你觉得插件这种机制有什么好处，能否列举一些其他领域里的类似项目？
 </ol><p>好久不见了，期待看到你的想法，我们一起讨论，留言区见。</p><p><img src="https://static001.geekbang.org/resource/image/e9/c8/e9c9050ebcd1d0fc001c53e1d75a37c8.jpg?wh=1920x2401" alt="图片"></p>
 <style>
     ul {
@@ -234,7 +234,7 @@ metadata:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/a6/d4/8d50d502.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -249,8 +249,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/95/af/b7f8dc43.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -265,8 +265,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/7c/25/19cbcd56.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -281,8 +281,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/5c/65/27fabb5f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -297,8 +297,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/19/35/be8372be.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -313,8 +313,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2f/85/6f/1654f4b9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -329,8 +329,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/cb/1f/d12f34de.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -345,8 +345,8 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2f/85/6f/1654f4b9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -361,5 +361,4 @@ metadata:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

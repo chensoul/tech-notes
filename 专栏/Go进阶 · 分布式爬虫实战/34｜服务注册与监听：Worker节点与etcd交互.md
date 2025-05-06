@@ -1,14 +1,14 @@
 <audio title="34｜服务注册与监听：Worker节点与etcd交互" src="https://static001.geekbang.org/resource/audio/4e/76/4ea221d45cc71d2ed6ff85b80b145376.mp3" controls="controls"></audio> 
-<p>你好，我是郑建勋。</p><p>这节课，让我们将Worker节点变为一个支持GRPC与HTTP协议访问的服务，让它最终可以被Master服务和外部服务直接访问。在Worker节点上线之后，我们还要将Worker节点注册到服务注册中心。</p><h2>GRPC与Protocol buffers</h2><p>一般要在微服务中进行远程通信，会选择 <a href="https://grpc.io/">GRPC</a> 或RESTful风格的协议。我们之前就提到过，GRPC的好处包括：</p><ul>
-<li>使用了HTTP/2传输协议来传输序列化后的二进制信息，让传输速度更快；</li>
-<li>可以为不同的语言生成对应的Client库，让外部访问非常便利；</li>
-<li>使用 Protocol Buffers 定义API的行为，提供了强大的序列化与反序列化能力；</li>
-<li>支持双向的流式传输（Bi-directional streaming）。</li>
-</ul><p>GRPC默认使用 Protocol buffers 协议来定义接口，它有如下特点：</p><ul>
-<li>它提供了与语言、框架无关的序列化与反序列化的能力；</li>
-<li>它序列化生成的字节数组比JSON更小，同时序列化与反序列化的速度也比JSON更快；</li>
-<li>有良好的向后和向前兼容性。</li>
-</ul><p>Protocol buffers 将接口语言定义在以 .proto为后缀的文件中，之后 proto 编译器结合特定语言的运行库生成特定的SDK。这个SDK文件有助于我们在Client端访问，也有助于我们生成GRPC Server。</p><!-- [[[read_end]]] --><p>现在让我们来实战一下Protocol buffers 协议。</p><p><strong>第一步，</strong>书写一个简单的文件hello.proto：</p><pre><code class="language-plain">syntax = "proto3";
+<p>你好，我是郑建勋。</p><p>这节课，让我们将Worker节点变为一个支持GRPC与HTTP协议访问的服务，让它最终可以被Master服务和外部服务直接访问。在Worker节点上线之后，我们还要将Worker节点注册到服务注册中心。</p><h2>GRPC与Protocol buffers</h2><p>一般要在微服务中进行远程通信，会选择 <a href="https://grpc.io/">GRPC</a> 或RESTful风格的协议。我们之前就提到过，GRPC的好处包括：</p>
+使用了HTTP/2传输协议来传输序列化后的二进制信息，让传输速度更快；
+可以为不同的语言生成对应的Client库，让外部访问非常便利；
+使用 Protocol Buffers 定义API的行为，提供了强大的序列化与反序列化能力；
+支持双向的流式传输（Bi-directional streaming）。
+<p>GRPC默认使用 Protocol buffers 协议来定义接口，它有如下特点：</p>
+它提供了与语言、框架无关的序列化与反序列化的能力；
+它序列化生成的字节数组比JSON更小，同时序列化与反序列化的速度也比JSON更快；
+有良好的向后和向前兼容性。
+<p>Protocol buffers 将接口语言定义在以 .proto为后缀的文件中，之后 proto 编译器结合特定语言的运行库生成特定的SDK。这个SDK文件有助于我们在Client端访问，也有助于我们生成GRPC Server。</p><!-- [[[read_end]]] --><p>现在让我们来实战一下Protocol buffers 协议。</p><p><strong>第一步，</strong>书写一个简单的文件hello.proto：</p><pre><code class="language-plain">syntax = "proto3";
 option go_package = "proto/greeter";
 
 service Greeter {
@@ -22,11 +22,11 @@ message Request {
 message Response {
 	string greeting = 2;
 }
-</code></pre><p>proto协议很容易理解：</p><ul>
-<li><code>syntax = "proto3";</code> 标识我们协议的版本，每个版本的语言可能会有所不同，目前最新的使用最多的版本是proto3，它的语法你可以查看<a href="https://developers.google.com/protocol-buffers/docs/proto3">官方文档</a>；</li>
-<li>option go_package 定义生成的 Go 的 package 名；</li>
-<li>service Greeter 定义了一个服务Greeter，它的远程方法为Hello，Hello参数为结构体Request，返回值为结构体Response。</li>
-</ul><p>要根据这个proto文件生成Go对应的协议文件，我们需要做一下前置的工作：下载 proto 的编译器protoc，安装 protoc 指定版本的方式可以查看<a href="https://grpc.io/docs/protoc-installation/">官方的安装文档</a>。</p><p>同时，我们还需要安装 protoc 的Go语言的插件。</p><pre><code class="language-plain">go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+</code></pre><p>proto协议很容易理解：</p>
+<code>syntax = "proto3";</code> 标识我们协议的版本，每个版本的语言可能会有所不同，目前最新的使用最多的版本是proto3，它的语法你可以查看<a href="https://developers.google.com/protocol-buffers/docs/proto3">官方文档</a>；
+option go_package 定义生成的 Go 的 package 名；
+service Greeter 定义了一个服务Greeter，它的远程方法为Hello，Hello参数为结构体Request，返回值为结构体Response。
+<p>要根据这个proto文件生成Go对应的协议文件，我们需要做一下前置的工作：下载 proto 的编译器protoc，安装 protoc 指定版本的方式可以查看<a href="https://grpc.io/docs/protoc-installation/">官方的安装文档</a>。</p><p>同时，我们还需要安装 protoc 的Go语言的插件。</p><pre><code class="language-plain">go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 </code></pre><p><strong>第二步，</strong>输入命令protoc进行编译，编译完成后生成了hello.pb.go与hello_grpc.pb.go两个协议文件。</p><pre><code class="language-plain">protoc -I $GOPATH/src  -I . --go_out=.  --go-grpc_out=.  hello.proto
 </code></pre><p>在hello_grpc.pb.go中，我们会看到生成的文件为我们自动生成了GreeterServer接口，接口中有Hello方法。</p><pre><code class="language-plain">type GreeterServer interface {
@@ -413,7 +413,7 @@ Hello John
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/8c/7d/cae6b979.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -428,8 +428,8 @@ Hello John
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/8c/7d/cae6b979.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -444,8 +444,8 @@ Hello John
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/qCv5IcP1lkO2jicrTic9KicycZXZ7WylG49GZHJCibuFQfBlJMsCpVHARuaLxIB23f3enRL4ls6EOr9wxu40K0Hl8Q/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -460,8 +460,8 @@ Hello John
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKgz63XQKh9eI5vEicMY27siaoAPubmWr33XNBYic1rvFX0bFNUF6obpKpEEZgzcAtNX1nQiartf8icvdQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -476,8 +476,8 @@ Hello John
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83ep075ibtmxMf3eOYlBJ96CE9TEelLUwePaLqp8M75gWHEcM3za0voylA0oe9y3NiaboPB891rypRt7w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -492,5 +492,4 @@ Hello John
   </div>
 </div>
 </div>
-</li>
-</ul>
+

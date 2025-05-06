@@ -79,10 +79,10 @@ spec:
 综上所述，这个NetworkPolicy对象，指定的隔离规则如下所示：
 
 1. 该隔离规则只对default Namespace下的，携带了role=db标签的Pod有效。限制的请求类型包括ingress（流入）和egress（流出）。
-<li>Kubernetes会拒绝任何访问被隔离Pod的请求，除非这个请求来自于以下“白名单”里的对象，并且访问的是被隔离Pod的6379端口。这些“白名单”对象包括：<br>
+Kubernetes会拒绝任何访问被隔离Pod的请求，除非这个请求来自于以下“白名单”里的对象，并且访问的是被隔离Pod的6379端口。这些“白名单”对象包括：<br>
 a. default Namespace里的，携带了role=fronted标签的Pod；<br>
 b. 携带了project=myproject 标签的 Namespace 里的任何 Pod；<br>
-c. 任何源地址属于172.17.0.0/16网段，且不属于172.17.1.0/24网段的请求。</li>
+c. 任何源地址属于172.17.0.0/16网段，且不属于172.17.1.0/24网段的请求。
 1. Kubernetes会拒绝被隔离Pod对外发起任何请求，除非请求的目的地址属于10.0.0.0/24网段，并且访问的是该网段地址的5978端口。
 
 需要注意的是，定义一个NetworkPolicy对象的过程，容易犯错的是“白名单”部分（from和to字段）。

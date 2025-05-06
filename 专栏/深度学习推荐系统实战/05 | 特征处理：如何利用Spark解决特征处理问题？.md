@@ -169,11 +169,11 @@ _（参考 com.wzhe.sparrowrecsys.offline.spark.featureeng.FeatureEngineering中
 
 ## 课后思考
 
-<li>
+
 请你查阅一下Spark MLlib的编程手册，找出Normalizer、StandardScaler、RobustScaler、MinMaxScaler这个几个特征处理方法有什么不同。
-</li>
-<li>
+
+
 你能试着运行一下SparrowRecSys中的FeatureEngineering类，从输出的结果中找出，到底哪一列是我们处理好的One-hot特征和Multi-hot特征吗？以及这两个特征是用Spark中的什么数据结构来表示的呢？
-</li>
+
 
 这就是我们这节课的全部内容了，你掌握得怎么样？欢迎你把这节课转发出去。下节课我们将讲解一种更高阶的特征处理方法，它同时也是深度学习知识体系中一个非常重要的部分，我们到时候见！

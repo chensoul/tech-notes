@@ -136,10 +136,10 @@ inhibit_rules:
 &nbsp; &nbsp; target_match:
 &nbsp; &nbsp; &nbsp; severity: 'warning'
 &nbsp; &nbsp; equal: ['alertname', 'dev', 'instance']
-</code></pre><p>首先配置一个全局SMTP，然后修改 receivers。receivers 是个数组，默认例子里有个 web.hook，我又加了一个 email 的 receiver，然后配置 route.receiver 字段的值为 email。email_configs中的 to 表示收件人，多个人用逗号分隔，比如 <code>to: 'user1@163.com, user2@163.com'</code>，最后收到的邮件内容大概是这样的，你可以看一下我给出的样例。</p><p><img src="https://static001.geekbang.org/resource/image/bf/d2/bf8a77d0640d97415205c662f50069d2.png?wh=1920x1560" alt="图片"></p><p>收到告警邮件，就说明这整个告警链路走通了。最后我们再看一下数据可视化的问题。Prometheus 自带的看图工具，是给专家用的，需要对指标体系非常了解，经验没法沉淀，而且绘图工具单一，只有折线图。如果你希望有一个更好用的UI工具，可以试试 Grafana。</p><h2>部署 Grafana</h2><p>Grafana 是一个数据可视化工具，有丰富的图表类型，视觉效果很棒，插件式架构，支持各种数据源，是开源监控数据可视化的标杆之作。Grafana可以直接对接Prometheus，大部分使用Prometheus的用户，也都会使用Grafana，下面我们就来部署一下。</p><p>我们可以先把 <a href="https://grafana.com/grafana/download?pg=get&plcmt=selfmanaged-box1-cta1&edition=oss">Grafana</a> 下载下来，它分为两个版本，企业版和开源版，开源版本遵照AGPLV3协议，只要不做二次开发商业化分发，是可以直接使用的。我这里就下载了开源版本，选择 <a href="https://dl.grafana.com/oss/release/grafana-9.1.5.linux-amd64.tar.gz">tar.gz 包</a>，下载之后解压缩，执行 <code>./bin/grafana-server</code> 即可一键启动，Grafana默认的监听端口是3000，访问后就可以看到登录页面了，默认的用户名和密码都是 admin。</p><p>要看图首先要配置数据源，在菜单位置：Configuration -&gt; Data sources，点击 <strong>Add data source</strong> 就能进入数据源类型选择页面，选择Prometheus，填写Prometheus的链接信息，主要是URL，点击 <strong>Save & test</strong> 完成数据源配置。</p><p>Grafana提供了和Prometheus看图页面类似的功能，叫做Explore，我们可以在这个页面点选指标看图。</p><p><img src="https://static001.geekbang.org/resource/image/7d/72/7dd10e1295567613329a7c06eb873872.png?wh=1313x1120" alt="图片"></p><p>但Explore功能不是最核心的，我们使用Grafana，主要是使用Dashboard看图。Grafana社区有很多人制作了各式各样的大盘，以JSON格式上传保存在了 <a href="https://grafana.com/grafana/dashboards/">grafana.com</a>，我们想要某个Dashboard，可以先去这个网站搜索一下，看看是否有人分享过，特别方便。因为我们已经部署了Node-Exporter，那这里就可以直接导入Node-Exporter的大盘，大盘ID是1860，写到图中对应的位置，点击Load，然后选择数据源点击Import即可。</p><p><img src="https://static001.geekbang.org/resource/image/ed/5e/ed4598ac72020b58e03b84152ea2185e.png?wh=1920x1191" alt="图片"></p><p>导入成功的话会自动打开Dashboard，Node-Exporter的大盘长这个样子。</p><p><img src="https://static001.geekbang.org/resource/image/24/b7/24b12129c46b572f84c2f6550cf394b7.png?wh=1920x998" alt="图片"></p><p>走到这个监控看图的部分，我们也走完了整个流程。下面我们对这节课的内容做一个简单总结。</p><h2>小结</h2><p>本讲的核心内容就是演示Prometheus生态相关组件的部署。如果你在课程中是一步一步跟我操作下来的，相信你对Prometheus这套生态就有了入门级的认识。学完这些内容我们再来看一下 Prometheus 的架构图，和监控系统通用架构图相互做一个印证，加深理解。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d6/8e7bcb19da502cbe4cc811f60be871d6.png?wh=1920x1159" alt="图片" title="图片来自官网"></p><p>图上有两个部分我们没有讲到，一个是Pushgateway组件，另一个是Service discovery部分。这里我再做一个简单的补充。</p><ul>
-<li>Pushgateway：用于接收短生命周期任务的指标上报，是PUSH的接收方式。因为Prometheus主要是PULL的方式拉取监控数据，这就要求在拉取的时刻，监控对象得活着，但是很多短周期任务，比如cronjob，可能半秒就运行结束了，就没法拉取了。为了应对这种情况，才单独做了Pushgateway组件作为整个生态的补充。</li>
-<li>Service discovery：我们演示抓取数据时，是直接在 prometheus.yml 中配置的多个 Targets。这种方式虽然简单直观，但是也有弊端，典型的问题就是如果 Targets 是动态变化的，而且变化得比较频繁，那就会造成管理上的灾难。所以 Prometheus 提供了多种服务发现机制，可以动态获取要监控的目标，比如 Kubernetes 的服务发现，可以通过调用 kube-apiserver 动态获取到需要监控的目标对象，大幅降低了抓取目标的管理成本。</li>
-</ul><p>最后，我把这一讲的内容整理了一张脑图，供你理解和记忆。</p><p><img src="https://static001.geekbang.org/resource/image/57/35/57d84b93f63dbc1dc5779ba257c48235.jpg?wh=2379x2174" alt=""></p><h2>互动时刻</h2><p>监控数据的获取，有推（PUSH）拉（PULL）两种模式，不是非黑即白的，不同的场景选择不同的方式，本讲我们在介绍Pushgateway模块时提到了一些选型的依据，你知道推拉两种模式的其他优缺点和适用场景吗？欢迎留言分享，也欢迎你把今天的内容分享给你身边的朋友，邀他一起学习。我们下节课再见！</p><p>点击加入<a href="https://jinshuju.net/f/Ql3qlz">课程交流群</a></p>
+</code></pre><p>首先配置一个全局SMTP，然后修改 receivers。receivers 是个数组，默认例子里有个 web.hook，我又加了一个 email 的 receiver，然后配置 route.receiver 字段的值为 email。email_configs中的 to 表示收件人，多个人用逗号分隔，比如 <code>to: 'user1@163.com, user2@163.com'</code>，最后收到的邮件内容大概是这样的，你可以看一下我给出的样例。</p><p><img src="https://static001.geekbang.org/resource/image/bf/d2/bf8a77d0640d97415205c662f50069d2.png?wh=1920x1560" alt="图片"></p><p>收到告警邮件，就说明这整个告警链路走通了。最后我们再看一下数据可视化的问题。Prometheus 自带的看图工具，是给专家用的，需要对指标体系非常了解，经验没法沉淀，而且绘图工具单一，只有折线图。如果你希望有一个更好用的UI工具，可以试试 Grafana。</p><h2>部署 Grafana</h2><p>Grafana 是一个数据可视化工具，有丰富的图表类型，视觉效果很棒，插件式架构，支持各种数据源，是开源监控数据可视化的标杆之作。Grafana可以直接对接Prometheus，大部分使用Prometheus的用户，也都会使用Grafana，下面我们就来部署一下。</p><p>我们可以先把 <a href="https://grafana.com/grafana/download?pg=get&plcmt=selfmanaged-box1-cta1&edition=oss">Grafana</a> 下载下来，它分为两个版本，企业版和开源版，开源版本遵照AGPLV3协议，只要不做二次开发商业化分发，是可以直接使用的。我这里就下载了开源版本，选择 <a href="https://dl.grafana.com/oss/release/grafana-9.1.5.linux-amd64.tar.gz">tar.gz 包</a>，下载之后解压缩，执行 <code>./bin/grafana-server</code> 即可一键启动，Grafana默认的监听端口是3000，访问后就可以看到登录页面了，默认的用户名和密码都是 admin。</p><p>要看图首先要配置数据源，在菜单位置：Configuration -&gt; Data sources，点击 <strong>Add data source</strong> 就能进入数据源类型选择页面，选择Prometheus，填写Prometheus的链接信息，主要是URL，点击 <strong>Save & test</strong> 完成数据源配置。</p><p>Grafana提供了和Prometheus看图页面类似的功能，叫做Explore，我们可以在这个页面点选指标看图。</p><p><img src="https://static001.geekbang.org/resource/image/7d/72/7dd10e1295567613329a7c06eb873872.png?wh=1313x1120" alt="图片"></p><p>但Explore功能不是最核心的，我们使用Grafana，主要是使用Dashboard看图。Grafana社区有很多人制作了各式各样的大盘，以JSON格式上传保存在了 <a href="https://grafana.com/grafana/dashboards/">grafana.com</a>，我们想要某个Dashboard，可以先去这个网站搜索一下，看看是否有人分享过，特别方便。因为我们已经部署了Node-Exporter，那这里就可以直接导入Node-Exporter的大盘，大盘ID是1860，写到图中对应的位置，点击Load，然后选择数据源点击Import即可。</p><p><img src="https://static001.geekbang.org/resource/image/ed/5e/ed4598ac72020b58e03b84152ea2185e.png?wh=1920x1191" alt="图片"></p><p>导入成功的话会自动打开Dashboard，Node-Exporter的大盘长这个样子。</p><p><img src="https://static001.geekbang.org/resource/image/24/b7/24b12129c46b572f84c2f6550cf394b7.png?wh=1920x998" alt="图片"></p><p>走到这个监控看图的部分，我们也走完了整个流程。下面我们对这节课的内容做一个简单总结。</p><h2>小结</h2><p>本讲的核心内容就是演示Prometheus生态相关组件的部署。如果你在课程中是一步一步跟我操作下来的，相信你对Prometheus这套生态就有了入门级的认识。学完这些内容我们再来看一下 Prometheus 的架构图，和监控系统通用架构图相互做一个印证，加深理解。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d6/8e7bcb19da502cbe4cc811f60be871d6.png?wh=1920x1159" alt="图片" title="图片来自官网"></p><p>图上有两个部分我们没有讲到，一个是Pushgateway组件，另一个是Service discovery部分。这里我再做一个简单的补充。</p>
+Pushgateway：用于接收短生命周期任务的指标上报，是PUSH的接收方式。因为Prometheus主要是PULL的方式拉取监控数据，这就要求在拉取的时刻，监控对象得活着，但是很多短周期任务，比如cronjob，可能半秒就运行结束了，就没法拉取了。为了应对这种情况，才单独做了Pushgateway组件作为整个生态的补充。
+Service discovery：我们演示抓取数据时，是直接在 prometheus.yml 中配置的多个 Targets。这种方式虽然简单直观，但是也有弊端，典型的问题就是如果 Targets 是动态变化的，而且变化得比较频繁，那就会造成管理上的灾难。所以 Prometheus 提供了多种服务发现机制，可以动态获取要监控的目标，比如 Kubernetes 的服务发现，可以通过调用 kube-apiserver 动态获取到需要监控的目标对象，大幅降低了抓取目标的管理成本。
+<p>最后，我把这一讲的内容整理了一张脑图，供你理解和记忆。</p><p><img src="https://static001.geekbang.org/resource/image/57/35/57d84b93f63dbc1dc5779ba257c48235.jpg?wh=2379x2174" alt=""></p><h2>互动时刻</h2><p>监控数据的获取，有推（PUSH）拉（PULL）两种模式，不是非黑即白的，不同的场景选择不同的方式，本讲我们在介绍Pushgateway模块时提到了一些选型的依据，你知道推拉两种模式的其他优缺点和适用场景吗？欢迎留言分享，也欢迎你把今天的内容分享给你身边的朋友，邀他一起学习。我们下节课再见！</p><p>点击加入<a href="https://jinshuju.net/f/Ql3qlz">课程交流群</a></p>
 <style>
     ul {
       list-style: none;
@@ -249,7 +249,7 @@ inhibit_rules:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/4f/b0/ab179368.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -264,8 +264,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/3c/88/ff81f846.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -280,8 +280,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -296,8 +296,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -312,8 +312,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/e3/12/fd02db2e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -328,8 +328,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/45/b2/701f5ad7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -344,8 +344,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -360,8 +360,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -376,8 +376,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/ac/aa/2f117918.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -392,8 +392,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKSVuNarJuDhBSvHY0giaq6yriceEBKiaKuc04wCYWOuso50noqDexaPJJibJN7PHwvcQppnzsDia1icZkw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -408,8 +408,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKSVuNarJuDhBSvHY0giaq6yriceEBKiaKuc04wCYWOuso50noqDexaPJJibJN7PHwvcQppnzsDia1icZkw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -424,8 +424,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/22/13/67/910fb1dc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -440,8 +440,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/a1/69/0af5e082.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -456,8 +456,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/41/23/26f8f45a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -472,8 +472,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/ce/d7/8168e1bf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -488,8 +488,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/4b/33/48b278a4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -504,8 +504,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/5e/45/50424a7a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -520,8 +520,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/8f/cf/890f82d6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -536,8 +536,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/39/22/8437fd56.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -552,8 +552,8 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/4f/b0/ab179368.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -568,5 +568,4 @@ inhibit_rules:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

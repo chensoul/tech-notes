@@ -164,18 +164,18 @@ NEW A
 
 还记得在专栏导读里我们的承诺吗？我们会选出坚持参与学习并分享心得的同学，送出2019年GMTC大会的门票。今天我们就来兑现承诺，送出价值4800元的GMTC门票一张。获得这个“大礼包”的同学是@唯鹿，他不仅提交了作业，更是在博客里分享了每个练习Sample实现的过程和心得，并且一直在坚持。我在文稿里贴了他的练习心得文章链接，如果你对于之前的练习Sample还有不明白的地方，可以参考唯鹿同学的实现过程。
 
-<li>
+
 [Android 开发高手课 课后练习（1 ~ 5）](https://blog.csdn.net/qq_17766199/article/details/85716750)
-</li>
-<li>
+
+
 [Android 开发高手课 课后练习（6 ~ 8，12，17，19）](https://blog.csdn.net/qq_17766199/article/details/86770948)
-</li>
-<li>
+
+
 [专栏第4期完成作业](https://github.com/simplezhli/Chapter04)
-</li>
-<li>
+
+
 [专栏第19期完成作业](https://github.com/simplezhli/Chapter19)
-</li>
+
 
 GMTC门票还有剩余，给自己一个进阶的机会，从现在开始一切都还来得及。
 

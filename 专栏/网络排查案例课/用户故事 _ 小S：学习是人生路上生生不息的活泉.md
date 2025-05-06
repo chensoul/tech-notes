@@ -109,7 +109,7 @@
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q3auHgzwzM7zuDYFIutbSPc4eEtcMhdNBTI1FRR7q0xrGh2X1QdiaNxvAV31HcRUsjPWLaaWftqgwTnVoiaica8Nw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -124,8 +124,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/b4/94/2796de72.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -140,8 +140,8 @@
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/39/f9/b2fe7b63.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -156,5 +156,4 @@
   </div>
 </div>
 </div>
-</li>
-</ul>
+

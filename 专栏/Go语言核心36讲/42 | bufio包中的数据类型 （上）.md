@@ -34,12 +34,12 @@
 
 `bufio`包为我们提供了两个用于初始化`Reader`值的函数，分别叫：
 
-<li>
+
 `NewReader`；
-</li>
-<li>
+
+
 `NewReaderSize`；
-</li>
+
 
 它们都会返回一个`*bufio.Reader`类型的值。
 

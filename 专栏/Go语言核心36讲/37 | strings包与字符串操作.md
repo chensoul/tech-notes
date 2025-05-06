@@ -10,12 +10,12 @@ Go语言不但拥有可以独立代表Unicode字符的类型`rune`，而且还�
 
 我们今天主要来说一说标准库中的`strings`代码包。这个代码包也用到了不少`unicode`包和`unicode/utf8`包中的程序实体。
 
-<li>
+
 比如，`strings.Builder`类型的`WriteRune`方法。
-</li>
-<li>
+
+
 又比如，`strings.Reader`类型的`ReadRune`方法，等等。
-</li>
+
 
 下面这个问题就是针对`strings.Builder`类型的。**我们今天的问题是：与`string`值相比，`strings.Builder`类型的值有哪些优势？**
 

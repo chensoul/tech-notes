@@ -17,10 +17,10 @@ Command file generated: internal/iamctl/cmd/helloworld/helloworld.go
         },
 </code></pre><p>这些操作中包含了low code的思想。在第 <a href="https://time.geekbang.org/column/article/384648"><strong>10讲</strong></a> 中我就强调过，要尽可能使用代码自动生成这一技术。这样做有两个好处：一方面能够提高我们的代码开发效率；另一方面也能够保证规范，减少手动操作可能带来的错误。所以这里，我将iamctl的命令也模板化，并通过 <code>iamctl new</code> 自动生成。</p><p>第三步，生成代码。</p><pre><code>$ make gen
 </code></pre><p>如果改动不涉及代码生成，可以不执行<code>make gen</code>操作。 <code>make gen</code> 执行的其实是gen.run伪目标：</p><pre><code>gen.run: gen.clean gen.errcode gen.docgo.doc
-</code></pre><p>可以看到，当执行 <code>make gen.run</code> 时，其实会先清理之前生成的文件，再分别自动生成error code和doc.go文件。</p><p>这里需要注意，通过<code>make gen</code> 生成的存量代码要具有幂等性。只有这样，才能确保每次生成的代码是一样的，避免不一致带来的问题。</p><p>我们可以将更多的与自动生成代码相关的功能放在 gen.mk Makefile 中。例如：</p><ul>
-<li>gen.docgo.doc，代表自动生成doc.go文件。</li>
-<li>gen.ca.%，代表自动生成iamctl、iam-apiserver、iam-authz-server证书文件。</li>
-</ul><p>第四步，版权检查。</p><p>如果有新文件添加，我们还需要执行 <code>make verify-copyright</code>  ，来检查新文件有没有添加版权头信息。</p><pre><code>$ make verify-copyright
+</code></pre><p>可以看到，当执行 <code>make gen.run</code> 时，其实会先清理之前生成的文件，再分别自动生成error code和doc.go文件。</p><p>这里需要注意，通过<code>make gen</code> 生成的存量代码要具有幂等性。只有这样，才能确保每次生成的代码是一样的，避免不一致带来的问题。</p><p>我们可以将更多的与自动生成代码相关的功能放在 gen.mk Makefile 中。例如：</p>
+gen.docgo.doc，代表自动生成doc.go文件。
+gen.ca.%，代表自动生成iamctl、iam-apiserver、iam-authz-server证书文件。
+<p>第四步，版权检查。</p><p>如果有新文件添加，我们还需要执行 <code>make verify-copyright</code>  ，来检查新文件有没有添加版权头信息。</p><pre><code>$ make verify-copyright
 </code></pre><p>如果版权检查失败，可以执行<code>make add-copyright</code>自动添加版权头。添加版权信息只针对开源软件，如果你的软件不需要添加，就可以略过这一步。</p><p>这里还有个Makefile编写技巧：如果Makefile的command需要某个命令，就可以使该目标依赖类似tools.verify.addlicense这种目标，tools.verify.addlicense会检查该工具是否已安装，如果没有就先安装。</p><pre><code>.PHONY: copyright.verify    
 copyright.verify: tools.verify.addlicense 
   ...
@@ -31,10 +31,10 @@ install.addlicense:
   @$(GO) get -u github.com/marmotedu/addlicense
 </code></pre><p>通过这种方式，可以使 <code>make copyright.verify</code> 尽可能自动化，减少手动介入的概率。</p><p>第五步，代码格式化。</p><pre><code>$ make format
 </code></pre><p>执行<code>make format</code>会依次执行以下格式化操作：</p><ol>
-<li>调用gofmt格式化你的代码。</li>
-<li>调用goimports工具，自动增删依赖的包，并将依赖包按字母序排序并分类。</li>
-<li>调用golines工具，把超过120行的代码按golines规则，格式化成&lt;120行的代码。</li>
-<li>调用 <code>go mod edit -fmt</code> 格式化go.mod文件。</li>
+调用gofmt格式化你的代码。
+调用goimports工具，自动增删依赖的包，并将依赖包按字母序排序并分类。
+调用golines工具，把超过120行的代码按golines规则，格式化成&lt;120行的代码。
+调用 <code>go mod edit -fmt</code> 格式化go.mod文件。
 </ol><p>第六步，静态代码检查。</p><pre><code>$ make lint
 </code></pre><p>关于静态代码检查，在这里你可以先了解代码开发阶段有这个步骤，至于如何操作，我会在下一讲给你详细介绍。</p><p>第七步，单元测试。</p><pre><code>$ make test
 </code></pre><p>这里要注意，并不是所有的包都需要执行单元测试。你可以通过如下命令，排除掉不需要单元测试的包：</p><pre><code>go test `go list ./...|egrep -v $(subst $(SPACE),'|',$(sort $(EXCLUDE_TESTS)))`
@@ -115,22 +115,22 @@ fi
 </code></pre><p>在scripts/ensure_tag.sh脚本中，通过 <code>gsemver bump</code> 命令来自动化生成语义化的版本号，并执行 <code>git tag -a</code> 给仓库打上版本号标签，<code>gsemver</code> 命令会根据Commit Message自动生成版本号。</p><p>之后，Makefile和Shell脚本用到的所有版本号均统一使用<a href="https://github.com/marmotedu/iam/blob/v1.0.0/scripts/make-rules/common.mk#L28">scripts/make-rules/common.mk</a>文件中的VERSION变量：</p><pre><code>VERSION := $(shell git describe --tags --always --match='v*')
 </code></pre><p>上述的Shell命令通过 <code>git describe</code> 来获取离当前提交最近的tag（版本号）。</p><p>在执行 <code>git describe</code> 时，如果符合条件的tag指向最新提交，则只显示tag的名字，否则会有相关的后缀，来描述该tag之后有多少次提交，以及最新的提交commit id。例如：</p><pre><code>$ git describe --tags --always --match='v*'
 v1.0.0-3-g1909e47
-</code></pre><p>这里解释下版本号中各字符的含义：</p><ul>
-<li>3：表示自打tag v1.0.0以来有3次提交。</li>
-<li>g1909e47：g 为git的缩写，在多种管理工具并存的环境中很有用处。</li>
-<li>1909e47：7位字符表示为最新提交的commit id 前7位。</li>
-</ul><p>最后解释下参数：</p><ul>
-<li>–tags，使用所有的标签，而不是只使用带注释的标签（annotated tag）。<code>git tag &lt;tagname&gt; </code>生成一个 unannotated tag，<code>git tag -a &lt;tagname&gt; -m '&lt;message&gt;' </code>生成一个 annotated tag。</li>
-<li>–always，如果仓库没有可用的标签，那么使用commit缩写来替代标签。</li>
-<li>–match <pattern>，只考虑与给定模式相匹配的标签。</pattern></li>
-</ul><h3>保持行为一致</h3><p>上面我们介绍了一些管理功能，例如检查Commit Message是否符合规范、自动生成CHANGELOG、自动生成版本号。这些可以通过Makefile来操作，我们也可以手动执行。例如，通过以下命令，检查IAM的所有Commit是否符合Angular Commit Message规范：</p><pre><code>$ go-gitlint
+</code></pre><p>这里解释下版本号中各字符的含义：</p>
+3：表示自打tag v1.0.0以来有3次提交。
+g1909e47：g 为git的缩写，在多种管理工具并存的环境中很有用处。
+1909e47：7位字符表示为最新提交的commit id 前7位。
+<p>最后解释下参数：</p>
+–tags，使用所有的标签，而不是只使用带注释的标签（annotated tag）。<code>git tag &lt;tagname&gt; </code>生成一个 unannotated tag，<code>git tag -a &lt;tagname&gt; -m '&lt;message&gt;' </code>生成一个 annotated tag。
+–always，如果仓库没有可用的标签，那么使用commit缩写来替代标签。
+–match <pattern>，只考虑与给定模式相匹配的标签。</pattern>
+<h3>保持行为一致</h3><p>上面我们介绍了一些管理功能，例如检查Commit Message是否符合规范、自动生成CHANGELOG、自动生成版本号。这些可以通过Makefile来操作，我们也可以手动执行。例如，通过以下命令，检查IAM的所有Commit是否符合Angular Commit Message规范：</p><pre><code>$ go-gitlint
 b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor|test|ci|docs|chore)(\(.+\))?: [^A-Z].*[^.]$]
 </code></pre><p>也可以通过以下命令，手动来生成CHANGELOG：</p><pre><code>$ git-chglog v1.0.0 CHANGELOG/CHANGELOG-1.0.0.md
 </code></pre><p>还可以执行gsemver来生成版本号：</p><pre><code>$ gsemver bump
 1.0.1
 </code></pre><p>这里要强调的是，我们要保证<strong>不管使用手动操作，还是通过Makefile操作</strong>，都要确保git commit message规范检查结果、生成的CHANGELOG、生成的版本号是一致的。这需要我们<strong>采用同一种操作方式</strong>。</p><h2>总结</h2><p>在整个研发流程中，需要开发人员深度参与的阶段有两个，分别是开发阶段和测试阶段。在开发阶段，开发者完成代码开发之后，通常需要执行生成代码、版权检查、代码格式化、静态代码检查、单元测试、构建等操作。我们可以将这些操作集成在Makefile中，来提高效率，并借此统一操作。</p><p>另外，IAM项目在编写Makefile时也采用了一些技巧，例如<code>make help</code> 命令中，help信息是通过解析Makefile文件的注释来完成的；可以通过git-chglog自动生成CHANGELOG；通过gsemver自动生成语义化的版本号等。</p><h2>课后练习</h2><ol>
-<li>看下IAM项目的 <code>make dependencies</code> 是如何实现的，这样实现有什么好处？</li>
-<li>IAM项目中使用 了<code>gofmt</code> 、<code>goimports</code> 、<code>golines</code> 3种格式化工具，思考下，还有没有其他格式化工具值得集成在 <code>make format</code> 目标的命令中？</li>
+看下IAM项目的 <code>make dependencies</code> 是如何实现的，这样实现有什么好处？
+IAM项目中使用 了<code>gofmt</code> 、<code>goimports</code> 、<code>golines</code> 3种格式化工具，思考下，还有没有其他格式化工具值得集成在 <code>make format</code> 目标的命令中？
 </ol><p>欢迎你在留言区分享你的见解，和我一起交流讨论，我们下一讲见！</p>
 <style>
     ul {
@@ -241,7 +241,7 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/7a/d2/4ba67c0c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -256,8 +256,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/a5/cd/3aff5d57.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -272,8 +272,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/64/53/c93b8110.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -288,8 +288,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -304,8 +304,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/15/ea/11/4f464693.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -320,8 +320,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/xfclWEPQ7szTZnKqnX9icSbgDWV0VAib3Cyo8Vg0OG3Usby88ic7ZgO2ho5lj0icOWI4JeJ70zUBiaTW1xh1UCFRPqA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -336,8 +336,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/21/5f/f8/1d16434b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -352,8 +352,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -368,8 +368,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/23/1b/75/0d18b0bc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -384,8 +384,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/4d/26/44095eba.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -400,8 +400,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/67/17/cbd5c23f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -416,8 +416,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/b4/35/3a96e893.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -432,8 +432,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -448,8 +448,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/cf/63/23db516f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -464,8 +464,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/f0/eb/24a8be29.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -480,8 +480,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/a2/94/ae0a60d8.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -496,8 +496,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -512,8 +512,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/c6/73/abb7bfe3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -528,8 +528,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -544,8 +544,8 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -560,5 +560,4 @@ b62db1f: subject does not match regex [^(revert: )?(feat|fix|perf|style|refactor
   </div>
 </div>
 </div>
-</li>
-</ul>
+

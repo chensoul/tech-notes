@@ -191,12 +191,12 @@ mysql&gt; explain select * from t where (a between 1 and 1000) and (b between 50
 
 从这个结果中，你可以得到两个结论：
 
-<li>
+
 扫描行数的估计值依然不准确；
-</li>
-<li>
+
+
 这个例子里MySQL又选错了索引。
-</li>
+
 
 # 索引选择异常和处理
 
@@ -279,15 +279,15 @@ mysql&gt; select * from  (select * from t where (a between 1 and 1000)  and (b b
 
 merge的执行流程是这样的：
 
-<li>
+
 从磁盘读入数据页到内存（老版本的数据页）；
-</li>
-<li>
+
+
 从change buffer里找出这个数据页的change buffer 记录(可能有多个），依次应用，得到新版数据页；
-</li>
-<li>
+
+
 写redo log。这个redo log包含了数据的变更和change buffer的变更。
-</li>
+
 
 到这里merge过程就结束了。这时候，数据页和内存中change buffer对应的磁盘位置都还没有修改，属于脏页，之后各自刷回自己的物理数据，就是另外一个过程了。
 

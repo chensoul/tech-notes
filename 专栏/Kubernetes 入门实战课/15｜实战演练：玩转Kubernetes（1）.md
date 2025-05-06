@@ -1,11 +1,11 @@
 <audio title="15｜实战演练：玩转Kubernetes（1）" src="https://static001.geekbang.org/resource/audio/97/e5/971343e64de4b61fd3e7e5091b073de5.mp3" controls="controls"></audio> 
-<p>你好，我是Chrono。</p><p>经过两个星期的学习，到今天我们的“初级篇”也快要结束了。</p><p>和之前的“入门篇”一样，在这次课里，我也会对前面学过的知识做一个比较全面的回顾，毕竟Kubernetes领域里有很多新名词、新术语、新架构，知识点多且杂，这样的总结复习就更有必要。</p><p>接下来我还是先简要列举一下“初级篇”里讲到的Kubernetes要点，然后再综合运用这些知识，演示一个实战项目——还是搭建WordPress网站，不过这次不是在Docker里，而是在Kubernetes集群里。</p><h2>Kubernetes技术要点回顾</h2><p>容器技术开启了云原生的大潮，但成熟的容器技术，到生产环境的应用部署的时候，却显得“步履维艰”。因为容器只是针对单个进程的隔离和封装，而实际的应用场景却是要求许多的应用进程互相协同工作，其中的各种关系和需求非常复杂，在容器这个技术层次很难掌控。</p><p>为了解决这个问题，<strong>容器编排</strong>（Container Orchestration）就出现了，它可以说是以前的运维工作在云原生世界的落地实践，本质上还是在集群里调度管理应用程序，只不过管理的主体由人变成了计算机，管理的目标由原生进程变成了容器和镜像。</p><p>而现在，容器编排领域的王者就是——Kubernetes。</p><!-- [[[read_end]]] --><p>Kubernetes源自Borg系统，它凝聚了Google的内部经验和CNCF的社区智慧，所以战胜了竞争对手Apache Mesos和Docker Swarm，成为了容器编排领域的事实标准，也成为了云原生时代的基础操作系统，学习云原生就必须要掌握Kubernetes。</p><p>（<a href="https://time.geekbang.org/column/article/529800">10讲</a>）Kubernetes的<strong>Master/Node架构</strong>是它具有自动化运维能力的关键，也对我们的学习至关重要，这里我再用另一张参考架构图来简略说明一下它的运行机制（<a href="https://kubernetes.io/blog/2018/07/18/11-ways-not-to-get-hacked">图片来源</a>）：</p><p><img src="https://static001.geekbang.org/resource/image/f4/05/f429ca7114eebf140632409f3fbcbb05.png?wh=1475x852" alt="图片"></p><p>Kubernetes把集群里的计算资源定义为节点（Node），其中又划分成控制面和数据面两类。</p><ul>
-<li>控制面是Master节点，负责管理集群和运维监控应用，里面的核心组件是<strong>apiserver、etcd、scheduler、controller-manager</strong>。</li>
-<li>数据面是Worker节点，受Master节点的管控，里面的核心组件是<strong>kubelet、kube-proxy、container-runtime</strong>。</li>
-</ul><p>此外，Kubernetes还支持插件机制，能够灵活扩展各项功能，常用的插件有DNS和Dashboard。</p><p>为了更好地管理集群和业务应用，Kubernetes从现实世界中抽象出了许多概念，称为“<strong>API对象</strong>”，描述这些对象就需要使用<strong>YAML</strong>语言。</p><p>YAML是JSON的超集，但语法更简洁，表现能力更强，更重要的是它以“<strong>声明式</strong>”来表述对象的状态，不涉及具体的操作细节，这样Kubernetes就能够依靠存储在etcd里集群的状态信息，不断地“调控”对象，直至实际状态与期望状态相同，这个过程就是Kubernetes的自动化运维管理（<a href="https://time.geekbang.org/column/article/529813">11讲</a>）。</p><p>Kubernetes里有很多的API对象，其中最核心的对象是“<strong>Pod</strong>”，它捆绑了一组存在密切协作关系的容器，容器之间共享网络和存储，在集群里必须一起调度一起运行。通过Pod这个概念，Kubernetes就简化了对容器的管理工作，其他的所有任务都是通过对Pod这个最小单位的再包装来实现的（<a href="https://time.geekbang.org/column/article/531551">12讲</a>）。</p><p>除了核心的Pod对象，基于“单一职责”和“对象组合”这两个基本原则，我们又学习了4个比较简单的API对象，分别是<strong>Job/CronJob</strong>和<strong>ConfigMap</strong>/<strong>Secret</strong>。</p><ul>
-<li>Job/CronJob对应的是离线作业，它们逐层包装了Pod，添加了作业控制和定时规则（<a href="https://time.geekbang.org/column/article/531566">13讲</a>）。</li>
-<li>ConfigMap/Secret对应的是配置信息，需要以环境变量或者存储卷的形式注入进Pod，然后进程才能在运行时使用（<a href="https://time.geekbang.org/column/article/533395">14讲</a>）。</li>
-</ul><p>和Docker类似，Kubernetes也提供一个客户端工具，名字叫“<strong>kubectl</strong>”，它直接与Master节点的apiserver通信，把YAML文件发送给RESTful接口，从而触发Kubernetes的对象管理工作流程。</p><p>kubectl的命令很多，查看自带文档可以用 <code>api-resources</code>、<code>explain</code> ，查看对象状态可以用 <code>get</code>、<code>describe</code>、<code>logs</code> ，操作对象可以用 <code>run</code>、<code>apply</code>、<code>exec</code>、<code>delete</code> 等等（<a href="https://time.geekbang.org/column/article/529780">09讲</a>）。</p><p>使用YAML描述API对象也有固定的格式，必须写的“头字段”是“<strong>apiVersion</strong>”“<strong>kind</strong>”“<strong>metadata</strong>”，它们表示对象的版本、种类和名字等元信息。实体对象如Pod、Job、CronJob会再有“<strong>spec</strong>”字段描述对象的期望状态，最基本的就是容器信息，非实体对象如ConfigMap、Secret使用的是“<strong>data</strong>”字段，记录一些静态的字符串信息。</p><p>好了，“初级篇”里的Kubernetes知识要点我们就基本总结完了，如果你发现哪部分不太清楚，可以课后再多复习一下前面的课程加以巩固。</p><h2>WordPress网站基本架构</h2><p>下面我们就在Kubernetes集群里再搭建出一个WordPress网站，用的镜像还是“入门篇”里的那三个应用：WordPress、MariaDB、Nginx，不过当时我们是直接以容器的形式来使用它们，现在要改成Pod的形式，让它们运行在Kubernetes里。</p><p>我还是画了一张简单的架构图，来说明这个系统的内部逻辑关系：</p><p><img src="https://static001.geekbang.org/resource/image/3d/cc/3d9d09078f1200a84c63a7cea2f40bcc.jpg?wh=1920x865" alt="图片"></p><p>从这张图中你可以看到，网站的大体架构是没有变化的，毕竟应用还是那三个，它们的调用依赖关系也必然没有变化。</p><p>那么Kubernetes系统和Docker系统的区别又在哪里呢？</p><p>关键就在<strong>对应用的封装</strong>和<strong>网络环境</strong>这两点上。</p><p>现在WordPress、MariaDB这两个应用被封装成了Pod（由于它们都是在线业务，所以Job/CronJob在这里派不上用场），运行所需的环境变量也都被改写成ConfigMap，统一用“声明式”来管理，比起Shell脚本更容易阅读和版本化管理。</p><p>另外，Kubernetes集群在内部维护了一个自己的专用网络，这个网络和外界隔离，要用特殊的“端口转发”方式来传递数据，还需要在集群之外用Nginx反向代理这个地址，这样才能实现内外沟通，对比Docker的直接端口映射，这里略微麻烦了一些。</p><h2>WordPress网站搭建步骤</h2><p>了解基本架构之后，接下来我们就逐步搭建这个网站系统，总共需要4步。</p><p><strong>第一步</strong>当然是要编排MariaDB对象，它的具体运行需求可以参考“入门篇”的实战演练课，这里我就不再重复了。</p><p>MariaDB需要4个环境变量，比如数据库名、用户名、密码等，在Docker里我们是在命令行里使用参数 <code>--env</code>，而在Kubernetes里我们就应该使用ConfigMap，为此需要定义一个 <code>maria-cm</code> 对象：</p><pre><code class="language-yaml">apiVersion: v1
+<p>你好，我是Chrono。</p><p>经过两个星期的学习，到今天我们的“初级篇”也快要结束了。</p><p>和之前的“入门篇”一样，在这次课里，我也会对前面学过的知识做一个比较全面的回顾，毕竟Kubernetes领域里有很多新名词、新术语、新架构，知识点多且杂，这样的总结复习就更有必要。</p><p>接下来我还是先简要列举一下“初级篇”里讲到的Kubernetes要点，然后再综合运用这些知识，演示一个实战项目——还是搭建WordPress网站，不过这次不是在Docker里，而是在Kubernetes集群里。</p><h2>Kubernetes技术要点回顾</h2><p>容器技术开启了云原生的大潮，但成熟的容器技术，到生产环境的应用部署的时候，却显得“步履维艰”。因为容器只是针对单个进程的隔离和封装，而实际的应用场景却是要求许多的应用进程互相协同工作，其中的各种关系和需求非常复杂，在容器这个技术层次很难掌控。</p><p>为了解决这个问题，<strong>容器编排</strong>（Container Orchestration）就出现了，它可以说是以前的运维工作在云原生世界的落地实践，本质上还是在集群里调度管理应用程序，只不过管理的主体由人变成了计算机，管理的目标由原生进程变成了容器和镜像。</p><p>而现在，容器编排领域的王者就是——Kubernetes。</p><!-- [[[read_end]]] --><p>Kubernetes源自Borg系统，它凝聚了Google的内部经验和CNCF的社区智慧，所以战胜了竞争对手Apache Mesos和Docker Swarm，成为了容器编排领域的事实标准，也成为了云原生时代的基础操作系统，学习云原生就必须要掌握Kubernetes。</p><p>（<a href="https://time.geekbang.org/column/article/529800">10讲</a>）Kubernetes的<strong>Master/Node架构</strong>是它具有自动化运维能力的关键，也对我们的学习至关重要，这里我再用另一张参考架构图来简略说明一下它的运行机制（<a href="https://kubernetes.io/blog/2018/07/18/11-ways-not-to-get-hacked">图片来源</a>）：</p><p><img src="https://static001.geekbang.org/resource/image/f4/05/f429ca7114eebf140632409f3fbcbb05.png?wh=1475x852" alt="图片"></p><p>Kubernetes把集群里的计算资源定义为节点（Node），其中又划分成控制面和数据面两类。</p>
+控制面是Master节点，负责管理集群和运维监控应用，里面的核心组件是<strong>apiserver、etcd、scheduler、controller-manager</strong>。
+数据面是Worker节点，受Master节点的管控，里面的核心组件是<strong>kubelet、kube-proxy、container-runtime</strong>。
+<p>此外，Kubernetes还支持插件机制，能够灵活扩展各项功能，常用的插件有DNS和Dashboard。</p><p>为了更好地管理集群和业务应用，Kubernetes从现实世界中抽象出了许多概念，称为“<strong>API对象</strong>”，描述这些对象就需要使用<strong>YAML</strong>语言。</p><p>YAML是JSON的超集，但语法更简洁，表现能力更强，更重要的是它以“<strong>声明式</strong>”来表述对象的状态，不涉及具体的操作细节，这样Kubernetes就能够依靠存储在etcd里集群的状态信息，不断地“调控”对象，直至实际状态与期望状态相同，这个过程就是Kubernetes的自动化运维管理（<a href="https://time.geekbang.org/column/article/529813">11讲</a>）。</p><p>Kubernetes里有很多的API对象，其中最核心的对象是“<strong>Pod</strong>”，它捆绑了一组存在密切协作关系的容器，容器之间共享网络和存储，在集群里必须一起调度一起运行。通过Pod这个概念，Kubernetes就简化了对容器的管理工作，其他的所有任务都是通过对Pod这个最小单位的再包装来实现的（<a href="https://time.geekbang.org/column/article/531551">12讲</a>）。</p><p>除了核心的Pod对象，基于“单一职责”和“对象组合”这两个基本原则，我们又学习了4个比较简单的API对象，分别是<strong>Job/CronJob</strong>和<strong>ConfigMap</strong>/<strong>Secret</strong>。</p>
+Job/CronJob对应的是离线作业，它们逐层包装了Pod，添加了作业控制和定时规则（<a href="https://time.geekbang.org/column/article/531566">13讲</a>）。
+ConfigMap/Secret对应的是配置信息，需要以环境变量或者存储卷的形式注入进Pod，然后进程才能在运行时使用（<a href="https://time.geekbang.org/column/article/533395">14讲</a>）。
+<p>和Docker类似，Kubernetes也提供一个客户端工具，名字叫“<strong>kubectl</strong>”，它直接与Master节点的apiserver通信，把YAML文件发送给RESTful接口，从而触发Kubernetes的对象管理工作流程。</p><p>kubectl的命令很多，查看自带文档可以用 <code>api-resources</code>、<code>explain</code> ，查看对象状态可以用 <code>get</code>、<code>describe</code>、<code>logs</code> ，操作对象可以用 <code>run</code>、<code>apply</code>、<code>exec</code>、<code>delete</code> 等等（<a href="https://time.geekbang.org/column/article/529780">09讲</a>）。</p><p>使用YAML描述API对象也有固定的格式，必须写的“头字段”是“<strong>apiVersion</strong>”“<strong>kind</strong>”“<strong>metadata</strong>”，它们表示对象的版本、种类和名字等元信息。实体对象如Pod、Job、CronJob会再有“<strong>spec</strong>”字段描述对象的期望状态，最基本的就是容器信息，非实体对象如ConfigMap、Secret使用的是“<strong>data</strong>”字段，记录一些静态的字符串信息。</p><p>好了，“初级篇”里的Kubernetes知识要点我们就基本总结完了，如果你发现哪部分不太清楚，可以课后再多复习一下前面的课程加以巩固。</p><h2>WordPress网站基本架构</h2><p>下面我们就在Kubernetes集群里再搭建出一个WordPress网站，用的镜像还是“入门篇”里的那三个应用：WordPress、MariaDB、Nginx，不过当时我们是直接以容器的形式来使用它们，现在要改成Pod的形式，让它们运行在Kubernetes里。</p><p>我还是画了一张简单的架构图，来说明这个系统的内部逻辑关系：</p><p><img src="https://static001.geekbang.org/resource/image/3d/cc/3d9d09078f1200a84c63a7cea2f40bcc.jpg?wh=1920x865" alt="图片"></p><p>从这张图中你可以看到，网站的大体架构是没有变化的，毕竟应用还是那三个，它们的调用依赖关系也必然没有变化。</p><p>那么Kubernetes系统和Docker系统的区别又在哪里呢？</p><p>关键就在<strong>对应用的封装</strong>和<strong>网络环境</strong>这两点上。</p><p>现在WordPress、MariaDB这两个应用被封装成了Pod（由于它们都是在线业务，所以Job/CronJob在这里派不上用场），运行所需的环境变量也都被改写成ConfigMap，统一用“声明式”来管理，比起Shell脚本更容易阅读和版本化管理。</p><p>另外，Kubernetes集群在内部维护了一个自己的专用网络，这个网络和外界隔离，要用特殊的“端口转发”方式来传递数据，还需要在集群之外用Nginx反向代理这个地址，这样才能实现内外沟通，对比Docker的直接端口映射，这里略微麻烦了一些。</p><h2>WordPress网站搭建步骤</h2><p>了解基本架构之后，接下来我们就逐步搭建这个网站系统，总共需要4步。</p><p><strong>第一步</strong>当然是要编排MariaDB对象，它的具体运行需求可以参考“入门篇”的实战演练课，这里我就不再重复了。</p><p>MariaDB需要4个环境变量，比如数据库名、用户名、密码等，在Docker里我们是在命令行里使用参数 <code>--env</code>，而在Kubernetes里我们就应该使用ConfigMap，为此需要定义一个 <code>maria-cm</code> 对象：</p><pre><code class="language-yaml">apiVersion: v1
 kind: ConfigMap
 metadata:
 &nbsp; name: maria-cm
@@ -86,8 +86,8 @@ kubectl get pod -o wide
 &nbsp; &nbsp; nginx:alpine
 </code></pre><p><img src="https://static001.geekbang.org/resource/image/9f/51/9f2b16fb58dbe0a358e26042565f9851.png?wh=1920x238" alt="图片"></p><p>有了Nginx的反向代理之后，我们就可以打开浏览器，输入本机的“127.0.0.1”或者是虚拟机的IP地址（我这里仍然是“<a href="http://192.168.10.208">http://192.168.10.208</a>”），看到WordPress的界面：</p><p><img src="https://static001.geekbang.org/resource/image/73/f4/735552be9cf6d45ac41a001252ayyef4.png?wh=1524x1858" alt="图片"></p><p>你也可以在Kubernetes里使用命令 <code>kubectl logs</code> 查看WordPress、MariaDB等Pod的运行日志，来验证它们是否已经正确地响应了请求：</p><p><img src="https://static001.geekbang.org/resource/image/84/62/8498c598e6f3142d490218601acdbc62.png?wh=1920x809" alt="图片"></p><h2>使用Dashboard管理Kubernetes</h2><p>到这里WordPress网站就搭建成功了，我们的主要任务也算是完成了，不过我还想再带你看看Kubernetes的图形管理界面，也就是Dashboard，看看不用命令行该怎么管理Kubernetes。</p><p>启动Dashboard的命令你还记得吗，在第10节课里讲插件的时候曾经说过，需要用minikube，命令是：</p><pre><code class="language-plain">minikube dashboard
 </code></pre><p>它会自动打开浏览器界面，显示出当前Kubernetes集群里的工作负载：</p><p><img src="https://static001.geekbang.org/resource/image/53/59/536eeb176a7737c9ed815c10af0fcf59.png?wh=1920x1022" alt="图片"></p><p>点击任意一个Pod的名字，就会进入管理界面，可以看到Pod的详细信息，而右上角有4个很重要的功能，分别可以查看日志、进入Pod内部、编辑Pod和删除Pod，相当于执行 <code>logs</code>、<code>exec</code>、<code>edit</code>、<code>delete</code> 命令，但要比命令行要直观友好的多：</p><p><img src="https://static001.geekbang.org/resource/image/d5/28/d5e5131bfb1d6aae2f026177bf283628.png?wh=1920x781" alt="图片"></p><p>比如说，我点击了第二个按钮，就会在浏览器里开启一个Shell窗口，直接就是Pod的内部Linux环境，在里面可以输入任意的命令，无论是查看状态还是调试都很方便：</p><p><img src="https://static001.geekbang.org/resource/image/46/4c/466c67a48616c946505242d0796ed74c.png?wh=1820x1240" alt="图片"></p><p>ConfigMap/Secret等对象也可以在这里任意查看或编辑：</p><p><img src="https://static001.geekbang.org/resource/image/de/22/defyybc05ed793b7966e1f6b68018022.png?wh=1312x976" alt="图片"></p><p>Dashboard里的可操作的地方还有很多，这里我只是一个非常简单的介绍。虽然你也许已经习惯了使用键盘和命令行，但偶尔换一换口味，改用鼠标和图形界面来管理Kubernetes也是件挺有意思的事情，有机会不妨尝试一下。</p><h2>小结</h2><p>好了，作为“初级篇”的最后一节课，今天我们回顾了一下Kubernetes的知识要点，我还是画一份详细的思维导图，帮助你课后随时复习总结。</p><p><img src="https://static001.geekbang.org/resource/image/87/1f/87a1d338340c8ca771a97d0fyy4b611f.jpg?wh=1920x1877" alt="图片"></p><p>这节课里我们使用Kubernetes搭建了WordPress网站，和第7讲里的Docker比较起来，我们应用了容器编排技术，以“声明式”的YAML来描述应用的状态和它们之间的关系，而不会列出详细的操作步骤，这就降低了我们的心智负担——调度、创建、监控等杂事都交给Kubernetes处理，我们只需“坐享其成”。</p><p>虽然我们朝着云原生的方向迈出了一大步，不过现在我们的容器编排还不够完善，Pod的IP地址还必须手工查找填写，缺少自动的服务发现机制，另外对外暴露服务的方式还很原始，必须要依赖集群外部力量的帮助。</p><p>所以，我们的学习之旅还将继续，在接下来的“中级篇”里，会开始研究更多的API对象，来解决这里遇到的问题。</p><h2>课下作业</h2><p>最后是课下作业时间，给你留两个动手题：</p><ol>
-<li>MariaDB、WordPress现在用的是ConfigMap，能否改用Secret来实现呢？</li>
-<li>你能否把Nginx代理转换成Pod的形式，让它在Kubernetes里运行呢？</li>
+MariaDB、WordPress现在用的是ConfigMap，能否改用Secret来实现呢？
+你能否把Nginx代理转换成Pod的形式，让它在Kubernetes里运行呢？
 </ol><p>期待能看到你动手体验后的想法，如果觉得有帮助，欢迎分享给自己身边的朋友一起学习。</p><p>下节课就是视频演示的操作课了，我们下节课再见。</p><p><img src="https://static001.geekbang.org/resource/image/3c/ea/3c3036bc56bb9ec14598342e56c11bea.jpg?wh=1920x1544" alt="图片"></p>
 <style>
     ul {
@@ -198,7 +198,7 @@ kubectl get pod -o wide
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -213,8 +213,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -229,8 +229,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -245,8 +245,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKQuaDVYz2jWN9vrmgbB785SNkmYmxf1xzEG8m8ku3ZvzYSkiaanTjqt7O47ficOQUpGmEy7eImplDw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -261,8 +261,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/83/af/1cb42cd3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -277,8 +277,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/14/e7/c534fab3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -293,8 +293,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -309,8 +309,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -325,8 +325,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/7c/cf/d5382404.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -341,8 +341,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -357,8 +357,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -373,8 +373,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -389,8 +389,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/ibZVAmmdAibBeVpUjzwId8ibgRzNk7fkuR5pgVicB5mFSjjmt2eNadlykVLKCyGA0GxGffbhqLsHnhDRgyzxcKUhjg/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -405,8 +405,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/42/df/a034455d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -421,8 +421,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/42/df/a034455d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -437,8 +437,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1d/42/df/a034455d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -453,8 +453,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/PiajxSqBRaEKSVuNarJuDhBSvHY0giaq6yriceEBKiaKuc04wCYWOuso50noqDexaPJJibJN7PHwvcQppnzsDia1icZkw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -469,8 +469,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/89/c8/53085ffb.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -485,8 +485,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Gtf3tMDmYRoCL9Eico52ciatacq4PUHfQ8icQIYKV6KLDAJyTa8ZnLXMKf05pEice5RnEagocFobca5zv8jwyPhNKA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -501,8 +501,8 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/db/f7/29cff40f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -517,5 +517,4 @@ kubectl get pod -o wide
   </div>
 </div>
 </div>
-</li>
-</ul>
+

@@ -8,12 +8,12 @@
 
 我们知道如果要设计一个系统，首先是要了解需求。通过专栏前面的文章，我们已经了解了Tomcat要实现2个核心功能：
 
-<li>
+
 处理Socket连接，负责网络字节流与Request和Response对象的转化。
-</li>
-<li>
+
+
 加载和管理Servlet，以及具体处理Request请求。
-</li>
+
 
 **因此Tomcat设计了两个核心组件连接器（Connector）和容器（Container）来分别做这两件事情。连接器负责对外交流，容器负责内部处理。**
 
@@ -23,27 +23,27 @@
 
 Tomcat支持的I/O模型有：
 
-<li>
+
 NIO：非阻塞I/O，采用Java NIO类库实现。
-</li>
-<li>
+
+
 NIO.2：异步I/O，采用JDK 7最新的NIO.2类库实现。
-</li>
-<li>
+
+
 APR：采用Apache可移植运行库实现，是C/C++编写的本地库。
-</li>
+
 
 Tomcat支持的应用层协议有：
 
-<li>
+
 HTTP/1.1：这是大部分Web应用采用的访问协议。
-</li>
-<li>
+
+
 AJP：用于和Web服务器集成（如Apache）。
-</li>
-<li>
+
+
 HTTP/2：HTTP 2.0大幅度的提升了Web性能。
-</li>
+
 
 Tomcat为了实现支持多种I/O模型和应用层协议，一个容器可能对接多个连接器，就好比一个房间有多个门。但是单独的连接器或者容器都不能对外提供服务，需要把它们组装起来才能工作，组装后这个整体叫作Service组件。这里请你注意，Service本身没有做什么重要的事情，只是在连接器和容器外面多包了一层，把它们组装在一起。Tomcat内可能有多个Service，这样的设计也是出于灵活性的考虑。通过在Tomcat中配置多个Service，可以实现通过不同的端口号来访问同一台机器上部署的不同应用。
 
@@ -59,54 +59,54 @@ Tomcat为了实现支持多种I/O模型和应用层协议，一个容器可能�
 
 我们可以把连接器的功能需求进一步细化，比如：
 
-<li>
+
 监听网络端口。
-</li>
-<li>
+
+
 接受网络连接请求。
-</li>
-<li>
+
+
 读取网络请求字节流。
-</li>
-<li>
+
+
 根据具体应用层协议（HTTP/AJP）解析字节流，生成统一的Tomcat Request对象。
-</li>
-<li>
+
+
 将Tomcat Request对象转成标准的ServletRequest。
-</li>
-<li>
+
+
 调用Servlet容器，得到ServletResponse。
-</li>
-<li>
+
+
 将ServletResponse转成Tomcat Response对象。
-</li>
-<li>
+
+
 将Tomcat Response转成网络字节流。
-</li>
-<li>
+
+
 将响应字节流写回给浏览器。
-</li>
+
 
 需求列清楚后，我们要考虑的下一个问题是，连接器应该有哪些子模块？优秀的模块化设计应该考虑**高内聚、低耦合**。
 
-<li>
+
 **高内聚**是指相关度比较高的功能要尽可能集中，不要分散。
-</li>
-<li>
+
+
 **低耦合**是指两个相关的模块要尽可能减少依赖的部分和降低依赖的程度，不要让两个模块产生强依赖。
-</li>
+
 
 通过分析连接器的详细功能列表，我们发现连接器需要完成3个**高内聚**的功能：
 
-<li>
+
 网络通信。
-</li>
-<li>
+
+
 应用层协议解析。
-</li>
-<li>
+
+
 Tomcat Request/Response与ServletRequest/ServletResponse的转化。
-</li>
+
 
 因此Tomcat的设计者设计了3个组件来实现这3个功能，分别是Endpoint、Processor和Adapter。
 

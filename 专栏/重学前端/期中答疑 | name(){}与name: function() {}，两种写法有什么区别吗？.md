@@ -133,10 +133,10 @@ console.log('sync2');
 
 最终显示顺序是这样的。
 
-<li>**宏任务1**
-<ul>
-<li>微任务1
-<ul>
+**宏任务1**
+
+微任务1
+
 - sync 1
 - promise
 - sync 2

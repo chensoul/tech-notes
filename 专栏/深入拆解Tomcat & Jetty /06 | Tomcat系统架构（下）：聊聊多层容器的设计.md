@@ -117,12 +117,12 @@ Wrapper容器的最后一个Valve会创建一个Filter链，并调用doFilter方
 
 你可能会问，前面我们不是讲到了Filter，似乎也有相似的功能，那Valve和Filter有什么区别吗？它们的区别是：
 
-<li>
+
 Valve是Tomcat的私有机制，与Tomcat的基础架构/API是紧耦合的。Servlet API是公有的标准，所有的Web容器包括Jetty都支持Filter机制。
-</li>
-<li>
+
+
 另一个重要的区别是Valve工作在Web容器级别，拦截所有应用的请求；而Servlet Filter工作在应用级别，只能拦截某个Web应用的所有请求。如果想做整个Web容器的拦截器，必须通过Valve来实现。
-</li>
+
 
 ## 本期精华
 

@@ -44,15 +44,15 @@ CR: PBX-2222
 The Flask-XML-RPC-Re fork has Python 3 support, but it has a couple
 other problems.
 <ol>
-<li>
+
 test suite does not pass
-</li>
-<li>
+
+
 latest code is not tagged
-</li>
-<li>
+
+
 uncompiled source code is not distributed via PyPI
-</li>
+
 </ol>
 The Flask-XML-RPC module is essentially dead upstream, but it is
 <p>packaged in EPEL 7 and Fedora. This module will get us far enough to<br>

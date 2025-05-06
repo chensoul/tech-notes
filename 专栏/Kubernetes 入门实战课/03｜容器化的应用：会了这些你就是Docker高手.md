@@ -19,13 +19,13 @@ docker run -it --name ubuntu 2e6 sh   # 使用IMAGE ID，登录Ubuntu18.04
 docker run -d --rm redis
 docker run -it --rm 2e6 sh 
 </code></pre><p>然后我们用 <code>docker stop</code> 停止容器，再用 <code>docker ps -a</code> ，就会发现不需要我们再手动执行 <code>docker rm</code> ，Docker已经自动删除了这三个容器。</p><p><img src="https://static001.geekbang.org/resource/image/c8/85/c8cd008e91aaff2cd91e0392b0079085.jpg?wh=1920x1747" alt="图片"></p><h2>小结</h2><p>好了，今天我们一起学习了容器化的应用，然后使用Docker实际操作了镜像和容器，运行了被容器化的Alpine、Nginx、Redis等应用。</p><p>镜像是容器的静态形式，它打包了应用程序的所有运行依赖项，方便保存和传输。使用容器技术运行镜像，就形成了动态的容器，由于镜像只读不可修改，所以应用程序的运行环境总是一致的。</p><p>而容器化的应用就是指以镜像的形式打包应用程序，然后在容器环境里从镜像启动容器。</p><p>由于Docker的命令比较多，而且每个命令还有许多参数，一节课里很难把它们都详细说清楚，希望你课下参考Docker自带的帮助或者官网文档（<a href="https://docs.docker.com/reference/">https://docs.docker.com/reference/</a>），再多加实操练习，相信你一定能够成为Docker高手。</p><p>我这里就对今天的镜像操作和容器操作做个小结：</p><ol>
-<li>常用的镜像操作有 <code>docker pull</code>、<code>docker images</code>、<code>docker rmi</code>，分别是拉取镜像、查看镜像和删除镜像。</li>
-<li>用来启动容器的 <code>docker run</code> 是最常用的命令，它有很多参数用来调整容器的运行状态，对于后台服务来说应该使用 <code>-d</code>。</li>
-<li><code>docker exec</code> 命令可以在容器内部执行任意程序，对于调试排错特别有用。</li>
-<li>其他常用的容器操作还有 <code>docker ps</code>、<code>docker stop</code>、<code>docker rm</code>，用来查看容器、停止容器和删除容器。</li>
+常用的镜像操作有 <code>docker pull</code>、<code>docker images</code>、<code>docker rmi</code>，分别是拉取镜像、查看镜像和删除镜像。
+用来启动容器的 <code>docker run</code> 是最常用的命令，它有很多参数用来调整容器的运行状态，对于后台服务来说应该使用 <code>-d</code>。
+<code>docker exec</code> 命令可以在容器内部执行任意程序，对于调试排错特别有用。
+其他常用的容器操作还有 <code>docker ps</code>、<code>docker stop</code>、<code>docker rm</code>，用来查看容器、停止容器和删除容器。
 </ol><h2>课下作业</h2><p>最后是课下作业时间，给你留两个思考题：</p><ol>
-<li>说一说你对容器镜像的理解，它与rpm、deb安装包有哪些不同和优缺点。</li>
-<li>你觉得 <code>docker run</code> 和 <code>docker exec</code> 的区别在哪里，应该怎么使用它们？</li>
+说一说你对容器镜像的理解，它与rpm、deb安装包有哪些不同和优缺点。
+你觉得 <code>docker run</code> 和 <code>docker exec</code> 的区别在哪里，应该怎么使用它们？
 </ol><p>欢迎在留言区参与讨论，据说打字发言能把自己学到的新知识再加工一遍，可以显著提升理解哦。</p><p>我们下节课再见。<br>
 <img src="https://static001.geekbang.org/resource/image/74/f9/7405faa28109b810cace4975eb3a4ef9.jpg?wh=1920x2481" alt=""></p>
 <style>
@@ -137,7 +137,7 @@ docker run -it --rm 2e6 sh
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/WrANpwBMr6DsGAE207QVs0YgfthMXy3MuEKJxR8icYibpGDCI1YX4DcpDq1EsTvlP8ffK1ibJDvmkX9LUU4yE8X0w/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -152,8 +152,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -168,8 +168,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/0c/e1/f663213e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -184,8 +184,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJk3PElN2J96DtyWuIg6xPSs3zRFsIMibOvIn5kuRkESORsRIkDJMUekymI2wiaYiaP0UzibXWEl0aLYw/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -200,8 +200,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/05/8a/e7c5a7e2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -216,8 +216,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -232,8 +232,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -248,8 +248,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/63/1b/83ac7733.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -264,8 +264,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/20/fb/96/791d0f5e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -280,8 +280,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/cd/e0/c85bb948.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -296,8 +296,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1a/21/56/91669d26.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -312,8 +312,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/cd/ba/3a348f2d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -328,8 +328,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/94/91/6d6ca42f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -344,8 +344,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/52/40/db9b0eb2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -360,8 +360,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/88/07/7804f4cc.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -376,8 +376,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -392,8 +392,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/3c/4d/3dec4bfe.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -408,8 +408,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/36/0c/a5/344c1ea2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -424,8 +424,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/32/50/8d/ded8482f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -440,8 +440,8 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2c/c7/89/16437396.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -456,5 +456,4 @@ docker run -it --rm 2e6 sh
   </div>
 </div>
 </div>
-</li>
-</ul>
+

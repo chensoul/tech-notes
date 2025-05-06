@@ -41,28 +41,28 @@ spec:
     "type": "NodePort"
   }
 }
-</code></pre><p>我就是通过<code>json2yaml</code>在线工具，来转换YAML和JSON的，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/0f/02/0ffac271b296d1cc407941cfc3139702.png?wh=1920x780" alt="图片"></p><p>在编写Kubernetes资源定义文件的过程中，如果因为YAML格式文件中的配置项缩进太深，导致不容易判断配置项的层级，那么，你就可以将其转换成JSON格式，通过JSON格式来判断配置型的层级。</p><p>如果想学习更多关于YAML的知识，你可以参考<a href="https://yaml.org/spec/1.2/spec.html">YAML 1.2 (3rd Edition)</a>。这里，可以先看看我整理的YAML基本语法：</p><ul>
-<li>属性和值都是大小写敏感的。</li>
-<li>使用缩进表示层级关系。</li>
-<li>禁止使用Tab键缩进，只允许使用空格，建议两个空格作为一个层级的缩进。元素左对齐，就说明对齐的两个元素属于同一个级别。</li>
-<li>使用 <code>#</code> 进行注释，直到行尾。</li>
-<li><code>key: value</code>格式的定义中，冒号后要有一个空格。</li>
-<li>短横线表示列表项，使用一个短横线加一个空格；多个项使用同样的缩进级别作为同一列表。</li>
-<li>使用 <code>---</code> 表示一个新的YAML文件开始。</li>
-</ul><p>现在你知道了，Kubernetes支持YAML和JSON两种格式，它们是可以相互转换的。但鉴于YAML格式的各项优点，我建议你使用YAML格式来定义Kubernetes的各类资源。</p><h2>Kubernetes 资源定义概述</h2><p>Kubernetes中有很多内置的资源，常用的资源有Deployment、StatefulSet、ConfigMap、Service、Secret、Nodes、Pods、Events、Jobs、DaemonSets等。除此之外，Kubernetes还有其他一些资源。如果你觉得Kubernetes内置的资源满足不了需求，还可以自定义资源。</p><p>Kubernetes的资源清单可以通过执行以下命令来查看：</p><pre><code class="language-bash">$ kubectl api-resources
+</code></pre><p>我就是通过<code>json2yaml</code>在线工具，来转换YAML和JSON的，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/0f/02/0ffac271b296d1cc407941cfc3139702.png?wh=1920x780" alt="图片"></p><p>在编写Kubernetes资源定义文件的过程中，如果因为YAML格式文件中的配置项缩进太深，导致不容易判断配置项的层级，那么，你就可以将其转换成JSON格式，通过JSON格式来判断配置型的层级。</p><p>如果想学习更多关于YAML的知识，你可以参考<a href="https://yaml.org/spec/1.2/spec.html">YAML 1.2 (3rd Edition)</a>。这里，可以先看看我整理的YAML基本语法：</p>
+属性和值都是大小写敏感的。
+使用缩进表示层级关系。
+禁止使用Tab键缩进，只允许使用空格，建议两个空格作为一个层级的缩进。元素左对齐，就说明对齐的两个元素属于同一个级别。
+使用 <code>#</code> 进行注释，直到行尾。
+<code>key: value</code>格式的定义中，冒号后要有一个空格。
+短横线表示列表项，使用一个短横线加一个空格；多个项使用同样的缩进级别作为同一列表。
+使用 <code>---</code> 表示一个新的YAML文件开始。
+<p>现在你知道了，Kubernetes支持YAML和JSON两种格式，它们是可以相互转换的。但鉴于YAML格式的各项优点，我建议你使用YAML格式来定义Kubernetes的各类资源。</p><h2>Kubernetes 资源定义概述</h2><p>Kubernetes中有很多内置的资源，常用的资源有Deployment、StatefulSet、ConfigMap、Service、Secret、Nodes、Pods、Events、Jobs、DaemonSets等。除此之外，Kubernetes还有其他一些资源。如果你觉得Kubernetes内置的资源满足不了需求，还可以自定义资源。</p><p>Kubernetes的资源清单可以通过执行以下命令来查看：</p><pre><code class="language-bash">$ kubectl api-resources
 NAME                              SHORTNAMES   APIVERSION                        NAMESPACED   KIND
 bindings                                       v1                                true         Binding
 componentstatuses                 cs           v1                                false        ComponentStatus
 configmaps                        cm           v1                                true         ConfigMap
 endpoints                         ep           v1                                true         Endpoints
 events                            ev           v1                                true         Event
-</code></pre><p>上述输出中，各列的含义如下。</p><ul>
-<li>NAME：资源名称。</li>
-<li>SHORTNAMES：资源名称简写。</li>
-<li>APIVERSION：资源的API版本，也称为group。</li>
-<li>NAMESPACED：资源是否具有Namespace属性。</li>
-<li>KIND：资源类别。</li>
-</ul><p>这些资源有一些共同的配置，也有一些特有的配置。这里，我们先来看下这些资源共同的配置。</p><p>下面这些配置是Kubernetes各类资源都具备的：</p><pre><code class="language-yaml">---
+</code></pre><p>上述输出中，各列的含义如下。</p>
+NAME：资源名称。
+SHORTNAMES：资源名称简写。
+APIVERSION：资源的API版本，也称为group。
+NAMESPACED：资源是否具有Namespace属性。
+KIND：资源类别。
+<p>这些资源有一些共同的配置，也有一些特有的配置。这里，我们先来看下这些资源共同的配置。</p><p>下面这些配置是Kubernetes各类资源都具备的：</p><pre><code class="language-yaml">---
 apiVersion: &lt;string&gt; # string类型，指定group的名称，默认为core。可以使用 `kubectl api-versions` 命令，来获取当前kubernetes版本支持的所有group。
 kind: &lt;string&gt; # string类型，资源类别。
 metadata: &lt;Object&gt; # 资源的元数据。
@@ -76,15 +76,15 @@ status: &lt;Object&gt; # 资源当前的状态，以只读的方式显示资源�
 </code></pre><p>你可以通过<code>kubectl explain &lt;object&gt;</code>命令来查看Object资源对象介绍，并通过<code>kubectl explain &lt;object1&gt;.&lt;object2&gt;</code>来查看<code>&lt;object1&gt;</code>的子对象<code>&lt;object2&gt;</code>的资源介绍，例如：</p><pre><code class="language-bash">$ kubectl explain service
 $ kubectl explain service.spec
 $ kubectl explain service.spec.ports
-</code></pre><p>Kubernetes资源定义YAML文件，支持以下数据类型：</p><ul>
-<li>string，表示字符串类型。</li>
-<li>object，表示一个对象，需要嵌套多层字段。</li>
-<li>map[string]string，表示由key:value组成的映射。</li>
-<li>[]string，表示字串列表。</li>
-<li>[]object，表示对象列表。</li>
-<li>boolean，表示布尔类型。</li>
-<li>integer，表示整型。</li>
-</ul><h2>常用的Kubernetes资源定义</h2><p>上面说了，Kubernetes中有很多资源，其中Pod、Deployment、Service、ConfigMap这4类是比较常用的资源，我来一个个介绍下。</p><h3>Pod资源定义</h3><p>下面是一个Pod的YAML定义：</p><pre><code class="language-yaml">apiVersion: v1   # 必须 版本号， 常用v1  apps/v1
+</code></pre><p>Kubernetes资源定义YAML文件，支持以下数据类型：</p>
+string，表示字符串类型。
+object，表示一个对象，需要嵌套多层字段。
+map[string]string，表示由key:value组成的映射。
+[]string，表示字串列表。
+[]object，表示对象列表。
+boolean，表示布尔类型。
+integer，表示整型。
+<h2>常用的Kubernetes资源定义</h2><p>上面说了，Kubernetes中有很多资源，其中Pod、Deployment、Service、ConfigMap这4类是比较常用的资源，我来一个个介绍下。</p><h3>Pod资源定义</h3><p>下面是一个Pod的YAML定义：</p><pre><code class="language-yaml">apiVersion: v1   # 必须 版本号， 常用v1  apps/v1
 kind: Pod	 # 必须
 metadata:  # 必须，元数据
   name: string  # 必须，名称
@@ -365,11 +365,11 @@ data:
   iam-: ""
   iam-apiserver.yaml: |
     ...
-</code></pre><p>可以看到，使用<code>kubeval</code>之类的工具，能让我们在部署的早期，不用访问集群就能发现YAML文件的错误。</p><h3>kube-score</h3><p><a href="https://github.com/zegl/kube-score">kube-score</a>能够对Kubernetes YAML进行分析，并根据内置的检查对其评分，这些检查是根据安全建议和最佳实践而选择的，例如：</p><ul>
-<li>以非Root用户启动容器。</li>
-<li>为Pods设置健康检查。</li>
-<li>定义资源请求和限制。</li>
-</ul><p>你可以按照这个方法安装：</p><pre><code class="language-bash">$ go get github.com/zegl/kube-score/cmd/kube-score
+</code></pre><p>可以看到，使用<code>kubeval</code>之类的工具，能让我们在部署的早期，不用访问集群就能发现YAML文件的错误。</p><h3>kube-score</h3><p><a href="https://github.com/zegl/kube-score">kube-score</a>能够对Kubernetes YAML进行分析，并根据内置的检查对其评分，这些检查是根据安全建议和最佳实践而选择的，例如：</p>
+以非Root用户启动容器。
+为Pods设置健康检查。
+定义资源请求和限制。
+<p>你可以按照这个方法安装：</p><pre><code class="language-bash">$ go get github.com/zegl/kube-score/cmd/kube-score
 </code></pre><p>然后，我们对Kubernetes YAML进行评分：</p><pre><code class="language-bash">$ kube-score score -o ci deployments/iam.invalid.yaml
 [OK] iam-apiserver apps/v1/Deployment
 [OK] iam-apiserver apps/v1/Deployment
@@ -384,8 +384,8 @@ data:
 ...
 </code></pre><p>检查的结果有<code>OK</code>、<code>SKIPPED</code>、<code>WARNING</code>和<code>CRITICAL</code>。<code>CRITICAL</code>是需要你修复的；<code>WARNING</code>是需要你关注的；<code>SKIPPED</code>是因为某些原因略过的检查；<code>OK</code>是验证通过的。</p><p>如果你想查看详细的错误原因和解决方案，可以使用<code>-o human</code>选项，例如：</p><pre><code class="language-bash">$ kube-score score -o human deployments/iam.invalid.yaml
 </code></pre><p>上述命令会检查YAML资源定义文件，如果有不合规的地方会报告级别、类别以及错误详情，如下图所示：</p><p><img src="https://static001.geekbang.org/resource/image/04/f6/0498529693c6d15c9d9d45cbyy866cf6.png?wh=1920x827" alt="图片"></p><h3></h3><p>当然，除了kubeval、kube-score这两个工具，业界还有其他一些Kubernetes检查工具，例如<a href="https://github.com/stelligent/config-lint">config-lint</a>、<a href="https://github.com/cloud66-oss/copper">copper</a>、<a href="https://github.com/open-policy-agent/conftest">conftest</a>、<a href="https://github.com/FairwindsOps/polaris">polaris</a>等。</p><p>这些工具，我推荐你这么来选择：首先，使用kubeval工具做最基本的YAML文件验证。验证通过之后，我们就可以进行更多的测试。如果你没有特别复杂的YAML验证要求，只需要用到一些最常见的检查策略，这时候可以使用kube-score。如果你有复杂的验证要求，并且希望能够自定义验证策略，则可以考虑使用copper。当然，<code>polaris</code>、<code>config-lint</code>、<code>copper</code>也值得你去尝试下。</p><h2>总结</h2><p>今天，我主要讲了如何编写Kubernetes YAML文件。</p><p>YAML格式具有丰富的数据表达能力、清晰的结构和层次，因此被用于Kubernetes资源的定义文件中。如果你要把应用部署在Kubernetes集群中，就要创建多个关联的K8s资源，如果要创建K8s资源，目前比较多的方式还是编写YAML格式的定义文件。</p><p>这一讲我介绍了K8s中最常用的四种资源（Pod、Deployment、Service、ConfigMap）的YAML定义的写法，你可以常来温习。</p><p>另外，在编写YAML文件时，也有一些技巧。比如，可以通过在线工具<a href="https://k8syaml.com/">k8syaml</a>来自动生成初版的YAML文件，再基于此YAML文件进行二次修改，从而形成终版。</p><p>最后，我还给你分享了编写和使用Kubernetes YAML时，社区提供的多种工具。比如，kubeval可以校验YAML，kube-score可以给YAML文件打分。了解了如何编写Kubernetes YAML文件，下一讲的学习相信你会进行得更顺利。</p><h2>课后练习</h2><ol>
-<li>思考一下，如何将ConfigMap中的Key挂载到同一个目录中，文件名为Key名？</li>
-<li>使用kubeval检查你正在或之前从事过的项目的K8s YAML定义文件，查看报错，并修改和优化。</li>
+思考一下，如何将ConfigMap中的Key挂载到同一个目录中，文件名为Key名？
+使用kubeval检查你正在或之前从事过的项目的K8s YAML定义文件，查看报错，并修改和优化。
 </ol><p>欢迎你在留言区和我交流讨论，我们下一讲见。</p>
 <style>
     ul {
@@ -496,7 +496,7 @@ data:
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/28/83/17/df99b53d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -511,8 +511,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/dd/09/feca820a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -527,8 +527,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/87/64/3882d90d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -543,8 +543,8 @@ data:
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/64/05/6989dce6.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -559,5 +559,4 @@ data:
   </div>
 </div>
 </div>
-</li>
-</ul>
+

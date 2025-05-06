@@ -25,165 +25,165 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="00&#32;为什么我们要学习&#32;Kubernetes&#32;技术.md">00 为什么我们要学习 Kubernetes 技术.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="01&#32;重新认识&#32;Kubernetes&#32;的核心组件.md">01 重新认识 Kubernetes 的核心组件.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;深入理解&#32;Kubernets&#32;的编排对象.md">02 深入理解 Kubernets 的编排对象.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;DevOps&#32;场景下落地&#32;K8s&#32;的困难分析.md">03 DevOps 场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;微服务应用场景下落地&#32;K8s&#32;的困难分析.md">04 微服务应用场景下落地 K8s 的困难分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;解决&#32;K8s&#32;落地难题的方法论提炼.md">05 解决 K8s 落地难题的方法论提炼.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;练习篇：K8s&#32;核心实践知识掌握.md">06 练习篇：K8s 核心实践知识掌握.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;容器引擎&#32;containerd&#32;落地实践.md">07 容器引擎 containerd 落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;K8s&#32;集群安装工具&#32;kubeadm&#32;的落地实践.md">08 K8s 集群安装工具 kubeadm 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="09&#32;南北向流量组件&#32;IPVS&#32;的落地实践.md">09 南北向流量组件 IPVS 的落地实践.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;东西向流量组件&#32;Calico&#32;的落地实践.md">10 东西向流量组件 Calico 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;服务发现&#32;DNS&#32;的落地实践.md">11 服务发现 DNS 的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;练习篇：K8s&#32;集群配置测验.md">12 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;理解对方暴露服务的对象&#32;Ingress&#32;和&#32;Service.md">13 理解对方暴露服务的对象 Ingress 和 Service.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;应用网关&#32;OpenResty&#32;对接&#32;K8s&#32;实践.md">14 应用网关 OpenResty 对接 K8s 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;Service&#32;层引流技术实践.md">15 Service 层引流技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;Cilium&#32;容器网络的落地实践.md">16 Cilium 容器网络的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;应用流量的优雅无损切换实践.md">17 应用流量的优雅无损切换实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;练习篇：应用流量无损切换技术测验.md">18 练习篇：应用流量无损切换技术测验.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;使用&#32;Rook&#32;构建生产可用存储环境实践.md">19 使用 Rook 构建生产可用存储环境实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;有状态应用的默认特性落地分析.md">20 有状态应用的默认特性落地分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;案例：分布式&#32;MySQL&#32;集群工具&#32;Vitess&#32;实践分析.md">21 案例：分布式 MySQL 集群工具 Vitess 实践分析.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;存储对象&#32;PV、PVC、Storage&#32;Classes&#32;的管理落地实践.md">22 存储对象 PV、PVC、Storage Classes 的管理落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;K8s&#32;集群中存储对象灾备的落地实践.md">23 K8s 集群中存储对象灾备的落地实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;练习篇：K8s&#32;集群配置测验.md">24 练习篇：K8s 集群配置测验.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -251,14 +251,14 @@
 <p><img src="assets/d1b69cc0-dad0-11ea-a4e8-99c9f3b124a4.jpg" alt="ipvs-iptables-compare" /></p>
 <p>从图中可以看到，当 Service 对象实例超过 1000 的时候，iptables 和 IPVS 对 CPU 的影响才会产生差异，规模越大影响也越明显。很明显这是因为它们的转发规则的查询方式不同导致了性能的差异。</p>
 <p>除了规则匹配的检索优势，IPVS 对比 iptables 还提供了一些更灵活的负载均衡算法特性如：</p>
-<ul>
-<li>rr：轮询调度</li>
-<li>lc：最小连接数</li>
-<li>dh：目标地址散列</li>
-<li>sh：源地址散列</li>
-<li>sed：最短期望延迟</li>
-<li>nq：最少队列</li>
-</ul>
+
+rr：轮询调度
+lc：最小连接数
+dh：目标地址散列
+sh：源地址散列
+sed：最短期望延迟
+nq：最少队列
+
 <p>而在 iptables 中我们默认只有轮询调度特性。</p>
 <p>此刻让我们来重温一下 IPVS（IP Virtual Server）的定义，它是构建在 Linux Netfilter 模块之上的实现南北向流量负载均衡的 Linux 内核模块。IPVS 支持 4 层地址请求的转发，把 Service 层的唯一虚拟 IP 绑定到容器副本 IP 组上，实现流量负载。所以它天然符合 Kubernetes 对 Service 的定义实现。</p>
 <h3>IPVS 使用简介</h3>
@@ -304,21 +304,21 @@ TCP  100.100.100.100:http rr
 </code></pre>
 <p>到此，IPVS 的负载配置步骤就给大家演示完了，kube-proxy 也是如此操作 IPVS 的。</p>
 <h3>kube-proxy 的 IPVS 模式配置参数详解</h3>
-<ul>
-<li><strong>--proxy-mode 参数</strong>：当你配置为 <code>--proxy-mode=ipvs</code>，立即激活 IPVS NAT 转发模式，实现 POD 端口的流量负载。</li>
-<li><strong>--ipvs-scheduler 参数</strong>：修改负载均衡策略，默认为 rr——轮询调度。</li>
-<li><strong>--cleanup-ipvs 参数</strong>：启动 IPVS 前清除历史遗留的规则。</li>
-<li><strong>--ipvs-sync-period 和 --ipvs-min-sync-period 参数</strong>：配置定期同步规则的周期，例如 5s，必须大于 0。</li>
-<li><strong>--ipvs-exclude-cidrs 参数</strong>：过滤自建的 IPVS 规则，让你可以保留之前的负载均衡流量。</li>
-</ul>
+
+<strong>--proxy-mode 参数</strong>：当你配置为 <code>--proxy-mode=ipvs</code>，立即激活 IPVS NAT 转发模式，实现 POD 端口的流量负载。
+<strong>--ipvs-scheduler 参数</strong>：修改负载均衡策略，默认为 rr——轮询调度。
+<strong>--cleanup-ipvs 参数</strong>：启动 IPVS 前清除历史遗留的规则。
+<strong>--ipvs-sync-period 和 --ipvs-min-sync-period 参数</strong>：配置定期同步规则的周期，例如 5s，必须大于 0。
+<strong>--ipvs-exclude-cidrs 参数</strong>：过滤自建的 IPVS 规则，让你可以保留之前的负载均衡流量。
+
 <h3>IPVS 模式下的例外情况</h3>
 <p>IPVS 毕竟是为了负载均衡流量使用的，还有一些场景下它是爱莫能助的。比如包过滤、端口回流、SNAT 等需求下还是要依靠 iptables 来完成。另外，还有 4 种情况下 IPVS 模式会回退到 iptables 模式。</p>
-<ul>
-<li>kube-proxy 启动并开启 <code>--masquerade-all=true</code> 参数</li>
-<li>kube-proxy 启动时定义了集群网络</li>
-<li>支持 Loadbalancer 类型的 Service</li>
-<li>支持 NodePort 类型的 Service</li>
-</ul>
+
+kube-proxy 启动并开启 <code>--masquerade-all=true</code> 参数
+kube-proxy 启动时定义了集群网络
+支持 Loadbalancer 类型的 Service
+支持 NodePort 类型的 Service
+
 <p>当然，为了优化 iptables 的过多规则生成，kube-proxy 还引入 ipset 工具来减少 iptables 规则。以下表格就是 IPVS 模式下维护的 ipset 规则：</p>
 <table>
 <thead>

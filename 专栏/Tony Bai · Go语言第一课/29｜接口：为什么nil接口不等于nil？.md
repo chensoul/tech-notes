@@ -74,10 +74,10 @@ type eface struct {
     _type *_type
     data  unsafe.Pointer
 }
-</code></pre><p>我们看到，在运行时层面，接口类型变量有两种内部表示：<code>iface</code>和<code>eface</code>，这两种表示分别用于不同的接口类型变量：</p><ul>
-<li>eface用于表示没有方法的空接口（<strong>e</strong>mpty inter<strong>face</strong>）类型变量，也就是interface{}类型的变量；</li>
-<li>iface用于表示其余拥有方法的接口<strong>i</strong>nter<strong>face</strong>类型变量。</li>
-</ul><p>这两个结构的共同点是它们都有两个指针字段，并且第二个指针字段的功能相同，都是指向当前赋值给该接口类型变量的动态类型变量的值。</p><p>那它们的不同点在哪呢？就在于eface表示的空接口类型并没有方法列表，因此它的第一个指针字段指向一个<code>_type</code>类型结构，这个结构为该接口类型变量的动态类型的信息，它的定义是这样的：</p><pre><code class="language-plain">// $GOROOT/src/runtime/type.go
+</code></pre><p>我们看到，在运行时层面，接口类型变量有两种内部表示：<code>iface</code>和<code>eface</code>，这两种表示分别用于不同的接口类型变量：</p>
+eface用于表示没有方法的空接口（<strong>e</strong>mpty inter<strong>face</strong>）类型变量，也就是interface{}类型的变量；
+iface用于表示其余拥有方法的接口<strong>i</strong>nter<strong>face</strong>类型变量。
+<p>这两个结构的共同点是它们都有两个指针字段，并且第二个指针字段的功能相同，都是指向当前赋值给该接口类型变量的动态类型变量的值。</p><p>那它们的不同点在哪呢？就在于eface表示的空接口类型并没有方法列表，因此它的第一个指针字段指向一个<code>_type</code>类型结构，这个结构为该接口类型变量的动态类型的信息，它的定义是这样的：</p><pre><code class="language-plain">// $GOROOT/src/runtime/type.go
 
 type _type struct {
     size       uintptr
@@ -375,11 +375,11 @@ func dumpT(dataOfIface unsafe.Pointer) {
 }
 ... ...
 
-</code></pre><p>这里我挑选了关键部分，省略了部分代码。上面这个dumpinterface.go中提供了三个主要函数:</p><ul>
-<li>dumpEface: 用于输出空接口类型变量的内部表示信息；</li>
-<li>dumpItabOfIface: 用于输出非空接口类型变量的tab字段信息；</li>
-<li>dumpDataOfIface: 用于输出非空接口类型变量的data字段信息；</li>
-</ul><p>我们利用这三个函数来输出一下前面printEmptyInterfaceAndNonEmptyInterface函数中的接口类型变量的信息：</p><pre><code class="language-plain">package main
+</code></pre><p>这里我挑选了关键部分，省略了部分代码。上面这个dumpinterface.go中提供了三个主要函数:</p>
+dumpEface: 用于输出空接口类型变量的内部表示信息；
+dumpItabOfIface: 用于输出非空接口类型变量的tab字段信息；
+dumpDataOfIface: 用于输出非空接口类型变量的data字段信息；
+<p>我们利用这三个函数来输出一下前面printEmptyInterfaceAndNonEmptyInterface函数中的接口类型变量的信息：</p><pre><code class="language-plain">package main
 
 import "unsafe"
 
@@ -617,7 +617,7 @@ var staticuint64s = [...]uint64{
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/53/a8/abc96f70.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -632,8 +632,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -648,8 +648,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/11/66/ac631a36.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -664,8 +664,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/c9/d9/00870178.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -680,8 +680,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/1d/de/62bfa83f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -696,8 +696,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/b0/6e/921cb700.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -712,8 +712,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/GJXKh8OG00U5ial64plAIibbIuwkzhPc8uYic9Hibl8SbqvhnS2JImHgCD4JGvTktiaVnCjHQWbA5wicaxRUN5aTEWnQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -728,8 +728,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/18/75/bc/e24e181e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -744,8 +744,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/16/48/01567df1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -760,8 +760,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/9d/a4/e481ae48.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -776,8 +776,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/59/28/62ee741f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -792,8 +792,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/31/2a/4e/a3f53cae.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -808,8 +808,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/98/b1/f89a84d0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -824,8 +824,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/87/5f/6bf8b74a.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -840,8 +840,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/5c/da/0a8bc27b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -856,8 +856,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/ba/ce/fd45714f.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -872,8 +872,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1f/64/8a/bc8cb43c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -888,8 +888,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/24/5f/f1/c66c8c51.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -904,8 +904,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/60/6d/3c2a5143.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -920,8 +920,8 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/47/00/3202bdf0.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -936,5 +936,4 @@ var staticuint64s = [...]uint64{
   </div>
 </div>
 </div>
-</li>
-</ul>
+

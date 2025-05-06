@@ -1,13 +1,13 @@
 <audio title="17｜自动构建：如何使用 GitLab CI 构建镜像？" src="https://static001.geekbang.org/resource/audio/98/14/981ab2359ee20e333d3c0ff85fb09e14.mp3" controls="controls"></audio> 
-<p>你好，我是王炜。</p><p>在上一节课，我们学习了如何使用 GitHub Action 自动构建镜像，我们通过为示例应用配置 GitHub Action 工作流，实现了自动构建，并将镜像推送到了 Docker Hub 镜像仓库。</p><p>但是，要使用 GitHub Action 构建镜像，前提条件是你需要使用 GitHub 作为代码仓库，那么，如果我所在的团队使用的是 GitLab 要怎么做呢？</p><p>这节课，我会带你学习如何使用 GitLab CI 来自动构建镜像。我还是以示例应用为例，使用 SaaS 版的 GitLab 从零配置 CI 流水线。</p><p>需要注意的是，有些团队是以自托管的方式来使用 GitLab 的，也就是我们常说的私有部署的方式，它和 SaaS 版本的差异不大。如果你用的是私有化部署版本，同样可以按照这节课的流程来实践。</p><h2>GitLab CI 简介</h2><p>在正式使用 GitLab CI 之前，你需要先了解一些基本概念，你可以结合下面这张图来理解。</p><p><img src="https://static001.geekbang.org/resource/image/bd/68/bd3ac77e391a02eb63ab2cc6f8b07368.jpg?wh=1920x1043" alt="图片"></p><p>这张图中出现了 Pipeline、Stage 和 Job 这几个概念，接下来我们分别了解一下。</p><h3>Pipeline</h3><p>Pipeline 指的是流水线，在 GitLab 中，当有新提交推送到仓库中时，会自动触发流水线。流水线包含一组 Stage 和 Job 的定义，它们负责执行具体的逻辑。</p><!-- [[[read_end]]] --><p>在 GitLab 中，Pipeline 是通过仓库根目录下的 .gitlab-ci.yml 文件来定义的。</p><p>此外，Pipeline 在全局也可以配置运行镜像、全局变量和额外服务镜像。</p><h3>Stage</h3><p>Stage 字面上的意思是“阶段”。在 GitLab CI 中，至少需要包含一个 Stage，上面这张图中有三个 Stage，分别是 Stage1、Stage2 和 Stage3，不同的 Stage 是按照定义的顺序依次执行的。如果其中一个 Stage 失败，则整个 Pipeline 都将失败，后续的 Stage 也都不会再继续执行。</p><h3>Job</h3><p>Job 字面上的意思是“任务”。实际上，Job 的作用是定义具体需要执行的 Shell 脚本，同时，Job 可以被关联到一个 Stage 上。当 Stage 执行时，它所关联的 Job 也会并行执行。</p><p>以自动构建镜像为例，我们可能需要在 1 个 Job 中定义 2 个 Shell 脚本步骤，它们分别是：</p><ul>
-<li>运行 docker build 构建镜像</li>
-<li>运行 docker push 来推送镜像</li>
-</ul><h3>费用</h3><p>和 GitHub Action 一样，GitLab 也不能无限免费使用。对于 GitLab 免费账户，每个月有 400 分钟的 GitLab CI/CD 时长可供使用，超出时长则需要按量付费，你可以在<a href="https://about.gitlab.com/pricing/">这里</a>查看详细的计费策略。</p><h2>为示例应用创建 GitLab CI Pipeline</h2><p>在简单学习了 GitLab CI 相关概念之后，<strong>接下来我们进入到实战环节</strong>。</p><p>我仍然以示例应用为例，介绍如何配置自动构建示例应用的前后端镜像流水线。在这个例子中，我们创建的流水线将实现以下这些步骤。</p><ul>
-<li>运行 docker login 登录到 Docker Hub。</li>
-<li>运行 docker build 来构建前后端应用的镜像。</li>
-<li>运行 docker push 推送镜像。<br>
-接下来，我们开始创建 GitLab CI Pipeline。</li>
-</ul><h3>创建 .gitlab-ci.yml 文件</h3><p>首先，将示例应用仓库克隆到本地。</p><pre><code class="language-yaml">$ git clone https://github.com/lyzhang1999/kubernetes-example.git
+<p>你好，我是王炜。</p><p>在上一节课，我们学习了如何使用 GitHub Action 自动构建镜像，我们通过为示例应用配置 GitHub Action 工作流，实现了自动构建，并将镜像推送到了 Docker Hub 镜像仓库。</p><p>但是，要使用 GitHub Action 构建镜像，前提条件是你需要使用 GitHub 作为代码仓库，那么，如果我所在的团队使用的是 GitLab 要怎么做呢？</p><p>这节课，我会带你学习如何使用 GitLab CI 来自动构建镜像。我还是以示例应用为例，使用 SaaS 版的 GitLab 从零配置 CI 流水线。</p><p>需要注意的是，有些团队是以自托管的方式来使用 GitLab 的，也就是我们常说的私有部署的方式，它和 SaaS 版本的差异不大。如果你用的是私有化部署版本，同样可以按照这节课的流程来实践。</p><h2>GitLab CI 简介</h2><p>在正式使用 GitLab CI 之前，你需要先了解一些基本概念，你可以结合下面这张图来理解。</p><p><img src="https://static001.geekbang.org/resource/image/bd/68/bd3ac77e391a02eb63ab2cc6f8b07368.jpg?wh=1920x1043" alt="图片"></p><p>这张图中出现了 Pipeline、Stage 和 Job 这几个概念，接下来我们分别了解一下。</p><h3>Pipeline</h3><p>Pipeline 指的是流水线，在 GitLab 中，当有新提交推送到仓库中时，会自动触发流水线。流水线包含一组 Stage 和 Job 的定义，它们负责执行具体的逻辑。</p><!-- [[[read_end]]] --><p>在 GitLab 中，Pipeline 是通过仓库根目录下的 .gitlab-ci.yml 文件来定义的。</p><p>此外，Pipeline 在全局也可以配置运行镜像、全局变量和额外服务镜像。</p><h3>Stage</h3><p>Stage 字面上的意思是“阶段”。在 GitLab CI 中，至少需要包含一个 Stage，上面这张图中有三个 Stage，分别是 Stage1、Stage2 和 Stage3，不同的 Stage 是按照定义的顺序依次执行的。如果其中一个 Stage 失败，则整个 Pipeline 都将失败，后续的 Stage 也都不会再继续执行。</p><h3>Job</h3><p>Job 字面上的意思是“任务”。实际上，Job 的作用是定义具体需要执行的 Shell 脚本，同时，Job 可以被关联到一个 Stage 上。当 Stage 执行时，它所关联的 Job 也会并行执行。</p><p>以自动构建镜像为例，我们可能需要在 1 个 Job 中定义 2 个 Shell 脚本步骤，它们分别是：</p>
+运行 docker build 构建镜像
+运行 docker push 来推送镜像
+<h3>费用</h3><p>和 GitHub Action 一样，GitLab 也不能无限免费使用。对于 GitLab 免费账户，每个月有 400 分钟的 GitLab CI/CD 时长可供使用，超出时长则需要按量付费，你可以在<a href="https://about.gitlab.com/pricing/">这里</a>查看详细的计费策略。</p><h2>为示例应用创建 GitLab CI Pipeline</h2><p>在简单学习了 GitLab CI 相关概念之后，<strong>接下来我们进入到实战环节</strong>。</p><p>我仍然以示例应用为例，介绍如何配置自动构建示例应用的前后端镜像流水线。在这个例子中，我们创建的流水线将实现以下这些步骤。</p>
+运行 docker login 登录到 Docker Hub。
+运行 docker build 来构建前后端应用的镜像。
+运行 docker push 推送镜像。<br>
+接下来，我们开始创建 GitLab CI Pipeline。
+<h3>创建 .gitlab-ci.yml 文件</h3><p>首先，将示例应用仓库克隆到本地。</p><pre><code class="language-yaml">$ git clone https://github.com/lyzhang1999/kubernetes-example.git
 </code></pre><p>进入 kubernetes-example 目录。</p><pre><code class="language-yaml">$ cd kubernetes-example
 </code></pre><p>然后，将下面的内容保存到 .gitlab-ci.yml 文件内。</p><pre><code class="language-yaml">stages:
   - build
@@ -148,7 +148,7 @@ $ git push -u origin main
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoUEZtvgjx3Lo8ib1GxBruDJCLXxX0KfRptk7BoBtRebKMA4Chp2tPbiaCwlCQ9hBZ4JnukX1bs9blA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -163,8 +163,8 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -179,8 +179,8 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/25/ec/f3/f140576e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -195,8 +195,8 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/d9/36/92d8eb91.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -211,8 +211,8 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/a9/c6/30b29c22.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -227,8 +227,8 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/Gg1doG856ec8BWgFregO01XwjnfygRmXpqb9cJ63JzAyH08yCYkCItuYN71p4Vk0JDhODiaHbGVdmRpeRVIyuuA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -243,8 +243,8 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -259,5 +259,4 @@ $ git push -u origin main
   </div>
 </div>
 </div>
-</li>
-</ul>
+

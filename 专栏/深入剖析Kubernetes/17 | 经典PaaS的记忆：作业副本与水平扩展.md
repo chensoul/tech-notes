@@ -122,18 +122,18 @@ nginx-deployment   3         0         0            0           1s
 
 在返回结果中，我们可以看到四个状态字段，它们的含义如下所示。
 
-<li>
+
 DESIRED：用户期望的Pod副本个数（spec.replicas的值）；
-</li>
-<li>
+
+
 CURRENT：当前处于Running状态的Pod的个数；
-</li>
-<li>
+
+
 UP-TO-DATE：当前处于最新版本的Pod的个数，所谓最新版本指的是Pod的Spec部分与Deployment里Pod模板里定义的完全一致；
-</li>
-<li>
+
+
 AVAILABLE：当前已经可用的Pod的个数，即：既是Running状态，又是最新版本，并且已经处于Ready（健康检查正确）状态的Pod的个数。
-</li>
+
 
 可以看到，只有这个AVAILABLE字段，描述的才是用户所期望的最终状态。
 

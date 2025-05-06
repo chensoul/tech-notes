@@ -25,81 +25,81 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;导读：课程概要.md">01 导读：课程概要.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;WebFlux&#32;快速入门实践.md">02 WebFlux 快速入门实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;WebFlux&#32;Web&#32;CRUD&#32;实践.md">03 WebFlux Web CRUD 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;WebFlux&#32;整合&#32;MongoDB.md">04 WebFlux 整合 MongoDB.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;WebFlux&#32;整合&#32;Thymeleaf.md">05 WebFlux 整合 Thymeleaf.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;WebFlux&#32;中&#32;Thymeleaf&#32;和&#32;MongoDB&#32;实践.md">06 WebFlux 中 Thymeleaf 和 MongoDB 实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;WebFlux&#32;整合&#32;Redis.md">07 WebFlux 整合 Redis.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;WebFlux&#32;中&#32;Redis&#32;实现缓存.md">08 WebFlux 中 Redis 实现缓存.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;WebFlux&#32;中&#32;WebSocket&#32;实现通信.md">09 WebFlux 中 WebSocket 实现通信.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;WebFlux&#32;集成测试及部署.md">10 WebFlux 集成测试及部署.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="11&#32;WebFlux&#32;实战图书管理系统.md">11 WebFlux 实战图书管理系统.md</a>
                     
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -161,18 +161,18 @@
 <p>类似上面讲的工程搭建，新建一个工程编写此案例。工程如图：</p>
 <p><img src="assets/1a05190038e9565a3ffa1b876a63f4701525504.png" alt="img" /></p>
 <p>下面目录和上面类似，这边不重复讲解：</p>
-<ul>
-<li>pom.xml Maven 依赖配置</li>
-<li>application.properties 配置文件，配置 mongo 连接属性配置</li>
-<li>dao 数据访问层</li>
-</ul>
+
+pom.xml Maven 依赖配置
+application.properties 配置文件，配置 mongo 连接属性配置
+dao 数据访问层
+
 <p><a href="https://github.com/JeffLi1993/springboot-learning-example">单击这里查看源代码</a>。</p>
 <p>本文主要介绍：</p>
-<ul>
-<li>controller 控制层实现</li>
-<li>static 存放 css 图片静态资源</li>
-<li>templates 编写页面逻辑</li>
-</ul>
+
+controller 控制层实现
+static 存放 css 图片静态资源
+templates 编写页面逻辑
+
 <h3>CityController 控制层</h3>
 <p>使用注解驱动的模式来进行开发，代码如下：</p>
 <pre><code>/**
@@ -234,12 +234,12 @@ public class CityController {
 
 </code></pre>
 <p>可以创建不同功能的控制层，来处理不同的 HTTP 业务请求，比如 CityFrontController、CityAdminController 等分别处理不同场景的问题。</p>
-<ul>
-<li>getCityList 方法：处理“/city”的 GET 请求，用来获取 City 列表。</li>
-<li>getCity 方法：处理“/city/update/{id}”的 GET 请求，用来获取 City 信息。</li>
-<li>postCity 方法：处理“/book/create”的 POST 请求，用来新建 Book 信息；通过 @ModelAttribut 绑定实体参数，也通过 @RequestBody @RequestParam 传递参数。</li>
-<li>putCity 方法：处理“/update”的 PUT 请求，用来更新 City 信息，并使用 redirect 重定向到列表页面。</li>
-</ul>
+
+getCityList 方法：处理“/city”的 GET 请求，用来获取 City 列表。
+getCity 方法：处理“/city/update/{id}”的 GET 请求，用来获取 City 信息。
+postCity 方法：处理“/book/create”的 POST 请求，用来新建 Book 信息；通过 @ModelAttribut 绑定实体参数，也通过 @RequestBody @RequestParam 传递参数。
+putCity 方法：处理“/update”的 PUT 请求，用来更新 City 信息，并使用 redirect 重定向到列表页面。
+
 <h3>cityForm 提交表单页面</h3>
 <p>表单页面如下：</p>
 <pre><code>&lt;!DOCTYPE html&gt;

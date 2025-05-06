@@ -53,12 +53,12 @@ brew install openresty
 
 不过，这看似简单的安装背后，其实有两个问题：
 
-<li>
+
 为什么我不推荐使用源码来安装呢？
-</li>
-<li>
+
+
 为什么不能直接从操作系统的官方仓库安装，而是需要先设置另外一个仓库地址？
-</li>
+
 
 对于这两个问题，你不妨先自己想一想。
 
@@ -150,15 +150,15 @@ ERROR: failed to run command &quot;valgrind /usr/local/Cellar/openresty/1.13.6.2
 
 写出这样的 OpenResty 程序并不简单，你至少需要三步才能完成：
 
-<li>
+
 创建工作目录；
-</li>
-<li>
+
+
 修改 NGINX 的配置文件，把 Lua 代码嵌入其中；
-</li>
-<li>
+
+
 启动 OpenResty 服务。
-</li>
+
 
 我们先来创建工作目录。
 

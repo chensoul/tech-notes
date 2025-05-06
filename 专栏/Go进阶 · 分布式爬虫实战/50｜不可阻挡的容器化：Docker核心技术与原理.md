@@ -1,10 +1,10 @@
 <audio title="50｜不可阻挡的容器化：Docker核心技术与原理" src="https://static001.geekbang.org/resource/audio/ab/10/ab5409355466f2afd76046df92cb6a10.mp3" controls="controls"></audio> 
-<p>你好，我是郑建勋。</p><p>这节课，我们来看看容器化技术，并利用Docker将我们的程序打包为容器。</p><h2>不可阻挡的容器化</h2><p>大多数应用程序都是在服务器上运行的。过去，我们只能在一台服务器上运行一个应用程序，这带来了巨大的资源浪费，因为机器的资源通常不能被充分地利用。同时，由于程序依赖的资源很多，部署和迁移通常都比较困难。</p><p>解决这一问题的一种方法是使用虚拟机技术（VM，Virtual Machine）。虚拟机是对物理硬件的抽象。协调程序的Hypervisor允许多个虚拟机在一台机器上运行。但是，每个 VM 都包含操作系统、应用程序、必要的二进制文件和库的完整副本，这可能占用数十GB。此外，每个操作系统还会额外消耗 CPU、RAM和其他资源。VM 的启动也比较缓慢，难以进行灵活的迁移。</p><p>为了应对虚拟机带来的问题，容器化技术应运而生了。容器不需要单独的操作系统，它是应用层的抽象，它将代码和依赖项打包在了一起。多个容器可以在同一台机器上运行，并与其他容器共享操作系统内核。</p><p>容器可以共享主机的操作系统，比VM占用的空间更少。这减少了维护资源和操作系统的成本。同时，容器可以快速迁移，便于配置，将容器从本地迁移到云端是轻而易举的事情。</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/12/1e/12b9ecfb85f49aa69bf14a207df9271e.jpg?wh=1920x827" alt="图片"></p><p>现代容器起源于Linux，借助kernel namespaces、control groups、union filesystems等技术实现了资源的隔离。而真正让容器技术走向寻常百姓家的是Docker。</p><p>Docker既是一门技术也指代一个软件。作为一个软件，Docker目前由 <a href="https://github.com/moby/moby">Moby</a> 开源的各种工具构建而成，它可以创建、管理甚至编排容器。要安装Docker也非常简单，在Mac与Windows系统下，我们可以直接使用<a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a>软件安装包。而在不同的Linux发行版上也有不同的安装方式，如果有需要你可以查看<a href="https://docs.docker.com/engine/install/">官网安装教程</a>。</p><h2>Docker的架构</h2><p>当前Docker的架构可以分为4个部分，分别为运行时（Runtime）、守护进程（Dockerd） 、集群管理（Swarm）和客户端（Client）。</p><ul>
-<li>运行时主要分为底层运行时和更高级别的运行时两种。底层运行时称为 runC，它遵循<a href="https://opencontainers.org/">OCI</a>定义的运行时规范。runC的工作是与底层操作系统交互、启动和停止容器。更高级别的运行时叫做 Containerd。Containerd 比 runC 做得更多，它负责管理容器的整个生命周期，包括拉取镜像、创建网络接口和管理较低级别的 runc 实例。</li>
-<li>守护进程 (Dockerd) 位于 Containerd 之上，负责执行更高级别的任务。Dockerd的一个主要任务是提供一个易于使用的API来抽象对底层容器的操作，它提供了对Images、Volume、网络的管理。</li>
-<li>Docker 还原生支持管理 Docker 集群的技术 Docker Swarm。Swarm有助于资源排版，并提供集群间交流的安全性。</li>
-<li>客户端 Client 用于发送指令与Dockerd进行交互，最终实现操作容器的目的。</li>
-</ul><p><img src="https://static001.geekbang.org/resource/image/30/c9/30230bf16003b9bc0b02a18734c082c9.jpg?wh=1920x827" alt="图片"></p><h2>Docker 镜像</h2><p>要利用Docker生成容器，我们需要构建Docker镜像（Docker images）。Docker 镜像打包了容器需要的程序、依赖、文件系统等所有资源。镜像是静态的，有了镜像之后，借助Docker就能够运行有相同行为的容器了。这有助于容器的扩容与迁移，使运维变得更加简单了。</p><p>而要生成镜像，我们可以书写<strong>Dockerfile文件</strong>，Dockerfile文件会告诉Docker如何构建镜像。下面我们来看看怎么书写一个最简单的Dockerfile文件，它可以帮助我们生成爬虫项目的镜像。</p><pre><code class="language-plain">FROM golang:1.18-alpine
+<p>你好，我是郑建勋。</p><p>这节课，我们来看看容器化技术，并利用Docker将我们的程序打包为容器。</p><h2>不可阻挡的容器化</h2><p>大多数应用程序都是在服务器上运行的。过去，我们只能在一台服务器上运行一个应用程序，这带来了巨大的资源浪费，因为机器的资源通常不能被充分地利用。同时，由于程序依赖的资源很多，部署和迁移通常都比较困难。</p><p>解决这一问题的一种方法是使用虚拟机技术（VM，Virtual Machine）。虚拟机是对物理硬件的抽象。协调程序的Hypervisor允许多个虚拟机在一台机器上运行。但是，每个 VM 都包含操作系统、应用程序、必要的二进制文件和库的完整副本，这可能占用数十GB。此外，每个操作系统还会额外消耗 CPU、RAM和其他资源。VM 的启动也比较缓慢，难以进行灵活的迁移。</p><p>为了应对虚拟机带来的问题，容器化技术应运而生了。容器不需要单独的操作系统，它是应用层的抽象，它将代码和依赖项打包在了一起。多个容器可以在同一台机器上运行，并与其他容器共享操作系统内核。</p><p>容器可以共享主机的操作系统，比VM占用的空间更少。这减少了维护资源和操作系统的成本。同时，容器可以快速迁移，便于配置，将容器从本地迁移到云端是轻而易举的事情。</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/12/1e/12b9ecfb85f49aa69bf14a207df9271e.jpg?wh=1920x827" alt="图片"></p><p>现代容器起源于Linux，借助kernel namespaces、control groups、union filesystems等技术实现了资源的隔离。而真正让容器技术走向寻常百姓家的是Docker。</p><p>Docker既是一门技术也指代一个软件。作为一个软件，Docker目前由 <a href="https://github.com/moby/moby">Moby</a> 开源的各种工具构建而成，它可以创建、管理甚至编排容器。要安装Docker也非常简单，在Mac与Windows系统下，我们可以直接使用<a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a>软件安装包。而在不同的Linux发行版上也有不同的安装方式，如果有需要你可以查看<a href="https://docs.docker.com/engine/install/">官网安装教程</a>。</p><h2>Docker的架构</h2><p>当前Docker的架构可以分为4个部分，分别为运行时（Runtime）、守护进程（Dockerd） 、集群管理（Swarm）和客户端（Client）。</p>
+运行时主要分为底层运行时和更高级别的运行时两种。底层运行时称为 runC，它遵循<a href="https://opencontainers.org/">OCI</a>定义的运行时规范。runC的工作是与底层操作系统交互、启动和停止容器。更高级别的运行时叫做 Containerd。Containerd 比 runC 做得更多，它负责管理容器的整个生命周期，包括拉取镜像、创建网络接口和管理较低级别的 runc 实例。
+守护进程 (Dockerd) 位于 Containerd 之上，负责执行更高级别的任务。Dockerd的一个主要任务是提供一个易于使用的API来抽象对底层容器的操作，它提供了对Images、Volume、网络的管理。
+Docker 还原生支持管理 Docker 集群的技术 Docker Swarm。Swarm有助于资源排版，并提供集群间交流的安全性。
+客户端 Client 用于发送指令与Dockerd进行交互，最终实现操作容器的目的。
+<p><img src="https://static001.geekbang.org/resource/image/30/c9/30230bf16003b9bc0b02a18734c082c9.jpg?wh=1920x827" alt="图片"></p><h2>Docker 镜像</h2><p>要利用Docker生成容器，我们需要构建Docker镜像（Docker images）。Docker 镜像打包了容器需要的程序、依赖、文件系统等所有资源。镜像是静态的，有了镜像之后，借助Docker就能够运行有相同行为的容器了。这有助于容器的扩容与迁移，使运维变得更加简单了。</p><p>而要生成镜像，我们可以书写<strong>Dockerfile文件</strong>，Dockerfile文件会告诉Docker如何构建镜像。下面我们来看看怎么书写一个最简单的Dockerfile文件，它可以帮助我们生成爬虫项目的镜像。</p><pre><code class="language-plain">FROM golang:1.18-alpine
 LABEL maintainer="zhuimengshaonian04@gmail.com"
 WORKDIR /app
 COPY . /app
@@ -12,16 +12,16 @@ RUN go mod download
 RUN go build -o crawler main.go
 EXPOSE 8080
 CMD [ "./crawler","worker" ]
-</code></pre><p>让我们逐行剖析一下这段Dockerfile文件。</p><ul>
-<li>第一行，所有 Dockerfile 都以 FROM 指令开头，这是镜像的基础层，其余文件与依赖将作为附加层添加到基础层中。golang:1.18-alpine是Go官方提供的包含了Go指定版本与Linux文件系统的基础层。</li>
-<li>第二行，LABEL指令，可以为镜像添加元数据，在这里我们列出了镜像维护者的邮箱。</li>
-<li>第三行，WORKDIR 指令用于设置镜像的工作目录，这里我们设置为/app。</li>
-<li>第四行，COPY 指令用于将文件复制到镜像中，在这里我们将项目的所有文件复制到了/app路径下。</li>
-<li>第五行， RUN指令，用于执行指定的命令。在这里，我们执行 go mod download 来安装Go项目的依赖。</li>
-<li>第六行，RUN go build 用于构建项目的二进制文件。</li>
-<li>第七行，EXPOSE 8080 声明了容器暴露的服务端口，它主要用于描述，没有正式的作用。</li>
-<li>第八行，CMD 声明了容器启动时运行的命令，在这里我们运行的是./crawler worker。</li>
-</ul><p>接下来让我们构建镜像，下面的命令将创建一个新的镜像crawler:latest。第一行最后的 <code>.</code> 是在告诉Docker使用当前的目录作为构建的上下文环境。</p><pre><code class="language-plain">» docker image build -t crawler:latest .                                                                                      jackson@bogon
+</code></pre><p>让我们逐行剖析一下这段Dockerfile文件。</p>
+第一行，所有 Dockerfile 都以 FROM 指令开头，这是镜像的基础层，其余文件与依赖将作为附加层添加到基础层中。golang:1.18-alpine是Go官方提供的包含了Go指定版本与Linux文件系统的基础层。
+第二行，LABEL指令，可以为镜像添加元数据，在这里我们列出了镜像维护者的邮箱。
+第三行，WORKDIR 指令用于设置镜像的工作目录，这里我们设置为/app。
+第四行，COPY 指令用于将文件复制到镜像中，在这里我们将项目的所有文件复制到了/app路径下。
+第五行， RUN指令，用于执行指定的命令。在这里，我们执行 go mod download 来安装Go项目的依赖。
+第六行，RUN go build 用于构建项目的二进制文件。
+第七行，EXPOSE 8080 声明了容器暴露的服务端口，它主要用于描述，没有正式的作用。
+第八行，CMD 声明了容器启动时运行的命令，在这里我们运行的是./crawler worker。
+<p>接下来让我们构建镜像，下面的命令将创建一个新的镜像crawler:latest。第一行最后的 <code>.</code> 是在告诉Docker使用当前的目录作为构建的上下文环境。</p><pre><code class="language-plain">» docker image build -t crawler:latest .                                                                                      jackson@bogon
 [+] Building 2.5s (10/10) FINISHED                                                                                                                                                                                                                                                                                            0.1s
  =&gt; [1/5] FROM docker.io/library/golang:1.18-alpine@sha256:c2bb8281641f39a32e01854ae6b5fea45870f6f4c0c04365eadc0be596675456                                                    0.0s
 ...	                                                                                                                                                       0.0s
@@ -77,13 +77,13 @@ CMD ["./crawler","worker"]
 </code></pre><p>接下来让我们再次执行dokcer build，会发现最新生成的镜像大小只有41MB了。相比最初的782MB，节省了七百多兆空间。</p><pre><code class="language-plain">» docker images 
 REPOSITORY   TAG        IMAGE ID       CREATED         SIZE
 crawler      local      19c35890a440   9 days ago      41MB
-</code></pre><h2>Docker 网络原理</h2><p>那Docker网络通信的原理是什么呢？我们在之前看到，容器中的网络是相互隔离的，容器与容器之间无法相互通信。在Linux中，这是通过网络命名空间（Network namespace）实现的隔离。Docker中的网络模型遵循了容器网络模型（<a href="https://github.com/docker/libnetwork/blob/master/docs/design.md">CNM</a>，Container Network Model）的设计规范。如下所示，容器网络就像一个沙盒，只有通过Endpoint将容器加入到指定的网络中才可以相互通信。</p><p><img src="https://static001.geekbang.org/resource/image/2e/78/2e897a1b0891ca13a4214443acf80478.jpg?wh=1920x827" alt="图片"></p><p>Docker 的网络子系统由网络驱动程序以插件形式提供。默认存在多个驱动程序，常见的驱动程序有下面几个。</p><ul>
-<li>bridge：桥接网络，为Docker默认的网络驱动。</li>
-<li>host：去除网络隔离，容器使用和宿主机相同的网络命名空间。</li>
-<li>none： 禁用所有网络，通常与自定义网络驱动程序结合使用。</li>
-<li>overlay：容器可以跨主机通信。<br>
-要查看容器当前可用的网络驱动，可以使用docker network ls。</li>
-</ul><pre><code class="language-plain">» docker network ls                                                                                                                            jackson@bogon
+</code></pre><h2>Docker 网络原理</h2><p>那Docker网络通信的原理是什么呢？我们在之前看到，容器中的网络是相互隔离的，容器与容器之间无法相互通信。在Linux中，这是通过网络命名空间（Network namespace）实现的隔离。Docker中的网络模型遵循了容器网络模型（<a href="https://github.com/docker/libnetwork/blob/master/docs/design.md">CNM</a>，Container Network Model）的设计规范。如下所示，容器网络就像一个沙盒，只有通过Endpoint将容器加入到指定的网络中才可以相互通信。</p><p><img src="https://static001.geekbang.org/resource/image/2e/78/2e897a1b0891ca13a4214443acf80478.jpg?wh=1920x827" alt="图片"></p><p>Docker 的网络子系统由网络驱动程序以插件形式提供。默认存在多个驱动程序，常见的驱动程序有下面几个。</p>
+bridge：桥接网络，为Docker默认的网络驱动。
+host：去除网络隔离，容器使用和宿主机相同的网络命名空间。
+none： 禁用所有网络，通常与自定义网络驱动程序结合使用。
+overlay：容器可以跨主机通信。<br>
+要查看容器当前可用的网络驱动，可以使用docker network ls。
+<pre><code class="language-plain">» docker network ls                                                                                                                            jackson@bogon
 NETWORK ID     NAME           DRIVER    SCOPE
 40865fd56e0d   bridge         bridge    local
 1fa0c4c53670   host           host      local
@@ -220,7 +220,7 @@ PING 172.17.0.3 (172.17.0.3): 56 data bytes
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -235,8 +235,8 @@ PING 172.17.0.3 (172.17.0.3): 56 data bytes
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/7f/d3/b5896293.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -251,5 +251,4 @@ PING 172.17.0.3 (172.17.0.3): 56 data bytes
   </div>
 </div>
 </div>
-</li>
-</ul>
+

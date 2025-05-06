@@ -1,11 +1,11 @@
 <audio title="14｜组件监控：Redis的关键指标及采集方法有哪些？" src="https://static001.geekbang.org/resource/audio/35/bb/35c56a2413e520730559e5396b5833bb.mp3" controls="controls"></audio> 
 <p>你好，我是秦晓辉。</p><p>上一讲我们在Google四个黄金指标方法论的指导下，梳理了最常用的关系型数据库——MySQL的关键指标和采集方法。这一讲我们来继续学习最常用的NoSQL数据库——Redis的关键指标，掌握相关原理和采集方法。</p><p>Redis也是一个对外服务，所以Google的四个黄金指标同样适用于Redis，与上一讲一样，我们还是从延迟、流量、错误、饱和度这些方面，来分析Redis的关键指标。</p><h2>延迟</h2><p>在软件工程架构中，之所以选择Redis作为技术堆栈的一员，大概率是想要得到更快的响应速度和更高的吞吐量，所以延迟数据对使用Redis的应用程序至关重要。通常我们会通过下面这两种方式来监控延迟。</p><ol>
-<li>
+
 <p>客户端应用程序埋点。比如某个Java或Go的程序在调用Redis的时候，计算一下各个命令花费了多久，然后把耗时数据推给监控系统即可。这种方式好处是非常灵活，想要按照什么维度统计就按照什么维度统计，缺点自然是代码侵入性，和客户端埋点监控MySQL的原理是一样的。</p>
-</li>
-<li>
+
+
 <p>使用 redis-cli 的 <code>--latency</code> 命令，这个原理比较简单，就是客户端连上 redis-server，然后不断发送 ping 命令，统计耗时。我在远端机器对某个 redis-server 做探测，你可以看一下探测的结果。</p>
-</li>
+
 </ol><!-- [[[read_end]]] --><pre><code class="language-json">redis-cli --latency -h 10.206.0.16 -p 6379
 min: 33, max: 58, avg: 35.30 (1013 samples)
 </code></pre><p>然后我又跑到 10.206.0.16 这个机器上，对本机的 redis-server 做探测，结果是这样的。</p><pre><code class="language-json">redis-cli --latency -h 127.0.0.1 -p 6379
@@ -85,10 +85,10 @@ active-defrag-cycle-max 75
 127.0.0.1:6379&gt; config get maxmemory-policy
 1) "maxmemory-policy"
 2) "noeviction"
-</code></pre><p>其他常见策略有：volatile-lru，表示从已设置过期时间的内存数据集里，挑选最近最少使用的数据淘汰掉；volatile-ttl，表示从已设置过期时间的内存数据集里，挑选即将过期的数据淘汰。</p><p>“Google的四个黄金指标”重点要关注的指标我们就描述到这里，如果这些指标出问题，上游的服务大概率会受到影响，还有一些指标虽然短期不会影响上游服务，但是如果不及时处理未来也会出现大麻烦，这类指标通常用于衡量Redis内部的一些运行工况，比如：</p><ul>
-<li>持久化相关的指标：rdb_changes_since_last_save 表示自从上次落盘以来又有多少次变更。</li>
-<li>主从相关的指标：master_link_down_since_seconds 表示主从连接已经断开的时长。</li>
-</ul><p>这些都属于见名知义的指标，我们就不展开了，下面我们看一下Redis的监控数据如何采集。</p><h2>采集配置</h2><p>Categraf 也提供了 Redis 采集插件，配置样例在 <code>conf/input.redis/redis.toml</code>，我们看一下。</p><pre><code class="language-json">[[instances]]
+</code></pre><p>其他常见策略有：volatile-lru，表示从已设置过期时间的内存数据集里，挑选最近最少使用的数据淘汰掉；volatile-ttl，表示从已设置过期时间的内存数据集里，挑选即将过期的数据淘汰。</p><p>“Google的四个黄金指标”重点要关注的指标我们就描述到这里，如果这些指标出问题，上游的服务大概率会受到影响，还有一些指标虽然短期不会影响上游服务，但是如果不及时处理未来也会出现大麻烦，这类指标通常用于衡量Redis内部的一些运行工况，比如：</p>
+持久化相关的指标：rdb_changes_since_last_save 表示自从上次落盘以来又有多少次变更。
+主从相关的指标：master_link_down_since_seconds 表示主从连接已经断开的时长。
+<p>这些都属于见名知义的指标，我们就不展开了，下面我们看一下Redis的监控数据如何采集。</p><h2>采集配置</h2><p>Categraf 也提供了 Redis 采集插件，配置样例在 <code>conf/input.redis/redis.toml</code>，我们看一下。</p><pre><code class="language-json">[[instances]]
 # address = "127.0.0.1:6379"
 # username = ""
 # password = ""
@@ -101,13 +101,13 @@ active-defrag-cycle-max 75
 # ]
 
 # labels = { instance="n9e-dev-redis" }
-</code></pre><p>最核心的配置就是 address，也就是 Redis 的连接地址，然后是认证信息，username 字段低版本的 Redis 是不需要的，如果是 6.0 以上的版本并且启用了ACL的才需要。</p><p>commands 的作用是自定义一些命令来获取指标，和 MySQL 采集器中的 queries 类似，在业务指标采集的场景，通常能发挥奇效。</p><p>labels 是个通用配置，所有的 Categraf 的采集器，都支持在 <code>[[instances]]</code> 下面自定义标签。当然，我个人还是习惯使用机器名来过滤，这样便于把 Redis 的指标和 Redis 所在机器的指标放到一张大盘里展示。这里我提供了一个<a href="https://github.com/flashcatcloud/categraf/blob/main/inputs/redis/dashboard.json">仪表盘样例</a>，供你参考。</p><p><img src="https://static001.geekbang.org/resource/image/42/2f/429ae1a1c2e6fa1f457b409267ea312f.png?wh=3012x1594" alt=""></p><p>Redis 监控的原理、采集方法、仪表盘相关的知识就讲解完了，下面我们做一个总结。</p><h2>小结</h2><p>因为 Redis 也是一个对外服务，所以我这里还是按照 Google 的四个黄金指标的法则来梳理重要指标。</p><ul>
-<li>延迟方面可以使用  <code>redis-cli --latency</code> 来探测，不过采集器一般不会直接调用这个命令行工具，而是采集的时候先发个 ping 命令来获取一下延迟。</li>
-</ul><p><img src="https://static001.geekbang.org/resource/image/33/87/338f3abbe4d141cdc96128963994c287.png?wh=1574x436" alt="图片"></p><ul>
-<li>流量方面重点关注每秒处理多少个 command，每秒收到多少网络流量，返回多少网络流量。</li>
-<li>Redis因为只是操作内存，所以基本不会遇到错误，我们可以使用客户端埋点方式，来采集网络错误、命令错误。</li>
-<li>饱和度方面，则重点关注内存饱和度，尤其是内存碎片率，小于1不行，太大了也不太好。</li>
-</ul><p>老规矩，我画了一张脑图来帮助你理解和记忆这一讲的内容。</p><p><img src="https://static001.geekbang.org/resource/image/6c/28/6c59e45ed77817e05003e5888853b228.jpg?wh=2287x1820" alt=""></p><h2>互动时刻</h2><p>根据这一讲的介绍，你应该对 Redis 的关键指标有一定的了解了，让我们来集思广益，攒一下 Redis 的告警规则吧。欢迎留言分享你认为应该作为告警规则的 PromQL，也欢迎你把今天的内容分享给你身边的朋友，邀他一起学习。我们下一讲再见！</p>
+</code></pre><p>最核心的配置就是 address，也就是 Redis 的连接地址，然后是认证信息，username 字段低版本的 Redis 是不需要的，如果是 6.0 以上的版本并且启用了ACL的才需要。</p><p>commands 的作用是自定义一些命令来获取指标，和 MySQL 采集器中的 queries 类似，在业务指标采集的场景，通常能发挥奇效。</p><p>labels 是个通用配置，所有的 Categraf 的采集器，都支持在 <code>[[instances]]</code> 下面自定义标签。当然，我个人还是习惯使用机器名来过滤，这样便于把 Redis 的指标和 Redis 所在机器的指标放到一张大盘里展示。这里我提供了一个<a href="https://github.com/flashcatcloud/categraf/blob/main/inputs/redis/dashboard.json">仪表盘样例</a>，供你参考。</p><p><img src="https://static001.geekbang.org/resource/image/42/2f/429ae1a1c2e6fa1f457b409267ea312f.png?wh=3012x1594" alt=""></p><p>Redis 监控的原理、采集方法、仪表盘相关的知识就讲解完了，下面我们做一个总结。</p><h2>小结</h2><p>因为 Redis 也是一个对外服务，所以我这里还是按照 Google 的四个黄金指标的法则来梳理重要指标。</p>
+延迟方面可以使用  <code>redis-cli --latency</code> 来探测，不过采集器一般不会直接调用这个命令行工具，而是采集的时候先发个 ping 命令来获取一下延迟。
+<p><img src="https://static001.geekbang.org/resource/image/33/87/338f3abbe4d141cdc96128963994c287.png?wh=1574x436" alt="图片"></p>
+流量方面重点关注每秒处理多少个 command，每秒收到多少网络流量，返回多少网络流量。
+Redis因为只是操作内存，所以基本不会遇到错误，我们可以使用客户端埋点方式，来采集网络错误、命令错误。
+饱和度方面，则重点关注内存饱和度，尤其是内存碎片率，小于1不行，太大了也不太好。
+<p>老规矩，我画了一张脑图来帮助你理解和记忆这一讲的内容。</p><p><img src="https://static001.geekbang.org/resource/image/6c/28/6c59e45ed77817e05003e5888853b228.jpg?wh=2287x1820" alt=""></p><h2>互动时刻</h2><p>根据这一讲的介绍，你应该对 Redis 的关键指标有一定的了解了，让我们来集思广益，攒一下 Redis 的告警规则吧。欢迎留言分享你认为应该作为告警规则的 PromQL，也欢迎你把今天的内容分享给你身边的朋友，邀他一起学习。我们下一讲再见！</p>
 <style>
     ul {
       list-style: none;
@@ -217,7 +217,7 @@ active-defrag-cycle-max 75
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoUnB8oxzr2YIXrvqxpOfKEiaZ60BCwzXHlFe6gxZmBzXUdL9Yk3Yp9s11bGcK9KIKtOdZBDibQ3GAQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -232,8 +232,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/6b/20/004af747.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -248,8 +248,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/c4/92/338b5609.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -264,8 +264,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/35/72/b4/7420b047.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -280,8 +280,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -296,8 +296,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/c8/5d/edfa625d.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -312,8 +312,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/25/87/f3a69d1b.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -328,8 +328,8 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1b/5d/52/21275675.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -344,5 +344,4 @@ active-defrag-cycle-max 75
   </div>
 </div>
 </div>
-</li>
-</ul>
+

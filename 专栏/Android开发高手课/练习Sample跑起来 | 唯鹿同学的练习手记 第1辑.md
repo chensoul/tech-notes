@@ -406,11 +406,11 @@ private void testIO() {
 
 **参考**
 
-<li>
+
 [练习Sample跑起来 | 热点问题答疑第1期](https://time.geekbang.org/column/article/73068)
-</li>
-<li>
+
+
 [练习Sample跑起来 | 热点问题答疑第2期](https://time.geekbang.org/column/article/75440)
-</li>
+
 
 

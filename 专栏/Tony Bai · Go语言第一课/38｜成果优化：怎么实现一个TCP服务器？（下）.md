@@ -71,11 +71,11 @@ CONTAINER ID   IMAGE                                     COMMAND                
 563d655cdf90   grafana/grafana:latest                    "/run.sh"                26 hours ago   Up 26 hours             grafana
 65616d1b6d1a   prom/prometheus:latest                    "/bin/prometheus --c…"   26 hours ago   Up 26 hours             prometheus
 b29d3fef8572   quay.io/prometheus/node-exporter:latest   "/bin/node_exporter …"   26 hours ago   Up 26 hours             node_exporter
-</code></pre><p>为了更直观地了解到整个观测设施中各个工具之间的关系，我这里画了一幅示意图，对照着这幅图，你再来理解上面的配置与执行步骤会容易许多：</p><p><img src="https://static001.geekbang.org/resource/image/2c/1d/2c1125e3629da1c12db3a29da523231d.jpg?wh=1366x526" alt=""></p><h3>配置Grafana</h3><p>一旦成功启动，Prometheus便会启动各个采集job，从tcp server以及node-exporter中拉取度量数据，并存储在其时序数据库中，这个时候我们需要对Grafana进行一些简单配置，才能让这些数据以图形化的方式展现出来。</p><p>我们首先需要为Grafana配置一个新的数据源（data source），在数据源选择页面，我们选择Prometheus，就像下图这样：</p><p><img src="https://static001.geekbang.org/resource/image/83/1f/83a422e1cf39e47a9600dc222f384a1f.png?wh=1920x454" alt="图片"></p><p>选择后，在Prometheus数据源配置页面，配置这个数据源的HTTP URL就可以了。如果你点击“Save &amp; test”按钮后提示成功，那么数据源就配置好了。</p><p>接下来，我们再添加一个node-exporter仪表板（dashboard），把从node-exporter拉取的度量数据以图形化方式展示出来。这个时候我们不需要手工一个一个设置仪表板上的panel，Grafana官方有现成的node-exporter仪表板可用，我们只需要在grafana的import页面中输入相应的dashboard ID，就可以导入相关仪表板的设置：</p><p><img src="https://static001.geekbang.org/resource/image/e4/e8/e483fec0e2a3cfbc258cd92817d820e8.png?wh=1592x1178" alt="图片"></p><p>这里，我们使用的是ID为1860的node-exporter仪表板，导入成功后，进入这个仪表板页面，等待一段时间后，我们就可以看到类似下面的可视化结果：</p><p><img src="https://static001.geekbang.org/resource/image/5a/5c/5a1583feb00585b93eebb0d9b7e8995c.png?wh=1920x1052" alt="图片"></p><p>好了，到这里node-exporter的度量数据，已经可以以图形化的形式呈现在我们面前了，那么我们的自定义协议的服务端的数据又如何采集与呈现呢？我们继续向下看。</p><h3>在服务端埋入度量数据采集点</h3><p>前面说了，我们要建立服务端的性能基准，那么哪些度量数据能反映出服务端的性能指标呢？这里我们定义三个度量数据项：</p><ul>
-<li>当前已连接的客户端数量（client_connected）；</li>
-<li>每秒接收消息请求的数量（req_recv_rate）；</li>
-<li>每秒发送消息响应的数量（rsp_send_rate）。</li>
-</ul><p>那么如何在服务端的代码中埋入这三个度量数据项呢？</p><p>我们将上一讲的tcp-server-demo1项目拷贝一份，形成tcp-server-demo2项目，我们要在tcp-server-demo2项目中实现这三个度量数据项的采集。</p><p>我们在tcp-server-demo2下，创建新的metrics包负责定义度量数据项，metrics包的源码如下：</p><pre><code class="language-plain">// tcp-server-demo2/metrics/metrics.go
+</code></pre><p>为了更直观地了解到整个观测设施中各个工具之间的关系，我这里画了一幅示意图，对照着这幅图，你再来理解上面的配置与执行步骤会容易许多：</p><p><img src="https://static001.geekbang.org/resource/image/2c/1d/2c1125e3629da1c12db3a29da523231d.jpg?wh=1366x526" alt=""></p><h3>配置Grafana</h3><p>一旦成功启动，Prometheus便会启动各个采集job，从tcp server以及node-exporter中拉取度量数据，并存储在其时序数据库中，这个时候我们需要对Grafana进行一些简单配置，才能让这些数据以图形化的方式展现出来。</p><p>我们首先需要为Grafana配置一个新的数据源（data source），在数据源选择页面，我们选择Prometheus，就像下图这样：</p><p><img src="https://static001.geekbang.org/resource/image/83/1f/83a422e1cf39e47a9600dc222f384a1f.png?wh=1920x454" alt="图片"></p><p>选择后，在Prometheus数据源配置页面，配置这个数据源的HTTP URL就可以了。如果你点击“Save &amp; test”按钮后提示成功，那么数据源就配置好了。</p><p>接下来，我们再添加一个node-exporter仪表板（dashboard），把从node-exporter拉取的度量数据以图形化方式展示出来。这个时候我们不需要手工一个一个设置仪表板上的panel，Grafana官方有现成的node-exporter仪表板可用，我们只需要在grafana的import页面中输入相应的dashboard ID，就可以导入相关仪表板的设置：</p><p><img src="https://static001.geekbang.org/resource/image/e4/e8/e483fec0e2a3cfbc258cd92817d820e8.png?wh=1592x1178" alt="图片"></p><p>这里，我们使用的是ID为1860的node-exporter仪表板，导入成功后，进入这个仪表板页面，等待一段时间后，我们就可以看到类似下面的可视化结果：</p><p><img src="https://static001.geekbang.org/resource/image/5a/5c/5a1583feb00585b93eebb0d9b7e8995c.png?wh=1920x1052" alt="图片"></p><p>好了，到这里node-exporter的度量数据，已经可以以图形化的形式呈现在我们面前了，那么我们的自定义协议的服务端的数据又如何采集与呈现呢？我们继续向下看。</p><h3>在服务端埋入度量数据采集点</h3><p>前面说了，我们要建立服务端的性能基准，那么哪些度量数据能反映出服务端的性能指标呢？这里我们定义三个度量数据项：</p>
+当前已连接的客户端数量（client_connected）；
+每秒接收消息请求的数量（req_recv_rate）；
+每秒发送消息响应的数量（rsp_send_rate）。
+<p>那么如何在服务端的代码中埋入这三个度量数据项呢？</p><p>我们将上一讲的tcp-server-demo1项目拷贝一份，形成tcp-server-demo2项目，我们要在tcp-server-demo2项目中实现这三个度量数据项的采集。</p><p>我们在tcp-server-demo2下，创建新的metrics包负责定义度量数据项，metrics包的源码如下：</p><pre><code class="language-plain">// tcp-server-demo2/metrics/metrics.go
 
 package metrics
 
@@ -434,7 +434,7 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/26/27/eba94899.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -449,8 +449,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/0c/46/dfe32cf4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -465,8 +465,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/11/49/4e/8798cd01.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -481,8 +481,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/19/2e/ca/469f7266.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -497,8 +497,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/5JKZO1Ziax3Ky03noshpVNyEvZw0pUwjLcHrHRo1XNPKXdmCE88homb6ltA15CdVRnjzjgGs3Ex42CaDbeYzNuQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -513,8 +513,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/10/13/45/16c60da2.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -529,8 +529,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/4a/d9/75dd7cf9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -545,8 +545,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/22/cb/18/0139e086.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -561,8 +561,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/5JKZO1Ziax3Ky03noshpVNyEvZw0pUwjLcHrHRo1XNPKXdmCE88homb6ltA15CdVRnjzjgGs3Ex42CaDbeYzNuQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -577,8 +577,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/44/b5/7eba5a0e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -593,8 +593,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/4c/12/f0c145d4.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -609,8 +609,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/90/23/5c74e9b7.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -625,8 +625,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -641,8 +641,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/3e/d1/17f3160c.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -657,8 +657,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/16/d4/2e/d9c38892.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -673,8 +673,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/29/b0/d3/200e82ff.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -689,8 +689,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/0a/da/dcf8f2b1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -705,8 +705,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/83/af/1cb42cd3.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -721,8 +721,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/d7/f9/4c08ed90.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -737,8 +737,8 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/20/56/9d/4b2a7d29.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -753,5 +753,4 @@ func handlePacket(framePayload []byte) (ackFramePayload []byte, err error) {
   </div>
 </div>
 </div>
-</li>
-</ul>
+

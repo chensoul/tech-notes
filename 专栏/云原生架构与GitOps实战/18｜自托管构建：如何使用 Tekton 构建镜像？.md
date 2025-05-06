@@ -1,8 +1,8 @@
 <audio title="18｜自托管构建：如何使用 Tekton 构建镜像？" src="https://static001.geekbang.org/resource/audio/be/89/be21d53eca5045793b357c49abda2989.mp3" controls="controls"></audio> 
-<p>你好，我是王炜。</p><p>前两节课，我们分别介绍了如何使用 GitHub Action Workflow 和 GitLab CI 来自动构建镜像，它们配置起来相对简单，作为平台自带的功能，也不需要花费额外的维护成本。并且，它们都和 Git 仓库深度整合，这就让触发流水线变得非常简单了。</p><p>对于构建次数较少的团队来说，在免费额度范围内使用它们是一个非常好的选择。但是对于构建次数非常频繁的中大型团队来说，综合考虑费用、可控和定制化等各方面因素，他们可能会考虑使用其他自托管的方案。</p><p>这节课，我们就来介绍其中一种自动构建镜像的自托管方案：<strong>使用 Tekton 来自动构建镜像。</strong>Tekton 是一款基于 Kubernetes 的 CI/CD 开源产品，如果你已经有一个 Kubernetes 集群，那么利用 Tekton 直接在 Kubernetes 上构建镜像是一个不错的选择。</p><p>我会首先带你了解 Tekton 的基本概念，然后我们仍然以示例应用为例，从零开始为示例应用配置构建镜像的流水线，并结合 GitHub为 Tekton 配置 Webhook 触发器，实现提交代码之后触发 Tekton 流水线并构建镜像，最后推送到镜像仓库的过程。</p><p>在学完这节课之后，你将基本掌握 Tekton 的流水线以及触发器的用法，并具备独立配置它们的能力。</p><!-- [[[read_end]]] --><p>在开始今天的学习之前，你需要具备以下前提条件。</p><ul>
-<li>在本地安装了 kubectl。</li>
-<li>已经按照<a href="https://time.geekbang.org/column/article/622743">第16讲</a>将 <a href="https://github.com/lyzhang1999/kubernetes-example">kubernetes-example</a> 示例应用代码推送到了自己的 GitHub 仓库中。</li>
-</ul><h2>准备 Kubernetes 集群</h2><p>由于我们在实践的过程中需要 Kubernetes 集群的 Loadbalancer 能力，所以，首先你需要准备一个云厂商的 Kubernetes 集群，你可以使用 AWS、阿里云或腾讯云等任何云厂商。这里我以开通腾讯云 TKE 集群为例演示一下，<strong>这部分内容比较基础，如果你已经有云厂商 Kubernetes 集群，或者熟悉开通过程，都可以跳过这个步骤。</strong></p><p>首先，登录腾讯云并在<a href="https://console.cloud.tencent.com/tke2">这个页面</a>打开 TKE 控制台，点击“新建”按钮，选择“标准集群”。</p><p><img src="https://static001.geekbang.org/resource/image/06/19/06a9f41ea4995155e6f59f1050e72519.png?wh=1920x1113" alt="图片"></p><p>在创建集群页面输入“集群名称”，“所在地域”项中选择“中国香港”，集群网络选择“Default”，其他信息保持默认，点击下一步。</p><p><img src="https://static001.geekbang.org/resource/image/d4/9e/d4d3e50848b7955ae17d5713e050199e.png?wh=1710x868" alt="图片"></p><p>接下来进入到 Worker 节点配置阶段。在“机型”一栏中选择一个 2 核 8G 的节点，在“公网带宽”一栏中将带宽调整为 100Mbps，并且按量计费。</p><p><img src="https://static001.geekbang.org/resource/image/84/ab/84b2b5e0eae4f7d730831aab913fc5ab.png?wh=1920x812" alt="图片"></p><p>点击“下一步”。后续的页面都保持默认选择，点击“完成”创建 Kubernetes 集群。这里需要等待几分钟直至集群准备就绪。</p><p><img src="https://static001.geekbang.org/resource/image/8a/1e/8a1e7316111ba78caa5a40c4acd40f1e.png?wh=1778x406" alt="图片"></p><p>点击集群名称“docker-build”进入集群详情页，在“集群APIServer信息”一栏找到“外网访问”，点击开关来开启集群的外网访问。</p><p><img src="https://static001.geekbang.org/resource/image/b0/a8/b05a317c0fecf31110634a2f44a58aa8.png?wh=1300x332" alt="图片"></p><p>在弹出的新窗口中，选择“Default”安全组并选择“按使用流量”计费，访问方式选择“公网 IP”，然后点击“保存”开通集群外网访问。</p><p><img src="https://static001.geekbang.org/resource/image/67/6b/6754def296488c9ac73fa26ayy8dcd6b.png?wh=1334x956" alt="图片"></p><p>等待“外网访问”开关转变为启用状态。</p><p>接下来，在“Kubeconfig”一栏点击“复制”，复制集群 Kubeconfig 信息。</p><p><img src="https://static001.geekbang.org/resource/image/15/35/15ca4f2ee0a02e3aea7b74b0c68d1835.png?wh=1304x514" alt="图片"></p><p>接下来，将集群证书信息内容写入到本地的 ~/.kube/config 文件内，这是 kubectl 默认读取 kubeconfig 的文件位置。</p><p>为了避免覆盖已有的 kubeconfig，首先你需要备份 ~/.kube/config 文件。</p><pre><code class="language-powershell">$ mv ~/.kube/config ~/.kube/config-bak
+<p>你好，我是王炜。</p><p>前两节课，我们分别介绍了如何使用 GitHub Action Workflow 和 GitLab CI 来自动构建镜像，它们配置起来相对简单，作为平台自带的功能，也不需要花费额外的维护成本。并且，它们都和 Git 仓库深度整合，这就让触发流水线变得非常简单了。</p><p>对于构建次数较少的团队来说，在免费额度范围内使用它们是一个非常好的选择。但是对于构建次数非常频繁的中大型团队来说，综合考虑费用、可控和定制化等各方面因素，他们可能会考虑使用其他自托管的方案。</p><p>这节课，我们就来介绍其中一种自动构建镜像的自托管方案：<strong>使用 Tekton 来自动构建镜像。</strong>Tekton 是一款基于 Kubernetes 的 CI/CD 开源产品，如果你已经有一个 Kubernetes 集群，那么利用 Tekton 直接在 Kubernetes 上构建镜像是一个不错的选择。</p><p>我会首先带你了解 Tekton 的基本概念，然后我们仍然以示例应用为例，从零开始为示例应用配置构建镜像的流水线，并结合 GitHub为 Tekton 配置 Webhook 触发器，实现提交代码之后触发 Tekton 流水线并构建镜像，最后推送到镜像仓库的过程。</p><p>在学完这节课之后，你将基本掌握 Tekton 的流水线以及触发器的用法，并具备独立配置它们的能力。</p><!-- [[[read_end]]] --><p>在开始今天的学习之前，你需要具备以下前提条件。</p>
+在本地安装了 kubectl。
+已经按照<a href="https://time.geekbang.org/column/article/622743">第16讲</a>将 <a href="https://github.com/lyzhang1999/kubernetes-example">kubernetes-example</a> 示例应用代码推送到了自己的 GitHub 仓库中。
+<h2>准备 Kubernetes 集群</h2><p>由于我们在实践的过程中需要 Kubernetes 集群的 Loadbalancer 能力，所以，首先你需要准备一个云厂商的 Kubernetes 集群，你可以使用 AWS、阿里云或腾讯云等任何云厂商。这里我以开通腾讯云 TKE 集群为例演示一下，<strong>这部分内容比较基础，如果你已经有云厂商 Kubernetes 集群，或者熟悉开通过程，都可以跳过这个步骤。</strong></p><p>首先，登录腾讯云并在<a href="https://console.cloud.tencent.com/tke2">这个页面</a>打开 TKE 控制台，点击“新建”按钮，选择“标准集群”。</p><p><img src="https://static001.geekbang.org/resource/image/06/19/06a9f41ea4995155e6f59f1050e72519.png?wh=1920x1113" alt="图片"></p><p>在创建集群页面输入“集群名称”，“所在地域”项中选择“中国香港”，集群网络选择“Default”，其他信息保持默认，点击下一步。</p><p><img src="https://static001.geekbang.org/resource/image/d4/9e/d4d3e50848b7955ae17d5713e050199e.png?wh=1710x868" alt="图片"></p><p>接下来进入到 Worker 节点配置阶段。在“机型”一栏中选择一个 2 核 8G 的节点，在“公网带宽”一栏中将带宽调整为 100Mbps，并且按量计费。</p><p><img src="https://static001.geekbang.org/resource/image/84/ab/84b2b5e0eae4f7d730831aab913fc5ab.png?wh=1920x812" alt="图片"></p><p>点击“下一步”。后续的页面都保持默认选择，点击“完成”创建 Kubernetes 集群。这里需要等待几分钟直至集群准备就绪。</p><p><img src="https://static001.geekbang.org/resource/image/8a/1e/8a1e7316111ba78caa5a40c4acd40f1e.png?wh=1778x406" alt="图片"></p><p>点击集群名称“docker-build”进入集群详情页，在“集群APIServer信息”一栏找到“外网访问”，点击开关来开启集群的外网访问。</p><p><img src="https://static001.geekbang.org/resource/image/b0/a8/b05a317c0fecf31110634a2f44a58aa8.png?wh=1300x332" alt="图片"></p><p>在弹出的新窗口中，选择“Default”安全组并选择“按使用流量”计费，访问方式选择“公网 IP”，然后点击“保存”开通集群外网访问。</p><p><img src="https://static001.geekbang.org/resource/image/67/6b/6754def296488c9ac73fa26ayy8dcd6b.png?wh=1334x956" alt="图片"></p><p>等待“外网访问”开关转变为启用状态。</p><p>接下来，在“Kubeconfig”一栏点击“复制”，复制集群 Kubeconfig 信息。</p><p><img src="https://static001.geekbang.org/resource/image/15/35/15ca4f2ee0a02e3aea7b74b0c68d1835.png?wh=1304x514" alt="图片"></p><p>接下来，将集群证书信息内容写入到本地的 ~/.kube/config 文件内，这是 kubectl 默认读取 kubeconfig 的文件位置。</p><p>为了避免覆盖已有的 kubeconfig，首先你需要备份 ~/.kube/config 文件。</p><pre><code class="language-powershell">$ mv ~/.kube/config ~/.kube/config-bak
 </code></pre><p>然后新建 ~/.kube/config 文件，将刚才复制的 Kubeconfig 内容写入到该文件内。</p><p>最后，执行 kubectl get node 来验证 kubectl 与集群的联通性。</p><pre><code class="language-powershell">$ kubectl get node
 NAME&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;STATUS&nbsp; &nbsp;ROLES&nbsp; &nbsp; AGE&nbsp; &nbsp; &nbsp;VERSION
 172.19.0.107&nbsp; &nbsp;Ready&nbsp; &nbsp; &lt;none&gt;&nbsp; &nbsp;5m21s&nbsp; &nbsp;v1.22.5-tke.5
@@ -236,13 +236,13 @@ data:
   id_rsa: LS0tLS......
   known_hosts: Z2l0aHViLm......
   config: SG9zd......
-</code></pre><p>解释一下，你主要需要修改的是下面这几个字段。</p><ul>
-<li>将 stringData.username 替换为你的 Docker Hub 的用户名。</li>
-<li>将 stringData.password 替换为你的 Docker Hub Token，如果你还没有创建好，可以在<a href="https://time.geekbang.org/column/article/623358">上一节课</a>找到相应内容。</li>
-<li>将 data.id_rsa 替换为你本地 ~/.ssh/id_rsa 文件的 base64 编码内容，这将会为 Tekton 提供检出私有仓库的权限，你可以使用 <code>$ cat ~/.ssh/id_rsa | base64</code> 命令来获取。</li>
-<li>将 data.known_hosts 替换为你本地 ~/.ssh/known_hosts 文件的 base64 编码内容，你可以通过 <code>$ cat ~/.ssh/known_hosts | grep "github" | base64</code> 命令来获取。</li>
-<li>将 data.config 替换为你本地 ~/.ssh/config 文件的 base64 编码内容，你可以通过 <code>$ cat ~/.ssh/config | base64</code> 命令来获取。</li>
-</ul><p>然后，运行 kuebctl apply，同时将这 3 个 Secret 应用到集群内。</p><pre><code class="language-powershell">$ kubectl apply -f secret.yaml
+</code></pre><p>解释一下，你主要需要修改的是下面这几个字段。</p>
+将 stringData.username 替换为你的 Docker Hub 的用户名。
+将 stringData.password 替换为你的 Docker Hub Token，如果你还没有创建好，可以在<a href="https://time.geekbang.org/column/article/623358">上一节课</a>找到相应内容。
+将 data.id_rsa 替换为你本地 ~/.ssh/id_rsa 文件的 base64 编码内容，这将会为 Tekton 提供检出私有仓库的权限，你可以使用 <code>$ cat ~/.ssh/id_rsa | base64</code> 命令来获取。
+将 data.known_hosts 替换为你本地 ~/.ssh/known_hosts 文件的 base64 编码内容，你可以通过 <code>$ cat ~/.ssh/known_hosts | grep "github" | base64</code> 命令来获取。
+将 data.config 替换为你本地 ~/.ssh/config 文件的 base64 编码内容，你可以通过 <code>$ cat ~/.ssh/config | base64</code> 命令来获取。
+<p>然后，运行 kuebctl apply，同时将这 3 个 Secret 应用到集群内。</p><pre><code class="language-powershell">$ kubectl apply -f secret.yaml
 secret/registry-auth created
 secret/github-secret created
 secret/git-credentials created
@@ -359,7 +359,7 @@ $ git push origin main
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/2a/d1/34/03dc9e03.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -374,8 +374,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -390,8 +390,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -406,8 +406,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/31/81/3a/32ad4faa.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -422,8 +422,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -438,8 +438,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src=""
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -454,8 +454,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="http://thirdwx.qlogo.cn/mmopen/vi_32/cBh6rmNsSIbHEAGKiaq25yz9tqGuJEjbIYn2K0uFBLEe8lBNjL3SUOicibPbAO5SdH6TxV65kcCpK6FOB1hBr3PBQ/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -470,8 +470,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -486,8 +486,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -502,8 +502,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/17/e9/26/afc08398.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -518,8 +518,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eoUEZtvgjx3Lo8ib1GxBruDJCLXxX0KfRptk7BoBtRebKMA4Chp2tPbiaCwlCQ9hBZ4JnukX1bs9blA/132"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -534,8 +534,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/0f/57/4f/6fb51ff1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -550,8 +550,8 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/27/ff/e4/927547a9.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -566,5 +566,4 @@ $ git push origin main
   </div>
 </div>
 </div>
-</li>
-</ul>
+

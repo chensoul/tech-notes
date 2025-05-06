@@ -24,21 +24,21 @@ java.io包的好处是代码比较简单、直观，缺点则是IO效率和扩�
 
 在实际面试中，从传统IO到NIO、NIO 2，其中有很多地方可以扩展开来，考察点涉及方方面面，比如：
 
-<li>
+
 基础API功能与设计， InputStream/OutputStream和Reader/Writer的关系和区别。
-</li>
-<li>
+
+
 NIO、NIO  2的基本组成。
-</li>
-<li>
+
+
 给定场景，分别用不同模型实现，分析BIO、NIO等模式的设计和实现原理。
-</li>
-<li>
+
+
 NIO提供的高性能数据操作方式是基于什么原理，如何使用？
-</li>
-<li>
+
+
 或者，从开发者的角度来看，你觉得NIO自身实现存在哪些问题？有什么改进的想法吗？
-</li>
+
 
 IO的内容比较多，专栏一讲很难能够说清楚。IO不仅仅是多路复用，NIO 2也不仅仅是异步IO，尤其是数据操作部分，会在专栏下一讲详细分析。
 
@@ -46,32 +46,32 @@ IO的内容比较多，专栏一讲很难能够说清楚。IO不仅仅是多路�
 
 首先，需要澄清一些基本概念：
 
-<li>
+
 区分同步或异步（synchronous/asynchronous）。简单来说，同步是一种可靠的有序运行机制，当我们进行同步操作时，后续的任务是等待当前调用返回，才会进行下一步；而异步则相反，其他任务不需要等待当前调用返回，通常依靠事件、回调等机制来实现任务间次序关系。
-</li>
-<li>
+
+
 区分阻塞与非阻塞（blocking/non-blocking）。在进行阻塞操作时，当前线程会处于阻塞状态，无法从事其他任务，只有当条件就绪才能继续，比如ServerSocket新连接建立完毕，或数据读取、写入操作完成；而非阻塞则是不管IO操作是否结束，直接返回，相应操作在后台继续处理。
-</li>
+
 
 不能一概而论认为同步或阻塞就是低效，具体还要看应用和系统特征。
 
 对于java.io，我们都非常熟悉，我这里就从总体上进行一下总结，如果需要学习更加具体的操作，你可以通过[教程](https://docs.oracle.com/javase/tutorial/essential/io/streams.html)等途径完成。总体上，我认为你至少需要理解一下内容。
 
-<li>
+
 IO不仅仅是对文件的操作，网络编程中，比如Socket通信，都是典型的IO操作目标。
-</li>
-<li>
+
+
 输入流、输出流（InputStream/OutputStream）是用于读取或写入字节的，例如操作图片文件。
-</li>
-<li>
+
+
 而Reader/Writer则是用于操作字符，增加了字符编解码等功能，适用于类似从文件中读取或者写入文本信息。本质上计算机操作的都是字节，不管是网络通信还是文件读取，Reader/Writer相当于构建了应用逻辑和原始数据之间的桥梁。
-</li>
-<li>
+
+
 BufferedOutputStream等带缓冲区的实现，可以避免频繁的磁盘读写，进而提高IO处理效率。这种设计利用了缓冲区，将批量数据进行一次操作，但在使用中千万别忘了flush。
-</li>
-<li>
+
+
 参考下面这张类图，很多IO工具类都实现了Closeable接口，因为需要进行资源的释放。比如，打开FileInputStream，它就会获取相应的文件描述符（FileDescriptor），需要利用try-with-resources、 try-finally等机制保证FileInputStream被明确关闭，进而相应文件描述符也会失效，否则将导致资源无法被释放。利用专栏前面的内容提到的Cleaner或finalize机制作为资源释放的最后把关，也是必要的。
-</li>
+
 
 下面是我整理的一个简化版的类图，阐述了日常开发应用较多的类型和结构关系。
 
@@ -81,16 +81,16 @@ BufferedOutputStream等带缓冲区的实现，可以避免频繁的磁盘读写
 
 首先，熟悉一下NIO的主要组成部分：
 
-<li>
+
 Buffer，高效的数据容器，除了布尔类型，所有原始数据类型都有相应的Buffer实现。
-</li>
-<li>
+
+
 Channel，类似在Linux之类操作系统上看到的文件描述符，是NIO中被用来支持批量式IO操作的一种抽象。
 File或者Socket，通常被认为是比较高层次的抽象，而Channel则是更加操作系统底层的一种抽象，这也使得NIO得以充分利用现代操作系统底层机制，获得特定场景的性能优化，例如，DMA（Direct Memory Access）等。不同层次的抽象是相互关联的，我们可以通过Socket获取Channel，反之亦然。
-</li>
-<li>
+
+
 Selector，是NIO实现多路复用的基础，它提供了一种高效的机制，可以检测到注册在Selector上的多个Channel中，是否有Channel处于就绪状态，进而实现了单线程对多Channel的高效管理。Selector同样是基于底层操作系统机制，不同模式、不同版本都存在区别，例如，在最新的代码库里，相关实现如下：
-</li>
+
 
 > 
 Linux上依赖于[epoll](http://hg.openjdk.java.net/jdk/jdk/file/d8327f838b88/src/java.base/linux/classes/sun/nio/ch/EPollSelectorImpl.java)，Windows上NIO2（AIO）模式则是依赖于[iocp](http://hg.openjdk.java.net/jdk/jdk/file/d8327f838b88/src/java.base/windows/classes/sun/nio/ch/Iocp.java)。
@@ -167,18 +167,18 @@ class RequestHandler extends Thread {
 
 其实现要点是：
 
-<li>
+
 服务器端启动ServerSocket，端口0表示自动绑定一个空闲端口。
-</li>
-<li>
+
+
 调用accept方法，阻塞等待客户端连接。
-</li>
-<li>
+
+
 利用Socket模拟了一个简单的客户端，只进行连接、读取、打印。
-</li>
-<li>
+
+
 当连接建立后，启动一个单独线程负责回复客户端请求。
-</li>
+
 
 这样，一个简单的Socket服务器就被实现出来了。
 
@@ -243,19 +243,19 @@ public class NIOServer extends Thread {
 
 这个非常精简的样例掀开了NIO多路复用的面纱，我们可以分析下主要步骤和元素：
 
-<li>
+
 首先，通过Selector.open()创建一个Selector，作为类似调度员的角色。
-</li>
-<li>
+
+
 然后，创建一个ServerSocketChannel，并且向Selector注册，通过指定SelectionKey.OP_ACCEPT，告诉调度员，它关注的是新的连接请求。
 **注意**，为什么我们要明确配置非阻塞模式呢？这是因为阻塞模式下，注册操作是不允许的，会抛出IllegalBlockingModeException异常。
-</li>
-<li>
+
+
 Selector阻塞在select操作，当有Channel发生接入请求，就会被唤醒。
-</li>
-<li>
+
+
 在sayHelloWorld方法中，通过SocketChannel和Buffer进行数据操作，在本例中是发送了一段字符串。
-</li>
+
 
 可以看到，在前面两个样例中，IO都是同步阻塞模式，所以需要多线程以实现多任务处理。而NIO则是利用了单线程轮询事件的机制，通过高效地定位就绪的Channel，来决定做什么，仅仅select阶段是阻塞的，可以有效避免大量客户端连接时，频繁线程切换带来的问题，应用的扩展能力有了非常大的提高。下面这张图对这种实现思路进行了形象地说明。
 
@@ -280,12 +280,12 @@ serverSock.accept(serverSock, new CompletionHandler&lt;&gt;() { //为异步操�
 
 鉴于其编程要素（如Future、CompletionHandler等），我们还没有进行准备工作，为避免理解困难，我会在专栏后面相关概念补充后的再进行介绍，尤其是Reactor、Proactor模式等方面将在Netty主题一起分析，这里我先进行概念性的对比：
 
-<li>
+
 基本抽象很相似，AsynchronousServerSocketChannel对应于上面例子中的ServerSocketChannel；AsynchronousSocketChannel则对应SocketChannel。
-</li>
-<li>
+
+
 业务逻辑的关键在于，通过指定CompletionHandler回调接口，在accept/read/write等关键节点，通过事件机制调用，这是非常不同的一种编程思路。
-</li>
+
 
 今天我初步对Java提供的IO机制进行了介绍，概要地分析了传统同步IO和NIO的主要组成，并根据典型场景，通过不同的IO模式进行了实现与拆解。专栏下一讲，我还将继续分析Java IO的主题。
 

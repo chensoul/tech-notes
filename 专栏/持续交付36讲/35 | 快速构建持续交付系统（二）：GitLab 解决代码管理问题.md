@@ -61,14 +61,14 @@ sudo EXTERNAL_URL=&quot;http://192.168.0.101&quot; yum install -y gitlab-ee
 
 安装完成之后，还要进行一些系统配置。对于Omnibus GitLab的配置，我们只需要重点关注两方面的内容：
 
-<li>
+
 <p>使用命令行工具gitlab-ctl，管理Omnibus GitLab的一些常用命令。<br />
 比如，你想排查GitLab的运行异常，可以执行 gitlab-ctl tail 查看日志。</p>
-</li>
-<li>
+
+
 <p>配置文件/etc/gitlab/gitlab.rb，包含所有GitLab的相关配置。邮件服务器、LDAP账号验证，以及数据库缓存等配置，统一在这个配置文件中进行修改。<br />
 比如，你想要修改GitLab的外部域名时, 可以通过一条指令修改gitlab.rb文件：</p>
-</li>
+
 
 ```
 external_url 'http://newhost.com'
@@ -266,44 +266,44 @@ end
 
 Gitlab作为开源的代码管理平台，其原生也提供了不少优秀的功能，可以直接帮助我们解决上一篇文章中的一些需求。这些功能主要包括：
 
-<li>
+
 <p>Merge Requests<br />
 分支代码审核合并功能，关于Merge Request和分支策略。你可以回顾一下第四篇文章[《 一切的源头，代码分支策略的选择》](https://time.geekbang.org/column/article/10858)和 第七篇文章[《“两个披萨”团队的代码管理实际案例》](https://time.geekbang.org/column/article/11323)的内容。<br />
 之后就是，我们根据不同的团队性质，选择不同的分支管理策略了。<br />
 比如，在我们的这个系统中：中间件团队只有6个开发人员，且都是资深的开发人员，他们在项目的向下兼容方面也做得很好，所以整个团队选择了主干开发的分支策略，以保证最高的开发效率。<br />
 同时，后台团队和iOS团队各有20个开发人员，其中iOS团队一般是每周三下午进行发布，所以这两个团队都选择了GitLab Flow的分支策略。</p>
-</li>
-<li>
+
+
 <p>issues<br />
 可以通过列表和看板两种视图管理开发任务和Bug。在携程，我们也有一些团队是通过列表视图管理Bug，通过看板视图维护需求和开发任务。</p>
-</li>
-<li>
+
+
 <p>CI/CD<br />
 GitLab和GitLab-ci集成的一些功能，支持pipline和一些CI结果的展示。携程在打造持续交付系统时，GitLab-ci的功能还并不完善，所以也没有对此相关的功能进行调研，直接自研了CI/CD的驱动。<br />
 不过，由于GitLab-ci和GitLab天生的集成特性，目前也有不少公司使用它作为持续集成工作流。你也可尝试使用这种方法，它的配置很简单，可以直接参考官方文档。而在专栏中我会以最流行的Jenkins Pipeline来讲解这部分功能。</p>
-</li>
-<li>
+
+
 <p>Integrations<br />
 Integrations包括两部分：</p>
-<ul>
+
 1. GitLab service，是在GitLab内部实现的，与一些缺陷管理、团队协作等工具的集成服务。
 1. Webhook，支持在GitLab触发代码push、Merge Request等事件时进行http消息推送。
-</ul>
-</li>
+
+
 
 我在下一篇文章中介绍的代码管理与Jenkins集成，就是通过Webhook以及Jenkins的GitLab plugin实现的。
 
 理解了GitLab的几个重要功能后，便可以初步应对上一篇文章中的几个需求了。之后，搭建好的GitLab平台，满足代码管理的需求，我们可以通过三步实现：
 
-<li>
+
 创建对应的代码仓库；
-</li>
-<li>
+
+
 配置Sonar静态检查；
-</li>
-<li>
+
+
 解决其他设置。
-</li>
+
 
 接下来，我和你分享一下，每一步中的关键点，以及具体如何满足相应的代码需求。
 
@@ -339,15 +339,15 @@ GitLab的Merge Request需要通过触发Jenkins构建 Sonar 来驱动代码的�
 
 之后剩余的事情包括：
 
-<li>
+
 为项目添加开发者及对应的角色；
-</li>
-<li>
+
+
 根据分支策略，设定保护分支，仅允许Merge Request提交；
-</li>
-<li>
+
+
 创建功能分支。
-</li>
+
 
 至此，我们需要的代码管理平台就真的搭建好了，开发人员可以安心写代码了。
 

@@ -8,21 +8,21 @@
 
 首先，我们需要明确通常的分布式ID定义，基本的要求包括：
 
-<li>
+
 全局唯一，区别于单点系统的唯一，全局是要求分布式系统内唯一。
-</li>
-<li>
+
+
 有序性，通常都需要保证生成的ID是有序递增的。例如，在数据库存储等场景中，有序ID便于确定数据位置，往往更加高效。
-</li>
+
 
 目前业界的方案很多，典型方案包括：
 
-<li>
+
 基于数据库自增序列的实现。这种方式优缺点都非常明显，好处是简单易用，但是在扩展性和可靠性等方面存在局限性。
-</li>
-<li>
+
+
 基于Twitter早期开源的[Snowflake](https://github.com/twitter/snowflake)的实现，以及相关改动方案。这是目前应用相对比较广泛的一种方式，其结构定义你可以参考下面的示意图。
-</li>
+
 
 <img src="https://static001.geekbang.org/resource/image/ff/ad/ffd41494a39ef737b3c1151929c3c4ad.png" alt="">
 
@@ -38,12 +38,12 @@
 
 Snowflake的[官方版本](https://github.com/twitter/snowflake)是基于Scala语言，Java等其他语言的[参考实现](https://github.com/relops/snowflake)有很多，是一种非常简单实用的方式，具体位数的定义是可以根据分布式系统的真实场景进行修改的，并不一定要严格按照示意图中的设计。
 
-<li>
+
 Redis、ZooKeeper、MongoDB等中间件，也都有各种唯一ID解决方案。其中一些设计也可以算作是Snowflake方案的变种。例如，MongoDB的[ObjectId](http://mongodb.github.io/node-mongodb-native/2.0/tutorials/objectid/)提供了一个12 byte（96位）的ID定义，其中32位用于记录以秒为单位的时间，机器ID则为24位，16位用作进程ID，24位随机起始的计数序列。
-</li>
-<li>
+
+
 国内的一些大厂开源了其自身的部分分布式ID实现，InfoQ就曾经介绍过微信的[seqsvr](http://www.infoq.com/cn/articles/wechat-serial-number-generator-architecture)，它采取了相对复杂的两层架构，并根据社交应用的数据特点进行了针对性设计，具体请参考相关[代码实现](https://github.com/nebula-im/seqsvr)。另外，[百度](https://github.com/baidu/uid-generator/blob/master/README.zh_cn.md)、美团等也都有开源或者分享了不同的分布式ID实现，都可以进行参考。
-</li>
+
 
 关于第二个问题，**Snowflake是否受冬令时切换影响？**
 
@@ -55,12 +55,12 @@ Redis、ZooKeeper、MongoDB等中间件，也都有各种唯一ID解决方案。
 
 涉及分布式，很多单机模式下的简单问题突然就变得复杂了，这是分布式天然的复杂性，需要从不同角度去理解适用场景、架构和细节算法，我会从下面的角度进行适当解读：
 
-<li>
+
 我们的业务到底需要什么样的分布式ID，除了唯一和有序，还有哪些必须要考虑的要素？
-</li>
-<li>
+
+
 在实际场景中，针对典型的方案，有哪些可能的局限性或者问题，可以采取什么办法解决呢？
-</li>
+
 
 ## 知识扩展
 
@@ -68,15 +68,15 @@ Redis、ZooKeeper、MongoDB等中间件，也都有各种唯一ID解决方案。
 
 除了唯一和有序，考虑到分布式系统的功能需要，通常还会额外希望分布式ID保证：
 
-<li>
+
 有意义，或者说包含更多信息，例如时间、业务等信息。这一点和有序性要求存在一定关联，如果ID中包含时间，本身就能保证一定程度的有序，虽然并不能绝对保证。ID中包含额外信息，在分布式数据存储等场合中，有助于进一步优化数据访问的效率。
-</li>
-<li>
+
+
 高可用性，这是分布式系统的必然要求。前面谈到的方案中，有的是真正意义上的分布式，有得还是传统主从的思路，这一点没有绝对的对错，取决于我们业务对扩展性、性能等方面的要求。
-</li>
-<li>
+
+
 紧凑性，ID的大小可能受到实际应用的制约，例如数据库存储往往对长ID不友好，太长的ID会降低MySQL等数据库索引的性能；编程语言在处理时也可能受数据类型长度限制。
-</li>
+
 
 在具体的生产环境中，还有可能提出对QPS等方面的具体要求，尤其是在国内一线互联网公司的业务规模下，更是需要考虑峰值业务场景的数量级层次需求。
 
@@ -98,32 +98,32 @@ Redis、ZooKeeper、MongoDB等中间件，也都有各种唯一ID解决方案。
 
 从设计和具体编码的角度，还有一个很有效的措施就是缓存历史时间戳，然后在序列生成之前进行检验，如果出现当前时间落后于历史时间的不合理情况，可以采取相应的动作，要么重试、等待时钟重新一致，或者就直接提示服务不可用。
 
-<li>
+
 另外，序列号的可预测性是把双刃剑，虽然简化了一些工程问题，但很多业务场景并不适合可预测的ID。如果你用它作为安全令牌之类，则是非常危险的，很容易被黑客猜测并利用。
-</li>
-<li>
+
+
 ID设计阶段需要谨慎考虑暴露出的信息。例如，[Erlang版本](https://github.com/boundary/flake)的flake实现基于MAC地址计算WorkerID，在安全敏感的领域往往是不可以这样使用的。
-</li>
-<li>
+
+
 从理论上来说，类似Snowflake的方案由于时间数据位数的限制，存在与[2038年问题](https://en.wikipedia.org/wiki/Year_2038_problem)相似的理论极限。虽然目前的系统设计考虑数十年后的问题还太早，但是理解这些可能的极限是有必要的，也许会成为面试的过程中的考察点。
-</li>
+
 
 如果更加深入到时钟和分布式系统时序的问题，还有与分布式ID相关但又有所区别的问题，比如在分布式系统中，不同机器的时间很可能是不一致的，如何保证事件的有序性？Lamport在1978年的论文（[Time, Clocks, and the Ording of Events in a Distributed System](https://amturing.acm.org/p558-lamport.pdf)）中就有很深入的阐述，有兴趣的同学可以去查找相应的翻译和解读。
 
 最后，我再补充一些当前分布式领域的面试热点，例如：
 
-<li>
+
 分布式事务，包括其产生原因、业务背景、主流的解决方案等。
-</li>
-<li>
+
+
 理解[CAP](https://en.wikipedia.org/wiki/CAP_theorem)、[BASE](https://en.wikipedia.org/wiki/Eventual_consistency)等理论，懂得从最终一致性等角度来思考问题，理解[Paxos](https://en.wikipedia.org/wiki/Paxos_(computer_science))、[Raft](https://raft.github.io/)等一致性算法。
-</li>
-<li>
+
+
 理解典型的分布式锁实现，例如最常见的[Redis分布式锁](https://redis.io/topics/distlock)。
-</li>
-<li>
+
+
 负载均衡等分布式领域的典型算法，至少要了解主要方案的原理。
-</li>
+
 
 这些方面目前都已经有相对比较深入的分析，尤其是来自于一线大厂的实践经验。另外，在[左耳听风专栏的“程序员练级攻略”](http://time.geekbang.org/column/48)里，提供了非常全面的分布式学习资料，感兴趣的同学可以参考。
 

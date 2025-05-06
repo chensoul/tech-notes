@@ -25,141 +25,141 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;认知：ElasticSearch基础概念.md">01 认知：ElasticSearch基础概念.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="02&#32;认知：Elastic&#32;Stack生态和场景方案.md">02 认知：Elastic Stack生态和场景方案.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;安装：ElasticSearch和Kibana安装.md">03 安装：ElasticSearch和Kibana安装.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;入门：查询和聚合的基础使用.md">04 入门：查询和聚合的基础使用.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;索引：索引管理详解.md">05 索引：索引管理详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;索引：索引模板(Index&#32;Template)详解.md">06 索引：索引模板(Index Template)详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="07&#32;查询：DSL查询之复合查询详解.md">07 查询：DSL查询之复合查询详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="08&#32;查询：DSL查询之全文搜索详解.md">08 查询：DSL查询之全文搜索详解.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;查询：DSL查询之Term详解.md">09 查询：DSL查询之Term详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;聚合：聚合查询之Bucket聚合详解.md">10 聚合：聚合查询之Bucket聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;聚合：聚合查询之Metric聚合详解.md">11 聚合：聚合查询之Metric聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;聚合：聚合查询之Pipline聚合详解.md">12 聚合：聚合查询之Pipline聚合详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;原理：从图解构筑对ES原理的初步认知.md">13 原理：从图解构筑对ES原理的初步认知.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;原理：ES原理知识点补充和整体结构.md">14 原理：ES原理知识点补充和整体结构.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;原理：ES原理之索引文档流程详解.md">15 原理：ES原理之索引文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;原理：ES原理之读取文档流程详解.md">16 原理：ES原理之读取文档流程详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;优化：ElasticSearch性能优化详解.md">17 优化：ElasticSearch性能优化详解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="18&#32;大厂实践：腾讯万亿级&#32;Elasticsearch&#32;技术实践.md">18 大厂实践：腾讯万亿级 Elasticsearch 技术实践.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;资料：Awesome&#32;Elasticsearch.md">19 资料：Awesome Elasticsearch.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;WrapperQuery.md">20 WrapperQuery.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;备份和迁移.md">21 备份和迁移.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -218,19 +218,19 @@
 <p>提示</p>
 <p>很多读者在看官方文档学习时存在一个误区，以DSL中full text查询为例，其实内容是非常多的， 没有取舍/没重点去阅读， 要么需要花很多时间，要么头脑一片浆糊。所以这里重点谈谈我的理解。@pdai</p>
 <p>一些理解：</p>
-<ul>
-<li>第一点：<strong>全局观</strong>，即我们现在学习内容在整个体系的哪个位置？</li>
-</ul>
+
+第一点：<strong>全局观</strong>，即我们现在学习内容在整个体系的哪个位置？
+
 <p>如下图，可以很方便的帮助你构筑这种体系</p>
 <p><img src="assets/es-dsl-full-text-3.png" alt="img" /></p>
-<ul>
-<li>第二点： <strong>分类别</strong>，从上层理解，而不是本身</li>
-</ul>
+
+第二点： <strong>分类别</strong>，从上层理解，而不是本身
+
 <p>比如Full text Query中，我们只需要把如下的那么多点分为3大类，你的体系能力会大大提升</p>
 <p><img src="assets/es-dsl-full-text-1.png" alt="img" /></p>
-<ul>
-<li>第三点： <strong>知识点还是API</strong>？ API类型的是可以查询的，只需要知道大致有哪些功能就可以了。</li>
-</ul>
+
+第三点： <strong>知识点还是API</strong>？ API类型的是可以查询的，只需要知道大致有哪些功能就可以了。
+
 <p><img src="assets/es-dsl-full-text-2.png" alt="img" /></p>
 <h2>Match类型</h2>
 <blockquote>
@@ -238,9 +238,9 @@
 </blockquote>
 <h3>match 查询的步骤</h3>
 <p>在(指定字段查询)中我们已经介绍了match查询。</p>
-<ul>
-<li><strong>准备一些数据</strong></li>
-</ul>
+
+<strong>准备一些数据</strong>
+
 <p>这里我们准备一些数据，通过实例看match 查询的步骤</p>
 <pre><code class="language-bash">PUT /test-dsl-match
 { &quot;settings&quot;: { &quot;number_of_shards&quot;: 1 }} 
@@ -255,9 +255,9 @@ POST /test-dsl-match/_bulk
 { &quot;index&quot;: { &quot;_id&quot;: 4 }}
 { &quot;title&quot;: &quot;Brown fox brown dog&quot; }
 </code></pre>
-<ul>
-<li><strong>查询数据</strong></li>
-</ul>
+
+<strong>查询数据</strong>
+
 <pre><code class="language-bash">GET /test-dsl-match/_search
 {
     &quot;query&quot;: {
@@ -269,30 +269,30 @@ POST /test-dsl-match/_bulk
 </code></pre>
 <p>Elasticsearch 执行上面这个 match 查询的步骤是：</p>
 <ol>
-<li><strong>检查字段类型</strong> 。</li>
+<strong>检查字段类型</strong> 。
 </ol>
 <p>标题 title 字段是一个 string 类型（ analyzed ）已分析的全文字段，这意味着查询字符串本身也应该被分析。</p>
 <ol>
-<li><strong>分析查询字符串</strong> 。</li>
+<strong>分析查询字符串</strong> 。
 </ol>
 <p>将查询的字符串 QUICK! 传入标准分析器中，输出的结果是单个项 quick 。因为只有一个单词项，所以 match 查询执行的是单个底层 term 查询。</p>
 <ol>
-<li><strong>查找匹配文档</strong> 。</li>
+<strong>查找匹配文档</strong> 。
 </ol>
 <p>用 term 查询在倒排索引中查找 quick 然后获取一组包含该项的文档，本例的结果是文档：1、2 和 3 。</p>
 <ol>
-<li><strong>为每个文档评分</strong> 。</li>
+<strong>为每个文档评分</strong> 。
 </ol>
 <p>用 term 查询计算每个文档相关度评分 _score ，这是种将词频（term frequency，即词 quick 在相关文档的 title 字段中出现的频率）和反向文档频率（inverse document frequency，即词 quick 在所有文档的 title 字段中出现的频率），以及字段的长度（即字段越短相关度越高）相结合的计算方式。</p>
-<ul>
-<li><strong>验证结果</strong></li>
-</ul>
+
+<strong>验证结果</strong>
+
 <p><img src="assets/es-dsl-full-text-4.png" alt="img" /></p>
 <h3>match多个词深入</h3>
 <p>我们在上文中复合查询中已经使用了match多个词，比如“Quick pets”； 这里我们通过例子带你更深入理解match多个词</p>
-<ul>
-<li><strong>match多个词的本质</strong></li>
-</ul>
+
+<strong>match多个词的本质</strong>
+
 <p>查询多个词&quot;BROWN DOG!&quot;</p>
 <pre><code class="language-bash">GET /test-dsl-match/_search
 {
@@ -327,9 +327,9 @@ POST /test-dsl-match/_bulk
 }
 </code></pre>
 <p><img src="assets/es-dsl-full-text-6.png" alt="img" /></p>
-<ul>
-<li><strong>match多个词的逻辑</strong></li>
-</ul>
+
+<strong>match多个词的逻辑</strong>
+
 <p>上面等同于should（任意一个满足），是因为 match还有一个operator参数，默认是or, 所以对应的是should。</p>
 <p>所以上述查询也等同于</p>
 <pre><code class="language-bash">GET /test-dsl-match/_search
@@ -413,9 +413,9 @@ POST /test-dsl-match/_bulk
 </code></pre>
 <p><img src="assets/es-dsl-full-text-9.png" alt="img" /></p>
 <h3>其它match类型</h3>
-<ul>
-<li><strong>match_pharse</strong></li>
-</ul>
+
+<strong>match_pharse</strong>
+
 <p>match_phrase在前文中我们已经有了解，我们再看下另外一个例子。</p>
 <pre><code class="language-bash">GET /test-dsl-match/_search
 {
@@ -443,9 +443,9 @@ POST /test-dsl-match/_bulk
 </code></pre>
 <p>这样的查询是查不出任何数据的，因为前文中我们知道了match本质上是对term组合，match_phrase本质是连续的term的查询，所以f并不是一个分词，不满足term查询，所以最终查不出任何内容了。</p>
 <p><img src="assets/es-dsl-full-text-12.png" alt="img" /></p>
-<ul>
-<li><strong>match_pharse_prefix</strong></li>
-</ul>
+
+<strong>match_pharse_prefix</strong>
+
 <p>那有没有可以查询出<code>quick brown f</code>的方式呢？ELasticSearch在match_phrase基础上提供了一种可以查最后一个词项是前缀的方法，这样就可以查询<code>quick brown f</code>了</p>
 <pre><code class="language-bash">GET /test-dsl-match/_search
 {
@@ -460,9 +460,9 @@ POST /test-dsl-match/_bulk
 </code></pre>
 <p><img src="assets/es-dsl-full-text-13.png" alt="img" /></p>
 <p>(ps: prefix的意思不是整个text的开始匹配，而是最后一个词项满足term的prefix查询而已)</p>
-<ul>
-<li><strong>match_bool_prefix</strong></li>
-</ul>
+
+<strong>match_bool_prefix</strong>
+
 <p>除了match_phrase_prefix，ElasticSearch还提供了match_bool_prefix查询</p>
 <pre><code class="language-bash">GET /test-dsl-match/_search
 {
@@ -491,9 +491,9 @@ POST /test-dsl-match/_bulk
 }
 </code></pre>
 <p>所以这样你就能理解，match_bool_prefix查询中的quick,brown,f是无序的。</p>
-<ul>
-<li><strong>multi_match</strong></li>
-</ul>
+
+<strong>multi_match</strong>
+
 <p>如果我们期望一次对多个字段查询，怎么办呢？ElasticSearch提供了multi_match查询的方式</p>
 <pre><code class="language-bash">{
   &quot;query&quot;: {

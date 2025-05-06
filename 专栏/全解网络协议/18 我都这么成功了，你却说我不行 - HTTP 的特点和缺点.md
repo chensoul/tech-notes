@@ -25,213 +25,213 @@
         </div>
         <div class="book-menu uncollapsible">
             <ul class="uncollapsible">
-                <li><a href="../../index.html" class="current-tab">首页</a></li>
-            </ul>
+                <a href="../../index.html" class="current-tab">首页</a>
+            
 
             <ul class="uncollapsible">
-                <li><a href="../index.html">上一级</a></li>
-            </ul>
+                <a href="../index.html">上一级</a>
+            
 
             <ul class="uncollapsible">
-                <li>
+                
 
                     
                     <a href="01&#32;我应该站在谁的肩膀上&#32;-&#32;OSI&#32;vs&#32;TCPIP模型.md">01 我应该站在谁的肩膀上 - OSI vs TCPIP模型.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/02%20%E4%B8%87%E4%B8%88%E9%AB%98%E6%A5%BC%E5%B9%B3%E5%9C%B0%E8%B5%B7-%20%E7%89%A9%E7%90%86%E5%B1%82%20+%20%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82.md">02 万丈高楼平地起- 物理层 + 数据链路层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="03&#32;OSI的灵魂就是我&#32;-&#32;网络层.md">03 OSI的灵魂就是我 - 网络层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="04&#32;要快还是要稳你说好了&#32;-&#32;传输层.md">04 要快还是要稳你说好了 - 传输层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="05&#32;是时候展现真正的技术了&#32;-&#32;应用层.md">05 是时候展现真正的技术了 - 应用层.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="06&#32;重回小学课堂&#32;-&#32;二进制101.md">06 重回小学课堂 - 二进制101.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="https://learn.lianglianglee.com/%E4%B8%93%E6%A0%8F/%E5%85%A8%E8%A7%A3%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/07%201+1%20=%202%E5%90%97%EF%BC%9F%20-%20%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%9A%84%E8%AE%A1%E7%AE%97.md">07 1+1 = 2吗？ - 二进制的计算.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="08&#32;16进制又是个什么鬼？&#32;-&#32;16进制的讲解.md">08 16进制又是个什么鬼？ - 16进制的讲解.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="09&#32;我想有个家&#32;-&#32;什么是IP地址.md">09 我想有个家 - 什么是IP地址.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="10&#32;我可是住二环的人&#32;-&#32;IP地址的组成和分类.md">10 我可是住二环的人 - IP地址的组成和分类.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="11&#32;我已经没地方住了吗&#32;-&#32;IPv6.md">11 我已经没地方住了吗 - IPv6.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="12&#32;向左还是向右&#32;-&#32;IP路由.md">12 向左还是向右 - IP路由.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="13&#32;我能给你安全感&#32;-&#32;TCP（一）.md">13 我能给你安全感 - TCP（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="14&#32;我那不为人知的秘密是什么&#32;-&#32;TCP（二）.md">14 我那不为人知的秘密是什么 - TCP（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="15&#32;不问收没收到，就问快不快&#32;-&#32;UDP.md">15 不问收没收到，就问快不快 - UDP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="16&#32;我为什么与众不同&#32;-&#32;TCP高级篇（拥塞模型）.md">16 我为什么与众不同 - TCP高级篇（拥塞模型）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="17&#32;来，先看看我的家谱&#32;-&#32;HTTP的身世.md">17 来，先看看我的家谱 - HTTP的身世.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     <a class="current-tab" href="18&#32;我都这么成功了，你却说我不行&#32;-&#32;HTTP&#32;的特点和缺点.md">18 我都这么成功了，你却说我不行 - HTTP 的特点和缺点.md</a>
                     
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="19&#32;我老了，让我儿子来吧&#32;-&#32;HTTP2.md">19 我老了，让我儿子来吧 - HTTP2.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="20&#32;稳重的大外甥&#32;-&#32;HTTPS.md">20 稳重的大外甥 - HTTPS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="21&#32;HTTP的高级篇&#32;-&#32;HTTPClient（Java）.md">21 HTTP的高级篇 - HTTPClient（Java）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="22&#32;想来我家，你自己查呀&#32;-&#32;DNS.md">22 想来我家，你自己查呀 - DNS.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="23&#32;来的早，不如来得巧&#32;-&#32;NAT.md">23 来的早，不如来得巧 - NAT.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="24&#32;辛苦的邮政&#32;-&#32;SMTP.md">24 辛苦的邮政 - SMTP.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="25&#32;你就是看不见我&#32;-&#32;VPN.md">25 你就是看不见我 - VPN.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="26&#32;黑客的好帮手&#32;-&#32;SSH.md">26 黑客的好帮手 - SSH.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="27&#32;你可以得到我的心，却得不到我的人&#32;-&#32;物理安全设备.md">27 你可以得到我的心，却得不到我的人 - 物理安全设备.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="28&#32;你怎么证明你就是你&#32;-&#32;身份验证和访问控制.md">28 你怎么证明你就是你 - 身份验证和访问控制.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="29&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（一）.md">29 我要怎么藏好我的考研资料 - 网络攻击（一）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="30&#32;我要怎么藏好我的考研资料&#32;-&#32;网络攻击（二）.md">30 我要怎么藏好我的考研资料 - 网络攻击（二）.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="31&#32;如何保护我的考研资料&#32;-&#32;网络攻击防范.md">31 如何保护我的考研资料 - 网络攻击防范.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="32&#32;Linux网络安全&#32;-&#32;安全实战.md">32 Linux网络安全 - 安全实战.md</a>
 
-                </li>
-                <li>
+                
+                
 
                     
                     <a href="33&#32;结语.md">33 结语.md</a>
 
-                </li>
-            </ul>
+                
+            
 
         </div>
     </div>
@@ -297,19 +297,19 @@
 <p><img src="assets/20210219113630838.png" alt="在这里插入图片描述" /></p>
 <p>2012年Google如一声惊雷一样提出了SPDY的方案，优化了HTTP1.X的请求延迟，解决了HTTP1.X的安全性，具体如下：</p>
 <ol>
-<li>降低延迟，针对HTTP高延迟的问题，SPDY优雅的采取了多路复用(multiplexing)。多路复用通过多个请求stream共享一个TCP连接的方式，解决了HOL blocking的问题，降低了延迟同时提高了带宽的利用率。</li>
-<li>请求优先级（request prioritization)。多路复用带来一个新的问题是，在连接共享的基础之上有可能会导致关键请求被阻塞。SPDY允许给每个request设置优先级，这样重要的请求就会优先得到响应。比如浏览器加载首页，首页的html内容应该优先展示，之后才是各种静态资源文件，脚本文件等加载，这样可以保证用户能第一时间看到网页内容。</li>
-<li>Header压缩。前面提到HTTP1.x的header很多时候都是重复多余的。选择合适的压缩算法可以减小包的大小和数量。</li>
-<li>基于HTTPS的加密协议传输，大大提高了传输数据的可靠性。</li>
-<li>服务端推送(server push)，采用了SPDY的网页，例如我的网页有一个sytle.css的请求，在客户端收到sytle.css数据的同时，服务端会将sytle.js的文件推送给客户端，当客户端再次尝试获取sytle.js时就可以直接从缓存中获取到，不用再发请求了。</li>
+降低延迟，针对HTTP高延迟的问题，SPDY优雅的采取了多路复用(multiplexing)。多路复用通过多个请求stream共享一个TCP连接的方式，解决了HOL blocking的问题，降低了延迟同时提高了带宽的利用率。
+请求优先级（request prioritization)。多路复用带来一个新的问题是，在连接共享的基础之上有可能会导致关键请求被阻塞。SPDY允许给每个request设置优先级，这样重要的请求就会优先得到响应。比如浏览器加载首页，首页的html内容应该优先展示，之后才是各种静态资源文件，脚本文件等加载，这样可以保证用户能第一时间看到网页内容。
+Header压缩。前面提到HTTP1.x的header很多时候都是重复多余的。选择合适的压缩算法可以减小包的大小和数量。
+基于HTTPS的加密协议传输，大大提高了传输数据的可靠性。
+服务端推送(server push)，采用了SPDY的网页，例如我的网页有一个sytle.css的请求，在客户端收到sytle.css数据的同时，服务端会将sytle.js的文件推送给客户端，当客户端再次尝试获取sytle.js时就可以直接从缓存中获取到，不用再发请求了。
 </ol>
 <p>SPDY构成图</p>
 <p><img src="assets/20210219113653326.png" alt="在这里插入图片描述" /></p>
 <p>但是大佬们能让你Google独大吗, 于是基于SPDY发表了升级版也就是我们的HTTP2。 HTTP2.0和SPDY的区别</p>
-<ul>
-<li>HTTP2.0 支持明文HTTP传输，而SPDY强制使用HTTPS</li>
-<li>HTTP2.0 消息头的压缩算法采用HPACK而非SPDY采用的DEFLATE - http://zh.wikipedia.org/wiki/DEFLATE。</li>
-</ul>
+
+HTTP2.0 支持明文HTTP传输，而SPDY强制使用HTTPS
+HTTP2.0 消息头的压缩算法采用HPACK而非SPDY采用的DEFLATE - http://zh.wikipedia.org/wiki/DEFLATE。
+
 <p>Http2是一个二进制协议。二进制肯定比这个文本要好传输呀。它呢保持Http1.1里面的所有语义，比如Http1.x里面定义的所有头文件，资源等等。所有的工作都是用来解决Http1的缺点。如果通俗的讲，Http2是关于什么的？, 它是关于performance的。</p>
 <p>下面说一个小的知识点呀</p>
 <p><img src="assets/20210219113711326.png" alt="在这里插入图片描述" /></p>

@@ -143,10 +143,10 @@ secret/registry-auth edited
 
 $ git push origin main
 </code></pre><p>进入 Tekton Dashboard <a href="http://tekton.k8s.local/">http://tekton.k8s.local/</a>，并查看流水线运行状态。</p><p><img src="https://static001.geekbang.org/resource/image/08/66/087705da1bce016491b814faa355ef66.png?wh=1920x1041" alt="图片"></p><p>当流水线运行结束后，我们进入 Harbor Dashboard 会看到刚才 Tekton 推送的新镜像。</p><p><img src="https://static001.geekbang.org/resource/image/d4/cc/d494cc826214ec0bcd4e069a575a37cc.png?wh=1920x1041" alt="图片"></p><p>到这里，Harbor 的安装和配置就完成了。在最开始，我们是通过最小化的配置安装 Harbor，在生产环境下你可能需要注意一些额外的配置。</p><h2>Harbor 生产建议</h2><p>Harbor 的安装配置相对较多，这里我也提供几点生产建议供你参考。</p><ol>
-<li>确认 PVC 是否支持在线扩容。</li>
-<li>尽量使用 S3 作为镜像存储系统。</li>
-<li>使用外部数据库和 Redis。</li>
-<li>开启自动镜像扫描和阻止漏洞镜像。</li>
+确认 PVC 是否支持在线扩容。
+尽量使用 S3 作为镜像存储系统。
+使用外部数据库和 Redis。
+开启自动镜像扫描和阻止漏洞镜像。
 </ol><p>接下来我们对每一项进行详细的介绍。</p><h3>确认 PVC 是否支持在线扩容</h3><p>如果你是按照这节课的安装方式使用 PVC 持久卷来存储镜像的，那么随着镜像数量的增加，你需要额外注意 Harbor 仓库存储容量的问题。</p><p>一个简单的方案是在 Harbor 安装前，提前确认 StorageClass 是否支持在线扩容，以便后续对存储镜像的持久卷进行动态扩容。你可以使用 kubectl get storageclass 命令来确认。</p><pre><code class="language-yaml">$ kubectl get storageclass
 NAME&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; PROVISIONER&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;RECLAIMPOLICY&nbsp; &nbsp;VOLUMEBINDINGMODE&nbsp; &nbsp;ALLOWVOLUMEEXPANSION&nbsp; &nbsp;AGE
 cbs (default)&nbsp; &nbsp;com.tencent.cloud.csi.cbs&nbsp; &nbsp;Delete&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Immediate&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;true
@@ -328,7 +328,7 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
       color: #b2b2b2;
       font-size: 14px;
     }
-</style><ul><li>
+</style>
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -343,8 +343,8 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/1e/43/05/3fbf26cf.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -359,8 +359,8 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/12/32/a8/d5bf5445.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -375,8 +375,8 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/13/f6/24/547439f1.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -391,8 +391,8 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/25/ec/f3/f140576e.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -407,8 +407,8 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
   </div>
 </div>
 </div>
-</li>
-<li>
+
+
 <div class="_2sjJGcOH_0"><img src="https://static001.geekbang.org/account/avatar/00/14/54/21/0bac2254.jpg"
   class="_3FLYR4bF_0">
 <div class="_36ChpWj4_0">
@@ -423,5 +423,4 @@ Error response from daemon: unknown: current image with 14 vulnerabilities canno
   </div>
 </div>
 </div>
-</li>
-</ul>
+
