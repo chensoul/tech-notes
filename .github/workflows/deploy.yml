@@ -42,24 +42,3 @@ jobs:
           build_dir: docs/.vitepress/dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  # build:
-  #   runs-on: ubuntu-latest
-  #   if: github.repository == 'chensoul/tech-notes'
-  #   needs: docs
-  #   steps:
-  #     - name: Sync to Gitee
-  #       uses: wearerequired/git-mirror-action@master
-  #       env:
-  #         SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
-  #       with:
-  #         source-repo: git@github.com:chensoul/tech-notes.git
-  #         destination-repo: git@gitee.com:chensoul/tech-notes.git
-
-  #     - name: Build Gitee Pages
-  #       uses: yanglbme/gitee-pages-action@main
-  #       with:
-  #         gitee-username: chensoul
-  #         gitee-password: ${{ secrets.GITEE_PASSWORD }}
-  #         gitee-repo: chensoul/tech-notes
-  #         branch: gh-pages
