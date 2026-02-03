@@ -1,0 +1,1 @@
+import{_ as t,o as r,c as a,ae as i}from"./chunks/framework.gns6yynO.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"java/ddd.md","filePath":"java/ddd.md"}'),o={name:"java/ddd.md"};function l(n,e,h,s,c,d){return r(),a("div",null,[...e[0]||(e[0]=[i("",35)])])}const g=t(o,[["render",l]]);export{m as __pageData,g as default};

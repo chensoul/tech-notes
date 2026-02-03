@@ -1,0 +1,1 @@
+import{_ as a,o as t,c as l,ae as r}from"./chunks/framework.gns6yynO.js";const h=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"java/maven.md","filePath":"java/maven.md"}'),n={name:"java/maven.md"};function o(i,e,p,m,s,c){return t(),l("div",null,[...e[0]||(e[0]=[r("",5)])])}const u=a(n,[["render",o]]);export{h as __pageData,u as default};
